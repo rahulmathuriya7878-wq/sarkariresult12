@@ -54,6 +54,16 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
+  const handleWhatsAppShare = () => {
+    const text = `🚨 ${post.title}\n\nCheck all details, eligibility & apply links here:\n${window.location.href}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  const handleTelegramShare = () => {
+    const text = `🚨 ${post.title}\n\nCheck all details & apply online:`;
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`, '_blank');
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -94,7 +104,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             <span>{isHindi ? '← मुख्य पृष्ठ (Home)' : '← Back to Home Page'}</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => onToggleBookmark(post.id)}
               className="flex items-center gap-1 px-2.5 py-1.5 bg-black/25 hover:bg-black/40 text-white rounded text-xs font-semibold transition-colors cursor-pointer"
@@ -105,21 +115,36 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </button>
 
             <button
-              onClick={handlePrint}
+              onClick={handleCopyLink}
               className="flex items-center gap-1 px-2.5 py-1.5 bg-black/25 hover:bg-black/40 text-white rounded text-xs font-semibold transition-colors cursor-pointer"
-              title="Print Notification"
+              title="Copy Link to Clipboard"
             >
-              <Printer className="w-4 h-4" />
-              <span className="hidden sm:inline">Print</span>
+              {copiedLink ? <Check className="w-4 h-4 text-emerald-300" /> : <Share2 className="w-4 h-4" />}
+              <span className="hidden sm:inline">{copiedLink ? 'Copied!' : 'Copy Link'}</span>
             </button>
 
             <button
-              onClick={handleCopyLink}
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-black/25 hover:bg-black/40 text-white rounded text-xs font-semibold transition-colors cursor-pointer"
-              title="Share / Copy Link"
+              onClick={handleWhatsAppShare}
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded text-xs font-semibold transition-colors cursor-pointer"
+              title="Share on WhatsApp"
             >
-              {copiedLink ? <Check className="w-4 h-4 text-emerald-300" /> : <Share2 className="w-4 h-4" />}
-              <span className="hidden sm:inline">{copiedLink ? 'Copied' : 'Share'}</span>
+              <span className="font-bold">WhatsApp</span>
+            </button>
+
+            <button
+              onClick={handleTelegramShare}
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-sky-700 hover:bg-sky-800 text-white rounded text-xs font-semibold transition-colors cursor-pointer"
+              title="Share on Telegram"
+            >
+              <span className="font-bold">Telegram</span>
+            </button>
+
+            <button
+              onClick={handlePrint}
+              className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-black/25 hover:bg-black/40 text-white rounded text-xs font-semibold transition-colors cursor-pointer"
+              title="Print Notification"
+            >
+              <Printer className="w-4 h-4" />
             </button>
           </div>
         </div>

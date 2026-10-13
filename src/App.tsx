@@ -20,6 +20,7 @@ import { PhotoResizerTool } from './components/tools/PhotoResizerTool';
 import { EligibilityMatcherModal } from './components/tools/EligibilityMatcherModal';
 import { BookmarkedJobsModal } from './components/BookmarkedJobsModal';
 import { SarkariFooter } from './components/SarkariFooter';
+import { BackToTop } from './components/BackToTop';
 
 export default function App() {
   // Navigation & Category filter state
@@ -307,6 +308,8 @@ export default function App() {
         onRemoveBookmark={handleToggleBookmark}
         onClearAll={handleClearAllBookmarks}
       />
+
+      <BackToTop />
     </div>
   );
 }
