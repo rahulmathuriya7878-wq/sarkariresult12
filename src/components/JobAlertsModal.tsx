@@ -216,7 +216,7 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email (e.g. rahul@gmail.com)"
+                  placeholder="Enter your email (e.g. candidate@email.in)"
                   className="w-full px-3 py-2 border border-slate-300 rounded text-xs text-slate-900 focus:outline-none focus:border-[#ab1616] focus:ring-1 focus:ring-[#ab1616]"
                 />
               </div>

@@ -65,11 +65,6 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
             onClick={() => onSelectHighlight(box.slug)}
             className={`bg-gradient-to-r ${box.color} hover:opacity-95 text-white p-2 sm:p-2.5 rounded-xs shadow-xs transition-all text-center flex flex-col items-center justify-center min-h-[56px] border border-black/15 group cursor-pointer active:scale-98 relative overflow-hidden`}
           >
-            {box.isNew && (
-              <span className="absolute top-0 right-0 bg-yellow-400 text-black text-[8px] font-black px-1.5 py-0.5 rounded-bl-xs uppercase tracking-wider animate-pulse">
-                NEW
-              </span>
-            )}
             <span className="font-extrabold text-xs sm:text-sm tracking-tight leading-tight line-clamp-1 group-hover:underline">
               {box.title}
             </span>

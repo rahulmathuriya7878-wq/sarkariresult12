@@ -279,8 +279,8 @@ export const JobDetailModal: React.FC<JobDetailModalProps> = ({
             </div>
           )}
 
-          {/* How to Fill Form Steps */}
-          {post.howToApplySteps.length > 0 && (
+          {/* How to Fill Form Steps (Not shown for Important / Certificate Verification services) */}
+          {post.howToApplySteps.length > 0 && post.category !== 'important' && post.category !== 'certificate_verification' && (
             <div className="border border-slate-300 rounded-lg overflow-hidden bg-white shadow-2xs">
               <div className="bg-slate-700 text-white px-3.5 py-2 text-xs font-bold uppercase tracking-wider">
                 How to Fill {post.shortTitle} Online Form (आवेदन कैसे करें)
@@ -325,7 +325,7 @@ export const JobDetailModal: React.FC<JobDetailModalProps> = ({
         {/* Footer Bar */}
         <div className="bg-slate-100 px-4 sm:px-6 py-3 border-t border-slate-200 flex items-center justify-between shrink-0">
           <p className="text-[11px] text-slate-500 hidden sm:block">
-            SarkariResult.Com · Best & Fast Government Job Portal in India
+            Sarkari Result · Best & Fast Government Job Portal in India
           </p>
           <div className="flex items-center gap-2 ml-auto">
             <button

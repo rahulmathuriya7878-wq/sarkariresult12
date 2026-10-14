@@ -58,8 +58,8 @@ export const Header: React.FC<HeaderProps> = ({
               <h1 className="text-2xl sm:text-4xl font-black tracking-tight uppercase text-white font-sans drop-shadow-xs group-hover:opacity-95 leading-none">
                 SARKARI RESULT
               </h1>
-              <span className="text-[10px] sm:text-xs tracking-wider text-amber-300 font-bold font-mono block mt-1">
-                WWW.SARKARIRESULT
+              <span className="text-[10px] sm:text-xs tracking-wider text-amber-300 font-bold block mt-1">
+                सरकारी रिजल्ट
               </span>
             </div>
           </button>
@@ -85,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 2. Black Navigation Ribbon (Exact sarkariresult.com menu) */}
+      {/* 2. Black Navigation Ribbon (Sarkari Result menu) */}
       <div className="bg-black text-white border-b-2 border-slate-700 sticky top-0 z-30 shadow-md">
         <div className="max-w-7xl mx-auto px-2 flex items-center justify-between">
           <nav className="flex items-center overflow-x-auto no-scrollbar py-0.5 text-xs font-bold divide-x divide-neutral-800">

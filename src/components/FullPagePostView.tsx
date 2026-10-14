@@ -17,7 +17,6 @@ import {
   Building,
   GraduationCap,
   ChevronRight,
-  Send,
   Home,
   LogIn,
   UserPlus
@@ -203,6 +202,62 @@ const getDetailedHowToApplyHindi = (post: SarkariPost, isRajasthanJob: boolean) 
   ];
 };
 
+export const getHindiPostShareText = (post: SarkariPost): string => {
+  const isService = post.category === 'important' || post.category === 'certificate_verification';
+  const lines: string[] = [];
+  
+  lines.push(`🚨 *${post.hindiTitle || post.title}*`);
+  lines.push('──────────────────────');
+  
+  if (post.shortTitle && post.shortTitle !== post.title) {
+    lines.push(`📌 *भर्ती/अपडेट:* ${post.shortTitle}`);
+  }
+  
+  lines.push(`🏛️ *विभाग/बोर्ड:* ${post.department} (${post.state})`);
+  
+  if (post.totalVacancies) {
+    lines.push(`🎯 *कुल पद:* ${post.totalVacancies} Posts`);
+  }
+  
+  if (post.qualifications && post.qualifications.length > 0) {
+    lines.push(`🎓 *योग्यता:* ${post.qualifications.join(', ')}`);
+  }
+  
+  if (post.lastDate) {
+    lines.push(`⏳ *ऑनलाइन आवेदन की अंतिम तिथि:* ${post.lastDate}`);
+  } else if (post.importantDates && post.importantDates.length > 0) {
+    const mainDate = post.importantDates.find(d => d.isHighlight) || post.importantDates[0];
+    lines.push(`📅 *${mainDate.label}:* ${mainDate.value}`);
+  }
+  
+  if (post.applicationFee && post.applicationFee.length > 0) {
+    const feeSummary = post.applicationFee
+      .map(f => `${f.category}: ${f.amount}`)
+      .slice(0, 2)
+      .join(' | ');
+    lines.push(`💰 *आवेदन शुल्क:* ${feeSummary}`);
+  }
+  
+  if (post.ageLimit && (post.ageLimit.minAge || post.ageLimit.maxAge)) {
+    const ageArr = [];
+    if (post.ageLimit.minAge) ageArr.push(`न्यूनतम ${post.ageLimit.minAge} वर्ष`);
+    if (post.ageLimit.maxAge) ageArr.push(`अधिकतम ${post.ageLimit.maxAge} वर्ष`);
+    lines.push(`👤 *आयु सीमा:* ${ageArr.join(', ')}`);
+  }
+  
+  lines.push('──────────────────────');
+  lines.push(`🔗 *पूरी जानकारी, नोटिफिकेशन व ऑनलाइन लिंक:*`);
+  const postUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}${window.location.pathname}#${post.slug}`
+    : '';
+  if (postUrl) {
+    lines.push(postUrl);
+  }
+  lines.push(`\n📲 *Sarkari Result* - सबसे तेज व सटीक सरकारी नौकरी अपडेट`);
+  
+  return lines.join('\n');
+};
+
 export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   post,
   onBack,
@@ -213,6 +268,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   isHindi
 }) => {
   const [copiedLink, setCopiedLink] = useState(false);
+  const [shareSuccessToast, setShareSuccessToast] = useState(false);
   const [activeSimulationLink, setActiveSimulationLink] = useState<{ title: string; action: string; content: string } | null>(null);
   const [linksList, setLinksList] = useState(post.directLinks);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -252,31 +308,23 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  const handleWebShare = async () => {
+  const handleShare = async () => {
+    const hindiShareText = getHindiPostShareText(post);
     if (navigator.share) {
       try {
         await navigator.share({
-          title: post.title,
-          text: `Check out ${post.title} on Sarkari Result Portal`,
+          title: post.hindiTitle || post.title,
+          text: hindiShareText,
           url: window.location.href,
         });
       } catch (err) {
-        // User cancelled or share failed
+        // User cancelled or share closed
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Job link copied to clipboard!');
+      await navigator.clipboard.writeText(hindiShareText);
+      setShareSuccessToast(true);
+      setTimeout(() => setShareSuccessToast(false), 3000);
     }
-  };
-
-  const handleWhatsAppShare = () => {
-    const text = `🚨 ${post.title}\n\nCheck all details, eligibility & apply links here:\n${window.location.href}`;
-    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-  };
-
-  const handleTelegramShare = () => {
-    const text = `🚨 ${post.title}\n\nCheck all details & apply online:`;
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(text)}`, '_blank');
   };
 
   const handlePrint = () => {
@@ -382,20 +430,33 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           </div>
 
           <div className="p-4 sm:p-8 space-y-6 text-slate-800 text-sm">
-            {/* Share Web Share API Banner */}
-            <div className="bg-emerald-50 border border-emerald-300 p-3 rounded-md flex items-center justify-between gap-3 text-xs shadow-2xs">
-              <span className="font-bold text-emerald-900 flex items-center gap-2">
+            {/* Share Box with ONLY Share Button */}
+            <div className="bg-emerald-50 border border-emerald-300 p-3 sm:p-3.5 rounded-md shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-emerald-950 font-bold text-xs sm:text-sm">
                 <Share2 className="w-4 h-4 text-emerald-700 shrink-0" />
-                <span>Share this job notification with friends on WhatsApp & social media:</span>
-              </span>
-              <button
-                type="button"
-                onClick={handleWebShare}
-                className="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded font-extrabold text-xs uppercase tracking-wide shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1.5 shrink-0"
-              >
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Share Job</span>
-              </button>
+                <span>
+                  {post.category === 'important' || post.category === 'certificate_verification'
+                    ? 'इस महत्वपूर्ण सेवा की जानकारी शेयर करें:'
+                    : 'इस भर्ती की महत्वपूर्ण जानकारी दोस्तों के साथ शेयर करें:'}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                {shareSuccessToast && (
+                  <span className="text-xs bg-emerald-700 text-white font-bold px-2.5 py-1 rounded shadow-xs">
+                    ✓ महत्वपूर्ण जानकारी कॉपी हो गई!
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2 rounded font-bold text-xs sm:text-sm shadow-xs transition-all active:scale-95 cursor-pointer inline-flex items-center justify-center gap-2"
+                  title="Share"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span>Share</span>
+                </button>
+              </div>
             </div>
 
 
@@ -507,102 +568,108 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </div>
             )}
 
-            {/* Mode of Selection Box */}
-            <div className="border border-purple-800 rounded-md overflow-hidden bg-white shadow-2xs">
-              <div className="bg-purple-900 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-amber-300" />
-                  चयन प्रक्रिया (Mode of Selection)
-                </span>
-                <span className="text-[10px] bg-purple-700 text-purple-100 px-2 py-0.5 rounded font-bold normal-case">
-                  भर्ती नियमानुसार
-                </span>
-              </div>
-              <div className="p-4 text-xs sm:text-sm text-slate-800 space-y-2 bg-purple-50/20">
-                <p className="leading-relaxed">
-                  <strong className="text-purple-950 font-bold">{post.shortTitle}</strong> के लिए अभ्यर्थियों का चयन निम्नलिखित चरणों के आधार पर किया जाएगा:
-                </p>
-                <ul className="list-disc pl-5 space-y-1.5 font-medium text-slate-900">
-                  {getJobSelectionStages(post).map((stage, idx) => (
-                    <li key={idx} className="leading-relaxed">{stage}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Detailed How to Fill Form Steps in Hindi */}
-            <div className="border-2 border-slate-700 rounded-md overflow-hidden bg-white shadow-xs">
-              <div className="bg-slate-900 text-white px-4 py-3 text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-amber-300" />
-                  {post.shortTitle} : ऑनलाइन आवेदन कैसे करें (Step-by-Step Complete Guide)
-                </span>
-                <span className="text-[11px] bg-amber-400 text-slate-900 px-2 py-0.5 rounded font-black normal-case">
-                  विस्तृत दिशा-निर्देश
-                </span>
-              </div>
-
-              <div className="p-4 sm:p-5 space-y-4 bg-slate-50/40 text-xs sm:text-sm">
-                {/* Crucial Instructions Banner */}
-                <div className="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r text-amber-950 space-y-1.5 text-xs">
-                  <div className="font-extrabold flex items-center gap-1.5 text-slate-900">
-                    <AlertCircle className="w-4 h-4 text-amber-600" />
-                    <span>ऑनलाइन फॉर्म भरने से पूर्व महत्वपूर्ण सावधानियां:</span>
-                  </div>
-                  <ul className="list-disc pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
-                    <li>
-                      अंतिम तिथि (<strong className="text-red-700 font-bold">{post.lastDate || 'अंतिम तिथि'}</strong>) का इंतजार न करें; सर्वर व्यस्तता और तकनीकी समस्या से बचने के लिए समय से पहले आवेदन पूर्ण करें।
-                    </li>
-                    <li>
-                      आवेदन पत्र में अपना सक्रिय मोबाइल नंबर और वैध ईमेल आईडी ही दर्ज करें, क्योंकि आगामी एडमिट कार्ड, परीक्षा तिथि एवं रिजल्ट का अलर्ट SMS / Email द्वारा भेजा जाएगा।
-                    </li>
-                    <li>
-                      फोटो और हस्ताक्षर का साइज निर्धारित सीमा (Photo: 20-50 KB, Sign: 10-20 KB) में रखने के लिए पोर्टल पर उपलब्ध <strong className="text-[#0000cc]">Photo Resizer</strong> टूल का प्रयोग करें।
-                    </li>
+            {/* Mode of Selection Box (Not shown for Important / Certificate Verification services) */}
+            {post.category !== 'important' && post.category !== 'certificate_verification' && (
+              <div className="border border-purple-800 rounded-md overflow-hidden bg-white shadow-2xs">
+                <div className="bg-purple-900 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-amber-300" />
+                    चयन प्रक्रिया (Mode of Selection)
+                  </span>
+                  <span className="text-[10px] bg-purple-700 text-purple-100 px-2 py-0.5 rounded font-bold normal-case">
+                    भर्ती नियमानुसार
+                  </span>
+                </div>
+                <div className="p-4 text-xs sm:text-sm text-slate-800 space-y-2 bg-purple-50/20">
+                  <p className="leading-relaxed">
+                    <strong className="text-purple-950 font-bold">{post.shortTitle}</strong> के लिए अभ्यर्थियों का चयन निम्नलिखित चरणों के आधार पर किया जाएगा:
+                  </p>
+                  <ul className="list-disc pl-5 space-y-1.5 font-medium text-slate-900">
+                    {getJobSelectionStages(post).map((stage, idx) => (
+                      <li key={idx} className="leading-relaxed">{stage}</li>
+                    ))}
                   </ul>
                 </div>
+              </div>
+            )}
 
-                {/* Step-by-Step Cards */}
-                <div className="space-y-3">
-                  <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm uppercase tracking-wide border-b border-slate-200 pb-1">
-                    क्रमवार आवेदन प्रक्रिया (Step-by-Step Application Steps):
-                  </h4>
-                  <div className="space-y-2.5">
-                    {getDetailedHowToApplyHindi(post, isRajasthanJob).map((item) => (
-                      <div key={item.stepNumber} className="bg-white border border-slate-200 rounded p-3 shadow-2xs hover:border-slate-400 transition-colors">
-                        <div className="font-extrabold text-slate-900 flex items-start gap-2 mb-1">
-                          <span className="w-5 h-5 rounded-full bg-[#ab1616] text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                            {item.stepNumber}
-                          </span>
-                          <span className="text-[#ab1616] text-xs sm:text-sm font-black">{item.title}</span>
-                        </div>
-                        <p className="text-slate-700 leading-relaxed pl-7 text-xs">
-                          {item.desc}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+            {/* Detailed How to Fill Form Steps in Hindi (Not shown for Important / Certificate Verification services) */}
+            {post.category !== 'important' && post.category !== 'certificate_verification' && (
+              <div className="border-2 border-slate-700 rounded-md overflow-hidden bg-white shadow-xs">
+                <div className="bg-slate-900 text-white px-4 py-3 text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-amber-300" />
+                    {post.shortTitle} : ऑनलाइन आवेदन कैसे करें (Step-by-Step Complete Guide)
+                  </span>
+                  <span className="text-[11px] bg-amber-400 text-slate-900 px-2 py-0.5 rounded font-black normal-case">
+                    विस्तृत दिशा-निर्देश
+                  </span>
                 </div>
 
-                {/* Specific Board Note */}
-                {post.howToApplySteps && post.howToApplySteps.length > 0 && (
-                  <div className="bg-slate-100 border border-slate-300 rounded p-3 text-xs space-y-1">
-                    <span className="font-bold text-slate-800 block">आधिकारिक बोर्ड के विशेष दिशा-निर्देश (Board Specific Points):</span>
-                    <ul className="list-disc pl-5 space-y-1 text-slate-700">
-                      {post.howToApplySteps.map((st, i) => (
-                        <li key={i}>{st}</li>
-                      ))}
+                <div className="p-4 sm:p-5 space-y-4 bg-slate-50/40 text-xs sm:text-sm">
+                  {/* Crucial Instructions Banner */}
+                  <div className="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r text-amber-950 space-y-1.5 text-xs">
+                    <div className="font-extrabold flex items-center gap-1.5 text-slate-900">
+                      <AlertCircle className="w-4 h-4 text-amber-600" />
+                      <span>ऑनलाइन फॉर्म भरने से पूर्व महत्वपूर्ण सावधानियां:</span>
+                    </div>
+                    <ul className="list-disc pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
+                      <li>
+                        अंतिम तिथि (<strong className="text-red-700 font-bold">{post.lastDate || 'अंतिम तिथि'}</strong>) का इंतजार न करें; सर्वर व्यस्तता और तकनीकी समस्या से बचने के लिए समय से पहले आवेदन पूर्ण करें।
+                      </li>
+                      <li>
+                        आवेदन पत्र में अपना सक्रिय मोबाइल नंबर और वैध ईमेल आईडी ही दर्ज करें, क्योंकि आगामी एडमिट कार्ड, परीक्षा तिथि एवं रिजल्ट का अलर्ट SMS / Email द्वारा भेजा जाएगा।
+                      </li>
+                      <li>
+                        फोटो और हस्ताक्षर का साइज निर्धारित सीमा (Photo: 20-50 KB, Sign: 10-20 KB) में रखने के लिए पोर्टल पर उपलब्ध <strong className="text-[#0000cc]">Photo Resizer</strong> टूल का प्रयोग करें।
+                      </li>
                     </ul>
                   </div>
-                )}
+
+                  {/* Step-by-Step Cards */}
+                  <div className="space-y-3">
+                    <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm uppercase tracking-wide border-b border-slate-200 pb-1">
+                      क्रमवार आवेदन प्रक्रिया (Step-by-Step Application Steps):
+                    </h4>
+                    <div className="space-y-2.5">
+                      {getDetailedHowToApplyHindi(post, isRajasthanJob).map((item) => (
+                        <div key={item.stepNumber} className="bg-white border border-slate-200 rounded p-3 shadow-2xs hover:border-slate-400 transition-colors">
+                          <div className="font-extrabold text-slate-900 flex items-start gap-2 mb-1">
+                            <span className="w-5 h-5 rounded-full bg-[#ab1616] text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                              {item.stepNumber}
+                            </span>
+                            <span className="text-[#ab1616] text-xs sm:text-sm font-black">{item.title}</span>
+                          </div>
+                          <p className="text-slate-700 leading-relaxed pl-7 text-xs">
+                            {item.desc}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Specific Board Note */}
+                  {post.howToApplySteps && post.howToApplySteps.length > 0 && (
+                    <div className="bg-slate-100 border border-slate-300 rounded p-3 text-xs space-y-1">
+                      <span className="font-bold text-slate-800 block">आधिकारिक बोर्ड के विशेष दिशा-निर्देश (Board Specific Points):</span>
+                      <ul className="list-disc pl-5 space-y-1 text-slate-700">
+                        {post.howToApplySteps.map((st, i) => (
+                          <li key={i}>{st}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* The Iconic Sarkari Useful Links Table */}
             <div className="border-2 border-[#ab1616] rounded-xs overflow-hidden bg-white shadow-sm">
               <div className="bg-[#ab1616] text-white py-3 px-4 font-extrabold text-sm sm:text-base tracking-wide uppercase flex flex-col sm:flex-row items-center justify-between gap-2">
                 <div className="text-center sm:text-left">
-                  Interested Candidates Can Read the Full Notification Before Apply Online
+                  {post.category === 'important' || post.category === 'certificate_verification'
+                    ? 'Direct Official Portal Links & Verified Services'
+                    : 'Interested Candidates Can Read the Full Notification Before Apply Online'}
                   <span className="block text-xs font-normal text-yellow-200 mt-0.5">
                     SOME USEFUL IMPORTANT LINKS (महत्वपूर्ण उपयोगी लिंक्स)
                   </span>
@@ -764,7 +831,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   type="url"
                   value={customUrl}
                   onChange={(e) => setCustomUrl(e.target.value)}
-                  placeholder="https://example.com/notification.pdf"
+                  placeholder="https://portal.gov.in/notification.pdf"
                   className="w-full border border-slate-300 rounded p-2 text-slate-900 focus:outline-none focus:border-red-700 font-mono text-xs"
                   required
                 />
