@@ -8,7 +8,7 @@ interface QuickHighlightsGridProps {
 export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({ onSelectHighlight }) => {
   return (
     <div className="w-full pt-2 pb-3">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
         {highlightBoxes.map((box) => (
           <button
             key={box.id}

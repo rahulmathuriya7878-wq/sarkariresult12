@@ -1049,10 +1049,5 @@ export const trendingAlerts = [
 export const highlightBoxes = [
   { id: 'h1', title: 'UPSC IAS / IFS 2026', sub: 'Apply Online (1056 Posts)', slug: 'upsc-civil-services-ias-ifs-2026', color: 'from-amber-600 to-amber-700' },
   { id: 'h2', title: 'SSC CGL 2026', sub: 'Apply Online (14,500 Posts)', slug: 'ssc-cgl-2026-online-form', color: 'from-blue-600 to-blue-700' },
-  { id: 'h3', title: 'RRB NTPC 2026', sub: '11,558 Posts Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', color: 'from-emerald-600 to-emerald-700' },
-  { id: 'h4', title: 'UP Police Constable', sub: '60,244 Posts Notice', slug: 'up-police-constable-recruitment-60244', color: 'from-red-600 to-red-700' },
-  { id: 'h5', title: 'SSC CGL Tier II Admit Card', sub: 'All Regions Available', slug: 'ssc-cgl-tier-ii-admit-card-2026', color: 'from-purple-600 to-purple-700' },
-  { id: 'h6', title: 'SSC CHSL Tier 1 Result', sub: 'Cutoff Marks & List Out', slug: 'ssc-chsl-tier-i-result-cutoff-2026', color: 'from-rose-600 to-rose-700' },
-  { id: 'h7', title: 'SSC GD Answer Key', sub: 'Challenge Objection Portal', slug: 'ssc-gd-constable-answer-key-2026', color: 'from-teal-600 to-teal-700' },
-  { id: 'h8', title: 'NEET UG 2026 Form', sub: 'MBBS/BDS Registration Open', slug: 'nta-neet-ug-2026-online-registration', color: 'from-indigo-600 to-indigo-700' }
+  { id: 'h3', title: 'RRB NTPC 2026', sub: '11,558 Posts Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', color: 'from-emerald-600 to-emerald-700' }
 ];

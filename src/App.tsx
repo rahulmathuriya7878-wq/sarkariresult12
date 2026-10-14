@@ -21,6 +21,8 @@ import { EligibilityMatcherModal } from './components/tools/EligibilityMatcherMo
 import { BookmarkedJobsModal } from './components/BookmarkedJobsModal';
 import { SarkariFooter } from './components/SarkariFooter';
 import { BackToTop } from './components/BackToTop';
+import { CriticalAlertBanner } from './components/CriticalAlertBanner';
+import { MobileBottomNav } from './components/MobileBottomNav';
 
 export default function App() {
   // Navigation & Category filter state
@@ -199,6 +201,9 @@ export default function App() {
       {/* 2. "Latest ko sabse uper": Flash Ticker right at the top */}
       <MarqueeTicker onSelectAlert={handleSelectSlug} />
 
+      {/* Critical Urgent Update Banner */}
+      <CriticalAlertBanner onSelectSlug={handleSelectSlug} />
+
       {/* 3. Conditional Full Page View or Main Home Portal */}
       {selectedPost ? (
         /* Full Page View when clicking any link */
@@ -217,19 +222,7 @@ export default function App() {
           {/* Quick Highlights 8-box Grid (Top Trending Vacancies) */}
           <QuickHighlightsGrid onSelectHighlight={handleSelectSlug} />
 
-          {/* Live Search and Filters */}
-          <SearchAndFilterBar
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            selectedDept={selectedDept}
-            onDeptChange={setSelectedDept}
-            selectedQual={selectedQual}
-            onQualChange={setSelectedQual}
-            selectedState={selectedState}
-            onStateChange={setSelectedState}
-            onResetFilters={handleResetFilters}
-            totalFilteredCount={filteredPosts.length}
-          />
+
 
           {/* Dynamic Content: Drill-down Category view or Authentic 3-Column Tables */}
           {activeCategory !== 'all' ? (
@@ -310,6 +303,16 @@ export default function App() {
       />
 
       <BackToTop />
+
+      <MobileBottomNav
+        activeCategory={activeCategory}
+        onCategoryChange={(cat) => {
+          setSelectedPost(null);
+          setActiveCategory(cat);
+        }}
+        bookmarkCount={bookmarkedIds.length}
+        onOpenBookmarks={() => setIsBookmarksOpen(true)}
+      />
     </div>
   );
 }

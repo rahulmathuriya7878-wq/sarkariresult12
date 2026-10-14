@@ -42,7 +42,7 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
             A government job in India (Sarkari Naukri) is considered one of the most prestigious career paths, providing job security, respect, pension benefits, and opportunities to serve the nation. Millions of young graduates, 10th and 12th pass aspirants participate every year in examinations conducted by <strong>UPSC, SSC, Railway Recruitment Boards (RRB), IBPS, State PSCs, Police, and Defence Forces</strong>.
           </p>
           <p>
-            <strong>SarkariResult.Com</strong> is India’s most visited educational notification portal, helping candidates find all verified information on <strong>Latest Jobs, Admit Cards, Exam Results, Answer Keys, Detailed Syllabus, and Admission Notices</strong> in one single place with direct official application links.
+            <strong>Sarkari Result</strong> is India’s most visited educational notification portal, helping candidates find all verified information on <strong>Latest Jobs, Admit Cards, Exam Results, Answer Keys, Detailed Syllabus, and Admission Notices</strong> in one single place with direct official application links.
           </p>
         </div>
 
@@ -108,13 +108,13 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
         {/* Disclaimer */}
         <div className="border-t border-slate-200 pt-4 text-[10px] text-slate-500 leading-normal">
           <p>
-            <strong>Disclaimer:</strong> SarkariResult.com is an educational news portal and is not associated with any government agency or recruitment board. While we strive to ensure all information is accurate and up-to-date, candidates are requested to verify details from official government notifications before taking action.
+            <strong>Disclaimer:</strong> Sarkari Result is an educational news portal and is not associated with any government agency or recruitment board. While we strive to ensure all information is accurate and up-to-date, candidates are requested to verify details from official government notifications before taking action.
           </p>
         </div>
 
         {/* Copyright */}
         <div className="text-center text-[11px] text-slate-600 border-t border-slate-200 pt-3 font-medium">
-          © 2026 Sarkari Result · All Rights Reserved · WWW.SARKARIRESULT.COM
+          © 2026 Sarkari Result · All Rights Reserved · SARKARI RESULT
         </div>
       </div>
     </footer>

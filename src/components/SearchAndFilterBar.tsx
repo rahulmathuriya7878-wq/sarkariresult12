@@ -1,6 +1,6 @@
 import React from 'react';
-import { Search, Filter, X, SlidersHorizontal } from 'lucide-react';
-import { Department, Qualification, PostCategory } from '../types/job';
+import { Search, X } from 'lucide-react';
+import { Department, Qualification } from '../types/job';
 
 interface SearchAndFilterBarProps {
   searchQuery: string;
@@ -18,36 +18,10 @@ interface SearchAndFilterBarProps {
 export const SearchAndFilterBar: React.FC<SearchAndFilterBarProps> = ({
   searchQuery,
   onSearchChange,
-  selectedDept,
-  onDeptChange,
-  selectedQual,
-  onQualChange,
   selectedState,
   onStateChange,
-  onResetFilters,
-  totalFilteredCount
+  onResetFilters
 }) => {
-  const departments: (Department | 'All')[] = [
-    'All',
-    'SSC',
-    'UPSC',
-    'Railway',
-    'Police',
-    'Defence',
-    'Banking',
-    'Teaching',
-    'State PSC'
-  ];
-
-  const qualifications: (Qualification | 'All')[] = [
-    'All',
-    '10th Pass',
-    '12th Pass',
-    'Graduate',
-    'Diploma / ITI',
-    'B.Ed / CTET'
-  ];
-
   const states = [
     'All States',
     'Uttar Pradesh',
@@ -57,7 +31,7 @@ export const SearchAndFilterBar: React.FC<SearchAndFilterBarProps> = ({
     'Delhi'
   ];
 
-  const hasActiveFilters = searchQuery !== '' || selectedDept !== 'All' || selectedQual !== 'All' || selectedState !== 'All States';
+  const hasActiveFilters = searchQuery !== '' || selectedState !== 'All States';
 
   return (
     <div className="bg-white border border-slate-300 rounded-lg p-3 sm:p-4 shadow-2xs space-y-3 mb-6">
@@ -75,7 +49,7 @@ export const SearchAndFilterBar: React.FC<SearchAndFilterBarProps> = ({
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -87,7 +61,7 @@ export const SearchAndFilterBar: React.FC<SearchAndFilterBarProps> = ({
           <select
             value={selectedState}
             onChange={(e) => onStateChange(e.target.value)}
-            className="w-full py-2 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded-md focus:ring-1 focus:ring-red-700 font-medium text-slate-700"
+            className="w-full py-2 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded-md focus:ring-1 focus:ring-red-700 font-medium text-slate-700 cursor-pointer"
           >
             {states.map((st) => (
               <option key={st} value={st}>{st}</option>
@@ -104,48 +78,6 @@ export const SearchAndFilterBar: React.FC<SearchAndFilterBarProps> = ({
             <span>Reset</span>
           </button>
         )}
-      </div>
-
-      {/* Quick Sector Filter Buttons */}
-      <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs">
-        <span className="text-slate-500 font-semibold shrink-0 mr-1 flex items-center gap-1">
-          <SlidersHorizontal className="w-3.5 h-3.5" /> Sector:
-        </span>
-        {departments.map((dept) => (
-          <button
-            key={dept}
-            type="button"
-            onClick={() => onDeptChange(dept)}
-            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
-              selectedDept === dept
-                ? 'bg-red-800 text-white font-bold shadow-2xs'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            {dept}
-          </button>
-        ))}
-      </div>
-
-      {/* Qualification Filter Buttons */}
-      <div className="flex flex-wrap items-center gap-1.5 text-xs">
-        <span className="text-slate-500 font-semibold shrink-0 mr-1">
-          Qualification:
-        </span>
-        {qualifications.map((q) => (
-          <button
-            key={q}
-            type="button"
-            onClick={() => onQualChange(q)}
-            className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
-              selectedQual === q
-                ? 'bg-slate-900 text-white font-bold'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            {q}
-          </button>
-        ))}
       </div>
     </div>
   );
