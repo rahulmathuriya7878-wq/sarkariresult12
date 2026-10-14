@@ -36,26 +36,37 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="w-full">
-      {/* 1. Iconic Sarkari Result Top Banner (Exact sarkariresult.com styling) */}
+      {/* 1. Iconic Sarkari Result Top Banner */}
       <div className="bg-[#ab1616] text-white py-3 sm:py-4 px-3 text-center border-b border-red-900 shadow-xs">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="w-10 hidden sm:block"></div>
           <button
             onClick={() => onCategoryChange('all')}
-            className="inline-block text-center cursor-pointer group"
+            className="inline-block text-center cursor-pointer group mx-auto"
           >
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-white font-sans drop-shadow-xs group-hover:opacity-95">
               SARKARI RESULT
             </h1>
-            <p className="text-sm sm:text-lg font-black text-[#ffff00] tracking-wider font-mono mt-0.5">
-              WWW.SARKARIRESULT.COM
-            </p>
           </button>
           
-          <p className="text-[11px] sm:text-xs text-red-100 font-medium mt-1 max-w-2xl mx-auto">
-            {isHindi 
-              ? 'सरकारी रिजल्ट : Sarkari Naukri, Latest Jobs, Admit Card, Results, Answer Key 2026'
-              : 'Sarkari Result : SarkariResult.Com Sarkari Naukri Latest Jobs Online Form at sarkari result 2026'}
-          </p>
+          <button
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: 'Sarkari Result',
+                  text: 'Check Latest Govt Jobs, Admit Card and Results on Sarkari Result',
+                  url: window.location.href,
+                }).catch(() => {});
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Portal link copied to clipboard!');
+              }
+            }}
+            className="bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+            title="Share Portal"
+          >
+            <span>Share 🔗</span>
+          </button>
         </div>
       </div>
 

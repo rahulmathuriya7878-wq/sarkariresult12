@@ -21,16 +21,16 @@ export const SarkariThreeColumnGrid: React.FC<SarkariThreeColumnGridProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-4">
-      {/* 1. Result Column */}
+      {/* 1. Latest Jobs Column (Placed First / Sabse Uper) */}
       <div className="border-2 border-[#ab1616] bg-white rounded-xs flex flex-col shadow-2xs">
         <div className="bg-[#ab1616] text-white py-2 px-3 text-center">
           <h2 className="font-extrabold text-base tracking-wide uppercase">
-            {isHindi ? 'परिणाम (Result)' : 'Result'}
+            {isHindi ? 'सरकारी नौकरी (Latest Jobs)' : 'Latest Jobs'}
           </h2>
         </div>
 
         <ul className="divide-y divide-slate-100 flex-1 p-1">
-          {results.slice(0, 10).map((post) => (
+          {latestJobs.slice(0, 10).map((post) => (
             <li
               key={post.id}
               onClick={() => onSelectPost(post)}
@@ -41,28 +41,28 @@ export const SarkariThreeColumnGrid: React.FC<SarkariThreeColumnGridProps> = ({
                 <span className="font-semibold text-[#0000cc] group-hover:text-[#ab1616] group-hover:underline leading-snug">
                   {post.shortTitle}
                 </span>
-                {post.resultDate && (
-                  <span className="text-[10px] text-slate-500 block font-normal mt-0.5">
-                    Declared: {post.resultDate}
+                {post.lastDate && (
+                  <span className="text-[10px] text-red-600 block font-semibold mt-0.5">
+                    Last Date: {post.lastDate}
                   </span>
                 )}
               </div>
             </li>
           ))}
 
-          {results.length === 0 && (
+          {latestJobs.length === 0 && (
             <li className="p-4 text-center text-xs text-slate-400">
-              No results available.
+              No job notifications available.
             </li>
           )}
         </ul>
 
         <div className="p-1.5 text-center bg-slate-50 border-t border-slate-200">
           <button
-            onClick={() => onViewCategory('result')}
+            onClick={() => onViewCategory('latest_jobs')}
             className="text-xs font-bold text-[#ab1616] hover:underline inline-flex items-center gap-1 cursor-pointer"
           >
-            <span>View More Result</span>
+            <span>View More Latest Jobs</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -115,16 +115,16 @@ export const SarkariThreeColumnGrid: React.FC<SarkariThreeColumnGridProps> = ({
         </div>
       </div>
 
-      {/* 3. Latest Jobs Column */}
+      {/* 3. Result Column */}
       <div className="border-2 border-[#ab1616] bg-white rounded-xs flex flex-col shadow-2xs">
         <div className="bg-[#ab1616] text-white py-2 px-3 text-center">
           <h2 className="font-extrabold text-base tracking-wide uppercase">
-            {isHindi ? 'सरकारी नौकरी (Latest Jobs)' : 'Latest Jobs'}
+            {isHindi ? 'परिणाम (Result)' : 'Result'}
           </h2>
         </div>
 
         <ul className="divide-y divide-slate-100 flex-1 p-1">
-          {latestJobs.slice(0, 10).map((post) => (
+          {results.slice(0, 10).map((post) => (
             <li
               key={post.id}
               onClick={() => onSelectPost(post)}
@@ -135,28 +135,28 @@ export const SarkariThreeColumnGrid: React.FC<SarkariThreeColumnGridProps> = ({
                 <span className="font-semibold text-[#0000cc] group-hover:text-[#ab1616] group-hover:underline leading-snug">
                   {post.shortTitle}
                 </span>
-                {post.lastDate && (
-                  <span className="text-[10px] text-red-600 block font-semibold mt-0.5">
-                    Last Date: {post.lastDate}
+                {post.resultDate && (
+                  <span className="text-[10px] text-slate-500 block font-normal mt-0.5">
+                    Declared: {post.resultDate}
                   </span>
                 )}
               </div>
             </li>
           ))}
 
-          {latestJobs.length === 0 && (
+          {results.length === 0 && (
             <li className="p-4 text-center text-xs text-slate-400">
-              No job notifications available.
+              No results available.
             </li>
           )}
         </ul>
 
         <div className="p-1.5 text-center bg-slate-50 border-t border-slate-200">
           <button
-            onClick={() => onViewCategory('latest_jobs')}
+            onClick={() => onViewCategory('result')}
             className="text-xs font-bold text-[#ab1616] hover:underline inline-flex items-center gap-1 cursor-pointer"
           >
-            <span>View More Latest Jobs</span>
+            <span>View More Result</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
