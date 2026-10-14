@@ -31,6 +31,13 @@ export type Qualification =
   | 'B.Ed / CTET' 
   | 'Medical / Nursing';
 
+export type SalaryBand = 
+  | 'All' 
+  | 'Below 25K' 
+  | '25K - 50K' 
+  | '50K - 1 Lakh' 
+  | 'Above 1 Lakh';
+
 export interface VacancyBreakdown {
   postName: string;
   totalPosts: string | number;
@@ -93,6 +100,9 @@ export interface SarkariPost {
   importantDates: ImportantDateItem[];
   vacancyBreakdown: VacancyBreakdown[];
   howToApplySteps: string[];
+  selectionProcess?: string[];
+  salary?: string;
+  salaryBand?: SalaryBand;
   directLinks: DirectLinkItem[];
   notificationNumber?: string;
 }

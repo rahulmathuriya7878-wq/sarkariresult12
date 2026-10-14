@@ -5,6 +5,7 @@ interface SarkariFooterProps {
   onOpenAgeCalculator: () => void;
   onOpenPhotoResizer: () => void;
   onOpenJobFinder: () => void;
+  onOpenSitemap?: () => void;
   isHindi: boolean;
 }
 
@@ -12,20 +13,21 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
   onOpenAgeCalculator,
   onOpenPhotoResizer,
   onOpenJobFinder,
+  onOpenSitemap,
   isHindi
 }) => {
   return (
-    <footer className="w-full bg-[#f8f9fa] border-t-2 border-[#ab1616] text-slate-700 text-xs mt-8">
-      {/* Red Telegram / WhatsApp alert strip */}
-      <div className="bg-[#ab1616] text-white py-2 px-3 text-center text-xs font-bold">
+    <footer className="w-full bg-[#f8f9fa] border-t-2 border-slate-800 text-slate-700 text-xs mt-8">
+      {/* Telegram / WhatsApp alert strip */}
+      <div className="bg-slate-900 text-white py-2 px-3 text-center text-xs font-bold">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-3">
           <span className="flex items-center gap-1.5">
             <Send className="w-4 h-4 text-yellow-300" />
-            Join Sarkari Result Official Telegram Channel / WhatsApp Channel for Fast Updates
+            Join Rajasthan Vacancy Official Telegram Channel for Fast Updates
           </span>
           <button 
-            onClick={() => alert('Search @SarkariResultOfficial on Telegram or WhatsApp to join!')}
-            className="bg-white hover:bg-yellow-100 text-[#ab1616] px-2.5 py-0.5 rounded-xs font-black text-[11px] cursor-pointer"
+            onClick={() => window.open('https://t.me/newsarkariresultt', '_blank')}
+            className="bg-white hover:bg-yellow-100 text-slate-900 px-2.5 py-0.5 rounded-xs font-black text-[11px] cursor-pointer"
           >
             Join Now
           </button>
@@ -33,16 +35,16 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        {/* Authentic Sarkari Result SEO Information Text Block */}
+        {/* Authentic Rajasthan Vacancy SEO Information Text Block */}
         <div className="bg-white p-4 border border-slate-200 rounded-xs space-y-3 text-[11px] leading-relaxed text-slate-600">
           <h3 className="text-xs font-bold text-slate-900 uppercase">
-            Sarkari Result : Resources to Help Indians Find Government Jobs (Sarkari Naukri)
+            Rajasthan Vacancy (RajasthanVacancy.in) : Rajasthan Government Jobs & Bharti Portal
           </h3>
           <p>
-            A government job in India (Sarkari Naukri) is considered one of the most prestigious career paths, providing job security, respect, pension benefits, and opportunities to serve the nation. Millions of young graduates, 10th and 12th pass aspirants participate every year in examinations conducted by <strong>UPSC, SSC, Railway Recruitment Boards (RRB), IBPS, State PSCs, Police, and Defence Forces</strong>.
+            Find all latest Rajasthan government jobs (Rajasthan Sarkari Naukri) and recruitment notifications issued by <strong>RSMSSB (RSSB), RPSC, Rajasthan Police, High Court, Animal Husbandry, Medical & Health, Teacher Bharti (1st Grade, 2nd Grade, REET), LDC, Patwari, VDO, and Pashu Paricharak</strong>.
           </p>
           <p>
-            <strong>Sarkari Result</strong> is India’s most visited educational notification portal, helping candidates find all verified information on <strong>Latest Jobs, Admit Cards, Exam Results, Answer Keys, Detailed Syllabus, and Admission Notices</strong> in one single place with direct official application links.
+            <strong>RajasthanVacancy.in</strong> is Rajasthan's premier portal for <strong>Latest Jobs, Admit Cards, Exam Results, Answer Keys, Detailed Syllabus, CET Updates, and Online Application Forms</strong> with direct verified official links.
           </p>
         </div>
 
@@ -88,6 +90,11 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
                   • Job Finder by Qualification
                 </button>
               </li>
+              <li>
+                <button onClick={onOpenSitemap} className="text-[#0000cc] hover:underline font-bold cursor-pointer">
+                  • Dynamic XML Sitemap (SEO)
+                </button>
+              </li>
               <li>• PAN Card Online Apply</li>
               <li>• Aadhaar PVC Card Download</li>
             </ul>
@@ -113,8 +120,12 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
         </div>
 
         {/* Copyright */}
-        <div className="text-center text-[11px] text-slate-600 border-t border-slate-200 pt-3 font-medium">
-          © 2026 Sarkari Result · All Rights Reserved · SARKARI RESULT
+        <div className="text-center text-[11px] text-slate-600 border-t border-slate-200 pt-3 font-medium flex flex-wrap items-center justify-center gap-2">
+          <span>© 2026 Sarkari Result · All Rights Reserved · SARKARI RESULT</span>
+          <span>·</span>
+          <button onClick={onOpenSitemap} className="text-[#0000cc] hover:underline font-bold cursor-pointer">
+            sitemap.xml
+          </button>
         </div>
       </div>
     </footer>

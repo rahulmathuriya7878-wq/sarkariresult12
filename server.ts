@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import { generateSitemapXml, generateRobotsTxt } from './src/utils/sitemapGenerator';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,6 +10,29 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+
+  // Dynamic Sitemap XML Endpoint
+  app.get(['/sitemap.xml', '/sitemap', '/api/sitemap'], (req, res) => {
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+    const host = req.headers.host || 'ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app';
+    const baseUrl = `${protocol}://${host}`;
+    
+    const xml = generateSitemapXml(baseUrl);
+    res.header('Content-Type', 'application/xml; charset=utf-8');
+    res.header('Cache-Control', 'public, max-age=3600');
+    res.send(xml);
+  });
+
+  // Dynamic Robots.txt Endpoint
+  app.get('/robots.txt', (req, res) => {
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+    const host = req.headers.host || 'ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app';
+    const baseUrl = `${protocol}://${host}`;
+
+    const txt = generateRobotsTxt(baseUrl);
+    res.header('Content-Type', 'text/plain; charset=utf-8');
+    res.send(txt);
+  });
 
   const isProduction = process.env.NODE_ENV === 'production' || fs.existsSync(path.join(__dirname, 'dist'));
 

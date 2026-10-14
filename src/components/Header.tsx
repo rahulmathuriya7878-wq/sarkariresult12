@@ -5,7 +5,8 @@ import {
   Bookmark, 
   Sparkles, 
   Globe, 
-  Search
+  Search,
+  BellRing
 } from 'lucide-react';
 import { PostCategory } from '../types/job';
 
@@ -17,9 +18,12 @@ interface HeaderProps {
   onOpenAgeCalculator: () => void;
   onOpenPhotoResizer: () => void;
   onOpenJobFinder: () => void;
+  onOpenJobAlerts?: () => void;
   isHindi: boolean;
   onToggleHindi: () => void;
   onSearchFocus: () => void;
+  isClassicTheme?: boolean;
+  onToggleTheme?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,23 +34,34 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAgeCalculator,
   onOpenPhotoResizer,
   onOpenJobFinder,
+  onOpenJobAlerts,
   isHindi,
   onToggleHindi,
-  onSearchFocus
+  onSearchFocus,
+  isClassicTheme = true,
+  onToggleTheme
 }) => {
   return (
     <header className="w-full">
-      {/* 1. Iconic Sarkari Result Top Banner */}
+      {/* 1. Iconic Sarkari Result Top Banner (Normal Clean Look) */}
       <div className="bg-[#ab1616] text-white py-3 sm:py-4 px-3 text-center border-b border-red-900 shadow-xs">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="w-10 hidden sm:block"></div>
           <button
             onClick={() => onCategoryChange('all')}
-            className="inline-block text-center cursor-pointer group mx-auto"
+            className="inline-flex items-center justify-center gap-2.5 text-center cursor-pointer group mx-auto"
           >
-            <h1 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-white font-sans drop-shadow-xs group-hover:opacity-95">
-              SARKARI RESULT
-            </h1>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-400 text-slate-900 font-black flex items-center justify-center shadow-md border-2 border-amber-300 text-xl sm:text-2xl shrink-0">
+              ★
+            </div>
+            <div className="text-left">
+              <h1 className="text-2xl sm:text-4xl font-black tracking-tight uppercase text-white font-sans drop-shadow-xs group-hover:opacity-95 leading-none">
+                SARKARI RESULT
+              </h1>
+              <span className="text-[10px] sm:text-xs tracking-wider text-amber-300 font-bold font-mono block mt-1">
+                WWW.SARKARIRESULT
+              </span>
+            </div>
           </button>
           
           <button
@@ -62,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({
                 alert('Portal link copied to clipboard!');
               }
             }}
-            className="bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+            className="bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 border border-white/20"
             title="Share Portal"
           >
             <span>Share 🔗</span>
@@ -71,69 +86,69 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* 2. Black Navigation Ribbon (Exact sarkariresult.com menu) */}
-      <div className="bg-black text-white border-b-2 border-[#ab1616] sticky top-0 z-30 shadow-md">
+      <div className="bg-black text-white border-b-2 border-slate-700 sticky top-0 z-30 shadow-md">
         <div className="max-w-7xl mx-auto px-2 flex items-center justify-between">
           <nav className="flex items-center overflow-x-auto no-scrollbar py-0.5 text-xs font-bold divide-x divide-neutral-800">
             <button
               onClick={() => onCategoryChange('all')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'all' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'all' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Home
             </button>
             <button
               onClick={() => onCategoryChange('latest_jobs')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'latest_jobs' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'latest_jobs' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Latest Jobs
             </button>
             <button
               onClick={() => onCategoryChange('result')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'result' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'result' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Results
             </button>
             <button
               onClick={() => onCategoryChange('admit_card')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'admit_card' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'admit_card' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Admit Card
             </button>
             <button
               onClick={() => onCategoryChange('answer_key')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'answer_key' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'answer_key' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Answer Key
             </button>
             <button
               onClick={() => onCategoryChange('syllabus')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'syllabus' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'syllabus' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Syllabus
             </button>
             <button
               onClick={() => onCategoryChange('admission')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'admission' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Admission
             </button>
             <button
               onClick={() => onCategoryChange('certificate_verification')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-[#ab1616] transition-colors uppercase cursor-pointer ${
-                activeCategory === 'certificate_verification' ? 'bg-[#ab1616] text-white' : 'text-neutral-200'
+              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
+                activeCategory === 'certificate_verification' ? 'bg-slate-800 text-white' : 'text-neutral-200'
               }`}
             >
               Certificates
@@ -164,6 +179,14 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <ImageIcon className="w-3.5 h-3.5 text-amber-300" />
               <span>Photo Tool</span>
+            </button>
+            <button
+              onClick={onOpenJobAlerts}
+              className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold bg-amber-400 hover:bg-amber-300 text-slate-900 rounded transition-colors cursor-pointer shadow-2xs"
+              title="Get Job Alerts"
+            >
+              <BellRing className="w-3.5 h-3.5 text-slate-900 animate-pulse" />
+              <span className="hidden sm:inline">Job Alerts</span>
             </button>
             <button
               onClick={onToggleHindi}

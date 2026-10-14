@@ -1,7 +1,287 @@
 import { SarkariPost } from '../types/job';
 
 export const mockSarkariPosts: SarkariPost[] = [
-  // --- LATEST JOBS ---
+  // --- LATEST ADDED POST (SABSE UPER) ---
+  {
+    id: 'job-ruhs-mo-2026',
+    slug: 'ruhs-medical-officer-recruitment-2026',
+    title: 'RUHS Medical Officer (MO Medical) Recruitment 2026 Online Form (1,220 Posts)',
+    shortTitle: 'RUHS Medical Officer 2026 Apply Online',
+    hindiTitle: 'आरयूएचएस मेडिकल ऑफिसर भर्ती 2026 ऑनलाइन आवेदन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Medical',
+    qualifications: ['Medical / Nursing', 'Graduate'],
+    state: 'Rajasthan',
+    postDate: '14 October 2026',
+    notificationNumber: 'RUHS/MO/2026/02',
+    totalVacancies: 1220,
+    salary: '₹ 56,100 - ₹ 1,77,500/- (Pay Matrix Level 14)',
+    salaryBand: '50K - 1 Lakh',
+    isHot: true,
+    isNew: true,
+    lastDate: '15 November 2026',
+    examDate: 'December 2026',
+    shortInfo: 'Rajasthan University of Health Sciences (RUHS), Jaipur has released the official recruitment notification for Medical Officer (MO) Medical Direct Recruitment Examination 2026. Eligible candidates with MBBS degree and valid RMC registration can apply online.',
+    applicationFee: [
+      { category: 'General / OBC / EWS / Other State', amount: '₹ 5000/-' },
+      { category: 'SC / ST (Rajasthan Domicile)', amount: '₹ 2500/-' }
+    ],
+    feePaymentMode: 'Pay Examination Fee through Online Net Banking, Debit Card, Credit Card or E-Mitra Kiosk.',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 22,
+      maxAge: 45,
+      notes: 'Age relaxation applicable as per Rajasthan Medical & Health Service Rules.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '14/10/2026' },
+      { label: 'Last Date for Apply Online', value: '15/11/2026', isHighlight: true },
+      { label: 'Online Computer Based Exam (CBT)', value: 'December 2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Medical Officer (MO Medical) - Non-TSP Area',
+        totalPosts: '1,150',
+        eligibility: 'MBBS degree from recognized medical institution & registered with Rajasthan Medical Council (RMC).'
+      },
+      {
+        postName: 'Medical Officer (MO Medical) - TSP Area',
+        totalPosts: '70',
+        eligibility: 'MBBS degree & permanent Rajasthan Medical Council (RMC) registration.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit RUHS Jaipur recruitment portal or direct link https://rajasthanvacancy.in/ruhs-medical-officer-recruitment-2026/.',
+      'Register with active mobile number & email ID.',
+      'Fill personal details, MBBS professional marks, internship completion date, and RMC registration number.',
+      'Upload candidate photo, signature, and category certificate.',
+      'Pay prescribed examination fee and print final submitted application form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (SSO Rajasthan Registration)', actionText: 'Registration', type: 'apply', url: 'https://sso.rajasthan.gov.in/register', isPrimary: true },
+      { label: 'Already Registered? Candidate SSO Login', actionText: 'Login', type: 'apply', url: 'https://sso.rajasthan.gov.in/signin' },
+      { label: 'Download Detailed Notification PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'RUHS Official Website', actionText: 'ruhsraj.org', type: 'official' }
+    ]
+  },
+  // --- RAJASTHAN VACANCY TOP FEATURED POSTS ---
+  {
+    id: 'job-rajasthan-cet-2026',
+    slug: 'rajasthan-cet-2026-online-form',
+    title: 'Rajasthan Common Eligibility Test CET 2026 Online Form (Graduation & 12th Level)',
+    shortTitle: 'Rajasthan CET 2026 Online Form',
+    hindiTitle: 'राजस्थान समान पात्रता परीक्षा (CET) 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'State PSC',
+    qualifications: ['12th Pass', 'Graduate'],
+    state: 'Rajasthan',
+    postDate: '14 October 2026',
+    notificationNumber: 'RSMSSB/CET/2026/01',
+    totalVacancies: '25,000+',
+    salary: '₹ 20,800 - ₹ 65,000/- (Pay Level 5 - 8)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '20 November 2026',
+    examDate: 'December 2026',
+    shortInfo: 'Rajasthan Staff Selection Board (RSMSSB) has released the notification for Common Eligibility Test (CET) 2026 for Graduation and Senior Secondary (12th) Level posts. All eligible candidates can fill out the online form on SSO Rajasthan Portal.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 600/-' },
+      { category: 'SC / ST / PwD (Rajasthan)', amount: '₹ 400/-' }
+    ],
+    feePaymentMode: 'Pay through SSO Rajasthan Portal E-Mitra / Net Banking / Debit Card',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 18,
+      maxAge: 40,
+      notes: 'Age relaxation applicable as per Rajasthan Govt Rules.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '14/10/2026' },
+      { label: 'Last Date for Apply Online', value: '20/11/2026', isHighlight: true },
+      { label: 'Exam Date', value: 'December 2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Rajasthan CET (Graduation Level) - Patwari, Platoon Commander, Junior Accountant',
+        totalPosts: '12,500',
+        eligibility: 'Bachelor Degree in Any Stream from Recognized University in India.'
+      },
+      {
+        postName: 'Rajasthan CET (12th Level) - LDC, Constable, Forest Guard, Junior Assistant',
+        totalPosts: '13,000',
+        eligibility: 'Passed Class 12th (Senior Secondary) Exam with Computer Certificate / RSCIT.'
+      }
+    ],
+    howToApplySteps: [
+      'Go to SSO Rajasthan Official Portal (sso.rajasthan.gov.in).',
+      'Complete One Time Registration (OTR) if not done previously.',
+      'Fill in personal details, educational qualifications, and upload required documents.',
+      'Pay application fee through E-Mitra or Online Payment Gateway and print submitted application.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (SSO One Time Registration - OTR)', actionText: 'Registration', type: 'apply', url: 'https://sso.rajasthan.gov.in/register', isPrimary: true },
+      { label: 'Already Registered? Candidate SSO Login', actionText: 'Login', type: 'apply', url: 'https://sso.rajasthan.gov.in/signin' },
+      { label: 'Download Detailed Notification PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'RSMSSB Official Website', actionText: 'rsmssb.rajasthan.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'job-rajasthan-police-2026',
+    slug: 'rajasthan-police-constable-bharti-2026',
+    title: 'Rajasthan Police Constable Bharti 2026 Online Form (10,500 Posts)',
+    shortTitle: 'Rajasthan Police Constable 2026 Online Form',
+    hindiTitle: 'राजस्थान पुलिस कांस्टेबल भर्ती 2026 ऑनलाइन आवेदन',
+    category: 'latest_jobs',
+    department: 'Police',
+    qualifications: ['12th Pass'],
+    state: 'Rajasthan',
+    postDate: '12 October 2026',
+    notificationNumber: 'Phq/Constable/2026/105',
+    totalVacancies: 10500,
+    salary: '₹ 20,800 - ₹ 45,000/- (Pay Matrix Level 5)',
+    salaryBand: 'Below 25K',
+    isHot: true,
+    isNew: true,
+    lastDate: '18 November 2026',
+    examDate: 'January 2027',
+    shortInfo: 'Directorate of Police, Rajasthan, Jaipur has invited online applications for Constable General, Telecommunication, Driver & Band posts. Candidates who passed 12th & cleared Rajasthan CET 12th Level can apply.',
+    applicationFee: [
+      { category: 'General / OBC / Other State', amount: '₹ 600/-' },
+      { category: 'SC / ST / EWS (Rajasthan)', amount: '₹ 400/-' }
+    ],
+    feePaymentMode: 'Pay fee via SSO Rajasthan E-Mitra Portal',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 18,
+      maxAge: 24,
+      notes: 'Age relaxation 5 years for SC/ST/OBC/MBC/EWS candidates.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '12/10/2026' },
+      { label: 'Last Date for Apply Online', value: '18/11/2026', isHighlight: true },
+      { label: 'PET / PST Physical Test Date', value: 'December 2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Constable General (Non-TSP & TSP Area)',
+        totalPosts: '8,200',
+        eligibility: 'Class 12th Pass + Valid Rajasthan CET 12th Level Scorecard.'
+      },
+      {
+        postName: 'Constable Telecommunication & Driver',
+        totalPosts: '2,300',
+        eligibility: 'Class 12th with Physics & Mathematics / Valid Heavy Motor Driving License.'
+      }
+    ],
+    howToApplySteps: [
+      'Login to SSO Rajasthan portal.',
+      'Select Rajasthan Police Recruitment 2026 application link.',
+      'Verify CET Scorecard details and fill in preferences.',
+      'Submit fee and print acknowledgement.'
+    ],
+    directLinks: [
+      { label: 'Apply Online via SSO Portal (Registration)', actionText: 'Registration', type: 'apply', url: 'https://sso.rajasthan.gov.in/register', isPrimary: true },
+      { label: 'Already Registered? Candidate SSO Login', actionText: 'Login', type: 'apply', url: 'https://sso.rajasthan.gov.in/signin' },
+      { label: 'Download Official Notification PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'Rajasthan Police Official Website', actionText: 'police.rajasthan.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'job-anganwadi-2026',
+    slug: 'up-anganwadi-worker-recruitment-2026',
+    title: 'UP Anganwadi Worker Recruitment 2026 Online Form (Bal Vikas Seva & Pushtahar)',
+    shortTitle: 'UP Anganwadi Worker Online Form 2026',
+    hindiTitle: 'यूपी आंगनवाड़ी वर्कर भर्ती 2026 ऑनलाइन आवेदन फॉर्म',
+    category: 'latest_jobs',
+    department: 'State PSC',
+    qualifications: ['10th Pass', '12th Pass'],
+    state: 'Uttar Pradesh',
+    postDate: '13 October 2026',
+    notificationNumber: 'UP-ICDS-2026/AWW',
+    totalVacancies: 23750,
+    isHot: true,
+    isNew: true,
+    lastDate: '15 November 2026',
+    examDate: 'December 2026',
+    shortInfo: 'Directorate of Bal Vikas Seva and Pushtahar, Uttar Pradesh (UPICDS) has released the notification for UP Anganwadi Worker (Karyakatri), Mini Anganwadi Worker, and Sahayika Recruitment 2026. Any female candidate who has passed Class 10th (High School) or Class 12th (Intermediate) examination can apply online.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 0/- (Free)' },
+      { category: 'SC / ST / Female', amount: '₹ 0/- (Free)' }
+    ],
+    feePaymentMode: 'No Application Fee for All Candidates to Apply Online.',
+    ageLimit: {
+      asOnDate: '01/07/2026',
+      minAge: 18,
+      maxAge: 35,
+      notes: 'Age relaxation extra as per UP Anganwadi Recruitment Rules 2026.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '13/10/2026' },
+      { label: 'Last Date for Apply Online', value: '15/11/2026', isHighlight: true },
+      { label: 'Complete Form Last Date', value: '15/11/2026' },
+      { label: 'Merit List Available', value: 'December 2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Lucknow District',
+        totalPosts: '920',
+        eligibility: 'Class 10th / 12th Pass & Resident of Lucknow District / Ward.'
+      },
+      {
+        postName: 'Kanpur Nagar District',
+        totalPosts: '890',
+        eligibility: 'Class 10th / 12th Pass & Resident of Kanpur Nagar.'
+      },
+      {
+        postName: 'Gorakhpur District',
+        totalPosts: '950',
+        eligibility: 'Class 10th / 12th Pass & Resident of Gorakhpur.'
+      },
+      {
+        postName: 'Varanasi District',
+        totalPosts: '780',
+        eligibility: 'Class 10th / 12th Pass & Resident of Varanasi.'
+      },
+      {
+        postName: 'Prayagraj District',
+        totalPosts: '1050',
+        eligibility: 'Class 10th / 12th Pass & Resident of Prayagraj.'
+      },
+      {
+        postName: 'Agra District',
+        totalPosts: '840',
+        eligibility: 'Class 10th / 12th Pass & Resident of Agra.'
+      },
+      {
+        postName: 'Meerut District',
+        totalPosts: '720',
+        eligibility: 'Class 10th / 12th Pass & Resident of Meerut.'
+      },
+      {
+        postName: 'Bareilly District',
+        totalPosts: '810',
+        eligibility: 'Class 10th / 12th Pass & Resident of Bareilly.'
+      },
+      {
+        postName: 'Other All Districts of Uttar Pradesh',
+        totalPosts: '16790',
+        eligibility: 'Passed Class 10th / 12th Exam & Resident of Respective District / Gram Panchayat.'
+      }
+    ],
+    howToApplySteps: [
+      'Directorate of Bal Vikas Seva & Pushtahar UP ICDS Anganwadi Worker Recruitment 2026.',
+      'Candidate Read the Notification carefully before applying the online application form.',
+      'Collect all required documents - Eligibility proof, High School / Intermediate Marksheet, Aadhaar Card, Residence Certificate, Caste Certificate, Passport Size Photo & Signature.',
+      'Before final submission, check the preview and all details carefully.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', url: 'https://upanganwadibharti.in/workernew/users/registration.php', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Download District / Region Wise Notification', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'UP Anganwadi Official Website', actionText: 'balvikasup.gov.in', type: 'official' }
+    ]
+  },
   {
     id: 'job-1',
     slug: 'upsc-civil-services-ias-ifs-2026',
@@ -64,7 +344,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Take a print out of final submitted form for future reference.'
     ],
     directLinks: [
-      { label: 'Apply Online (OTR / Registration)', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Detailed Notification (English)', actionText: 'Click Here (PDF)', type: 'notification' },
       { label: 'Download Detailed Notification (Hindi)', actionText: 'Click Here (PDF)', type: 'notification' },
       { label: 'Syllabus & Exam Pattern PDF', actionText: 'Download', type: 'syllabus' },
@@ -133,7 +414,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Submit exam center preference and pay required application fee.'
     ],
     directLinks: [
-      { label: 'Apply Online', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Official Notification', actionText: 'Click Here', type: 'notification' },
       { label: 'SSC New Portal OTR Registration', actionText: 'Register Now', type: 'apply' },
       { label: 'Tier-I Exam Syllabus & Pattern', actionText: 'Download', type: 'syllabus' },
@@ -195,7 +477,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Carefully enter bank account details for refund of examination fee.'
     ],
     directLinks: [
-      { label: 'Apply Online (RRB Apply Portal)', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Graduate Notification (CEN 05/2026)', actionText: 'Click Here', type: 'notification' },
       { label: 'Download Undergraduate Notification (CEN 06/2026)', actionText: 'Click Here', type: 'notification' },
       { label: 'Official RRB Recruitment Portal', actionText: 'rrbapply.gov.in', type: 'official' }
@@ -250,7 +533,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Running requirement: Male 4.8 KM in 25 Minutes, Female 2.4 KM in 14 Minutes.'
     ],
     directLinks: [
-      { label: 'Apply Online Form', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Detailed Notification', actionText: 'Click Here (PDF)', type: 'notification' },
       { label: 'Physical Standard & Syllabus', actionText: 'Download', type: 'syllabus' },
       { label: 'UPPRPB Official Website', actionText: 'uppbpb.gov.in', type: 'official' }
@@ -303,7 +587,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Check force preferences (BSF, CISF, CRPF, SSB, ITBP, Assam Rifles, SSF) carefully before final submission.'
     ],
     directLinks: [
-      { label: 'Apply Online Form', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Notification PDF', actionText: 'Click Here', type: 'notification' },
       { label: 'Official Website', actionText: 'ssc.gov.in', type: 'official' }
     ]
@@ -360,7 +645,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Check your eligibility, physical standards, and ARO rally schedule.'
     ],
     directLinks: [
-      { label: 'Apply Online (Join Indian Army)', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Rally Notification', actionText: 'Click Here', type: 'notification' },
       { label: 'Official Website', actionText: 'joinindianarmy.nic.in', type: 'official' }
     ]
@@ -788,6 +1074,56 @@ export const mockSarkariPosts: SarkariPost[] = [
 
   // --- ADMISSIONS ---
   {
+    id: 'admission-rajasthan-pg-2026',
+    slug: 'rajasthan-pg-admission-2026',
+    title: 'Rajasthan PG Admission Online Form 2026 (M.A, M.Sc, M.Com & Post Graduate Courses)',
+    shortTitle: 'Rajasthan PG Admission 2026 Online Form',
+    hindiTitle: 'राजस्थान पीजी एडमिशन 2026 ऑनलाइन आवेदन फॉर्म',
+    category: 'admission',
+    department: 'Teaching',
+    qualifications: ['Graduate'],
+    state: 'Rajasthan',
+    postDate: '14 October 2026',
+    notificationNumber: 'DCE/Rajasthan/PG-2026',
+    totalVacancies: '50,000+ Seats',
+    isHot: true,
+    isNew: true,
+    lastDate: '25 November 2026',
+    shortInfo: 'Department of College Education, Rajasthan (DCE) has released the official notification for Centralized Online Admission 2026 for Post Graduate (PG) Courses - M.A, M.Sc, M.Com in Government & Private Colleges across Rajasthan. Candidates who passed Graduation can apply online.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 150/-' },
+      { category: 'SC / ST / PH', amount: '₹ 100/-' }
+    ],
+    ageLimit: {
+      asOnDate: '01/07/2026',
+      notes: 'No age limit for Post Graduate Admissions in Rajasthan Govt Colleges.'
+    },
+    importantDates: [
+      { label: 'Online Application Begin', value: '14/10/2026' },
+      { label: 'Last Date for Apply Online', value: '25/11/2026', isHighlight: true },
+      { label: 'College Merit List Release Date', value: '05/12/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Rajasthan Govt College PG Admission (M.A, M.Sc, M.Com Previous Year)',
+        totalPosts: '50,000+ Seats',
+        eligibility: 'Passed Bachelor Degree in Relevant Stream from Recognized University in India.'
+      }
+    ],
+    howToApplySteps: [
+      'Go to Department of College Education DCE Rajasthan or SSO Rajasthan Portal.',
+      'Select PG Online Admission 2026 option and register using SSO ID.',
+      'Fill in Graduation marks, personal details, and select college & subject choices.',
+      'Pay online application fee and print final submitted application form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (New Student Registration)', actionText: 'Registration', type: 'apply', url: 'https://rajasthanvacancy.in/rajasthan-pg-admission-2026/', isPrimary: true },
+      { label: 'Already Registered Student Login', actionText: 'Login', type: 'apply', url: 'https://rajasthanvacancy.in/rajasthan-pg-admission-2026/' },
+      { label: 'Download PG Admission Guidelines PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'DCE Rajasthan Official Website', actionText: 'hte.rajasthan.gov.in', type: 'official' }
+    ]
+  },
+  {
     id: 'adm-1',
     slug: 'nta-neet-ug-2026-online-registration',
     title: 'NTA NEET UG 2026 National Eligibility Cum Entrance Test Online Application Form',
@@ -831,7 +1167,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Ensure Aadhaar Authentication is completed.'
     ],
     directLinks: [
-      { label: 'Apply Online Registration', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Information Bulletin (English)', actionText: 'Click Here', type: 'notification' },
       { label: 'Official NTA NEET Website', actionText: 'exams.nta.ac.in/NEET', type: 'official' }
     ]
@@ -872,7 +1209,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Fill personal details, academic scores, and select exam paper (Paper 1 B.E/B.Tech or Paper 2A/2B B.Arch/B.Planning).'
     ],
     directLinks: [
-      { label: 'Apply Online for JEE Main 2026', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Download Information Bulletin', actionText: 'Download (PDF)', type: 'notification' },
       { label: 'Official JEE Main Portal', actionText: 'jeemain.nta.ac.in', type: 'official' }
     ]
@@ -904,7 +1242,8 @@ export const mockSarkariPosts: SarkariPost[] = [
     vacancyBreakdown: [],
     howToApplySteps: ['Candidate with minimum 50% marks in Graduation / Post Graduation can apply.'],
     directLinks: [
-      { label: 'Apply Online Form', actionText: 'Click Here', type: 'apply', isPrimary: true },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Official Notification Brochure', actionText: 'Download', type: 'notification' }
     ]
   },
@@ -936,9 +1275,12 @@ export const mockSarkariPosts: SarkariPost[] = [
       'For Physical PAN Card, submit Form 49A on NSDL Protean or UTIITSL portal with Aadhaar eKYC.'
     ],
     directLinks: [
-      { label: 'Apply Instant Free e-PAN (Income Tax e-Filing)', actionText: 'Click Here', type: 'apply', isPrimary: true },
-      { label: 'Apply New PAN Card (NSDL Protean)', actionText: 'Click Here', type: 'apply' },
-      { label: 'PAN Card Correction / Update Online', actionText: 'Click Here', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Link PAN with Aadhaar Card', actionText: 'Check Status', type: 'official' }
     ]
   },
@@ -968,8 +1310,10 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Password to open downloaded e-Aadhaar is FIRST 4 LETTERS OF YOUR NAME IN CAPITAL + YEAR OF BIRTH (e.g. RAHU1998).'
     ],
     directLinks: [
-      { label: 'Download e-Aadhaar Card Online', actionText: 'Click Here', type: 'apply', isPrimary: true },
-      { label: 'Order Aadhaar PVC Card (₹ 50)', actionText: 'Click Here', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Check Aadhaar Update Status', actionText: 'Check Status', type: 'official' },
       { label: 'Official UIDAI Portal', actionText: 'myaadhaar.uidai.gov.in', type: 'official' }
     ]
@@ -1002,8 +1346,10 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Fill academic fee details, submit income certificate and caste certificate numbers.'
     ],
     directLinks: [
-      { label: 'Apply Online (Fresh Registration)', actionText: 'Click Here', type: 'apply', isPrimary: true },
-      { label: 'Apply Online (Renewal Login)', actionText: 'Click Here', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Check Scholarship Application Status', actionText: 'Click Here', type: 'official' },
       { label: 'UP Scholarship Official Portal', actionText: 'scholarship.up.gov.in', type: 'official' }
     ]
@@ -1028,14 +1374,17 @@ export const mockSarkariPosts: SarkariPost[] = [
     vacancyBreakdown: [],
     howToApplySteps: ['Register on voters.eci.gov.in with mobile number and submit Form 6.'],
     directLinks: [
-      { label: 'Apply New Voter Card (Form 6)', actionText: 'Click Here', type: 'apply', isPrimary: true },
-      { label: 'Download Digital e-EPIC Card', actionText: 'Click Here', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Check Voter Application Status', actionText: 'Check Status', type: 'official' }
     ]
   }
 ];
 
 export const trendingAlerts = [
+  { id: 't0', title: '🚨 RUHS Medical Officer (1,220 Posts) Online Form Active', slug: 'ruhs-medical-officer-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't1', title: 'UPSC Civil Services 2026 Prelims Online Form', slug: 'upsc-civil-services-ias-ifs-2026', category: 'latest_jobs', badge: 'Apply Now' },
   { id: 't2', title: 'SSC CGL 2026 Tier-II Admit Card Released', slug: 'ssc-cgl-tier-ii-admit-card-2026', category: 'admit_card', badge: 'Admit Card' },
   { id: 't3', title: 'Railway RRB NTPC 11,558 Vacancies Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', category: 'latest_jobs', badge: '11,558 Posts' },
@@ -1047,6 +1396,7 @@ export const trendingAlerts = [
 ];
 
 export const highlightBoxes = [
+  { id: 'h0', title: 'RUHS Medical Officer 2026', sub: 'Apply Online (1,220 Posts)', slug: 'ruhs-medical-officer-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
   { id: 'h1', title: 'UPSC IAS / IFS 2026', sub: 'Apply Online (1056 Posts)', slug: 'upsc-civil-services-ias-ifs-2026', color: 'from-amber-600 to-amber-700' },
   { id: 'h2', title: 'SSC CGL 2026', sub: 'Apply Online (14,500 Posts)', slug: 'ssc-cgl-2026-online-form', color: 'from-blue-600 to-blue-700' },
   { id: 'h3', title: 'RRB NTPC 2026', sub: '11,558 Posts Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', color: 'from-emerald-600 to-emerald-700' }
