@@ -1,7 +1,69 @@
 import { SarkariPost } from '../types/job';
 
 export const mockSarkariPosts: SarkariPost[] = [
-  // --- LATEST ADDED POST (SABSE UPER) ---
+  // --- LATEST OFFICIAL NOTICE CEN 07/2026 ---
+  {
+    id: 'job-rrb-ntpc-cen-07-2026',
+    slug: 'rrb-ntpc-cen-07-2026-recruitment',
+    title: 'Railway RRB NTPC Undergraduate (12th Level) CEN 07/2026 Recruitment Online Form (1,688 Posts)',
+    shortTitle: 'RRB NTPC CEN 07/2026 Online Form',
+    hindiTitle: 'रेलवे आरआरबी एनटीपीसी CEN 07/2026 भर्ती ऑनलाइन आवेदन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Railway',
+    qualifications: ['12th Pass'],
+    state: 'All India',
+    postDate: '15 October 2026',
+    notificationNumber: 'CEN 07/2026',
+    totalVacancies: 1688,
+    salary: '₹ 19,900 - ₹ 63,200/- (Pay Level 2 & Level 3 as per 7th CPC)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '13/11/2026',
+    examDate: 'As per Schedule',
+    shortInfo: 'Railway Recruitment Boards (RRBs) have released Centralised Employment Notification CEN No. 07/2026 for recruitment to various Non-Technical Popular Categories (Under Graduate - Level 2 & Level 3) posts across all RRBs. Total 1,688 vacancies. Opening date 15/10/2026, Closing date 13/11/2026.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 refund after CBT 1)' },
+      { category: 'SC / ST / PwBD / Female / Minorities', amount: '₹ 250/- (Full ₹ 250 refund after CBT 1)' }
+    ],
+    feePaymentMode: 'Pay Examination Fee through Online Net Banking, Debit Card, Credit Card, or UPI.',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 18,
+      maxAge: 33,
+      notes: 'Age relaxation applicable as per Railway CEN 07/2026 rules.'
+    },
+    importantDates: [
+      { label: 'Application Opening Date', value: '15/10/2026 (Tentative)' },
+      { label: 'Application Closing Date', value: '13/11/2026 (23:59 Hrs.)', isHighlight: true },
+      { label: 'Form Correction Window', value: 'As per official schedule' },
+      { label: 'CBT 1 Exam Date', value: 'As per Schedule', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Non-Technical Popular Categories (Under Graduate - Level 2 & Level 3)',
+        totalPosts: '1,688',
+        eligibility: `• शैक्षणिक योग्यता: Class 12th (10+2) Intermediate or equivalent passed from recognized Board in India with required aggregate marks.
+• कंप्यूटर व टाइपिंग कौशल: 30 WPM English OR 25 WPM Hindi Typing speed on Computer for Junior Clerk / Accounts Clerk / Time Keeper posts.
+• चिकित्सा मानक: Medical Standard A-2, A-3, or C-2 as specified in CEN 07/2026. Candidate must possess valid Aadhaar Card.`,
+        modeOfSelection: 'CBT 1 & CBT 2 + Typing Test / Skill Test + Document Verification & Medical Examination',
+        categoryBreakdown: { gen: 688, obc: 450, ews: 168, sc: 253, st: 129 }
+      }
+    ],
+    howToApplySteps: [
+      'Visit official Railway Recruitment Board application portal rrbapply.gov.in.',
+      'Ensure Aadhaar card verification with 10th class certificate matching name and DOB.',
+      'Register under CEN 07/2026 using mobile number and email ID.',
+      'Upload recent photograph with plain white background and signature.',
+      'Pay application fee and submit final form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', url: 'https://www.rrbapply.gov.in/#/auth/home?flag=true', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply', url: 'https://www.rrbapply.gov.in/#/auth/home' },
+      { label: 'Download Indicative Notice CEN 07/2026 PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'Official RRB Recruitment Portal', actionText: 'Click Here', type: 'official', url: 'https://www.rrbapply.gov.in/#/auth/landing' }
+    ]
+  },
   {
     id: 'job-ruhs-mo-2026',
     slug: 'ruhs-medical-officer-recruitment-2026',
@@ -40,18 +102,19 @@ export const mockSarkariPosts: SarkariPost[] = [
     ],
     vacancyBreakdown: [
       {
-        postName: 'Medical Officer (MO Medical) - Non-TSP Area',
-        totalPosts: '1,150',
-        eligibility: 'MBBS degree from recognized medical institution & registered with Rajasthan Medical Council (RMC).'
-      },
-      {
-        postName: 'Medical Officer (MO Medical) - TSP Area',
-        totalPosts: '70',
-        eligibility: 'MBBS degree & permanent Rajasthan Medical Council (RMC) registration.'
+        postName: 'Medical Officer (MO Medical)',
+        nonTspPosts: '1,150',
+        tspPosts: '70',
+        totalPosts: '1,220',
+        eligibility: `• शैक्षणिक योग्यता (MBBS Degree): MBBS degree from recognized medical college/institution in India approved by NMC / MCI.
+• मेडिकल काउंसिल पंजीकरण: Candidate MUST be permanently registered with Rajasthan Medical Council (RMC), Jaipur on or before DV date.
+• इंटरनशिप व ज्ञान: 1-Year compulsory rotatory internship completed + Working knowledge of Hindi Devanagari script & Rajasthan culture.`,
+        modeOfSelection: 'Written Examination (CBT) + Document Verification & Medical Fitness Test',
+        categoryBreakdown: { gen: 490, obc: 254, ews: 122, sc: 195, st: 159 }
       }
     ],
     howToApplySteps: [
-      'Visit RUHS Jaipur recruitment portal or direct link https://rajasthanvacancy.in/ruhs-medical-officer-recruitment-2026/.',
+      'Visit RUHS Jaipur official recruitment portal.',
       'Register with active mobile number & email ID.',
       'Fill personal details, MBBS professional marks, internship completion date, and RMC registration number.',
       'Upload candidate photo, signature, and category certificate.',
@@ -64,7 +127,7 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'RUHS Official Website', actionText: 'ruhsraj.org', type: 'official' }
     ]
   },
-  // --- RAJASTHAN VACANCY TOP FEATURED POSTS ---
+  // --- TOP FEATURED POSTS ---
   {
     id: 'job-rajasthan-cet-2026',
     slug: 'rajasthan-cet-2026-online-form',
@@ -77,9 +140,7 @@ export const mockSarkariPosts: SarkariPost[] = [
     state: 'Rajasthan',
     postDate: '14 October 2026',
     notificationNumber: 'RSMSSB/CET/2026/01',
-    totalVacancies: '25,000+',
-    salary: '₹ 20,800 - ₹ 65,000/- (Pay Level 5 - 8)',
-    salaryBand: '25K - 50K',
+    totalVacancies: '25,500',
     isHot: true,
     isNew: true,
     lastDate: '20 November 2026',
@@ -104,13 +165,25 @@ export const mockSarkariPosts: SarkariPost[] = [
     vacancyBreakdown: [
       {
         postName: 'Rajasthan CET (Graduation Level) - Patwari, Platoon Commander, Junior Accountant',
+        nonTspPosts: '11,200',
+        tspPosts: '1,300',
         totalPosts: '12,500',
-        eligibility: 'Bachelor Degree in Any Stream from Recognized University in India.'
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree in Any Stream (BA, B.Sc, B.Com, Agriculture, Law, CS, Engineering) from Recognized University in India.
+• कंप्यूटर योग्यता: RSCIT Certificate issued by VMOU Kota / O-Level / COPA / Degree or Diploma in Computer Science / IT.
+• मुख्य विज्ञापित पद: पटवारी, प्लाटून कमान्डर, कनिष्ठ लेखाकार, तहसील राजस्व लेखाकार, महिला अधिकारिता पर्यवेक्षक।`,
+        modeOfSelection: 'Written Competitive Examination (Objective Multiple Choice Questions) + Document Verification & Final Merit List',
+        categoryBreakdown: { gen: 5000, obc: 2625, ews: 1250, sc: 2000, st: 1625 }
       },
       {
         postName: 'Rajasthan CET (12th Level) - LDC, Constable, Forest Guard, Junior Assistant',
+        nonTspPosts: '11,500',
+        tspPosts: '1,500',
         totalPosts: '13,000',
-        eligibility: 'Passed Class 12th (Senior Secondary) Exam with Computer Certificate / RSCIT.'
+        eligibility: `• शैक्षणिक योग्यता: Passed Senior Secondary (10+2 / 12th Exam) from Board of Secondary Education Rajasthan (BSER) or any Recognized Board in India.
+• कंप्यूटर योग्यता: RSCIT Certificate / COPA / Computer Diploma / Passed 12th Class with Computer Science / IT subject.
+• मुख्य विज्ञापित पद: एलडीसी (LDC / Clerk Grade-II), राजस्थान पुलिस कांस्टेबल, वनपाल/फॉरेस्टर, छात्रवास अधीक्षक।`,
+        modeOfSelection: 'Written Common Eligibility Examination + Physical Efficiency Test (where applicable) + Document Verification',
+        categoryBreakdown: { gen: 5200, obc: 2730, ews: 1300, sc: 2080, st: 1690 }
       }
     ],
     howToApplySteps: [
@@ -139,8 +212,6 @@ export const mockSarkariPosts: SarkariPost[] = [
     postDate: '12 October 2026',
     notificationNumber: 'Phq/Constable/2026/105',
     totalVacancies: 10500,
-    salary: '₹ 20,800 - ₹ 45,000/- (Pay Matrix Level 5)',
-    salaryBand: 'Below 25K',
     isHot: true,
     isNew: true,
     lastDate: '18 November 2026',
@@ -164,14 +235,26 @@ export const mockSarkariPosts: SarkariPost[] = [
     ],
     vacancyBreakdown: [
       {
-        postName: 'Constable General (Non-TSP & TSP Area)',
+        postName: 'Constable General',
+        nonTspPosts: '7,300',
+        tspPosts: '900',
         totalPosts: '8,200',
-        eligibility: 'Class 12th Pass + Valid Rajasthan CET 12th Level Scorecard.'
+        eligibility: `• शैक्षणिक योग्यता: Passed Class 12th (Senior Secondary) from recognized Board + Valid Rajasthan CET 12th Level Scorecard.
+• शारीरिक मापदंड: पुरुष ऊंचाई 168 सेमी (ST 160 सेमी), सीना 81-86 सेमी; महिला ऊंचाई 152 सेमी (ST 147 सेमी), न्यूनतम वजन 47.5 किग्रा।
+• शारीरिक दक्षता परीक्षा (PET): पुरुष 5 किमी दौड़ 25 मिनट में, महिला 5 किमी दौड़ 35 मिनट में।`,
+        modeOfSelection: 'Physical Efficiency Test (PET/PST - 5 KM Running) -> Computer Based Written Test (CBT) -> Proficiency Test -> Document Verification & Medical Exam',
+        categoryBreakdown: { gen: 3280, obc: 1722, ews: 820, sc: 1312, st: 1066 }
       },
       {
         postName: 'Constable Telecommunication & Driver',
+        nonTspPosts: '2,100',
+        tspPosts: '200',
         totalPosts: '2,300',
-        eligibility: 'Class 12th with Physics & Mathematics / Valid Heavy Motor Driving License.'
+        eligibility: `• दूरसंचार हेतु योग्यता: Passed 12th Class with Physics & Mathematics / Computer Science as main subjects.
+• ड्राइवर हेतु योग्यता: 10+2 Passed + Valid Heavy Motor Vehicle (HMV) / Light Motor Vehicle (LMV) Driving License (min 1 year old).
+• सीईटी पात्रता: Valid Rajasthan CET Senior Secondary Level Exam 2026 Scorecard mandatory.`,
+        modeOfSelection: 'PET/PST Physical Test -> Written Examination -> Driving / Technical Trade Test -> Document Verification & Medical Exam',
+        categoryBreakdown: { gen: 920, obc: 483, ews: 230, sc: 368, st: 299 }
       }
     ],
     howToApplySteps: [
@@ -324,13 +407,16 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: 'Indian Administrative Service (IAS / IPS / IFS & Allied Services)',
         totalPosts: '906',
-        eligibility: 'Bachelor Degree in Any Stream from Any Recognized University in India.',
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree in Any Stream from Any Recognized University in India.
+• आयु सीमा: 21-32 Years (Relaxation as per Rules).`,
+        modeOfSelection: 'Preliminary Examination (Objective Type - GS 1 & CSAT) -> Main Examination (Written Descriptive - 9 Papers) -> Personality Test / Interview',
         categoryBreakdown: { gen: 390, obc: 245, ews: 90, sc: 135, st: 46 }
       },
       {
         postName: 'Indian Forest Service (IFS)',
         totalPosts: '150',
-        eligibility: 'Bachelor Degree with at least one subject Animal Husbandry, Botany, Chemistry, Geology, Mathematics, Physics, Statistics and Zoology or Agriculture/Engineering.',
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree with at least one subject Animal Husbandry, Botany, Chemistry, Geology, Mathematics, Physics, Statistics and Zoology or Agriculture/Engineering.`,
+        modeOfSelection: 'Civil Services Prelims Exam -> IFS Main Examination (Descriptive) -> Personality Test & Medical Examination',
         categoryBreakdown: { gen: 65, obc: 40, ews: 15, sc: 20, st: 10 }
       }
     ],
@@ -344,12 +430,12 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Take a print out of final submitted form for future reference.'
     ],
     directLinks: [
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', url: 'https://upsconline.nic.in/candidate/realms/candidate-portal/login-actions/registration?execution=5cc68339-a3de-4411-b6ff-23460bba7ad6&client_id=account&tab_id=kgIbmuNADOk&client_data=eyJydSI6Imh0dHBzOi8vdXBzY29ubGluZS5uaWMuaW4vY2FuZGlkYXRlL3JlYWxtcy9jYW5kaWRhdGUtcG9ydGFsL2FjY291bnQvbG9naW4tcmVkaXJlY3QiLCJydCI6ImNvZGUiLCJzdCI6IjAvMmYzMTgzZjYtMTE2Ny05ZDY0LTA1N2EtNmUyODZhYmM5NWM0In0', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply', url: 'https://upsconline.nic.in/candidate/realms/candidate-portal/login-actions/authenticate?execution=dbd830c6-ec01-4843-b36b-1698ce52fb62&client_id=account&tab_id=kgIbmuNADOk&client_data=eyJydSI6Imh0dHBzOi8vdXBzY29ubGluZS5uaWMuaW4vY2FuZGlkYXRlL3JlYWxtcy9jYW5kaWRhdGUtcG9ydGFsL2FjY291bnQvbG9naW4tcmVkaXJlY3QiLCJydCI6ImNvZGUiLCJzdCI6IjAvMmYzMTgzZjYtMTE2Ny05ZDY0LTA1N2EtNmUyODZhYmM5NWM0In0' },
       { label: 'Download Detailed Notification (English)', actionText: 'Click Here (PDF)', type: 'notification' },
       { label: 'Download Detailed Notification (Hindi)', actionText: 'Click Here (PDF)', type: 'notification' },
       { label: 'Syllabus & Exam Pattern PDF', actionText: 'Download', type: 'syllabus' },
-      { label: 'UPSC Official Website', actionText: 'upsc.gov.in', type: 'official' }
+      { label: 'UPSC Official Website', actionText: 'Click Here', type: 'official', url: 'https://www.upsc.gov.in/' }
     ]
   },
   {
@@ -394,17 +480,25 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: 'Assistant Section Officer (ASO), Inspector (Central Excise, IT, Preventive), Sub-Inspector CBI',
         totalPosts: '9,200',
-        eligibility: 'Bachelor Degree in Any Stream from Any Recognized University in India.'
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree in Any Stream from Any Recognized University in India.
+• आयु सीमा: 20-30 Years (Post wise).`,
+        modeOfSelection: 'Tier-I Computer Based Exam (Qualifying) -> Tier-II CBE (Paper 1 & Data Entry Speed Test) -> Document Verification',
+        categoryBreakdown: { gen: 3680, obc: 2484, ews: 920, sc: 1380, st: 736 }
       },
       {
         postName: 'Junior Statistical Officer (JSO)',
         totalPosts: '650',
-        eligibility: 'Bachelor Degree with at least 60% Marks in Mathematics at 12th standard OR Bachelor Degree with Statistics as one of the subjects.'
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree with at least 60% Marks in Mathematics at 12th standard OR Bachelor Degree with Statistics as one of the subjects.
+• आयु सीमा: Up to 32 Years.`,
+        modeOfSelection: 'Tier-I Exam -> Tier-II Exam (Paper 1 + Paper 2 Statistics) -> Document Verification',
+        categoryBreakdown: { gen: 260, obc: 175, ews: 65, sc: 98, st: 52 }
       },
       {
         postName: 'Auditor, Accountant, Tax Assistant, Upper Division Clerk (UDC)',
         totalPosts: '4,650',
-        eligibility: 'Bachelor Degree in Any Stream from Any Recognized University.'
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree in Any Stream from Any Recognized University + Computer Proficiency & Typing Test.`,
+        modeOfSelection: 'Tier-I Exam -> Tier-II Exam & Data Entry Speed Test (DEST) -> Document Verification',
+        categoryBreakdown: { gen: 1860, obc: 1255, ews: 465, sc: 698, st: 372 }
       }
     ],
     howToApplySteps: [
@@ -414,12 +508,12 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Submit exam center preference and pay required application fee.'
     ],
     directLinks: [
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', url: 'https://ssc.gov.in/candidate-portal/one-time-registration/home-page', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply', url: 'https://ssc.gov.in/login' },
       { label: 'Download Official Notification', actionText: 'Click Here', type: 'notification' },
-      { label: 'SSC New Portal OTR Registration', actionText: 'Register Now', type: 'apply' },
+      { label: 'SSC New Portal OTR Registration', actionText: 'Register Now', type: 'apply', url: 'https://ssc.gov.in/candidate-portal/one-time-registration/home-page' },
       { label: 'Tier-I Exam Syllabus & Pattern', actionText: 'Download', type: 'syllabus' },
-      { label: 'Official Website', actionText: 'ssc.gov.in', type: 'official' }
+      { label: 'Official Website', actionText: 'Click Here', type: 'official', url: 'https://ssc.gov.in/' }
     ]
   },
   {
@@ -462,12 +556,16 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: 'Graduate Posts: Chief Commercial Cum Ticket Supervisor, Station Master, Goods Train Manager, Jr Accounts Assistant',
         totalPosts: '8,113',
-        eligibility: 'Bachelor Degree in Any Stream from Any Recognized University in India.'
+        eligibility: 'Bachelor Degree in Any Stream from Any Recognized University in India with Computer Typing Proficiency for typing posts.',
+        modeOfSelection: '1st Stage Computer Based Test (CBT-1) -> 2nd Stage CBT (CBT-2) -> Computer Based Aptitude Test (CBAT) / Typing Skill Test -> Document Verification & Medical Examination',
+        categoryBreakdown: { gen: 3245, obc: 2190, ews: 811, sc: 1217, st: 650 }
       },
       {
         postName: 'Undergraduate Posts: Commercial Cum Ticket Clerk, Accounts Clerk, Junior Clerk Cum Typist, Trains Clerk',
         totalPosts: '3,445',
-        eligibility: 'Class 12th (10+2) Examination Passed with 50% aggregate marks (50% not required for SC/ST/PwBD).'
+        eligibility: 'Class 12th (10+2) Examination Passed with 50% aggregate marks (50% not required for SC/ST/PwBD) + Typing speed in Hindi/English where applicable.',
+        modeOfSelection: '1st Stage CBT -> 2nd Stage CBT -> Typing Skill Test -> Document Verification & Medical Examination',
+        categoryBreakdown: { gen: 1378, obc: 930, ews: 344, sc: 517, st: 276 }
       }
     ],
     howToApplySteps: [
@@ -477,11 +575,11 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Carefully enter bank account details for refund of examination fee.'
     ],
     directLinks: [
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
+      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', url: 'https://www.rrbapply.gov.in/#/auth/home?flag=true', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply', url: 'https://www.rrbapply.gov.in/#/auth/home' },
       { label: 'Download Graduate Notification (CEN 05/2026)', actionText: 'Click Here', type: 'notification' },
       { label: 'Download Undergraduate Notification (CEN 06/2026)', actionText: 'Click Here', type: 'notification' },
-      { label: 'Official RRB Recruitment Portal', actionText: 'rrbapply.gov.in', type: 'official' }
+      { label: 'Official RRB Recruitment Portal', actionText: 'Click Here', type: 'official', url: 'https://www.rrbapply.gov.in/#/auth/landing' }
     ]
   },
   {
@@ -523,7 +621,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: 'UP Police Constable (Civil Police)',
         totalPosts: '60,244',
-        eligibility: '10+2 (Intermediate) Exam Passed from Any Recognized Board in India.',
+        eligibility: '10+2 (Intermediate) Exam Passed from Any Recognized Board in India. Height: Male Gen/OBC/SC 168 CM, ST 160 CM; Female Gen/OBC/SC 152 CM, ST 147 CM. Running: Male 4.8 KM in 25 Min, Female 2.4 KM in 14 Min.',
+        modeOfSelection: 'Written Examination (Offline OMR Based) -> Document Verification & Physical Standard Test (PST) -> Physical Efficiency Test (PET Running) -> Final Merit List',
         categoryBreakdown: { gen: 24102, ews: 6024, obc: 16264, sc: 12650, st: 1204 }
       }
     ],
@@ -579,7 +678,10 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: 'Constable GD (BSF, CISF, CRPF, SSB, ITBP, AR, SSF)',
         totalPosts: '39,481',
-        eligibility: 'Passed Class 10 (High School) Exam from Any Recognized Board in India. Height: Male 170 CM, Female 157 CM.'
+        eligibility: `• शैक्षणिक योग्यता: Passed Class 10 (High School) Exam from Any Recognized Board in India.
+• शारीरिक मानक: Male 170 CM, Female 157 CM. Chest (Male): 80-85 CM.`,
+        modeOfSelection: 'Computer Based Examination (CBE) + Physical Efficiency Test (PET - Male 5KM in 24m, Female 1.6KM in 8.5m) / Physical Standard Test (PST) + Medical Examination & Document Verification',
+        categoryBreakdown: { gen: 15800, obc: 9800, ews: 3900, sc: 6200, st: 3781 }
       }
     ],
     howToApplySteps: [
@@ -627,17 +729,23 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: 'Agniveer General Duty (All Arms)',
         totalPosts: 'Open Rally',
-        eligibility: 'Class 10th / Matric with 45% marks in aggregate and 33% in each subject.'
+        eligibility: `• शैक्षणिक योग्यता: Class 10th / Matric with 45% marks in aggregate and 33% in each subject. Valid Driving License holders given preference for Driver trades.`,
+        modeOfSelection: 'Phase 1: Online Common Entrance Examination (CEE) -> Phase 2: Recruitment Rally (Physical Fitness Test - 1.6 KM Run, Beam, Ditch, Balance) & Physical Measurement -> Phase 3: Medical Examination & Final Merit List',
+        categoryBreakdown: { gen: 0, obc: 0, ews: 0, sc: 0, st: 0 }
       },
       {
         postName: 'Agniveer Technical (All Arms)',
         totalPosts: 'Open Rally',
-        eligibility: '10+2 / Intermediate exam pass in Science with Physics, Chemistry, Maths and English with min 50% marks.'
+        eligibility: `• शैक्षणिक योग्यता: 10+2 / Intermediate exam pass in Science with Physics, Chemistry, Maths and English with min 50% marks in aggregate and 40% in each subject.`,
+        modeOfSelection: 'Online CEE Test -> Army Physical Fitness Test -> Medical Test -> Final Selection',
+        categoryBreakdown: { gen: 0, obc: 0, ews: 0, sc: 0, st: 0 }
       },
       {
         postName: 'Agniveer Clerk / Store Keeper Technical',
         totalPosts: 'Open Rally',
-        eligibility: '10+2 / Intermediate exam pass in any stream with 60% marks aggregate and min 50% in English and Maths/Accounts.'
+        eligibility: `• शैक्षणिक योग्यता: 10+2 / Intermediate exam pass in any stream (Arts, Commerce, Science) with 60% marks aggregate and min 50% in English and Maths/Accounts/Book Keeping in Class 12th.`,
+        modeOfSelection: 'Online CEE Exam + Typing / Computer Proficiency Test -> Physical Fitness Test -> Medical Examination',
+        categoryBreakdown: { gen: 0, obc: 0, ews: 0, sc: 0, st: 0 }
       }
     ],
     howToApplySteps: [
@@ -1117,8 +1225,8 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Pay online application fee and print final submitted application form.'
     ],
     directLinks: [
-      { label: 'Apply Online (New Student Registration)', actionText: 'Registration', type: 'apply', url: 'https://rajasthanvacancy.in/rajasthan-pg-admission-2026/', isPrimary: true },
-      { label: 'Already Registered Student Login', actionText: 'Login', type: 'apply', url: 'https://rajasthanvacancy.in/rajasthan-pg-admission-2026/' },
+      { label: 'Apply Online (New Student Registration)', actionText: 'Registration', type: 'apply', url: 'https://hte.rajasthan.gov.in', isPrimary: true },
+      { label: 'Already Registered Student Login', actionText: 'Login', type: 'apply', url: 'https://hte.rajasthan.gov.in' },
       { label: 'Download PG Admission Guidelines PDF', actionText: 'Click Here (PDF)', type: 'notification' },
       { label: 'DCE Rajasthan Official Website', actionText: 'hte.rajasthan.gov.in', type: 'official' }
     ]
@@ -1384,20 +1492,20 @@ export const mockSarkariPosts: SarkariPost[] = [
 ];
 
 export const trendingAlerts = [
-  { id: 't0', title: '🚨 RUHS Medical Officer (1,220 Posts) Online Form Active', slug: 'ruhs-medical-officer-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
-  { id: 't1', title: 'UPSC Civil Services 2026 Prelims Online Form', slug: 'upsc-civil-services-ias-ifs-2026', category: 'latest_jobs', badge: 'Apply Now' },
-  { id: 't2', title: 'SSC CGL 2026 Tier-II Admit Card Released', slug: 'ssc-cgl-tier-ii-admit-card-2026', category: 'admit_card', badge: 'Admit Card' },
-  { id: 't3', title: 'Railway RRB NTPC 11,558 Vacancies Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', category: 'latest_jobs', badge: '11,558 Posts' },
-  { id: 't4', title: 'SSC CHSL Tier-I Result & Cutoff Marks Declared', slug: 'ssc-chsl-tier-i-result-cutoff-2026', category: 'result', badge: 'Result' },
-  { id: 't5', title: 'UP Police Constable 60,244 Posts Exam Updates', slug: 'up-police-constable-recruitment-60244', category: 'latest_jobs', badge: 'Hot' },
-  { id: 't6', title: 'SSC GD Constable Answer Key Released With Response Sheet', slug: 'ssc-gd-constable-answer-key-2026', category: 'answer_key', badge: 'Answer Key' },
-  { id: 't7', title: 'NTA NEET UG 2026 Online Registration Open', slug: 'nta-neet-ug-2026-online-registration', category: 'admission', badge: 'Admission' },
-  { id: 't8', title: 'Instant e-PAN Card & Aadhaar Link Portal', slug: 'pan-card-apply-online-instant-e-pan', category: 'certificate_verification', badge: 'Services' }
+  { id: 't0', title: '🚂 Railway RRB NTPC 12th Level (3,445 Posts) Online Form Active', slug: 'rrb-ntpc-12th-level-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
+  { id: 't1', title: '🚨 RUHS Medical Officer (1,220 Posts) Online Form Active', slug: 'ruhs-medical-officer-recruitment-2026', category: 'latest_jobs', badge: 'Hot' },
+  { id: 't2', title: 'UPSC Civil Services 2026 Prelims Online Form', slug: 'upsc-civil-services-ias-ifs-2026', category: 'latest_jobs', badge: 'Apply Now' },
+  { id: 't3', title: 'SSC CGL 2026 Tier-II Admit Card Released', slug: 'ssc-cgl-tier-ii-admit-card-2026', category: 'admit_card', badge: 'Admit Card' },
+  { id: 't4', title: 'Railway RRB NTPC 11,558 Vacancies Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', category: 'latest_jobs', badge: '11,558 Posts' },
+  { id: 't5', title: 'SSC CHSL Tier-I Result & Cutoff Marks Declared', slug: 'ssc-chsl-tier-i-result-cutoff-2026', category: 'result', badge: 'Result' },
+  { id: 't6', title: 'UP Police Constable 60,244 Posts Exam Updates', slug: 'up-police-constable-recruitment-60244', category: 'latest_jobs', badge: 'Hot' },
+  { id: 't7', title: 'SSC GD Constable Answer Key Released With Response Sheet', slug: 'ssc-gd-constable-answer-key-2026', category: 'answer_key', badge: 'Answer Key' },
+  { id: 't8', title: 'NTA NEET UG 2026 Online Registration Open', slug: 'nta-neet-ug-2026-online-registration', category: 'admission', badge: 'Admission' }
 ];
 
 export const highlightBoxes = [
-  { id: 'h0', title: 'RUHS Medical Officer 2026', sub: 'Apply Online (1,220 Posts)', slug: 'ruhs-medical-officer-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
-  { id: 'h1', title: 'UPSC IAS / IFS 2026', sub: 'Apply Online (1056 Posts)', slug: 'upsc-civil-services-ias-ifs-2026', color: 'from-amber-600 to-amber-700' },
-  { id: 'h2', title: 'SSC CGL 2026', sub: 'Apply Online (14,500 Posts)', slug: 'ssc-cgl-2026-online-form', color: 'from-blue-600 to-blue-700' },
-  { id: 'h3', title: 'RRB NTPC 2026', sub: '11,558 Posts Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', color: 'from-emerald-600 to-emerald-700' }
+  { id: 'h0', title: 'RRB NTPC 12th Level 2026', sub: 'Apply Online (3,445 Posts)', slug: 'rrb-ntpc-12th-level-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
+  { id: 'h1', title: 'RUHS Medical Officer 2026', sub: 'Apply Online (1,220 Posts)', slug: 'ruhs-medical-officer-recruitment-2026', color: 'from-blue-600 to-blue-700' },
+  { id: 'h2', title: 'UPSC IAS / IFS 2026', sub: 'Apply Online (1056 Posts)', slug: 'upsc-civil-services-ias-ifs-2026', color: 'from-amber-600 to-amber-700' },
+  { id: 'h3', title: 'RRB NTPC Graduate 2026', sub: '11,558 Posts Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', color: 'from-emerald-600 to-emerald-700' }
 ];

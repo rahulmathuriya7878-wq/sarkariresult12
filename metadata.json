@@ -1,6 +1,6 @@
 {
   "name": "Sarkari Result Portal - Latest Govt Jobs, Admit Card & Results",
-  "description": "India's premier portal for Sarkari Result, Sarkari Naukri, Admit Card, Answer Key, Syllabus, and competitive government exam notifications with real-time updates and applicant tools.",
+  "description": "India's premier portal for Sarkari Result, Sarkari Naukri, Admit Card, Answer Key, Syllabus, and competitive government exam notifications with real-time updates.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -23,6 +23,7 @@ import { BackToTop } from './components/BackToTop';
 import { CriticalAlertBanner } from './components/CriticalAlertBanner';
 import { SitemapModal } from './components/SitemapModal';
 import { JobAlertsModal } from './components/JobAlertsModal';
+import { SarkariFAQSection } from './components/SarkariFAQSection';
 
 const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
   if (post.salaryBand) return post.salaryBand;
@@ -291,6 +292,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
           onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
           isHindi={isHindi}
+          onSelectPost={handleOpenPostFullPage}
         />
       ) : (
         /* Home Main View */
@@ -336,6 +338,9 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 onSelectPost={handleOpenPostFullPage}
                 isHindi={isHindi}
               />
+
+              {/* Homepage FAQ Section */}
+              <SarkariFAQSection isHindi={isHindi} />
             </>
           )}
         </main>

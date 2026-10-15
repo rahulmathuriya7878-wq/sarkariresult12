@@ -61,17 +61,27 @@ export const SearchAndFilterBar: React.FC<SearchAndFilterBarProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search Exam, Post, Department, RUHS, Rajasthan, CET, Police..."
-            className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-red-700 transition-colors"
+            className="w-full pl-9 pr-24 py-2 text-xs sm:text-sm bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-red-700 transition-colors"
           />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-              title="Clear search"
+          <div className="absolute right-0 top-0 bottom-0 flex items-center">
+            {searchQuery && (
+              <button
+                onClick={() => onSearchChange('')}
+                className="text-slate-400 hover:text-slate-600 p-1.5 cursor-pointer"
+                title="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+            <a
+              href={`https://www.google.com/search?q=${encodeURIComponent(searchQuery || 'Sarkari Result Latest Jobs')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-red-700 hover:bg-red-800 text-white px-2 py-1.5 rounded-r text-[10px] sm:text-xs font-bold cursor-pointer"
             >
-              <X className="w-4 h-4" />
-            </button>
-          )}
+              Google
+            </a>
+          </div>
         </div>
 
         {/* State Filter Dropdown */}

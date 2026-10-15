@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
                 SARKARI RESULT
               </h1>
               <span className="text-[10px] sm:text-xs tracking-wider text-amber-300 font-bold block mt-1">
-                सरकारी रिजल्ट
+                WWW.SARKARIRESULT.COM
               </span>
             </div>
           </button>
@@ -188,12 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
               <BellRing className="w-3.5 h-3.5 text-slate-900 animate-pulse" />
               <span className="hidden sm:inline">Job Alerts</span>
             </button>
-            <button
-              onClick={onToggleHindi}
-              className="px-2 py-1 text-[11px] font-bold text-amber-300 hover:bg-neutral-800 rounded transition-colors cursor-pointer"
-            >
-              {isHindi ? 'ENG' : 'हिंदी'}
-            </button>
+
             <button
               onClick={onOpenBookmarks}
               className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold bg-[#ab1616] text-white rounded transition-colors cursor-pointer"

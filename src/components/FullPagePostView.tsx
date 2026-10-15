@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SarkariPost } from '../types/job';
+import { mockSarkariPosts } from '../data/mockJobs';
+import { getProcessedImportantDates, getHowToApplyHindiSteps, getApplyDates } from '../utils/dateUtils';
 import { 
   ArrowLeft, 
   Printer, 
@@ -9,6 +11,7 @@ import {
   Check, 
   ExternalLink, 
   Calendar, 
+  Clock,
   CreditCard, 
   UserCheck, 
   FileText, 
@@ -19,7 +22,11 @@ import {
   ChevronRight,
   Home,
   LogIn,
-  UserPlus
+  UserPlus,
+  HelpCircle,
+  Award,
+  Users,
+  BookOpen
 } from 'lucide-react';
 
 interface FullPagePostViewProps {
@@ -30,201 +37,77 @@ interface FullPagePostViewProps {
   onOpenAgeCalculator: () => void;
   onOpenPhotoResizer: () => void;
   isHindi: boolean;
+  onSelectPost?: (post: SarkariPost) => void;
 }
 
-const getJobSelectionStages = (post: SarkariPost): string[] => {
-  if (post.selectionProcess && post.selectionProcess.length > 0) {
-    return post.selectionProcess;
-  }
-
-  const titleLower = (post.title + ' ' + post.slug).toLowerCase();
-
-  // आंगनवाड़ी भर्ती (सीधी मेरिट, कोई परीक्षा नहीं)
-  if (titleLower.includes('anganwadi')) {
-    return [
-      'चरण 1: सीधी मेरिट सूची - कक्षा 10वीं (हाईस्कूल) एवं 12वीं (इंटरमीडिएट) के प्राप्तांकों के आधार पर तैयार मेरिट (कोई लिखित परीक्षा नहीं)',
-      'चरण 2: ऑफलाइन दस्तावेज़ सत्यापन - मूल अंकतालिकाएं, आधार कार्ड, निवास प्रमाण पत्र, जाति व आय प्रमाण पत्र की जांच',
-      'चरण 3: जिला चयन समिति (जिलाधिकारी / DM की अध्यक्षता में) द्वारा अंतिम चयन व नियुक्ति पत्र जारी होना'
-    ];
-  }
-
-  // मेडिकल ऑफिसर / RUHS / डॉक्टर भर्ती
-  if (post.department === 'Medical' || titleLower.includes('medical-officer') || titleLower.includes('mo medical')) {
-    return [
-      'चरण 1: ऑनलाइन कंप्यूटर आधारित लिखित परीक्षा (CBT) - MBBS पाठ्यक्रम पर आधारित 100 वस्तुनिष्ठ बहुविकल्पीय प्रश्न',
-      'चरण 2: राजस्थान मेडिकल काउंसिल (RMC / NMC) में स्थायी पंजीकरण एवं इंटर्नशिप पूर्णता प्रमाण पत्र सत्यापन',
-      'चरण 3: सरकारी चिकित्सा संस्थानों / कोविड-19 संविदा सेवा का अनुभव बोनस अंक (राजस्थान सेवा नियमानुसार अधिकतम 30 अंक)',
-      'चरण 4: मूल दस्तावेज़ सत्यापन (DV), मेडिकल फिटनेस एवं अंतिम मेरिट आवंटन'
-    ];
-  }
-
-  // पुलिस / कांस्टेबल / सब-इंस्पेक्टर
-  if (post.department === 'Police' || titleLower.includes('police') || titleLower.includes('constable')) {
-    return [
-      'चरण 1: कंप्यूटर आधारित टेस्ट (CBT) या OMR आधारित लिखित परीक्षा (सामान्य ज्ञान, रीजनिंग व महिला-बाल सुरक्षा कानून)',
-      'चरण 2: शारीरिक दक्षता परीक्षा (PET - पुरुष अभ्यर्थियों के लिए 25 मिनट में 5 किमी दौड़, महिलाओं के लिए 35 मिनट)',
-      'चरण 3: शारीरिक मापदंड परीक्षण (PST - ऊंचाई, सीना व वजन की माप)',
-      'चरण 4: मूल दस्तावेज़ सत्यापन (DV) एवं पुलिस चरित्र सत्यापन (Verification)',
-      'चरण 5: मेडिकल परीक्षण एवं प्रशिक्षण हेतु अंतिम चयन सूची'
-    ];
-  }
-
-  // सेना / अग्निवीर / रक्षा सेवाएं
-  if (post.department === 'Defence' || titleLower.includes('agniveer') || titleLower.includes('army') || titleLower.includes('navy')) {
-    return [
-      'चरण 1: ऑनलाइन सामान्य प्रवेश परीक्षा (CEE - कंप्यूटर आधारित लिखित परीक्षा)',
-      'चरण 2: शारीरिक फिटनेस परीक्षण (PFT - 1.6 किमी दौड़, बीम पर 10 पुल-अप्स, 9 फीट गड्ढा कूद व बैलेंसिंग)',
-      'चरण 3: शारीरिक माप परीक्षण (PMT) एवं मूल प्रमाण पत्रों की जांच',
-      'चरण 4: सैन्य अस्पताल में विस्तृत चिकित्सा परीक्षण (Medical Exam)'
-    ];
-  }
-
-  // संघ लोक सेवा आयोग (UPSC Civil Services - IAS / IPS)
-  if (post.department === 'UPSC' || titleLower.includes('civil-services') || titleLower.includes('ias')) {
-    return [
-      'चरण 1: सिविल सेवा प्रारंभिक परीक्षा (ऑब्जेक्टिव GS पेपर 1 एवं CSAT क्वालीफाइंग पेपर 2)',
-      'चरण 2: सिविल सेवा मुख्य परीक्षा (9 वर्णनात्मक/विस्तृत प्रश्न पत्र - कुल 1750 अंक)',
-      'चरण 3: व्यक्तित्व परीक्षण / साक्षात्कार (इंटरव्यू - 275 अंक, धौलपुर हाउस, नई दिल्ली)',
-      'चरण 4: मुख्य परीक्षा एवं साक्षात्कार के प्राप्तांकों के आधार पर अखिल भारतीय अंतिम रैंक सूची'
-    ];
-  }
-
-  // शिक्षक भर्ती (REET / 1st & 2nd Grade / Teacher Bharti)
-  if (post.department === 'Teaching' || titleLower.includes('teacher') || titleLower.includes('reet')) {
-    return [
-      'चरण 1: शिक्षक पात्रता परीक्षा (REET / CTET / TET उत्तीर्णता प्रमाण पत्र)',
-      'चरण 2: मुख्य प्रतियोगी लिखित परीक्षा (संबंधित विषय ज्ञान, शैक्षणिक मनोविज्ञान व शिक्षण विधियां)',
-      'चरण 3: मूल दस्तावेज़ सत्यापन (DV) एवं शैक्षणिक प्राप्तांकों की वेटेज गणना',
-      'चरण 4: राज्य / संभाग स्तर पर स्कूल आवंटन एवं अंतिम चयन सूची'
-    ];
-  }
-
-  // बैंकिंग (IBPS, SBI, RBI PO & Clerk)
-  if (post.department === 'Banking') {
-    return [
-      'चरण 1: प्रारंभिक ऑनलाइन परीक्षा (अंग्रेजी भाषा, संख्यात्मक अभियोग्यता व रीजनिंग)',
-      'चरण 2: मुख्य ऑनलाइन परीक्षा (रीजनिंग, कंप्यूटर, डाटा एनालिसिस, बैंकिंग जागरूकता व अंग्रेजी वर्णनात्मक टेस्ट)',
-      'चरण 3: समूह चर्चा (GD) एवं व्यक्तिगत साक्षात्कार (अधिकारी संवर्ग हेतु)',
-      'चरण 4: सहभागी सार्वजनिक क्षेत्र के बैंकों में प्रोविजनल आवंटन व अंतिम मेरिट सूची'
-    ];
-  }
-
-  // रेलवे भर्ती (RRB NTPC, ग्रुप डी, ALP)
-  if (post.department === 'Railway') {
-    return [
-      'चरण 1: प्रथम चरण कंप्यूटर आधारित टेस्ट (CBT-1 स्क्रीनिंग परीक्षा)',
-      'चरण 2: द्वितीय चरण कंप्यूटर आधारित टेस्ट (CBT-2 मुख्य परीक्षा)',
-      'चरण 3: टाइपिंग स्किल टेस्ट / कंप्यूटर आधारित एप्टीट्यूड टेस्ट (CBAT - पद के नियमानुसार)',
-      'चरण 4: दस्तावेज़ सत्यापन (DV) एवं रेलवे मेडिकल फिटनेस परीक्षण'
-    ];
-  }
-
-  // प्रवेश परीक्षाएं (NEET, JEE, राजस्थान पीजी एडमिशन)
-  if (post.category === 'admission') {
-    return [
-      'चरण 1: प्रवेश परीक्षा प्राप्तांक अथवा स्नातक/12वीं के कुल अंकों के आधार पर मेरिट निर्धारण',
-      'चरण 2: केंद्रीकृत ऑनलाइन काउंसलिंग एवं कॉलेज/विषय विकल्प भरना (Online Choice Filling)',
-      'चरण 3: श्रेणीवार आरक्षण एवं मेरिट के आधार पर सीट आवंटन परिणाम',
-      'चरण 4: आवंटित कॉलेज में मूल प्रमाण पत्रों का सत्यापन एवं प्रवेश शुल्क जमा करना'
-    ];
-  }
-
-  // राजस्थान समान पात्रता परीक्षा (CET)
-  if (titleLower.includes('cet')) {
-    return [
-      'चरण 1: एकल चरण बहुविकल्पीय लिखित परीक्षा (300 अंक, 150 प्रश्न)',
-      'चरण 2: न्यूनतम निर्धारित क्वालीफाइंग अंक व 3 वर्ष के लिए वैध CET स्कोर कार्ड जारी होना',
-      'चरण 3: विभिन्न मुख्य भर्ती परीक्षाओं (पटवारी, एलडीसी, कांस्टेबल आदि) के लिए 15 गुना अभ्यर्थियों की शॉर्टलिस्टिंग'
-    ];
-  }
-
-  // कर्मचारी चयन आयोग (SSC CGL, CHSL, GD, MTS)
-  if (post.department === 'SSC') {
-    return [
-      'चरण 1: टियर-1 कंप्यूटर आधारित परीक्षा (सामान्य बुद्धिमत्ता, सामान्य ज्ञान, गणित व अंग्रेजी)',
-      'चरण 2: टियर-2 कंप्यूटर आधारित मुख्य परीक्षा (गणित, रीजनिंग, अंग्रेजी, सामान्य जागरूकता व कंप्यूटर ज्ञान)',
-      'चरण 3: डाटा एंट्री स्पीड टेस्ट (DEST) / टाइपिंग टेस्ट (पद के नियमानुसार)',
-      'चरण 4: संबंधित विभागों द्वारा दस्तावेज़ सत्यापन एवं अंतिम चयन सूची'
-    ];
-  }
-
-  return [
-    'चरण 1: लिखित परीक्षा / कंप्यूटर आधारित टेस्ट (CBT)',
-    'चरण 2: कौशल परीक्षा / टाइपिंग टेस्ट / शारीरिक परीक्षा (पद के नियमानुसार)',
-    'चरण 3: मूल दस्तावेज़ सत्यापन (Document Verification)',
-    'चरण 4: चिकित्सा परीक्षण (Medical Examination) एवं अंतिम चयन सूची'
-  ];
-};
-
-const getDetailedHowToApplyHindi = (post: SarkariPost, isRajasthanJob: boolean) => {
+const getDetailedHowToApplyEnglish = (post: SarkariPost, isRajasthanJob: boolean) => {
   const portalName = isRajasthanJob 
-    ? 'राजस्थान SSO आधिकारिक पोर्टल (sso.rajasthan.gov.in) अथवा संबंधित बोर्ड की वेबसाइट'
-    : 'आधिकारिक भर्ती बोर्ड की आधिकारिक वेबसाइट';
+    ? 'SSO Rajasthan Official Portal (sso.rajasthan.gov.in) or the official recruitment board website'
+    : 'the official recruitment board portal';
 
   return [
     {
       stepNumber: '1',
-      title: 'आधिकारिक पोर्टल पर जाएं व नया पंजीकरण (Registration / OTR) करें',
-      desc: `सर्वप्रथम ${portalName} पर जाएं। यदि आप पोर्टल पर नए अभ्यर्थी हैं तो "New Candidate Registration / One Time Registration (OTR)" लिंक पर क्लिक करें। अपना सक्रिय मोबाइल नंबर, ईमेल आईडी एवं आधार कार्ड दर्ज करके ओटीपी (OTP) सत्यापन के माध्यम से पंजीकरण पूर्ण करें।`
+      title: 'Visit Official Portal & Complete Registration / OTR',
+      desc: `First visit ${portalName}. New candidates must click on "New Registration" or "One Time Registration (OTR)". Fill in active mobile number, email ID, and Aadhaar card details to generate registration credentials via OTP verification.`
     },
     {
       stepNumber: '2',
-      title: 'पंजीकरण संख्या / SSO ID से लॉगिन करें',
-      desc: `पंजीकरण के पश्चात अपने मोबाइल या ईमेल पर प्राप्त रजिस्ट्रेशन नंबर / SSO ID और पासवर्ड के माध्यम से पोर्टल पर लॉगिन करें। इसके बाद रिक्रूटमेंट डैशबोर्ड पर "${post.shortTitle}" के सक्रिय ऑनलाइन फॉर्म लिंक पर क्लिक करें।`
+      title: 'Log In with Registration Credentials / SSO ID',
+      desc: `Log in using your Registration ID / SSO ID and password. Navigate to the Recruitment Dashboard and click on the active online form link for "${post.shortTitle}".`
     },
     {
       stepNumber: '3',
-      title: 'व्यक्तिगत, पत्राचार एवं शैक्षणिक विवरण भरें',
-      desc: `कक्षा 10वीं (मैट्रिक), 12वीं (इंटरमीडिएट), स्नातक अथवा पद हेतु निर्धारित तकनीकी/चिकित्सा डिग्री की मूल अंकतालिका के अनुसार अपना नाम, पिता का नाम, जन्मतिथि, आरक्षण श्रेणी (General/OBC/EWS/SC/ST) और स्थायी पता सावधानीपूर्वक दर्ज करें।`
+      title: 'Enter Personal, Educational & Address Details',
+      desc: `Fill in your candidate name, father's name, date of birth, reservation category (General/OBC/EWS/SC/ST), and permanent address strictly according to 10th (Matriculation) marksheet.`
     },
     {
       stepNumber: '4',
-      title: 'नवीनतम फोटो, हस्ताक्षर व आवश्यक प्रमाण पत्र अपलोड करें',
-      desc: `हाल ही में खींची गई पासपोर्ट साइज रंगीन फोटो (हल्के बैकग्राउंड के साथ, 20 KB से 50 KB) और साफ सफेद कागज पर किए गए हस्ताक्षर (10 KB से 20 KB) जेपीजी/जेपीईजी (JPG/JPEG) प्रारूप में स्कैन करके अपलोड करें। आवश्यकतानुसार जाति, मूल निवास एवं ईडब्ल्यूएस प्रमाण पत्र अपलोड करें।`
+      title: 'Upload Scanned Passport Photo, Signature & Documents',
+      desc: `Upload recent passport-size colored photograph (light background, 20 KB to 50 KB) and signature on white paper (10 KB to 20 KB) in JPG/JPEG format along with required caste or domicile certificates.`
     },
     {
       stepNumber: '5',
-      title: 'आवेदन पत्र का पूर्वावलोकन (Preview) कर सभी कॉलम जांचें',
-      desc: `फाइनल सबमिट करने से पूर्व "Preview Application" विकल्प पर क्लिक करके नाम की वर्तनी (Spelling), जन्मतिथि, श्रेणी व अन्य प्रविष्टियों की दोबारा गहन जांच अवश्य कर लें। एक बार अंतिम रूप से सबमिट होने के बाद संशोधन में कठिनाई हो सकती है।`
+      title: 'Preview Application Form & Check Details',
+      desc: `Click on "Preview Application" to thoroughly verify all entries including spelling, DOB, category, and educational qualifications before final submission.`
     },
     {
       stepNumber: '6',
-      title: 'श्रेणीवार निर्धारित परीक्षा शुल्क का ऑनलाइन भुगतान करें',
+      title: 'Pay Category-Wise Application Fee Online',
       desc: post.applicationFee && post.applicationFee.length > 0
-        ? `अपनी श्रेणी के अनुसार निर्धारित आवेदन शुल्क का भुगतान नेट बैंकिंग, डेबिट कार्ड, क्रेडिट कार्ड, यूपीआई (UPI) अथवा ई-मित्र कियोस्क के माध्यम से सफलतापूर्वक पूरा करें। यदि आपकी श्रेणी के लिए शुल्क शून्य (Free) है तो सीधे सबमिट करें।`
-        : `आवेदन पत्र को अंतिम रूप से सबमिट करें।`
+        ? `Pay the requisite application fee online using Net Banking, Debit/Credit Card, UPI, or E-Mitra Kiosk. If your category is exempt, submit the form directly.`
+        : `Submit the application form.`
     },
     {
       stepNumber: '7',
-      title: 'भरे हुए फाइनल फॉर्म एवं शुल्क रसीद का प्रिंटआउट सुरक्षित रखें',
-      desc: `सफल आवेदन जमा होने के पश्चात "Print Application Form" पर क्लिक करके भरे हुए फॉर्म एवं ई-चालान रसीद की 2-3 प्रतियां (PDF) निकाल कर सुरक्षित रख लें। यह भविष्य में एडमिट कार्ड डाउनलोड करने एवं चयन के समय दस्तावेज़ सत्यापन (DV) में अनिवार्य रूप से प्रस्तुत करनी होगी।`
+      title: 'Download & Print Final Submitted Application Form',
+      desc: `After successful submission, click "Print Application Form" and save 2-3 copies of the submitted application PDF and fee receipt for future admit card downloads and document verification.`
     }
   ];
 };
 
-export const getHindiPostShareText = (post: SarkariPost): string => {
-  const isService = post.category === 'important' || post.category === 'certificate_verification';
+export const getPostShareText = (post: SarkariPost): string => {
   const lines: string[] = [];
   
-  lines.push(`🚨 *${post.hindiTitle || post.title}*`);
+  lines.push(`🚨 *${post.title}*`);
   lines.push('──────────────────────');
   
   if (post.shortTitle && post.shortTitle !== post.title) {
-    lines.push(`📌 *भर्ती/अपडेट:* ${post.shortTitle}`);
+    lines.push(`📌 *Recruitment:* ${post.shortTitle}`);
   }
   
-  lines.push(`🏛️ *विभाग/बोर्ड:* ${post.department} (${post.state})`);
+  lines.push(`🏛️ *Department:* ${post.department} (${post.state})`);
   
   if (post.totalVacancies) {
-    lines.push(`🎯 *कुल पद:* ${post.totalVacancies} Posts`);
+    lines.push(`🎯 *Total Vacancies:* ${post.totalVacancies} Posts`);
   }
   
   if (post.qualifications && post.qualifications.length > 0) {
-    lines.push(`🎓 *योग्यता:* ${post.qualifications.join(', ')}`);
+    lines.push(`🎓 *Qualification:* ${post.qualifications.join(', ')}`);
   }
   
   if (post.lastDate) {
-    lines.push(`⏳ *ऑनलाइन आवेदन की अंतिम तिथि:* ${post.lastDate}`);
+    lines.push(`⏳ *Last Date to Apply Online:* ${post.lastDate}`);
   } else if (post.importantDates && post.importantDates.length > 0) {
     const mainDate = post.importantDates.find(d => d.isHighlight) || post.importantDates[0];
     lines.push(`📅 *${mainDate.label}:* ${mainDate.value}`);
@@ -235,25 +118,25 @@ export const getHindiPostShareText = (post: SarkariPost): string => {
       .map(f => `${f.category}: ${f.amount}`)
       .slice(0, 2)
       .join(' | ');
-    lines.push(`💰 *आवेदन शुल्क:* ${feeSummary}`);
+    lines.push(`💰 *Application Fee:* ${feeSummary}`);
   }
   
   if (post.ageLimit && (post.ageLimit.minAge || post.ageLimit.maxAge)) {
     const ageArr = [];
-    if (post.ageLimit.minAge) ageArr.push(`न्यूनतम ${post.ageLimit.minAge} वर्ष`);
-    if (post.ageLimit.maxAge) ageArr.push(`अधिकतम ${post.ageLimit.maxAge} वर्ष`);
-    lines.push(`👤 *आयु सीमा:* ${ageArr.join(', ')}`);
+    if (post.ageLimit.minAge) ageArr.push(`Min ${post.ageLimit.minAge} Yrs`);
+    if (post.ageLimit.maxAge) ageArr.push(`Max ${post.ageLimit.maxAge} Yrs`);
+    lines.push(`👤 *Age Limit:* ${ageArr.join(', ')}`);
   }
   
   lines.push('──────────────────────');
-  lines.push(`🔗 *पूरी जानकारी, नोटिफिकेशन व ऑनलाइन लिंक:*`);
+  lines.push(`🔗 *Official Direct Links & Notification:*`);
   const postUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}${window.location.pathname}#${post.slug}`
     : '';
   if (postUrl) {
     lines.push(postUrl);
   }
-  lines.push(`\n📲 *Sarkari Result* - सबसे तेज व सटीक सरकारी नौकरी अपडेट`);
+  lines.push(`\n📲 *Sarkari Result* - Fast & Verified Government Job Portal`);
   
   return lines.join('\n');
 };
@@ -265,13 +148,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   onToggleBookmark,
   onOpenAgeCalculator,
   onOpenPhotoResizer,
-  isHindi
+  isHindi,
+  onSelectPost
 }) => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [shareSuccessToast, setShareSuccessToast] = useState(false);
   const [activeSimulationLink, setActiveSimulationLink] = useState<{ title: string; action: string; content: string } | null>(null);
   const [linksList, setLinksList] = useState(post.directLinks);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [completedSteps, setCompletedSteps] = useState<string[]>([]);
   const [customLabel, setCustomLabel] = useState('');
   const [customActionText, setCustomActionText] = useState('Click Here');
   const [customUrl, setCustomUrl] = useState('');
@@ -309,19 +194,52 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   };
 
   const handleShare = async () => {
-    const hindiShareText = getHindiPostShareText(post);
+    const shareText = getPostShareText(post);
     if (navigator.share) {
       try {
         await navigator.share({
-          title: post.hindiTitle || post.title,
-          text: hindiShareText,
+          title: post.title,
+          text: shareText,
           url: window.location.href,
         });
       } catch (err) {
         // User cancelled or share closed
       }
     } else {
-      await navigator.clipboard.writeText(hindiShareText);
+      await navigator.clipboard.writeText(shareText);
+      setShareSuccessToast(true);
+      setTimeout(() => setShareSuccessToast(false), 3000);
+    }
+  };
+
+  const handleSocialShare = (platform: 'whatsapp' | 'telegram' | 'share' | 'copy') => {
+    const shareText = getPostShareText(post);
+    const currentUrl = window.location.href;
+
+    if (platform === 'whatsapp') {
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+      window.open(url, '_blank');
+    } else if (platform === 'telegram') {
+      const url = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(post.title)}`;
+      window.open(url, '_blank');
+    } else if (platform === 'share') {
+      if (navigator.share) {
+        navigator.share({
+          title: post.title,
+          text: shareText,
+          url: currentUrl
+        }).catch(() => {
+          navigator.clipboard.writeText(shareText);
+          setShareSuccessToast(true);
+          setTimeout(() => setShareSuccessToast(false), 3000);
+        });
+      } else {
+        navigator.clipboard.writeText(shareText);
+        setShareSuccessToast(true);
+        setTimeout(() => setShareSuccessToast(false), 3000);
+      }
+    } else if (platform === 'copy') {
+      navigator.clipboard.writeText(shareText);
       setShareSuccessToast(true);
       setTimeout(() => setShareSuccessToast(false), 3000);
     }
@@ -340,16 +258,94 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     post.title.toLowerCase().includes('rpsc') ||
     post.title.toLowerCase().includes('ruhs');
 
+  const isUpscJob = 
+    post.department === 'UPSC' || 
+    post.title.toLowerCase().includes('upsc') || 
+    post.slug.toLowerCase().includes('upsc') ||
+    post.shortTitle.toLowerCase().includes('upsc');
+
+  const isRailwayJob = 
+    post.department === 'Railway' || 
+    post.title.toLowerCase().includes('railway') || 
+    post.title.toLowerCase().includes('rrb') || 
+    post.slug.toLowerCase().includes('railway') || 
+    post.slug.toLowerCase().includes('rrb') ||
+    post.shortTitle.toLowerCase().includes('rrb');
+
+  const isSscJob = 
+    post.department === 'SSC' || 
+    post.title.toLowerCase().includes('ssc') || 
+    post.slug.toLowerCase().includes('ssc') ||
+    post.shortTitle.toLowerCase().includes('ssc');
+
+  const upscLoginUrl = 'https://upsconline.nic.in/candidate/realms/candidate-portal/login-actions/authenticate?execution=dbd830c6-ec01-4843-b36b-1698ce52fb62&client_id=account&tab_id=kgIbmuNADOk&client_data=eyJydSI6Imh0dHBzOi8vdXBzY29ubGluZS5uaWMuaW4vY2FuZGlkYXRlL3JlYWxtcy9jYW5kaWRhdGUtcG9ydGFsL2FjY291bnQvbG9naW4tcmVkaXJlY3QiLCJydCI6ImNvZGUiLCJzdCI6IjAvMmYzMTgzZjYtMTE2Ny05ZDY0LTA1N2EtNmUyODZhYmM5NWM0In0';
+  const upscRegisterUrl = 'https://upsconline.nic.in/candidate/realms/candidate-portal/login-actions/registration?execution=5cc68339-a3de-4411-b6ff-23460bba7ad6&client_id=account&tab_id=kgIbmuNADOk&client_data=eyJydSI6Imh0dHBzOi8vdXBzY29ubGluZS5uaWMuaW4vY2FuZGlkYXRlL3JlYWxtcy9jYW5kaWRhdGUtcG9ydGFsL2FjY291bnQvbG9naW4tcmVkaXJlY3QiLCJydCI6ImNvZGUiLCJzdCI6IjAvMmYzMTgzZjYtMTE2Ny05ZDY0LTA1N2EtNmUyODZhYmM5NWM0In0';
+  const upscOfficialUrl = 'https://www.upsc.gov.in/';
+
+  const sscOfficialUrl = 'https://ssc.gov.in/';
+  const sscLoginUrl = 'https://ssc.gov.in/login';
+  const sscRegisterUrl = 'https://ssc.gov.in/candidate-portal/one-time-registration/home-page';
+
   const handleLinkAction = (link: { label: string; actionText: string; type: string; url?: string }) => {
-    // Automatic Rajasthan SSO Portal Routing for all Rajasthan jobs
-    if (isRajasthanJob && link.type === 'apply') {
+    // Automatic SSC Portal Routing for all SSC jobs
+    if (isSscJob) {
       const text = (link.label + ' ' + link.actionText).toLowerCase();
-      if (text.includes('register') || text.includes('registration') || text.includes('apply') || text.includes('new student') || text.includes('otr')) {
-        window.open('https://sso.rajasthan.gov.in/register', '_blank');
+      if (link.type === 'official' || text.includes('official website') || text.includes('official portal') || text.includes('ssc portal') || text.includes('ssc official')) {
+        window.open(sscOfficialUrl, '_blank');
         return;
       }
       if (text.includes('login') || text.includes('sign in') || text.includes('signin') || text.includes('already registered')) {
+        window.open(sscLoginUrl, '_blank');
+        return;
+      }
+      if (link.type === 'apply' || text.includes('register') || text.includes('registration') || text.includes('apply') || text.includes('otr')) {
+        window.open(sscRegisterUrl, '_blank');
+        return;
+      }
+    }
+    // Automatic UPSC Portal Routing for all UPSC jobs
+    if (isUpscJob) {
+      const text = (link.label + ' ' + link.actionText).toLowerCase();
+      if (link.type === 'official' || text.includes('official website') || text.includes('official portal') || text.includes('upsc portal') || text.includes('upsc official')) {
+        window.open(upscOfficialUrl, '_blank');
+        return;
+      }
+      if (text.includes('login') || text.includes('sign in') || text.includes('signin') || text.includes('already registered')) {
+        window.open(upscLoginUrl, '_blank');
+        return;
+      }
+      if (link.type === 'apply' || text.includes('register') || text.includes('registration') || text.includes('apply')) {
+        window.open(upscRegisterUrl, '_blank');
+        return;
+      }
+    }
+
+    // Automatic Railway Portal Routing for all Railway jobs
+    if (isRailwayJob) {
+      const text = (link.label + ' ' + link.actionText).toLowerCase();
+      if (link.type === 'official' || text.includes('official website') || text.includes('official portal') || text.includes('rrb recruitment portal') || text.includes('rrb portal')) {
+        window.open('https://www.rrbapply.gov.in/#/auth/landing', '_blank');
+        return;
+      }
+      if (text.includes('login') || text.includes('sign in') || text.includes('signin') || text.includes('already registered')) {
+        window.open('https://www.rrbapply.gov.in/#/auth/home', '_blank');
+        return;
+      }
+      if (link.type === 'apply' || text.includes('register') || text.includes('registration') || text.includes('apply')) {
+        window.open('https://www.rrbapply.gov.in/#/auth/home?flag=true', '_blank');
+        return;
+      }
+    }
+
+    // Automatic Rajasthan SSO Portal Routing for all Rajasthan jobs
+    if (isRajasthanJob) {
+      const text = (link.label + ' ' + link.actionText).toLowerCase();
+      if (text.includes('login') || text.includes('sign in') || text.includes('signin') || text.includes('sso login') || text.includes('already registered')) {
         window.open('https://sso.rajasthan.gov.in/signin', '_blank');
+        return;
+      }
+      if (link.type === 'apply' || text.includes('register') || text.includes('registration') || text.includes('apply') || text.includes('otr')) {
+        window.open('https://sso.rajasthan.gov.in/register', '_blank');
         return;
       }
     }
@@ -381,7 +377,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-100/70 pb-16">
+    <>
+      <div className="w-full min-h-screen bg-slate-100/70 pb-16">
 
 
       {/* 2. Main Document Container */}
@@ -400,258 +397,345 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
         {/* Paper Container */}
         <article className="bg-white rounded-xs shadow-xs border border-slate-300 overflow-hidden">
-          {/* Post Header */}
-          <div className="p-5 sm:p-8 text-center border-b border-slate-200 bg-linear-to-b from-red-50/30 to-white">
-            <div className="inline-block bg-[#ab1616] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-xs uppercase tracking-wider mb-2">
-              {post.department} · {post.state}
-            </div>
+          {/* Post Header - Classic Sarkari Result Standard Table Format */}
+          <div className="p-4 sm:p-6 border-b border-slate-200 bg-white">
+            <div className="border-2 border-[#ab1616] rounded-xs overflow-hidden shadow-2xs">
+              <table className="w-full text-left border-collapse">
+                <tbody>
+                  <tr className="border-b border-slate-200 bg-slate-50/80">
+                    <td className="p-3 sm:p-4 text-slate-900 font-extrabold text-xs sm:text-sm whitespace-nowrap align-top border-r border-slate-200 w-32 sm:w-44">
+                      Name Of Post :
+                    </td>
+                    <td className="p-3 sm:p-4 text-[#ab1616] font-extrabold text-base sm:text-xl leading-snug">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2.5">
+                        <h1 className="flex-1">{post.title}</h1>
+                        <div className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-md text-xs sm:text-sm font-bold shadow-2xs">
+                          <Clock className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>Last Updated: <span className="font-extrabold text-emerald-900">{post.postDate}</span></span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
 
-            <h1 className="text-xl sm:text-3xl font-extrabold text-[#ab1616] leading-tight font-sans">
-              {post.title}
-            </h1>
+                  <tr className="border-b border-slate-200 bg-white">
+                    <td className="p-3 sm:p-4 text-slate-900 font-extrabold text-xs sm:text-sm whitespace-nowrap align-top border-r border-slate-200">
+                      Post Date / Update :
+                    </td>
+                    <td className="p-3 sm:p-4 text-slate-800 font-bold text-xs sm:text-sm">
+                      <div className="flex items-center gap-2">
+                        <span>{post.postDate}</span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">
+                          <Check className="w-3 h-3 text-emerald-600" /> Official Timestamp
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
 
-            {post.hindiTitle && (
-              <p className="text-base sm:text-lg font-bold text-slate-800 mt-2 font-serif">
-                {post.hindiTitle}
-              </p>
-            )}
-
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 mt-4 text-xs text-slate-600 border-t border-slate-200/80 pt-3">
-              <span>Post Date: <strong className="text-slate-900">{post.postDate}</strong></span>
-              <span aria-hidden="true" className="text-slate-300">|</span>
-              <span>Advertisement No: <strong className="text-slate-900">{post.notificationNumber || 'Official Notice'}</strong></span>
-              {post.totalVacancies && (
-                <>
-                  <span aria-hidden="true" className="text-slate-300">|</span>
-                  <span>Total Vacancies: <strong className="text-emerald-700 font-bold">{post.totalVacancies} Posts</strong></span>
-                </>
-              )}
+                  <tr className="bg-slate-50/80">
+                    <td className="p-3 sm:p-4 text-slate-900 font-extrabold text-xs sm:text-sm whitespace-nowrap align-top border-r border-slate-200">
+                      Short Information :
+                    </td>
+                    <td className="p-3 sm:p-4 text-slate-800 text-xs sm:text-sm leading-relaxed font-normal">
+                      <p className="text-slate-800 leading-relaxed font-normal">
+                        {post.shortInfo || `${post.department} has released ${post.title} notification. Those candidates who are interested in this recruitment exam can apply online. Read the official notification for eligibility, selection process, age limit, syllabus and all other information.`}
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
           <div className="p-4 sm:p-8 space-y-6 text-slate-800 text-sm">
-            {/* Share Box with ONLY Share Button */}
-            <div className="bg-emerald-50 border border-emerald-300 p-3 sm:p-3.5 rounded-md shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-emerald-950 font-bold text-xs sm:text-sm">
-                <Share2 className="w-4 h-4 text-emerald-700 shrink-0" />
-                <span>
-                  {post.category === 'important' || post.category === 'certificate_verification'
-                    ? 'इस महत्वपूर्ण सेवा की जानकारी शेयर करें:'
-                    : 'इस भर्ती की महत्वपूर्ण जानकारी दोस्तों के साथ शेयर करें:'}
-                </span>
-              </div>
+            {/* Social Media Sharing Section */}
+            <div className="bg-emerald-50/80 border border-emerald-200 p-4 rounded-md shadow-2xs">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-slate-900 font-extrabold text-xs sm:text-sm">
+                  <Share2 className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <span>Share This Job Vacancy with Friends:</span>
+                  {shareSuccessToast && (
+                    <span className="text-[11px] bg-emerald-700 text-white font-bold px-2.5 py-0.5 rounded shadow-2xs animate-fade-in">
+                      Copied to Clipboard!
+                    </span>
+                  )}
+                </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                {shareSuccessToast && (
-                  <span className="text-xs bg-emerald-700 text-white font-bold px-2.5 py-1 rounded shadow-xs">
-                    ✓ महत्वपूर्ण जानकारी कॉपी हो गई!
-                  </span>
-                )}
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2 rounded font-bold text-xs sm:text-sm shadow-xs transition-all active:scale-95 cursor-pointer inline-flex items-center justify-center gap-2"
-                  title="Share"
-                >
-                  <Share2 className="w-4 h-4" />
-                  <span>Share</span>
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* WhatsApp */}
+                  <button
+                    type="button"
+                    onClick={() => handleSocialShare('whatsapp')}
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded shadow-2xs transition-all cursor-pointer active:scale-95"
+                    title="Share on WhatsApp"
+                  >
+                    <span className="font-sans">WhatsApp</span>
+                  </button>
+
+                  {/* Telegram */}
+                  <button
+                    type="button"
+                    onClick={() => handleSocialShare('telegram')}
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-[#229ED9] hover:bg-[#1d8cb0] text-white text-xs font-bold rounded shadow-2xs transition-all cursor-pointer active:scale-95"
+                    title="Share on Telegram"
+                  >
+                    <span className="font-sans">Telegram</span>
+                  </button>
+
+                  {/* Share Button (Native Web Share & Copy) */}
+                  <button
+                    type="button"
+                    onClick={() => handleSocialShare('share')}
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded shadow-2xs transition-all cursor-pointer active:scale-95"
+                    title="Share Job Details"
+                  >
+                    <Share2 className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Share</span>
+                  </button>
+                </div>
               </div>
             </div>
 
 
 
 
-            {/* 2-Column Split: Important Dates & Application Fee */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {/* Important Dates Box */}
-              <div className="border-2 border-[#ab1616] rounded-xs overflow-hidden bg-white shadow-2xs">
-                <div className="bg-[#ab1616] text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-yellow-300" />
-                  Important Dates (महत्वपूर्ण तिथियां)
+            {/* Summary Boxes Section - Standard Sarkari Result Format */}
+            <div className="space-y-5">
+              {/* 1. Vacancy Details & Number of Posts Box (SABSE UPER - Topmost) */}
+              {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
+                <div className="border-2 border-blue-900 rounded-md overflow-hidden bg-white shadow-2xs">
+                  <div className="bg-blue-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                    <GraduationCap className="w-4.5 h-4.5 text-amber-300" />
+                    Vacancy Details & Number of Posts (वेकेंसी विवरण व कुल पद)
+                  </div>
+                  <div className="p-4 text-sm sm:text-base space-y-3 bg-blue-50/20 text-slate-800">
+                    {post.vacancyBreakdown.map((v, idx) => (
+                      <div key={idx} className="space-y-1.5 pb-2.5 border-b border-blue-100 last:border-0 last:pb-0">
+                        <div className="flex justify-between items-center font-bold text-blue-950">
+                          <span>{v.postName}</span>
+                          <span className="text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded text-xs sm:text-sm font-black">Total: {v.totalPosts}</span>
+                        </div>
+                        {v.nonTspPosts !== undefined && v.tspPosts !== undefined && post.state === 'Rajasthan' && (
+                          <div className="grid grid-cols-2 gap-2 pt-1 text-xs sm:text-sm">
+                            <div className="bg-blue-50 p-2 rounded border border-blue-200">Non-TSP Area: <strong className="text-blue-900 font-bold">{v.nonTspPosts}</strong></div>
+                            <div className="bg-amber-50 p-2 rounded border border-amber-200">TSP Area: <strong className="text-amber-900 font-bold">{v.tspPosts}</strong></div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="divide-y divide-slate-100 text-xs sm:text-sm">
-                  {post.importantDates.map((d, idx) => (
+              )}
+
+              {/* 2. Important Dates Box */}
+              <div className="border-2 border-[#ab1616] rounded-md overflow-hidden bg-white shadow-2xs">
+                <div className="bg-[#ab1616] text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                  <Calendar className="w-4.5 h-4.5 text-yellow-300" />
+                  Important Dates (महत्वपूर्ण तिथियाँ)
+                </div>
+                <div className="divide-y divide-slate-100 text-sm sm:text-base">
+                  {getProcessedImportantDates(post).map((d, idx) => (
                     <div 
                       key={idx} 
-                      className={`flex items-center justify-between p-3 ${d.isHighlight ? 'bg-red-50/90 font-bold text-red-950' : 'text-slate-800'}`}
+                      className={`flex items-center justify-between p-3.5 ${d.isHighlight ? 'bg-red-50/90 font-bold text-red-950' : 'text-slate-800'}`}
                     >
                       <span>{d.label}</span>
-                      <span className={d.isHighlight ? 'text-[#ab1616] font-extrabold' : 'text-slate-900 font-semibold'}>{d.value}</span>
+                      <span className={d.isHighlight ? 'text-[#ab1616] font-black' : 'text-slate-900 font-bold'}>{d.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Application Fee Box */}
+              {/* 3. Application Fee Box */}
               <div className="border-2 border-slate-800 rounded-md overflow-hidden bg-white shadow-2xs">
-                <div className="bg-slate-900 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-amber-300" />
+                <div className="bg-slate-900 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                  <CreditCard className="w-4.5 h-4.5 text-amber-300" />
                   Application Fee (आवेदन शुल्क)
                 </div>
-                <div className="divide-y divide-slate-100 text-xs sm:text-sm">
+                <div className="divide-y divide-slate-100 text-sm sm:text-base">
                   {post.applicationFee.length > 0 ? (
                     post.applicationFee.map((fee, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3">
-                        <span className="text-slate-700">{fee.category}</span>
-                        <strong className="text-slate-900 font-bold">{fee.amount}</strong>
+                      <div key={idx} className="flex items-center justify-between p-3.5">
+                        <span className="text-slate-800 font-medium">{fee.category}</span>
+                        <strong className="text-slate-900 font-extrabold">{fee.amount}</strong>
                       </div>
                     ))
                   ) : (
                     <div className="p-4 text-slate-500 italic">No Application Fee for this notification / Result update.</div>
                   )}
                   {post.feePaymentMode && (
-                    <div className="p-3 bg-slate-50 text-xs text-slate-600">
+                    <div className="p-3.5 bg-slate-50 text-xs sm:text-sm text-slate-700">
                       <strong>Payment Mode: </strong>{post.feePaymentMode}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 4. Age Limit Box */}
+              {post.ageLimit.asOnDate && (
+                <div className="border-2 border-emerald-800 rounded-md overflow-hidden bg-white shadow-2xs">
+                  <div className="bg-emerald-800 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <UserCheck className="w-4.5 h-4.5 text-emerald-200" />
+                      Age Limit as on {post.ageLimit.asOnDate} (आयु सीमा)
+                    </div>
+                    <button
+                      onClick={onOpenAgeCalculator}
+                      className="text-xs sm:text-sm underline text-amber-200 hover:text-white transition-colors cursor-pointer font-bold"
+                    >
+                      Calculate My Age Now →
+                    </button>
+                  </div>
+                  <div className="p-4 text-sm sm:text-base space-y-2 bg-emerald-50/20">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-medium text-slate-800">
+                      {post.ageLimit.minAge && <div>Minimum Age: <strong className="text-slate-900 font-bold">{post.ageLimit.minAge} Years.</strong></div>}
+                      {post.ageLimit.maxAge && <div>Maximum Age: <strong className="text-slate-900 font-bold">{post.ageLimit.maxAge} Years.</strong></div>}
+                    </div>
+                    {post.ageLimit.notes && (
+                      <p className="text-xs sm:text-sm text-slate-600 italic pt-1 border-t border-slate-100">
+                        {post.ageLimit.notes}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* 5. Category Wise Posts Box */}
+              {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
+                <div className="border-2 border-emerald-900 rounded-md overflow-hidden bg-white shadow-2xs">
+                  <div className="bg-emerald-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                    <Users className="w-4.5 h-4.5 text-amber-300" />
+                    Category Wise Posts (वर्ग-वार पद)
+                  </div>
+                  <div className="p-4 text-sm sm:text-base space-y-3 bg-emerald-50/20 text-slate-800">
+                    {post.vacancyBreakdown.map((v, idx) => (
+                      <div key={idx} className="space-y-1.5 pb-2.5 border-b border-emerald-100 last:border-0 last:pb-0">
+                        <div className="flex justify-between items-center font-bold text-emerald-950">
+                          <span>{v.postName}</span>
+                          <span className="text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded text-xs sm:text-sm font-black">Total: {v.totalPosts}</span>
+                        </div>
+                        {v.categoryBreakdown ? (
+                          <div className="grid grid-cols-2 gap-2 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
+                            <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>GEN:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.gen ?? '-'}</strong></div>
+                            <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>OBC:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.obc ?? '-'}</strong></div>
+                            <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>EWS:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.ews ?? '-'}</strong></div>
+                            <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>SC:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.sc ?? '-'}</strong></div>
+                            <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>ST:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.st ?? '-'}</strong></div>
+                          </div>
+                        ) : (
+                          <div className="text-slate-500 italic text-xs sm:text-sm">As per rule</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 6. Post-Wise Eligibility Box */}
+              {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
+                <div className="border-2 border-amber-800 rounded-md overflow-hidden bg-white shadow-2xs">
+                  <div className="bg-amber-900 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                    <BookOpen className="w-4.5 h-4.5 text-amber-300" />
+                    Post-Wise Eligibility (पद-वार पात्रता व शैक्षणिक योग्यता)
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs sm:text-sm text-slate-800 border-collapse">
+                      <thead className="bg-amber-100 text-amber-950">
+                        <tr>
+                          <th className="p-3 text-left border border-amber-200">Post Name (पद का नाम)</th>
+                          <th className="p-3 text-left border border-amber-200">Eligibility Criteria (पात्रता व योग्यता)</th>
+                          <th className="p-3 text-center border border-amber-200">Total Posts</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-amber-200">
+                        {post.vacancyBreakdown.map((v, idx) => (
+                          <tr key={idx} className="bg-white hover:bg-amber-50">
+                            <td className="p-3 border border-amber-200 font-bold text-amber-950">{v.postName}</td>
+                            <td className="p-3 border border-amber-200">
+                              <div className="space-y-1.5">
+                                {v.eligibility.split('\n').map((line, lIdx) => (
+                                  <p key={lIdx} className="leading-relaxed font-medium">{line}</p>
+                                ))}
+                              </div>
+                            </td>
+                            <td className="p-3 border border-amber-200 text-center font-black text-emerald-800">{v.totalPosts}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* 7. Mode of Selection Box (SABSE NICHE - Bottommost) */}
+              <div className="border-2 border-indigo-900 rounded-md overflow-hidden bg-white shadow-2xs">
+                <div className="bg-indigo-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                  <Award className="w-4.5 h-4.5 text-amber-300" />
+                  Mode of Selection (चयन प्रक्रिया)
+                </div>
+                <div className="p-4 text-sm sm:text-base space-y-3 bg-indigo-50/20 text-slate-800">
+                  {post.vacancyBreakdown.some(v => v.modeOfSelection) ? (
+                    post.vacancyBreakdown.map((v, idx) => (
+                      <div key={idx} className="space-y-1 pb-2 border-b border-indigo-100 last:border-0 last:pb-0">
+                        <strong className="text-indigo-950 block font-bold">{v.postName}:</strong>
+                        <p className="text-slate-800 leading-relaxed font-normal">{v.modeOfSelection}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="py-2 text-slate-800 font-medium">
+                      As per official notification (आधिकारिक अधिसूचना के अनुसार)
                     </div>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* Age Limit Box */}
-            {post.ageLimit.asOnDate && (
-              <div className="border border-emerald-800 rounded-md overflow-hidden bg-white shadow-2xs">
-                <div className="bg-emerald-800 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <UserCheck className="w-4 h-4 text-emerald-200" />
-                    Age Limit as on {post.ageLimit.asOnDate} (आयु सीमा)
-                  </div>
-                  <button
-                    onClick={onOpenAgeCalculator}
-                    className="text-xs underline text-amber-200 hover:text-white transition-colors cursor-pointer"
-                  >
-                    Calculate My Age Now →
-                  </button>
-                </div>
-                <div className="p-4 text-xs sm:text-sm space-y-2 bg-emerald-50/20">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-medium text-slate-800">
-                    {post.ageLimit.minAge && <div>Minimum Age: <strong className="text-slate-900 font-bold">{post.ageLimit.minAge} Years.</strong></div>}
-                    {post.ageLimit.maxAge && <div>Maximum Age: <strong className="text-slate-900 font-bold">{post.ageLimit.maxAge} Years.</strong></div>}
-                  </div>
-                  {post.ageLimit.notes && (
-                    <p className="text-xs text-slate-600 italic pt-1 border-t border-slate-100">
-                      {post.ageLimit.notes}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
 
-            {/* Vacancy Details Table */}
-            {post.vacancyBreakdown.length > 0 && (
+
+            {/* How to Apply Section */}
+            {post.category !== 'important' && post.category !== 'certificate_verification' && (
               <div className="border border-blue-900 rounded-md overflow-hidden bg-white shadow-2xs">
-                <div className="bg-blue-950 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 text-amber-300" />
-                  Vacancy Details & Eligibility Criteria (कुल पद व पात्रता)
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs sm:text-sm text-left border-collapse">
-                    <thead>
-                      <tr className="bg-slate-100 text-slate-800 border-b border-slate-200 font-bold">
-                        <th className="p-3">Post Name</th>
-                        <th className="p-3 w-28 text-center">Total Posts</th>
-                        <th className="p-3">Eligibility Criteria</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-200">
-                      {post.vacancyBreakdown.map((vac, idx) => (
-                        <tr key={idx} className="hover:bg-slate-50">
-                          <td className="p-3 font-bold text-slate-900">{vac.postName}</td>
-                          <td className="p-3 text-center font-bold text-emerald-700 text-base">{vac.totalPosts}</td>
-                          <td className="p-3 text-slate-700 leading-relaxed">{vac.eligibility}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {/* Mode of Selection Box (Not shown for Important / Certificate Verification services) */}
-            {post.category !== 'important' && post.category !== 'certificate_verification' && (
-              <div className="border border-purple-800 rounded-md overflow-hidden bg-white shadow-2xs">
-                <div className="bg-purple-900 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-between">
-                  <span className="flex items-center gap-2">
+                <div className="bg-blue-950 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4 text-amber-300" />
-                    चयन प्रक्रिया (Mode of Selection)
-                  </span>
-                  <span className="text-[10px] bg-purple-700 text-purple-100 px-2 py-0.5 rounded font-bold normal-case">
-                    भर्ती नियमानुसार
-                  </span>
-                </div>
-                <div className="p-4 text-xs sm:text-sm text-slate-800 space-y-2 bg-purple-50/20">
-                  <p className="leading-relaxed">
-                    <strong className="text-purple-950 font-bold">{post.shortTitle}</strong> के लिए अभ्यर्थियों का चयन निम्नलिखित चरणों के आधार पर किया जाएगा:
-                  </p>
-                  <ul className="list-disc pl-5 space-y-1.5 font-medium text-slate-900">
-                    {getJobSelectionStages(post).map((stage, idx) => (
-                      <li key={idx} className="leading-relaxed">{stage}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
-
-            {/* Detailed How to Fill Form Steps in Hindi (Not shown for Important / Certificate Verification services) */}
-            {post.category !== 'important' && post.category !== 'certificate_verification' && (
-              <div className="border-2 border-slate-700 rounded-md overflow-hidden bg-white shadow-xs">
-                <div className="bg-slate-900 text-white px-4 py-3 text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-between">
-                  <span className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-amber-300" />
-                    {post.shortTitle} : ऑनलाइन आवेदन कैसे करें (Step-by-Step Complete Guide)
-                  </span>
-                  <span className="text-[11px] bg-amber-400 text-slate-900 px-2 py-0.5 rounded font-black normal-case">
-                    विस्तृत दिशा-निर्देश
+                    {post.shortTitle} : How to Apply Online (आवेदन कैसे करें)
+                  </div>
+                  <span className="text-[11px] bg-amber-400 text-slate-900 font-extrabold px-2 py-0.5 rounded">
+                    How to Apply Date
                   </span>
                 </div>
-
-                <div className="p-4 sm:p-5 space-y-4 bg-slate-50/40 text-xs sm:text-sm">
-                  {/* Crucial Instructions Banner */}
-                  <div className="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r text-amber-950 space-y-1.5 text-xs">
-                    <div className="font-extrabold flex items-center gap-1.5 text-slate-900">
-                      <AlertCircle className="w-4 h-4 text-amber-600" />
-                      <span>ऑनलाइन फॉर्म भरने से पूर्व महत्वपूर्ण सावधानियां:</span>
+                <div className="p-4 sm:p-5 space-y-4 text-xs sm:text-sm text-slate-800">
+                  {/* Highlighted How to Apply Online Date Banner */}
+                  <div className="bg-red-50 border-l-4 border-red-700 p-3 rounded-r text-red-950 font-medium">
+                    <div className="font-extrabold text-sm sm:text-base text-red-800 mb-1 flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-red-700 shrink-0" />
+                      How to Apply Online Date (ऑनलाइन आवेदन की तिथि):
                     </div>
-                    <ul className="list-disc pl-5 space-y-1 text-slate-800 leading-relaxed font-medium">
-                      <li>
-                        अंतिम तिथि (<strong className="text-red-700 font-bold">{post.lastDate || 'अंतिम तिथि'}</strong>) का इंतजार न करें; सर्वर व्यस्तता और तकनीकी समस्या से बचने के लिए समय से पहले आवेदन पूर्ण करें।
-                      </li>
-                      <li>
-                        आवेदन पत्र में अपना सक्रिय मोबाइल नंबर और वैध ईमेल आईडी ही दर्ज करें, क्योंकि आगामी एडमिट कार्ड, परीक्षा तिथि एवं रिजल्ट का अलर्ट SMS / Email द्वारा भेजा जाएगा।
-                      </li>
-                      <li>
-                        फोटो और हस्ताक्षर का साइज निर्धारित सीमा (Photo: 20-50 KB, Sign: 10-20 KB) में रखने के लिए पोर्टल पर उपलब्ध <strong className="text-[#0000cc]">Photo Resizer</strong> टूल का प्रयोग करें।
-                      </li>
-                    </ul>
+                    <p className="text-xs sm:text-sm font-bold text-slate-900">
+                      उम्मीदवार <span className="text-red-700 font-black">{getApplyDates(post).startDate}</span> से <span className="text-red-700 font-black">{getApplyDates(post).lastDate}</span> तक ऑनलाइन आवेदन कर सकते हैं।
+                    </p>
+                    <p className="text-[11px] text-slate-600 mt-0.5 italic">
+                      (Candidate Can Apply Online Between {getApplyDates(post).startDate} to {getApplyDates(post).lastDate})
+                    </p>
                   </div>
 
-                  {/* Step-by-Step Cards */}
-                  <div className="space-y-3">
-                    <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm uppercase tracking-wide border-b border-slate-200 pb-1">
-                      क्रमवार आवेदन प्रक्रिया (Step-by-Step Application Steps):
+                  {/* Step-by-Step Instructions in Hindi */}
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-2 uppercase text-xs tracking-wide">
+                      ऑनलाइन आवेदन पत्र भरने की प्रक्रिया (Step-by-Step Instructions):
                     </h4>
-                    <div className="space-y-2.5">
-                      {getDetailedHowToApplyHindi(post, isRajasthanJob).map((item) => (
-                        <div key={item.stepNumber} className="bg-white border border-slate-200 rounded p-3 shadow-2xs hover:border-slate-400 transition-colors">
-                          <div className="font-extrabold text-slate-900 flex items-start gap-2 mb-1">
-                            <span className="w-5 h-5 rounded-full bg-[#ab1616] text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                              {item.stepNumber}
-                            </span>
-                            <span className="text-[#ab1616] text-xs sm:text-sm font-black">{item.title}</span>
-                          </div>
-                          <p className="text-slate-700 leading-relaxed pl-7 text-xs">
-                            {item.desc}
-                          </p>
-                        </div>
+                    <ol className="list-decimal pl-5 space-y-2.5 text-slate-800">
+                      {getHowToApplyHindiSteps(post).map((step, index) => (
+                        <li key={index} className="leading-relaxed">
+                          <strong className="text-red-800">{step.title}: </strong>
+                          <span>{step.desc}</span>
+                        </li>
                       ))}
-                    </div>
+                    </ol>
                   </div>
 
-                  {/* Specific Board Note */}
                   {post.howToApplySteps && post.howToApplySteps.length > 0 && (
-                    <div className="bg-slate-100 border border-slate-300 rounded p-3 text-xs space-y-1">
-                      <span className="font-bold text-slate-800 block">आधिकारिक बोर्ड के विशेष दिशा-निर्देश (Board Specific Points):</span>
+                    <div className="mt-3 pt-3 border-t border-slate-200">
+                      <strong className="text-slate-900 block mb-1">Official Board Guidelines:</strong>
                       <ul className="list-disc pl-5 space-y-1 text-slate-700">
                         {post.howToApplySteps.map((st, i) => (
                           <li key={i}>{st}</li>
@@ -671,7 +755,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     ? 'Direct Official Portal Links & Verified Services'
                     : 'Interested Candidates Can Read the Full Notification Before Apply Online'}
                   <span className="block text-xs font-normal text-yellow-200 mt-0.5">
-                    SOME USEFUL IMPORTANT LINKS (महत्वपूर्ण उपयोगी लिंक्स)
+                    SOME USEFUL IMPORTANT LINKS
                   </span>
                 </div>
                 <button
@@ -697,7 +781,12 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           : 'bg-[#0000cc] hover:bg-blue-900 text-white'
                       }`}
                     >
-                      {link.actionText.toLowerCase().includes('login') ? (
+                      {link.type === 'official' || link.label.toLowerCase().includes('official website') || link.label.toLowerCase().includes('वेबसाइट') ? (
+                        <>
+                          <span>Click Here</span>
+                          <ExternalLink className="w-4 h-4" />
+                        </>
+                      ) : link.actionText.toLowerCase().includes('login') ? (
                         <>
                           <LogIn className="w-4 h-4" />
                           <span>Login</span>
@@ -734,6 +823,125 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </div>
             </div>
 
+            {/* Post-Wise FAQ Section - Always placed at the bottom of the post (Hindi Translated) */}
+            <div className="border border-amber-600 rounded-md overflow-hidden bg-white shadow-2xs">
+              <div className="bg-amber-900 text-white px-4 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-amber-300" />
+                  {post.shortTitle} : बार-बार पूछे जाने वाले प्रश्न (FAQ - हिंदी में)
+                </span>
+                <span className="text-[10px] bg-amber-700 text-amber-100 px-2 py-0.5 rounded font-bold normal-case">
+                  भर्ती सहायता केंद्र (Helpdesk)
+                </span>
+              </div>
+              <div className="p-4 space-y-3 bg-amber-50/20 text-xs sm:text-sm">
+                <div className="space-y-2">
+                  <details className="group bg-white border border-amber-200 rounded p-3 shadow-2xs open:border-amber-500 transition-all">
+                    <summary className="font-extrabold text-slate-900 cursor-pointer flex items-center justify-between gap-2 list-none">
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-bold shrink-0">Q1</span>
+                        <span>{post.shortTitle} के लिए ऑनलाइन आवेदन करने की अंतिम तिथि (Last Date) क्या है?</span>
+                      </span>
+                      <span className="text-amber-800 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <p className="mt-2 pl-7 text-slate-700 leading-relaxed font-medium">
+                      {post.shortTitle} के लिए ऑनलाइन आवेदन फॉर्म जमा करने की अंतिम तिथि <strong className="text-red-700 font-bold">{post.lastDate || 'आधिकारिक अधिसूचना में निर्दिष्ट'}</strong> है। उम्मीदवारों को सलाह दी जाती है कि वे अंतिम समय की सर्वर त्रुटियों से बचने के लिए समय से पहले आवेदन पूरा करें।
+                    </p>
+                  </details>
+
+                  <details className="group bg-white border border-amber-200 rounded p-3 shadow-2xs open:border-amber-500 transition-all">
+                    <summary className="font-extrabold text-slate-900 cursor-pointer flex items-center justify-between gap-2 list-none">
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-bold shrink-0">Q2</span>
+                        <span>इस भर्ती के लिए आवेदन शुल्क (Application Fee) कितना है और भुगतान कैसे होगा?</span>
+                      </span>
+                      <span className="text-amber-800 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div className="mt-2 pl-7 text-slate-700 leading-relaxed space-y-1">
+                      {post.applicationFee.length > 0 ? (
+                        <>
+                          <p className="font-semibold text-slate-900">वर्ग-वार आवेदन शुल्क संरचना (Category-wise Application Fee):</p>
+                          <ul className="list-disc pl-4 space-y-0.5">
+                            {post.applicationFee.map((f, i) => (
+                              <li key={i}>{f.category}: <strong className="text-slate-900">{f.amount}</strong></li>
+                            ))}
+                          </ul>
+                          {post.feePaymentMode && <p className="text-xs text-slate-600 mt-1">भुगतान का माध्यम (Payment Mode): {post.feePaymentMode}</p>}
+                        </>
+                      ) : (
+                        <p>इस अधिसूचना के लिए कोई आवेदन शुल्क देय नहीं है (No Application Fee).</p>
+                      )}
+                    </div>
+                  </details>
+
+                  <details className="group bg-white border border-amber-200 rounded p-3 shadow-2xs open:border-amber-500 transition-all">
+                    <summary className="font-extrabold text-slate-900 cursor-pointer flex items-center justify-between gap-2 list-none">
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-bold shrink-0">Q3</span>
+                        <span>इस भर्ती के लिए पात्रता मानदंड (Eligibility & Qualification) क्या है?</span>
+                      </span>
+                      <span className="text-amber-800 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div className="mt-2 pl-7 text-slate-700 leading-relaxed space-y-1">
+                      {post.vacancyBreakdown.length > 0 ? (
+                        post.vacancyBreakdown.map((v, i) => (
+                          <p key={i}>• <strong className="text-slate-900">{v.postName} ({v.totalPosts} पद):</strong> {v.eligibility}</p>
+                        ))
+                      ) : (
+                        <p>विस्तृत शैक्षणिक योग्यता एवं पात्रता हेतु कृपया आधिकारिक अधिसूचना (Notification PDF) डाउनलोड करके पढ़ें।</p>
+                      )}
+                    </div>
+                  </details>
+
+                  <details className="group bg-white border border-amber-200 rounded p-3 shadow-2xs open:border-amber-500 transition-all">
+                    <summary className="font-extrabold text-slate-900 cursor-pointer flex items-center justify-between gap-2 list-none">
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-bold shrink-0">Q4</span>
+                        <span>इस पद के लिए चयन प्रक्रिया (Mode of Selection) क्या है?</span>
+                      </span>
+                      <span className="text-amber-800 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div className="mt-2 pl-7 text-slate-700 leading-relaxed space-y-1">
+                      <p className="font-semibold text-slate-900">इस भर्ती के लिए चयन प्रक्रिया में निम्नलिखित चरण शामिल होंगे:</p>
+                      <ul className="list-disc pl-4 space-y-0.5 font-medium">
+                        <li>चरण 1: लिखित परीक्षा / कंप्यूटर आधारित परीक्षा (CBT Exam)</li>
+                        <li>चरण 2: शारीरिक मानक / दक्षता परीक्षण / टाइपिंग या कौशल परीक्षा (यदि लागू हो)</li>
+                        <li>चरण 3: दस्तावेज़ सत्यापन (Document Verification - DV)</li>
+                        <li>चरण 4: चिकित्सीय परीक्षण (Medical Examination) एवं अंतिम मेरिट सूची</li>
+                      </ul>
+                      <p className="text-xs text-slate-600 mt-1">सटीक परीक्षा पैटर्न, सिलेबस और मार्किंग स्कीम हेतु आधिकारिक विज्ञप्ति देखें।</p>
+                    </div>
+                  </details>
+
+                  <details className="group bg-white border border-amber-200 rounded p-3 shadow-2xs open:border-amber-500 transition-all">
+                    <summary className="font-extrabold text-slate-900 cursor-pointer flex items-center justify-between gap-2 list-none">
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-bold shrink-0">Q5</span>
+                        <span>Is there upper age limit relaxation provided?</span>
+                      </span>
+                      <span className="text-amber-800 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <p className="mt-2 pl-7 text-slate-700 leading-relaxed font-medium">
+                      Yes, upper age limit relaxation is applicable for reserved categories (OBC, SC, ST, EWS, PwD, Ex-Servicemen) strictly as per government regulations and official advertisement rules.
+                    </p>
+                  </details>
+
+                  <details className="group bg-white border border-amber-200 rounded p-3 shadow-2xs open:border-amber-500 transition-all">
+                    <summary className="font-extrabold text-slate-900 cursor-pointer flex items-center justify-between gap-2 list-none">
+                      <span className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-bold shrink-0">Q6</span>
+                        <span>How and when can candidates download Admit Card and check Result?</span>
+                      </span>
+                      <span className="text-amber-800 group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <p className="mt-2 pl-7 text-slate-700 leading-relaxed font-medium">
+                      E-Admit cards are published 7 to 10 days before the exam date on the official recruitment portal. Log in using your <strong className="text-slate-900">Registration Number</strong> and <strong className="text-slate-900">Date of Birth</strong> to download your Hall Ticket. Stay tuned to Sarkari Result for direct verified download links.
+                    </p>
+                  </details>
+                </div>
+              </div>
+            </div>
+
             {/* Back to Home Button at bottom of page */}
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200">
               <button
@@ -741,7 +949,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-black text-white font-bold text-xs rounded transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>{isHindi ? 'मुख्य पृष्ठ पर वापस जाएं' : 'Back to Sarkari Result Home Page'}</span>
+                <span>Back to Sarkari Result Home Page</span>
               </button>
 
               <button
@@ -751,6 +959,45 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 ↑ Go to Top of Page
               </button>
             </div>
+
+            {/* Latest and Related Posts Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 border-t pt-8">
+              {/* Latest Jobs Column */}
+              <div className="border border-slate-300 rounded-md overflow-hidden bg-white shadow-xs">
+                <div className="bg-slate-800 text-white px-4 py-2 text-sm font-bold uppercase tracking-wider">
+                  Latest Posts (नवीनतम पोस्ट)
+                </div>
+                <ul className="divide-y divide-slate-100">
+                  {mockSarkariPosts.filter(p => p.category === 'latest_jobs').slice(0, 3).map((p) => (
+                    <li 
+                      key={p.id} 
+                      onClick={() => onSelectPost && onSelectPost(p)}
+                      className="p-3 text-sm font-semibold text-blue-900 hover:text-red-700 cursor-pointer hover:bg-slate-50 transition-colors"
+                    >
+                      {p.shortTitle}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* Related Jobs Column */}
+              <div className="border border-slate-300 rounded-md overflow-hidden bg-white shadow-xs">
+                <div className="bg-slate-800 text-white px-4 py-2 text-sm font-bold uppercase tracking-wider">
+                  Related Posts (सम्बंधित पोस्ट)
+                </div>
+                <ul className="divide-y divide-slate-100">
+                  {mockSarkariPosts.filter(p => p.category === post.category && p.id !== post.id).slice(0, 3).map((p) => (
+                    <li 
+                      key={p.id} 
+                      onClick={() => onSelectPost && onSelectPost(p)}
+                      className="p-3 text-sm font-semibold text-blue-900 hover:text-red-700 cursor-pointer hover:bg-slate-50 transition-colors"
+                    >
+                      {p.shortTitle}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
           </div>
         </article>
       </div>
@@ -868,6 +1115,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };

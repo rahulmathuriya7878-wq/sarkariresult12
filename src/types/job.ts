@@ -42,12 +42,15 @@ export interface VacancyBreakdown {
   postName: string;
   totalPosts: string | number;
   eligibility: string;
+  modeOfSelection?: string;
+  nonTspPosts?: string | number;
+  tspPosts?: string | number;
   categoryBreakdown?: {
-    gen?: number;
-    obc?: number;
-    ews?: number;
-    sc?: number;
-    st?: number;
+    gen?: number | string;
+    obc?: number | string;
+    ews?: number | string;
+    sc?: number | string;
+    st?: number | string;
   };
 }
 

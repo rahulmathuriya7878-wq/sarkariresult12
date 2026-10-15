@@ -23,7 +23,7 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-3">
           <span className="flex items-center gap-1.5">
             <Send className="w-4 h-4 text-yellow-300" />
-            Join Rajasthan Vacancy Official Telegram Channel for Fast Updates
+            Join Official Telegram Channel for Fast Updates
           </span>
           <button 
             onClick={() => window.open('https://t.me/newsarkariresultt', '_blank')}
@@ -35,16 +35,16 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        {/* Authentic Rajasthan Vacancy SEO Information Text Block */}
+        {/* Authentic Sarkari Result SEO Information Text Block */}
         <div className="bg-white p-4 border border-slate-200 rounded-xs space-y-3 text-[11px] leading-relaxed text-slate-600">
           <h3 className="text-xs font-bold text-slate-900 uppercase">
-            Rajasthan Vacancy (RajasthanVacancy.in) : Rajasthan Government Jobs & Bharti Portal
+            Sarkari Result Portal : Latest Govt Jobs, Admit Cards & Exam Results
           </h3>
           <p>
-            Find all latest Rajasthan government jobs (Rajasthan Sarkari Naukri) and recruitment notifications issued by <strong>RSMSSB (RSSB), RPSC, Rajasthan Police, High Court, Animal Husbandry, Medical & Health, Teacher Bharti (1st Grade, 2nd Grade, REET), LDC, Patwari, VDO, and Pashu Paricharak</strong>.
+            Find all latest government jobs (Sarkari Naukri) and recruitment notifications issued by <strong>UPSC, SSC, Banking, Railways, Defense, State PSC, Police, and Teaching examinations</strong> across India.
           </p>
           <p>
-            <strong>RajasthanVacancy.in</strong> is Rajasthan's premier portal for <strong>Latest Jobs, Admit Cards, Exam Results, Answer Keys, Detailed Syllabus, CET Updates, and Online Application Forms</strong> with direct verified official links.
+            <strong>Sarkari Result</strong> is India's premier portal for <strong>Latest Jobs, Admit Cards, Exam Results, Answer Keys, Detailed Syllabus, and Online Application Forms</strong> with direct verified official links.
           </p>
         </div>
 
