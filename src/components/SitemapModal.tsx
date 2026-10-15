@@ -22,9 +22,10 @@ export const SitemapModal: React.FC<SitemapModalProps> = ({
   const xmlContent = generateSitemapXml(window.location.origin);
 
   const handleCopyXml = () => {
-    navigator.clipboard.writeText(xmlContent);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(xmlContent).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(err => console.error('Failed to copy: ', err));
   };
 
   const handleDownloadXml = () => {

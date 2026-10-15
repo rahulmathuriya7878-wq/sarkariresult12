@@ -43,9 +43,11 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: 'Non-Technical Popular Categories (Under Graduate - Level 2 & Level 3)',
         totalPosts: '1,688',
-        eligibility: `• शैक्षणिक योग्यता: Class 12th (10+2) Intermediate or equivalent passed from recognized Board in India with required aggregate marks.
-• कंप्यूटर व टाइपिंग कौशल: 30 WPM English OR 25 WPM Hindi Typing speed on Computer for Junior Clerk / Accounts Clerk / Time Keeper posts.
-• चिकित्सा मानक: Medical Standard A-2, A-3, or C-2 as specified in CEN 07/2026. Candidate must possess valid Aadhaar Card.`,
+        eligibility: `• शैक्षणिक योग्यता: Class 12th (10+2) Intermediate or equivalent passed from recognized Board in India.
+• आयु सीमा: 18 - 33 Years (As on 01/01/2027).
+• शारीरिक मानक: Medical Standard A-2, A-3, or C-2 as specified in CEN 07/2026.
+• आरक्षण: आयु सीमा में नियमानुसार छूट.
+• अन्य: Candidate must possess valid Aadhaar Card.`,
         modeOfSelection: 'CBT 1 & CBT 2 + Typing Test / Skill Test + Document Verification & Medical Examination',
         categoryBreakdown: { gen: 688, obc: 450, ews: 168, sc: 253, st: 129 }
       }
@@ -106,9 +108,10 @@ export const mockSarkariPosts: SarkariPost[] = [
         nonTspPosts: '1,150',
         tspPosts: '70',
         totalPosts: '1,220',
-        eligibility: `• शैक्षणिक योग्यता (MBBS Degree): MBBS degree from recognized medical college/institution in India approved by NMC / MCI.
-• मेडिकल काउंसिल पंजीकरण: Candidate MUST be permanently registered with Rajasthan Medical Council (RMC), Jaipur on or before DV date.
-• इंटरनशिप व ज्ञान: 1-Year compulsory rotatory internship completed + Working knowledge of Hindi Devanagari script & Rajasthan culture.`,
+        eligibility: `• शैक्षणिक योग्यता: MBBS Degree from a recognized Medical College/University in India.
+• आयु सीमा: 22 - 45 Years (As on 01/01/2027).
+• रजिस्ट्रेशन: Valid Registration with Rajasthan Medical Council (RMC) is mandatory.
+• आरक्षण: राजस्थान राज्य के मूल निवासियों को नियमानुसार आरक्षण.`,
         modeOfSelection: 'Written Examination (CBT) + Document Verification & Medical Fitness Test',
         categoryBreakdown: { gen: 490, obc: 254, ews: 122, sc: 195, st: 159 }
       }
@@ -168,10 +171,11 @@ export const mockSarkariPosts: SarkariPost[] = [
         nonTspPosts: '11,200',
         tspPosts: '1,300',
         totalPosts: '12,500',
-        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree in Any Stream (BA, B.Sc, B.Com, Agriculture, Law, CS, Engineering) from Recognized University in India.
-• कंप्यूटर योग्यता: RSCIT Certificate issued by VMOU Kota / O-Level / COPA / Degree or Diploma in Computer Science / IT.
-• मुख्य विज्ञापित पद: पटवारी, प्लाटून कमान्डर, कनिष्ठ लेखाकार, तहसील राजस्व लेखाकार, महिला अधिकारिता पर्यवेक्षक।`,
-        modeOfSelection: 'Written Competitive Examination (Objective Multiple Choice Questions) + Document Verification & Final Merit List',
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree in Any Stream from Recognized University in India.
+• आयु सीमा: 18 - 40 Years (As on 01/01/2027).
+• कंप्यूटर योग्यता: RSCIT Certificate / O-Level / Degree or Diploma in CS/IT.
+• आरक्षण: राजस्थान राज्य के मूल निवासियों को नियमानुसार आरक्षण.`,
+        modeOfSelection: 'Written Competitive Examination + Document Verification & Final Merit List',
         categoryBreakdown: { gen: 5000, obc: 2625, ews: 1250, sc: 2000, st: 1625 }
       },
       {
@@ -179,9 +183,10 @@ export const mockSarkariPosts: SarkariPost[] = [
         nonTspPosts: '11,500',
         tspPosts: '1,500',
         totalPosts: '13,000',
-        eligibility: `• शैक्षणिक योग्यता: Passed Senior Secondary (10+2 / 12th Exam) from Board of Secondary Education Rajasthan (BSER) or any Recognized Board in India.
-• कंप्यूटर योग्यता: RSCIT Certificate / COPA / Computer Diploma / Passed 12th Class with Computer Science / IT subject.
-• मुख्य विज्ञापित पद: एलडीसी (LDC / Clerk Grade-II), राजस्थान पुलिस कांस्टेबल, वनपाल/फॉरेस्टर, छात्रवास अधीक्षक।`,
+        eligibility: `• शैक्षणिक योग्यता: Passed Senior Secondary (10+2) from a Recognized Board in India.
+• आयु सीमा: 18 - 40 Years (As on 01/01/2027).
+• कंप्यूटर योग्यता: RSCIT Certificate / O-Level / Degree or Diploma in CS/IT.
+• आरक्षण: राजस्थान राज्य के मूल निवासियों को नियमानुसार आरक्षण.`,
         modeOfSelection: 'Written Common Eligibility Examination + Physical Efficiency Test (where applicable) + Document Verification',
         categoryBreakdown: { gen: 5200, obc: 2730, ews: 1300, sc: 2080, st: 1690 }
       }

@@ -93,21 +93,21 @@ export const getPostShareText = (post: SarkariPost): string => {
   lines.push('──────────────────────');
   
   if (post.shortTitle && post.shortTitle !== post.title) {
-    lines.push(`📌 *Recruitment:* ${post.shortTitle}`);
+    lines.push(`📌 *भर्ती:* ${post.shortTitle}`);
   }
   
-  lines.push(`🏛️ *Department:* ${post.department} (${post.state})`);
+  lines.push(`🏛️ *विभाग:* ${post.department} (${post.state})`);
   
   if (post.totalVacancies) {
-    lines.push(`🎯 *Total Vacancies:* ${post.totalVacancies} Posts`);
+    lines.push(`🎯 *कुल पद:* ${post.totalVacancies} Posts`);
   }
   
   if (post.qualifications && post.qualifications.length > 0) {
-    lines.push(`🎓 *Qualification:* ${post.qualifications.join(', ')}`);
+    lines.push(`🎓 *योग्यता:* ${post.qualifications.join(', ')}`);
   }
   
   if (post.lastDate) {
-    lines.push(`⏳ *Last Date to Apply Online:* ${post.lastDate}`);
+    lines.push(`⏳ *ऑनलाइन आवेदन की अंतिम तिथि:* ${post.lastDate}`);
   } else if (post.importantDates && post.importantDates.length > 0) {
     const mainDate = post.importantDates.find(d => d.isHighlight) || post.importantDates[0];
     lines.push(`📅 *${mainDate.label}:* ${mainDate.value}`);
@@ -118,25 +118,25 @@ export const getPostShareText = (post: SarkariPost): string => {
       .map(f => `${f.category}: ${f.amount}`)
       .slice(0, 2)
       .join(' | ');
-    lines.push(`💰 *Application Fee:* ${feeSummary}`);
+    lines.push(`💰 *आवेदन शुल्क:* ${feeSummary}`);
   }
   
   if (post.ageLimit && (post.ageLimit.minAge || post.ageLimit.maxAge)) {
     const ageArr = [];
-    if (post.ageLimit.minAge) ageArr.push(`Min ${post.ageLimit.minAge} Yrs`);
-    if (post.ageLimit.maxAge) ageArr.push(`Max ${post.ageLimit.maxAge} Yrs`);
-    lines.push(`👤 *Age Limit:* ${ageArr.join(', ')}`);
+    if (post.ageLimit.minAge) ageArr.push(`न्यूनतम ${post.ageLimit.minAge} वर्ष`);
+    if (post.ageLimit.maxAge) ageArr.push(`अधिकतम ${post.ageLimit.maxAge} वर्ष`);
+    lines.push(`👤 *आयु सीमा:* ${ageArr.join(', ')}`);
   }
   
   lines.push('──────────────────────');
-  lines.push(`🔗 *Official Direct Links & Notification:*`);
+  lines.push(`🔗 *आधिकारिक डायरेक्ट लिंक और नोटिफिकेशन:*`);
   const postUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}${window.location.pathname}#${post.slug}`
     : '';
   if (postUrl) {
     lines.push(postUrl);
   }
-  lines.push(`\n📲 *Sarkari Result* - Fast & Verified Government Job Portal`);
+  lines.push(`\n📲 *सरकारी रिजल्ट* - सबसे तेज़ और सत्यापित सरकारी नौकरी पोर्टल`);
   
   return lines.join('\n');
 };
@@ -229,19 +229,22 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           text: shareText,
           url: currentUrl
         }).catch(() => {
-          navigator.clipboard.writeText(shareText);
-          setShareSuccessToast(true);
-          setTimeout(() => setShareSuccessToast(false), 3000);
+          navigator.clipboard.writeText(shareText).then(() => {
+            setShareSuccessToast(true);
+            setTimeout(() => setShareSuccessToast(false), 3000);
+          }).catch(err => console.error('Failed to copy: ', err));
         });
       } else {
-        navigator.clipboard.writeText(shareText);
-        setShareSuccessToast(true);
-        setTimeout(() => setShareSuccessToast(false), 3000);
+        navigator.clipboard.writeText(shareText).then(() => {
+          setShareSuccessToast(true);
+          setTimeout(() => setShareSuccessToast(false), 3000);
+        }).catch(err => console.error('Failed to copy: ', err));
       }
     } else if (platform === 'copy') {
-      navigator.clipboard.writeText(shareText);
-      setShareSuccessToast(true);
-      setTimeout(() => setShareSuccessToast(false), 3000);
+      navigator.clipboard.writeText(shareText).then(() => {
+        setShareSuccessToast(true);
+        setTimeout(() => setShareSuccessToast(false), 3000);
+      }).catch(err => console.error('Failed to copy: ', err));
     }
   };
 
@@ -485,12 +488,13 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   <button
                     type="button"
                     onClick={() => handleSocialShare('share')}
-                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded shadow-2xs transition-all cursor-pointer active:scale-95"
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#ab1616] to-red-800 hover:from-red-900 hover:to-red-950 text-white text-sm font-black rounded-md shadow-md transition-all cursor-pointer active:scale-95 hover:shadow-lg hover:-translate-y-0.5"
                     title="Share Job Details"
                   >
-                    <Share2 className="w-3.5 h-3.5 text-amber-300" />
-                    <span>Share</span>
+                    <Share2 className="w-4 h-4 text-white" />
+                    <span>Share Job Vacancy</span>
                   </button>
+
                 </div>
               </div>
             </div>
@@ -763,7 +767,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   onClick={() => setIsAddModalOpen(true)}
                   className="bg-amber-400 hover:bg-amber-500 text-slate-900 px-3 py-1.5 rounded text-xs font-black shadow-xs cursor-pointer shrink-0 uppercase tracking-normal"
                 >
-                  + Add Link / PDF
+                  Admin: + Add PDF / Link
                 </button>
               </div>
               <div className="divide-y divide-slate-200 text-sm sm:text-base">
@@ -1041,7 +1045,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-2xl border border-slate-300 space-y-4">
             <div className="flex items-center justify-between border-b pb-3">
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                ➕ Add Custom Link or PDF
+                ➕ Admin: Add PDF / Link
               </h3>
               <button 
                 onClick={() => setIsAddModalOpen(false)}

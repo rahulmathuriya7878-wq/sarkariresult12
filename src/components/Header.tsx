@@ -73,8 +73,9 @@ export const Header: React.FC<HeaderProps> = ({
                   url: window.location.href,
                 }).catch(() => {});
               } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('Portal link copied to clipboard!');
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Portal link copied to clipboard!');
+                }).catch(err => console.error('Failed to copy: ', err));
               }
             }}
             className="bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 border border-white/20"

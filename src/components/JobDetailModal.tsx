@@ -87,14 +87,16 @@ export const JobDetailModal: React.FC<JobDetailModalProps> = ({
         text: shareText,
         url: postUrl
       }).catch(() => {
-        navigator.clipboard.writeText(shareText);
-        setCopiedLink(true);
-        setTimeout(() => setCopiedLink(false), 2000);
+        navigator.clipboard.writeText(shareText).then(() => {
+          setCopiedLink(true);
+          setTimeout(() => setCopiedLink(false), 2000);
+        }).catch(err => console.error('Failed to copy: ', err));
       });
     } else {
-      navigator.clipboard.writeText(shareText);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2000);
+      navigator.clipboard.writeText(shareText).then(() => {
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2000);
+      }).catch(err => console.error('Failed to copy: ', err));
     }
   };
 
