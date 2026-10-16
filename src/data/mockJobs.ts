@@ -1,6 +1,134 @@
 import { SarkariPost } from '../types/job';
 
 export const mockSarkariPosts: SarkariPost[] = [
+  // --- LATEST NOTICES OCTOBER 2026 ---
+  {
+    id: 'job-supreme-court-attendant-2026',
+    slug: 'supreme-court-attendant-recruitment-2026',
+    title: 'Supreme Court of India Junior Court Attendant Recruitment 2026 Online Form (130 Posts)',
+    shortTitle: 'Supreme Court Attendant 2026 Online Form',
+    hindiTitle: 'सुप्रीम कोर्ट जूनियर कोर्ट अटेंडेंट भर्ती 2026 ऑनलाइन आवेदन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Other',
+    qualifications: ['10th Pass', '12th Pass'],
+    state: 'All India',
+    postDate: '16 October 2026',
+    notificationNumber: 'F.6/2026-SCA(I)',
+    totalVacancies: 130,
+    salary: '₹ 21,700 - ₹ 69,100/- (Pay Level 3, Gross approx ₹ 46,000/- p.m.)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '25/11/2026',
+    examDate: '26/12/2026 (Tentative)',
+    shortInfo: 'Supreme Court of India (SCI) has released the official recruitment notification for 130 tentative posts of Junior Court Attendant (Group "C" Non-Clerical). Minimum qualification is 10th standard pass (maximum qualification 12th pass). Online application starts from 04 November 2026 to 25 November 2026 on sci.gov.in.',
+    applicationFee: [
+      { category: 'General / EWS', amount: '₹ 1500/-' },
+      { category: 'SC / ST / OBC (NCL) / PwD / Ex-Servicemen', amount: '₹ 750/-' }
+    ],
+    feePaymentMode: 'Pay Examination Fee online through Net Banking, Debit Card, Credit Card, or UPI.',
+    ageLimit: {
+      asOnDate: '01/10/2026',
+      minAge: 18,
+      maxAge: 27,
+      notes: 'Age relaxation applicable for SC/ST/OBC/Physically Challenged/Ex-Servicemen as per Supreme Court of India recruitment rules.'
+    },
+    importantDates: [
+      { label: 'Official Notification Released', value: '15/10/2026' },
+      { label: 'Application Begin Date', value: '04/11/2026' },
+      { label: 'Last Date for Apply Online', value: '25/11/2026 (11:55 PM)', isHighlight: true },
+      { label: 'Written Exam Date (Tentative)', value: '26/12/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Junior Court Attendant (Group "C" Non-Clerical)',
+        totalPosts: '130',
+        eligibility: `• शैक्षणिक योग्यता: Passed Class 10th (High School / Matriculation) from Any Recognized Board in India.
+• अधिकतम शैक्षणिक सीमा: Candidate must not possess qualification higher than 10+2 (Intermediate).
+• आयु सीमा: 18 से 27 वर्ष (आयु की गणना 01 अक्टूबर 2026 के अनुसार)।
+• आरक्षण लाभ: एससी/एसटी/ओबीसी/दिव्यांग अभ्यर्थियों को नियमानुसार ऊपरी आयु सीमा में छूट।
+• चयन प्रक्रिया: 100 अंकों की बहुविकल्पीय लिखित परीक्षा (अंग्रेजी, सामान्य बुद्धि, सामान्य ज्ञान) + 25 अंकों का साक्षात्कार।`,
+        modeOfSelection: 'Objective Type Written Examination (100 Marks) + Interview (25 Marks) -> Final Merit List',
+        categoryBreakdown: { gen: 56, obc: 35, ews: 13, sc: 18, st: 8 }
+      }
+    ],
+    howToApplySteps: [
+      'Visit official Supreme Court of India recruitment portal: sci.gov.in.',
+      'Click on Recruitment -> Online Application for Junior Court Attendant Examination 2026.',
+      'Fill candidate registration details with valid mobile number and email ID.',
+      'Upload 10th certificate, passport size photograph, signature, and category certificate.',
+      'Pay online examination fee and download/print final submitted application form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (Supreme Court Portal Link)', actionText: 'Apply Online', type: 'apply', url: 'https://www.sci.gov.in/recruitment/', isPrimary: true },
+      { label: 'Download Detailed Official Notification PDF', actionText: 'Click Here (PDF)', type: 'notification', url: 'https://www.sci.gov.in/recruitment/' },
+      { label: 'Official Supreme Court of India Website', actionText: 'sci.gov.in', type: 'official', url: 'https://www.sci.gov.in' }
+    ]
+  },
+  {
+    id: 'job-itbp-motor-mechanic-2026',
+    slug: 'itbp-motor-mechanic-recruitment-2026',
+    title: 'ITBP Head Constable & Constable (Motor Mechanic) Recruitment 2026 Online Form (21 Posts)',
+    shortTitle: 'ITBP Motor Mechanic 2026 Online Form',
+    hindiTitle: 'आईटीबीपी मोटर मैकेनिक (हेड कांस्टेबल) भर्ती 2026 ऑनलाइन आवेदन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Defence',
+    qualifications: ['10th Pass', '12th Pass', 'Diploma / ITI'],
+    state: 'All India',
+    postDate: '16 October 2026',
+    notificationNumber: 'ITBP/MM/Rectt/2026',
+    totalVacancies: 21,
+    salary: '₹ 25,500 - ₹ 81,100/- (Pay Level 4 as per 7th CPC)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '27/10/2026',
+    examDate: 'As per Schedule',
+    shortInfo: 'Indo-Tibetan Border Police Force (ITBP), Ministry of Home Affairs, Government of India has released official notification for the recruitment of Head Constable (Motor Mechanic) Group "C" (Non-Gazetted & Non-Ministerial). Eligible male Indian citizens can apply online from 28/09/2026 to 27/10/2026 on recruitment.itbpolice.nic.in.',
+    applicationFee: [
+      { category: 'General / OBC / EWS (Male)', amount: '₹ 100/-' },
+      { category: 'SC / ST / Ex-Servicemen (ESM)', amount: '₹ 0/- (Exempted)' }
+    ],
+    feePaymentMode: 'Pay Examination Fee through Online Net Banking, Debit Card, Credit Card, or UPI.',
+    ageLimit: {
+      asOnDate: '27/10/2026',
+      minAge: 18,
+      maxAge: 25,
+      notes: 'Age relaxation 5 years for SC/ST and 3 years for OBC (NCL) candidates as per Government of India rules.'
+    },
+    importantDates: [
+      { label: 'Application Opening Date', value: '28/09/2026' },
+      { label: 'Application Closing Date', value: '27/10/2026 (23:59 Hrs.)', isHighlight: true },
+      { label: 'PET / PST Physical Test Date', value: 'Notify Soon', isHighlight: true },
+      { label: 'Written Examination Date', value: 'As per Schedule' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Head Constable (Motor Mechanic) - Group C',
+        totalPosts: '21',
+        eligibility: `• शैक्षणिक योग्यता: Class 10+2 (Intermediate / 12th) Exam Passed from Any Recognized Board in India.
+• तकनीकी योग्यता: Certificate in Motor Mechanic from recognized institute or ITI with 3 Years practical experience in reputed workshop OR 3-Year Diploma in Automobile Engineering.
+• आयु सीमा: 18 से 25 वर्ष (आयु की गणना 27 अक्टूबर 2026 के अनुसार)।
+• शारीरिक मापदंड (PST): पुरुष न्यूनतम ऊंचाई 170 सेमी (पहाड़ी/एसटी 162.5-165 सेमी), सीना 80-85 सेमी (5 सेमी फुलाव अनिवार्य)।
+• शारीरिक दक्षता परीक्षा (PET): 1.6 KM दौड़ 7 मिनट 30 सेकंड में, 11 फीट लंबी कूद (3 चांस), 3.5 फीट ऊंची कूद (3 चांस)।`,
+        modeOfSelection: 'Phase-I (PET & PST) -> Phase-II (Written Exam OMR/CBT 100 Marks) -> Phase-III (Practical / Skill Trade Test 50 Marks) -> Document Verification (DV) & Detailed Medical Exam (DME)',
+        categoryBreakdown: { gen: 7, obc: 7, ews: 3, sc: 4, st: 0 }
+      }
+    ],
+    howToApplySteps: [
+      'Visit ITBP official recruitment portal at recruitment.itbpolice.nic.in.',
+      'Click on NEW USER REGISTRATION or LOGIN if already registered.',
+      'Complete profile details, upload photograph & signature as per prescribed dimensions.',
+      'Select Head Constable (Motor Mechanic) recruitment form and fill technical trade & experience details.',
+      'Pay online application fee of ₹100 (if applicable) and download final printout.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (New Registration / Signup)', actionText: 'Registration', type: 'apply', url: 'https://recruitment.itbpolice.nic.in/registrations/applicant-signup', isPrimary: true },
+      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply', url: 'https://recruitment.itbpolice.nic.in/applicant-profile-details/applicant-login' },
+      { label: 'Download Detailed Notification PDF', actionText: 'Click Here (PDF)', type: 'notification', url: 'https://recruitment.itbpolice.nic.in/' },
+      { label: 'ITBP Official Recruitment Website', actionText: 'Click Here', type: 'official', url: 'https://itbpolice.nic.in/' }
+    ]
+  },
   // --- LATEST OFFICIAL NOTICE CEN 07/2026 ---
   {
     id: 'job-rrb-ntpc-cen-07-2026',
@@ -1497,6 +1625,8 @@ export const mockSarkariPosts: SarkariPost[] = [
 ];
 
 export const trendingAlerts = [
+  { id: 't-sci', title: '⚖️ Supreme Court Attendant (130 Posts) Online Form 2026', slug: 'supreme-court-attendant-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
+  { id: 't-itbp', title: '🛡️ ITBP Motor Mechanic (21 Posts) Online Form Active', slug: 'itbp-motor-mechanic-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't0', title: '🚂 Railway RRB NTPC 12th Level (3,445 Posts) Online Form Active', slug: 'rrb-ntpc-12th-level-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't1', title: '🚨 RUHS Medical Officer (1,220 Posts) Online Form Active', slug: 'ruhs-medical-officer-recruitment-2026', category: 'latest_jobs', badge: 'Hot' },
   { id: 't2', title: 'UPSC Civil Services 2026 Prelims Online Form', slug: 'upsc-civil-services-ias-ifs-2026', category: 'latest_jobs', badge: 'Apply Now' },
@@ -1509,8 +1639,8 @@ export const trendingAlerts = [
 ];
 
 export const highlightBoxes = [
-  { id: 'h0', title: 'RRB NTPC 12th Level 2026', sub: 'Apply Online (3,445 Posts)', slug: 'rrb-ntpc-12th-level-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
-  { id: 'h1', title: 'RUHS Medical Officer 2026', sub: 'Apply Online (1,220 Posts)', slug: 'ruhs-medical-officer-recruitment-2026', color: 'from-blue-600 to-blue-700' },
-  { id: 'h2', title: 'UPSC IAS / IFS 2026', sub: 'Apply Online (1056 Posts)', slug: 'upsc-civil-services-ias-ifs-2026', color: 'from-amber-600 to-amber-700' },
-  { id: 'h3', title: 'RRB NTPC Graduate 2026', sub: '11,558 Posts Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', color: 'from-emerald-600 to-emerald-700' }
+  { id: 'h-sci', title: 'Supreme Court Attendant', sub: 'Apply Online (130 Posts)', slug: 'supreme-court-attendant-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
+  { id: 'h-itbp', title: 'ITBP Motor Mechanic', sub: 'Apply Online (21 Posts)', slug: 'itbp-motor-mechanic-recruitment-2026', color: 'from-blue-600 to-blue-700' },
+  { id: 'h0', title: 'RRB NTPC 12th Level 2026', sub: 'Apply Online (3,445 Posts)', slug: 'rrb-ntpc-12th-level-recruitment-2026', color: 'from-amber-600 to-amber-700' },
+  { id: 'h1', title: 'RUHS Medical Officer 2026', sub: 'Apply Online (1,220 Posts)', slug: 'ruhs-medical-officer-recruitment-2026', color: 'from-emerald-600 to-emerald-700' }
 ];

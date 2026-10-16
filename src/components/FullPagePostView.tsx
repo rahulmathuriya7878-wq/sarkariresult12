@@ -86,6 +86,17 @@ const getDetailedHowToApplyEnglish = (post: SarkariPost, isRajasthanJob: boolean
   ];
 };
 
+export const hasCategoryBreakdownData = (v?: { categoryBreakdown?: { gen?: number | string; obc?: number | string; ews?: number | string; sc?: number | string; st?: number | string } }) => {
+  if (!v || !v.categoryBreakdown) return false;
+  const cb = v.categoryBreakdown;
+  const total = [cb.gen, cb.obc, cb.ews, cb.sc, cb.st].reduce<number>((acc, val) => {
+    if (val === undefined || val === null || val === '' || val === '-') return acc;
+    const num = Number(val);
+    return acc + (isNaN(num) ? 1 : num);
+  }, 0);
+  return total > 0;
+};
+
 export const getPostShareText = (post: SarkariPost): string => {
   const lines: string[] = [];
   
@@ -281,6 +292,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     post.slug.toLowerCase().includes('ssc') ||
     post.shortTitle.toLowerCase().includes('ssc');
 
+  const isItbpJob = 
+    post.title.toLowerCase().includes('itbp') || 
+    post.slug.toLowerCase().includes('itbp') || 
+    post.shortTitle.toLowerCase().includes('itbp');
+
+  const itbpSignupUrl = 'https://recruitment.itbpolice.nic.in/registrations/applicant-signup';
+  const itbpLoginUrl = 'https://recruitment.itbpolice.nic.in/applicant-profile-details/applicant-login';
+  const itbpOfficialUrl = 'https://itbpolice.nic.in/';
+
   const upscLoginUrl = 'https://upsconline.nic.in/candidate/realms/candidate-portal/login-actions/authenticate?execution=dbd830c6-ec01-4843-b36b-1698ce52fb62&client_id=account&tab_id=kgIbmuNADOk&client_data=eyJydSI6Imh0dHBzOi8vdXBzY29ubGluZS5uaWMuaW4vY2FuZGlkYXRlL3JlYWxtcy9jYW5kaWRhdGUtcG9ydGFsL2FjY291bnQvbG9naW4tcmVkaXJlY3QiLCJydCI6ImNvZGUiLCJzdCI6IjAvMmYzMTgzZjYtMTE2Ny05ZDY0LTA1N2EtNmUyODZhYmM5NWM0In0';
   const upscRegisterUrl = 'https://upsconline.nic.in/candidate/realms/candidate-portal/login-actions/registration?execution=5cc68339-a3de-4411-b6ff-23460bba7ad6&client_id=account&tab_id=kgIbmuNADOk&client_data=eyJydSI6Imh0dHBzOi8vdXBzY29ubGluZS5uaWMuaW4vY2FuZGlkYXRlL3JlYWxtcy9jYW5kaWRhdGUtcG9ydGFsL2FjY291bnQvbG9naW4tcmVkaXJlY3QiLCJydCI6ImNvZGUiLCJzdCI6IjAvMmYzMTgzZjYtMTE2Ny05ZDY0LTA1N2EtNmUyODZhYmM5NWM0In0';
   const upscOfficialUrl = 'https://www.upsc.gov.in/';
@@ -290,6 +310,22 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   const sscRegisterUrl = 'https://ssc.gov.in/candidate-portal/one-time-registration/home-page';
 
   const handleLinkAction = (link: { label: string; actionText: string; type: string; url?: string }) => {
+    // Automatic ITBP Portal Routing for all ITBP jobs
+    if (isItbpJob) {
+      const text = (link.label + ' ' + link.actionText).toLowerCase();
+      if (text.includes('login') || text.includes('sign in') || text.includes('signin') || text.includes('already registered')) {
+        window.open(itbpLoginUrl, '_blank');
+        return;
+      }
+      if (link.type === 'apply' || text.includes('register') || text.includes('registration') || text.includes('apply') || text.includes('signup')) {
+        window.open(itbpSignupUrl, '_blank');
+        return;
+      }
+      if (link.type === 'official' || text.includes('official website') || text.includes('official portal')) {
+        window.open(itbpOfficialUrl, '_blank');
+        return;
+      }
+    }
     // Automatic SSC Portal Routing for all SSC jobs
     if (isSscJob) {
       const text = (link.label + ' ' + link.actionText).toLowerCase();
@@ -603,21 +639,21 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               )}
 
-              {/* 5. Category Wise Posts Box */}
-              {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
+              {/* 5. Category Wise Posts Box - Data hone par hi list kare */}
+              {post.vacancyBreakdown && post.vacancyBreakdown.some(v => hasCategoryBreakdownData(v)) && (
                 <div className="border-2 border-emerald-900 rounded-md overflow-hidden bg-white shadow-2xs">
                   <div className="bg-emerald-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
                     <Users className="w-4.5 h-4.5 text-amber-300" />
                     Category Wise Posts (वर्ग-वार पद)
                   </div>
                   <div className="p-4 text-sm sm:text-base space-y-3 bg-emerald-50/20 text-slate-800">
-                    {post.vacancyBreakdown.map((v, idx) => (
+                    {post.vacancyBreakdown.filter(v => hasCategoryBreakdownData(v)).map((v, idx) => (
                       <div key={idx} className="space-y-1.5 pb-2.5 border-b border-emerald-100 last:border-0 last:pb-0">
                         <div className="flex justify-between items-center font-bold text-emerald-950">
                           <span>{v.postName}</span>
                           <span className="text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded text-xs sm:text-sm font-black">Total: {v.totalPosts}</span>
                         </div>
-                        {v.categoryBreakdown ? (
+                        {v.categoryBreakdown && (
                           <div className="grid grid-cols-2 gap-2 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
                             <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>GEN:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.gen ?? '-'}</strong></div>
                             <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>OBC:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.obc ?? '-'}</strong></div>
@@ -625,8 +661,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                             <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>SC:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.sc ?? '-'}</strong></div>
                             <div className="bg-white p-2 border border-slate-200 rounded flex justify-between"><span>ST:</span> <strong className="text-slate-900 font-extrabold">{v.categoryBreakdown.st ?? '-'}</strong></div>
                           </div>
-                        ) : (
-                          <div className="text-slate-500 italic text-xs sm:text-sm">As per rule</div>
                         )}
                       </div>
                     ))}

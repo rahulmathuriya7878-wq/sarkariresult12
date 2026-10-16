@@ -32,6 +32,17 @@ interface JobDetailModalProps {
   onOpenPhotoResizer: () => void;
 }
 
+const hasCategoryBreakdownData = (v?: { categoryBreakdown?: { gen?: number | string; obc?: number | string; ews?: number | string; sc?: number | string; st?: number | string } }) => {
+  if (!v || !v.categoryBreakdown) return false;
+  const cb = v.categoryBreakdown;
+  const total = [cb.gen, cb.obc, cb.ews, cb.sc, cb.st].reduce<number>((acc, val) => {
+    if (val === undefined || val === null || val === '' || val === '-') return acc;
+    const num = Number(val);
+    return acc + (isNaN(num) ? 1 : num);
+  }, 0);
+  return total > 0;
+};
+
 export const JobDetailModal: React.FC<JobDetailModalProps> = ({
   post,
   isOpen,
@@ -141,7 +152,32 @@ export const JobDetailModal: React.FC<JobDetailModalProps> = ({
   const sscLoginUrl = 'https://ssc.gov.in/login';
   const sscRegisterUrl = 'https://ssc.gov.in/candidate-portal/one-time-registration/home-page';
 
+  const isItbpJob = 
+    post.title.toLowerCase().includes('itbp') || 
+    post.slug.toLowerCase().includes('itbp') || 
+    post.shortTitle.toLowerCase().includes('itbp');
+
+  const itbpSignupUrl = 'https://recruitment.itbpolice.nic.in/registrations/applicant-signup';
+  const itbpLoginUrl = 'https://recruitment.itbpolice.nic.in/applicant-profile-details/applicant-login';
+  const itbpOfficialUrl = 'https://itbpolice.nic.in/';
+
   const handleLinkAction = (link: { label: string; actionText: string; type: string; url?: string }) => {
+    // Automatic ITBP Portal Routing for all ITBP jobs
+    if (isItbpJob) {
+      const text = (link.label + ' ' + link.actionText).toLowerCase();
+      if (text.includes('login') || text.includes('sign in') || text.includes('signin') || text.includes('already registered')) {
+        window.open(itbpLoginUrl, '_blank');
+        return;
+      }
+      if (link.type === 'apply' || text.includes('register') || text.includes('registration') || text.includes('apply') || text.includes('signup')) {
+        window.open(itbpSignupUrl, '_blank');
+        return;
+      }
+      if (link.type === 'official' || text.includes('official website') || text.includes('official portal')) {
+        window.open(itbpOfficialUrl, '_blank');
+        return;
+      }
+    }
     // Automatic SSC Portal Routing for all SSC jobs
     if (isSscJob) {
       const text = (link.label + ' ' + link.actionText).toLowerCase();
@@ -424,21 +460,21 @@ export const JobDetailModal: React.FC<JobDetailModalProps> = ({
               </div>
             )}
 
-            {/* 5. Category Wise Posts Box */}
-            {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
+            {/* 5. Category Wise Posts Box - Data hone par hi list kare */}
+            {post.vacancyBreakdown && post.vacancyBreakdown.some(v => hasCategoryBreakdownData(v)) && (
               <div className="border border-emerald-900 rounded-lg overflow-hidden bg-white shadow-2xs">
                 <div className="bg-emerald-950 text-white px-3.5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                   <Users className="w-4 h-4 text-amber-300" />
                   Category Wise Posts (वर्ग-वार पद)
                 </div>
                 <div className="p-3 text-xs space-y-2 bg-emerald-50/20 text-slate-800">
-                  {post.vacancyBreakdown.map((v, idx) => (
+                  {post.vacancyBreakdown.filter(v => hasCategoryBreakdownData(v)).map((v, idx) => (
                     <div key={idx} className="space-y-1 pb-2 border-b border-emerald-100 last:border-0 last:pb-0">
                       <div className="flex justify-between items-center font-bold text-emerald-950">
                         <span>{v.postName}</span>
                         <span className="text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded text-[10px] font-black">Total: {v.totalPosts}</span>
                       </div>
-                      {v.categoryBreakdown ? (
+                      {v.categoryBreakdown && (
                         <div className="grid grid-cols-2 gap-1.5 pt-1.5 text-[11px] font-semibold text-slate-700">
                           <div className="bg-white p-1 border border-slate-200 rounded flex justify-between"><span>GEN:</span> <strong className="text-slate-900 font-bold">{v.categoryBreakdown.gen ?? '-'}</strong></div>
                           <div className="bg-white p-1 border border-slate-200 rounded flex justify-between"><span>OBC:</span> <strong className="text-slate-900 font-bold">{v.categoryBreakdown.obc ?? '-'}</strong></div>
@@ -446,8 +482,6 @@ export const JobDetailModal: React.FC<JobDetailModalProps> = ({
                           <div className="bg-white p-1 border border-slate-200 rounded flex justify-between"><span>SC:</span> <strong className="text-slate-900 font-bold">{v.categoryBreakdown.sc ?? '-'}</strong></div>
                           <div className="bg-white p-1 border border-slate-200 rounded flex justify-between"><span>ST:</span> <strong className="text-slate-900 font-bold">{v.categoryBreakdown.st ?? '-'}</strong></div>
                         </div>
-                      ) : (
-                        <div className="text-slate-500 italic text-[10px]">As per rule</div>
                       )}
                     </div>
                   ))}
