@@ -195,10 +195,38 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     setIsAddModalOpen(false);
   };
 
-  // Scroll to top on page mount
+  // Scroll to top on page mount & update SEO meta tags & canonical link dynamically
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [post.id]);
+    
+    // Dynamic Document Title
+    document.title = `${post.title} - Sarkari Result Portal`;
+
+    // Dynamic Meta Description
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', post.shortInfo || `${post.title} online application form, last date, eligibility, fee, and official notification details on Sarkari Result.`);
+
+    // Dynamic Canonical Tag
+    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (!canonicalTag) {
+      canonicalTag = document.createElement('link');
+      canonicalTag.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalTag);
+    }
+    canonicalTag.setAttribute('href', `${window.location.origin}/#${post.slug}`);
+
+    return () => {
+      document.title = 'Sarkari Result Portal - Latest Govt Jobs, Admit Card & Results';
+      if (metaDesc) {
+        metaDesc.setAttribute('content', "India's premier portal for Sarkari Result, Sarkari Naukri, Admit Card, Answer Key, Syllabus, and competitive government exam notifications with real-time updates.");
+      }
+    };
+  }, [post]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.origin + '#' + post.slug);
@@ -1175,40 +1203,71 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </button>
             </div>
 
-            {/* Latest and Related Posts Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 border-t pt-8">
+            {/* Latest Jobs and Related Posts Section - Enhanced Sarkari Result Design */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 border-t-2 border-slate-300 pt-6">
               {/* Latest Jobs Column */}
-              <div className="border border-slate-300 rounded-md overflow-hidden bg-white shadow-xs">
-                <div className="bg-slate-800 text-white px-4 py-2 text-sm font-bold uppercase tracking-wider">
-                  Latest Posts (नवीनतम पोस्ट)
+              <div className="border-2 border-[#ab1616] bg-white rounded-xs overflow-hidden shadow-2xs flex flex-col">
+                <div className="bg-[#ab1616] text-white py-3 px-4 text-center">
+                  <h3 className="font-black text-base sm:text-lg tracking-wide uppercase">
+                    {isHindi ? 'नवीनतम नौकरियां (Latest Jobs)' : 'Latest Jobs'}
+                  </h3>
                 </div>
-                <ul className="divide-y divide-slate-100">
-                  {mockSarkariPosts.filter(p => p.category === 'latest_jobs').slice(0, 3).map((p) => (
+                <ul className="divide-y divide-slate-200 flex-1 p-2">
+                  {mockSarkariPosts.slice(0, 3).map((p) => (
                     <li 
                       key={p.id} 
                       onClick={() => onSelectPost && onSelectPost(p)}
-                      className="p-3 text-sm font-semibold text-blue-900 hover:text-red-700 cursor-pointer hover:bg-slate-50 transition-colors"
+                      className="py-3 px-3 hover:bg-red-50/50 transition-colors cursor-pointer group flex items-start gap-3"
                     >
-                      {p.shortTitle}
+                      <span className="text-[#ab1616] font-black leading-tight text-lg">•</span>
+                      <div className="flex-1">
+                        <span className="font-extrabold text-sm sm:text-base text-[#0000cc] group-hover:text-[#ab1616] group-hover:underline leading-snug block">
+                          {p.shortTitle || p.title}
+                        </span>
+                        {p.lastDate && (
+                          <span className="text-xs text-red-700 block font-bold mt-1">
+                            Last Date: {p.lastDate}
+                          </span>
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ul>
               </div>
-              {/* Related Jobs Column */}
-              <div className="border border-slate-300 rounded-md overflow-hidden bg-white shadow-xs">
-                <div className="bg-slate-800 text-white px-4 py-2 text-sm font-bold uppercase tracking-wider">
-                  Related Posts (सम्बंधित पोस्ट)
+
+              {/* Related Posts Column */}
+              <div className="border-2 border-indigo-900 bg-white rounded-xs overflow-hidden shadow-2xs flex flex-col">
+                <div className="bg-indigo-950 text-white py-3 px-4 text-center">
+                  <h3 className="font-black text-base sm:text-lg tracking-wide uppercase">
+                    {isHindi ? 'सम्बंधित पोस्ट (Related Posts)' : 'Related Posts'}
+                  </h3>
                 </div>
-                <ul className="divide-y divide-slate-100">
-                  {mockSarkariPosts.filter(p => p.category === post.category && p.id !== post.id).slice(0, 3).map((p) => (
-                    <li 
-                      key={p.id} 
-                      onClick={() => onSelectPost && onSelectPost(p)}
-                      className="p-3 text-sm font-semibold text-blue-900 hover:text-red-700 cursor-pointer hover:bg-slate-50 transition-colors"
-                    >
-                      {p.shortTitle}
+                <ul className="divide-y divide-slate-200 flex-1 p-2">
+                  {mockSarkariPosts
+                    .filter(p => p.id !== post.id && (p.category === post.category || p.department === post.department))
+                    .slice(0, 3)
+                    .map((p) => (
+                      <li 
+                        key={p.id} 
+                        onClick={() => onSelectPost && onSelectPost(p)}
+                        className="py-3 px-3 hover:bg-indigo-50/50 transition-colors cursor-pointer group flex items-start gap-3"
+                      >
+                        <span className="text-indigo-900 font-black leading-tight text-lg">•</span>
+                        <div className="flex-1">
+                          <span className="font-extrabold text-sm sm:text-base text-[#0000cc] group-hover:text-indigo-900 group-hover:underline leading-snug block">
+                            {p.shortTitle || p.title}
+                          </span>
+                          <span className="text-xs text-slate-600 block font-semibold mt-1">
+                            Category: <span className="capitalize">{p.category.replace('_', ' ')}</span> · Dept: {p.department}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  {mockSarkariPosts.filter(p => p.id !== post.id && (p.category === post.category || p.department === post.department)).length === 0 && (
+                    <li className="p-4 text-center text-xs text-slate-500 font-medium">
+                      No related posts found.
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>
