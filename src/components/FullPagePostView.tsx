@@ -1011,19 +1011,29 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </div>
                 ))}
                 {/* Join Sarkari Result Channel Row */}
-                <div className="flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100 transition-colors">
+                <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100 transition-colors gap-3">
                   <span className="font-extrabold text-emerald-900 flex items-center gap-2">
                     <span>Join Sarkari Result Channel</span>
                     <span className="text-xs bg-emerald-700 text-white px-2 py-0.5 rounded font-bold">Fast Updates</span>
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => window.open('https://t.me/newsarkariresultt', '_blank')}
-                    className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xs font-black text-sm sm:text-base shadow-xs transition-all cursor-pointer uppercase bg-sky-700 hover:bg-sky-800 text-white"
-                  >
-                    <span>Telegram</span>
-                    <ExternalLink className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j', '_blank')}
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xs font-black text-sm sm:text-base shadow-xs transition-all cursor-pointer uppercase bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 border border-emerald-300"
+                    >
+                      <MessageCircle className="w-4 h-4 fill-slate-950 text-emerald-100" />
+                      <span>WhatsApp</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => window.open('https://t.me/newsarkariresultt', '_blank')}
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xs font-black text-sm sm:text-base shadow-xs transition-all cursor-pointer uppercase bg-sky-700 hover:bg-sky-800 text-white"
+                    >
+                      <span>Telegram</span>
+                      <ExternalLink className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
