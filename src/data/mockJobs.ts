@@ -52,6 +52,25 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 56, obc: 35, ews: 13, sc: 18, st: 8 }
       }
     ],
+    paperPattern: {
+      examName: 'Supreme Court Junior Court Attendant Written Exam 2026',
+      examMode: 'Written Test (Objective Multiple Choice Type)',
+      totalQuestions: 100,
+      totalMarks: 100,
+      totalDuration: '90 Minutes (1.5 Hours)',
+      negativeMarking: 'No Negative Marking',
+      mediumOfExam: 'Bilingual (Hindi & English)',
+      subjects: [
+        { subjectName: 'General English (अंग्रेजी भाषा व समझ)', totalQuestions: 50, totalMarks: 50, remarks: 'Matric (10th) Level' },
+        { subjectName: 'General Aptitude / Reasoning (तार्किक योग्यता)', totalQuestions: 25, totalMarks: 25, remarks: 'Matric (10th) Level' },
+        { subjectName: 'General Knowledge & Current Affairs (सामान्य ज्ञान)', totalQuestions: 25, totalMarks: 25, remarks: 'National & Current' }
+      ],
+      notes: [
+        'All 100 questions will be objective multiple-choice (MCQ) type carrying 1 mark each.',
+        'Candidates qualifying the written examination will be called for an Interview carrying 25 marks.',
+        'Final merit list will be prepared based on combined aggregate performance in Written Test + Interview.'
+      ]
+    },
     howToApplySteps: [
       'Visit official Supreme Court of India recruitment portal: sci.gov.in.',
       'Click on Recruitment -> Online Application for Junior Court Attendant Examination 2026.',
@@ -115,6 +134,27 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 7, obc: 7, ews: 3, sc: 4, st: 0 }
       }
     ],
+    paperPattern: {
+      examName: 'ITBP Head Constable (Motor Mechanic) Phase-II Written Exam 2026',
+      examMode: 'Written Examination (OMR / Computer Based Test)',
+      totalQuestions: 100,
+      totalMarks: 100,
+      totalDuration: '2 Hours (120 Minutes)',
+      negativeMarking: 'No Negative Marking (कोई नकारात्मक अंकन नहीं)',
+      mediumOfExam: 'Bilingual (Hindi & English)',
+      subjects: [
+        { subjectName: 'General Knowledge (सामान्य ज्ञान - द्विभाषी)', totalQuestions: 10, totalMarks: 10, remarks: 'Objective MCQ' },
+        { subjectName: 'General English (सामान्य अंग्रेजी)', totalQuestions: 10, totalMarks: 10, remarks: 'Objective MCQ' },
+        { subjectName: 'General Hindi (सामान्य हिन्दी)', totalQuestions: 10, totalMarks: 10, remarks: 'Objective MCQ' },
+        { subjectName: 'Mathematics (प्राथमिक गणित)', totalQuestions: 10, totalMarks: 10, remarks: '10th Standard' },
+        { subjectName: 'Motor Mechanic Trade Subject (तकनीकी ट्रेड ज्ञान)', totalQuestions: 60, totalMarks: 60, remarks: 'ITI / Diploma Trade Level' }
+      ],
+      notes: [
+        'Written exam carries 100 objective questions of 1 mark each for total 100 marks.',
+        'Qualifying cut-off marks: General / EWS / Ex-Servicemen: 35%, SC / ST / OBC: 33%.',
+        'Phase-III Practical / Skill Test of 50 marks will be conducted for candidates qualifying written test.'
+      ]
+    },
     howToApplySteps: [
       'Visit ITBP official recruitment portal at recruitment.itbpolice.nic.in.',
       'Click on NEW USER REGISTRATION or LOGIN if already registered.',
@@ -180,6 +220,25 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 688, obc: 450, ews: 168, sc: 253, st: 129 }
       }
     ],
+    paperPattern: {
+      examName: 'Railway RRB NTPC CEN 07/2026 First Stage CBT-1 Examination',
+      examMode: 'Computer Based Test (CBT-1 Online)',
+      totalQuestions: 100,
+      totalMarks: 100,
+      totalDuration: '90 Minutes (120 Minutes for PwBD)',
+      negativeMarking: '1/3rd Mark Deduction for each wrong answer',
+      mediumOfExam: '15 Regional Languages + English & Hindi',
+      subjects: [
+        { subjectName: 'General Awareness (सामान्य जागरूकता व विज्ञान)', totalQuestions: 40, totalMarks: 40, remarks: 'Static GK, Science & Current' },
+        { subjectName: 'Mathematics (गणित / अंकगणित)', totalQuestions: 30, totalMarks: 30, remarks: 'Number System, Algebra, Arithmetic' },
+        { subjectName: 'General Intelligence & Reasoning (तर्कशक्ति)', totalQuestions: 30, totalMarks: 30, remarks: 'Verbal & Non-Verbal Reasoning' }
+      ],
+      notes: [
+        'CBT-1 is of screening nature; marks scored will be normalized for shortlisting to CBT-2.',
+        'Negative marking of 1/3 mark applies for every incorrect response.',
+        'Shortlisting for CBT 2 will be 15 times the number of vacancies.'
+      ]
+    },
     howToApplySteps: [
       'Visit official Railway Recruitment Board application portal rrbapply.gov.in.',
       'Ensure Aadhaar card verification with 10th class certificate matching name and DOB.',
@@ -244,6 +303,27 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 490, obc: 254, ews: 122, sc: 195, st: 159 }
       }
     ],
+    paperPattern: {
+      examName: 'RUHS Medical Officer (MO Medical) CBT Online Examination 2026',
+      examMode: 'Computer Based Test (CBT Online)',
+      totalQuestions: 100,
+      totalMarks: 100,
+      totalDuration: '2 Hours (120 Minutes)',
+      negativeMarking: 'No Negative Marking (कोई नकारात्मक अंकन नहीं)',
+      mediumOfExam: 'English',
+      subjects: [
+        { subjectName: 'General Medicine & Paediatrics (MBBS Level)', totalQuestions: 30, totalMarks: 30, remarks: 'Objective MCQ' },
+        { subjectName: 'Surgery, Orthopaedics & Anaesthesia', totalQuestions: 25, totalMarks: 25, remarks: 'Objective MCQ' },
+        { subjectName: 'Obstetrics & Gynaecology (OBG)', totalQuestions: 20, totalMarks: 20, remarks: 'Objective MCQ' },
+        { subjectName: 'Preventive & Social Medicine (PSM / Community Medicine)', totalQuestions: 15, totalMarks: 15, remarks: 'Objective MCQ' },
+        { subjectName: 'Pathology, Pharmacology & Microbiology', totalQuestions: 10, totalMarks: 10, remarks: 'Objective MCQ' }
+      ],
+      notes: [
+        'All 100 questions will be of objective multiple-choice (MCQ) type carrying 1 mark each.',
+        'There is no negative marking for incorrect or unattempted questions.',
+        'Qualifying standards and merit list criteria strictly adhere to Rajasthan Medical & Health Service Rules.'
+      ]
+    },
     howToApplySteps: [
       'Visit RUHS Jaipur official recruitment portal.',
       'Register with active mobile number & email ID.',
@@ -319,6 +399,27 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 5200, obc: 2730, ews: 1300, sc: 2080, st: 1690 }
       }
     ],
+    paperPattern: {
+      examName: 'Rajasthan RSMSSB CET 2026 Written Examination Scheme',
+      examMode: 'Offline (OMR Sheet Based)',
+      totalQuestions: 150,
+      totalMarks: 300,
+      totalDuration: '3 Hours (180 Minutes)',
+      negativeMarking: 'कोई नकारात्मक अंकन नहीं (No Negative Marking)',
+      mediumOfExam: 'Hindi & English (द्विभाषी)',
+      subjects: [
+        { subjectName: 'राजस्थान का इतिहास, कला, संस्कृति, साहित्य व विरासत', totalQuestions: 50, totalMarks: 100, remarks: '2 अंक प्रति प्रश्न' },
+        { subjectName: 'भारत एवं राजस्थान का भूगोल, अर्थव्यवस्था व राजनीति', totalQuestions: 40, totalMarks: 80, remarks: '2 अंक प्रति प्रश्न' },
+        { subjectName: 'तार्किक विवेचन, मानसिक योग्यता एवं सामान्य विज्ञान (Maths, Reasoning & Science)', totalQuestions: 30, totalMarks: 60, remarks: '2 अंक प्रति प्रश्न' },
+        { subjectName: 'सामान्य हिन्दी एवं General English', totalQuestions: 20, totalMarks: 40, remarks: '2 अंक प्रति प्रश्न' },
+        { subjectName: 'कंप्यूटर ज्ञान एवं समसामयिक घटनाएं (Current Affairs)', totalQuestions: 10, totalMarks: 20, remarks: '2 अंक प्रति प्रश्न' }
+      ],
+      notes: [
+        'प्रत्येक प्रश्न 2 अंक का होगा, कुल 150 बहुविकल्पीय प्रश्न (कुल पूर्णांक 300)।',
+        'परीक्षा में 5वां विकल्प (अनुत्तरित प्रश्न हेतु) भरना अनिवार्य होगा।',
+        'परीक्षा में कोई नेगेटिव मार्किंग नहीं होगी।'
+      ]
+    },
     howToApplySteps: [
       'Go to SSO Rajasthan Official Portal (sso.rajasthan.gov.in).',
       'Complete One Time Registration (OTR) if not done previously.',
@@ -390,6 +491,26 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 920, obc: 483, ews: 230, sc: 368, st: 299 }
       }
     ],
+    paperPattern: {
+      examName: 'Rajasthan Police Constable CBT Written Examination 2026',
+      examMode: 'Computer Based Test (CBT Online)',
+      totalQuestions: 150,
+      totalMarks: 150,
+      totalDuration: '2 Hours (120 Minutes)',
+      negativeMarking: '25% (1/4th Mark) for each wrong answer',
+      mediumOfExam: 'Hindi & English',
+      subjects: [
+        { subjectName: 'विवेचना एवं तार्किक योग्यता तथा कंप्यूटर का सामान्य ज्ञान', totalQuestions: 60, totalMarks: 60, remarks: 'भाग-अ' },
+        { subjectName: 'सामान्य ज्ञान, सामान्य विज्ञान, सामाजिक विज्ञान एवं समसामयिक विषय', totalQuestions: 35, totalMarks: 35, remarks: 'भाग-ब' },
+        { subjectName: 'महिला एवं बच्चों के प्रति अपराध व कानूनी प्रावधान / सरकारी योजनाएं', totalQuestions: 10, totalMarks: 10, remarks: 'भाग-स' },
+        { subjectName: 'राजस्थान के इतिहास, संस्कृति, कला, भूगोल, राजनीति एवं आर्थिक स्थिति', totalQuestions: 45, totalMarks: 45, remarks: 'भाग-द' }
+      ],
+      notes: [
+        'लिखित परीक्षा कुल 150 अंकों की होगी जिसमें 150 बहुविकल्पीय प्रश्न होंगे।',
+        'प्रत्येक सही उत्तर के लिए 1 अंक देय होगा एवं गलत उत्तर पर 1/4 अंक काटा जाएगा।',
+        'सामान्य, ईडब्ल्यूएस, ओबीसी/एमबीसी वर्ग के अभ्यर्थियों के लिए न्यूनतम 40% उत्तीर्णांक अनिवार्य है।'
+      ]
+    },
     howToApplySteps: [
       'Login to SSO Rajasthan portal.',
       'Select Rajasthan Police Recruitment 2026 application link.',
@@ -401,6 +522,274 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'Already Registered? Candidate SSO Login', actionText: 'Login', type: 'apply', url: 'https://sso.rajasthan.gov.in/signin' },
       { label: 'Download Official Notification PDF', actionText: 'Click Here (PDF)', type: 'notification' },
       { label: 'Rajasthan Police Official Website', actionText: 'police.rajasthan.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'job-rajasthan-pashu-parichar-2026',
+    slug: 'rajasthan-rsmssb-pashu-parichar-animal-attendant-2026',
+    title: 'Rajasthan RSMSSB Pashu Parichar (Animal Attendant) Recruitment 2026 Online Form (5,934 Posts)',
+    shortTitle: 'Rajasthan Animal Attendant (पशु परिचर) 2026',
+    hindiTitle: 'राजस्थान पशु परिचर (Animal Attendant) सीधी भर्ती 2026',
+    category: 'latest_jobs',
+    department: 'State PSC',
+    qualifications: ['10th Pass'],
+    state: 'Rajasthan',
+    postDate: '15 October 2026',
+    notificationNumber: 'RSMSSB/PASHU-PARICHAR/2026/08',
+    totalVacancies: 5934,
+    isHot: true,
+    isNew: true,
+    lastDate: '15/11/2026',
+    examDate: 'December 2026',
+    salary: '₹ 17,700 - ₹ 56,200/- (Pay Matrix Level L-1)',
+    shortInfo: 'Rajasthan Staff Selection Board (RSMSSB / RSSB), Jaipur invites online applications for Pashu Parichar (Animal Attendant) Recruitment 2026 for 5,934 posts (Non-TSP: 5,281 & TSP: 653). Candidates who have passed Class 10th (Secondary) and possess knowledge of Devanagari Hindi and Rajasthani culture can apply online through Rajasthan Single Sign-On (SSO) portal.',
+    applicationFee: [
+      { category: 'General / OBC Creamy Layer', amount: '₹ 600/-' },
+      { category: 'OBC Non-Creamy / EWS / SC / ST / PwD', amount: '₹ 400/-' },
+      { category: 'One Time Registration (OTR) Fee', amount: 'Applicable Once Only' }
+    ],
+    feePaymentMode: 'Online via SSO Rajasthan / e-Mitra / Net Banking / Debit Card / UPI',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 18,
+      maxAge: 40,
+      notes: 'Age Relaxation: SC/ST/OBC/EWS Male candidates of Rajasthan: 5 Years. General Female: 5 Years. Reserved Category Female: 10 Years.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '16/10/2026' },
+      { label: 'Last Date for Online Apply', value: '15/11/2026', isHighlight: true },
+      { label: 'Last Date for Fee Payment', value: '15/11/2026' },
+      { label: 'Exam Date', value: '15-18 December 2026', isHighlight: true },
+      { label: 'Admit Card Available', value: 'First Week of December 2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'पशु परिचर (Animal Attendant - Non TSP)',
+        totalPosts: 5281,
+        nonTspPosts: 5281,
+        tspPosts: 0,
+        eligibility: `• भारत में किसी भी मान्यता प्राप्त बोर्ड से 10वीं (सेकेंडरी) परीक्षा उत्तीर्ण।
+• देवनागरी लिपि में लिखी हिंदी में कार्य करने का ज्ञान एवं राजस्थान की संस्कृति का ज्ञान।`,
+        modeOfSelection: 'Written Examination (CBT/OMR) -> Document Verification -> Final Merit List',
+        categoryBreakdown: { gen: 1905, obc: 1098, ews: 527, sc: 835, st: 626 }
+      },
+      {
+        postName: 'पशु परिचर (Animal Attendant - TSP Area)',
+        totalPosts: 653,
+        nonTspPosts: 0,
+        tspPosts: 653,
+        eligibility: `• 10वीं पास एवं राजस्थान अनुसूचित क्षेत्र (TSP Area) का मूल निवासी।
+• देवनागरी लिपि व राजस्थानी संस्कृति का ज्ञान।`,
+        modeOfSelection: 'Written Examination -> Document Verification',
+        categoryBreakdown: { gen: 328, sc: 32, st: 293 }
+      }
+    ],
+    paperPattern: {
+      examName: 'RSMSSB Pashu Parichar Written Exam Scheme 2026',
+      examMode: 'Objective Type Written Exam (OMR Based)',
+      totalQuestions: 150,
+      totalMarks: 150,
+      totalDuration: '3 Hours (180 Minutes)',
+      negativeMarking: '1/4th (0.25 Mark) negative marking for each incorrect answer',
+      mediumOfExam: 'Hindi & English',
+      subjects: [
+        { subjectName: 'भाग-अ: राजस्थान का सामान्य ज्ञान, भूगोल, इतिहास, संस्कृति, दैनिक विज्ञान व गणित (70%)', totalQuestions: 105, totalMarks: 105, duration: '3 Hours', remarks: '70% भारांक' },
+        { subjectName: 'भाग-ब: पशुपालन, नस्लें, दुग्ध दोहन, पशु आहार, कृत्रिम गर्भाधान, टीकाकरण व रोग (30%)', totalQuestions: 45, totalMarks: 45, duration: '3 Hours', remarks: '30% भारांक' }
+      ],
+      notes: [
+        'प्रश्न पत्र में कुल 150 बहुविकल्पीय प्रश्न होंगे, प्रत्येक प्रश्न 1 अंक का होगा।',
+        'प्रत्येक गलत उत्तर के लिए 1/4 अंक काटा जाएगा।',
+        'अभ्यर्थियों को परीक्षा में न्यूनतम 40% अंक लाना अनिवार्य होगा।'
+      ]
+    },
+    howToApplySteps: [
+      'राजस्थान एसएसओ (SSO) पोर्टल पर लॉगिन अथवा नया पंजीकरण करें।',
+      'Recruitment Portal पर जाकर Pashu Parichar Recruitment 2026 पर क्लिक करें।',
+      'वन टाइम रजिस्ट्रेशन (OTR) विवरण की पुष्टि करें व आवेदन पत्र भरें।',
+      'ऑनलाइन आवेदन शुल्क का भुगतान करें और आवेदन का प्रिंट सुरक्षित रखें।'
+    ],
+    directLinks: [
+      { label: 'Apply Online via Rajasthan SSO Portal', actionText: 'Apply Online', type: 'apply', url: 'https://sso.rajasthan.gov.in', isPrimary: true },
+      { label: 'Download Official Notification PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'Download Detailed Syllabus PDF', actionText: 'Syllabus PDF', type: 'syllabus' },
+      { label: 'RSMSSB Official Website', actionText: 'rsmssb.rajasthan.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'job-rajasthan-patwari-2026',
+    slug: 'rajasthan-rsmssb-patwari-recruitment-2026',
+    title: 'Rajasthan RSMSSB Patwari Recruitment 2026 Online Form (2,998 Posts)',
+    shortTitle: 'Rajasthan Patwari Online Form 2026',
+    hindiTitle: 'राजस्थान पटवारी सीधी भर्ती 2026 ऑनलाइन आवेदन फॉर्म',
+    category: 'latest_jobs',
+    department: 'State PSC',
+    qualifications: ['Graduate', 'Diploma / ITI'],
+    state: 'Rajasthan',
+    postDate: '15 October 2026',
+    notificationNumber: 'RSMSSB/PATWARI/2026/04',
+    totalVacancies: 2998,
+    isHot: true,
+    isNew: true,
+    lastDate: '10/11/2026',
+    examDate: 'January 2027',
+    salary: '₹ 20,800 - ₹ 65,900/- (Pay Matrix Level L-5)',
+    shortInfo: 'Rajasthan Staff Selection Board (RSMSSB) invites online applications for Rajasthan Patwari Recruitment 2026 for 2,998 posts under Revenue Board, Rajasthan, Ajmer. Candidates having Bachelor Degree in any stream with RSCIT / Computer Diploma can apply online through Single Sign-On (SSO).',
+    applicationFee: [
+      { category: 'General / OBC Creamy Layer', amount: '₹ 600/-' },
+      { category: 'OBC NCL / EWS / SC / ST / PwD', amount: '₹ 400/-' }
+    ],
+    feePaymentMode: 'Online Payment Gateway / e-Mitra Kiosk',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 18,
+      maxAge: 40,
+      notes: 'Category wise relaxation applicable as per Rajasthan Civil Services Rules.'
+    },
+    importantDates: [
+      { label: 'Online Apply Start Date', value: '15/10/2026' },
+      { label: 'Last Date for Online Apply', value: '10/11/2026', isHighlight: true },
+      { label: 'Exam Date', value: 'January 2027', isHighlight: true },
+      { label: 'Admit Card Available', value: 'Before Exam' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'पटवारी (Patwari - Non TSP)',
+        totalPosts: 2560,
+        nonTspPosts: 2560,
+        tspPosts: 0,
+        eligibility: `• किसी भी मान्यता प्राप्त विश्वविद्यालय से स्नातक (Graduation Degree in any stream).
+• आरकेसीएल (RS-CIT) या 'O' Level या कंप्यूटर विज्ञान में डिग्री/डिप्लोमा।
+• देवनागरी हिंदी व राजस्थानी संस्कृति का ज्ञान।`,
+        modeOfSelection: 'Written Competitive Examination -> Document Verification',
+        categoryBreakdown: { gen: 924, obc: 538, ews: 256, sc: 410, st: 307 }
+      },
+      {
+        postName: 'पटवारी (Patwari - TSP Area)',
+        totalPosts: 438,
+        nonTspPosts: 0,
+        tspPosts: 438,
+        eligibility: `• स्नातक डिग्री + RSCIT कंप्यूटर प्रमाण पत्र।
+• राजस्थान अनुसूचित क्षेत्र (TSP) का मूल निवासी प्रमाण पत्र।`,
+        modeOfSelection: 'Written Examination -> Merit List -> DV',
+        categoryBreakdown: { gen: 220, sc: 22, st: 196 }
+      }
+    ],
+    paperPattern: {
+      examName: 'RSMSSB Patwari Combined Competitive Examination Scheme 2026',
+      examMode: 'Written Examination (OMR Based)',
+      totalQuestions: 150,
+      totalMarks: 300,
+      totalDuration: '3 Hours (180 Minutes)',
+      negativeMarking: '1/3rd (0.33 Mark) deduction for each wrong response',
+      mediumOfExam: 'Hindi & English',
+      subjects: [
+        { subjectName: 'General Science, History, Polity & Geography of India; General Knowledge, Current Affairs', totalQuestions: 38, totalMarks: 76, remarks: '25% Weightage' },
+        { subjectName: 'Geography, History, Culture and Polity of Rajasthan', totalQuestions: 30, totalMarks: 60, remarks: '20% Weightage' },
+        { subjectName: 'General English & Hindi (सामान्य हिंदी व अंग्रेजी)', totalQuestions: 22, totalMarks: 44, remarks: '15% Weightage' },
+        { subjectName: 'Mental Ability & Reasoning, Basic Numerical Efficiency (गणित व रीजनिंग)', totalQuestions: 45, totalMarks: 90, remarks: '30% Weightage' },
+        { subjectName: 'Basic Computer (बेसिक कंप्यूटर ज्ञान)', totalQuestions: 15, totalMarks: 30, remarks: '10% Weightage' }
+      ],
+      notes: [
+        'परीक्षा में 150 प्रश्न 300 अंकों के होंगे।',
+        'प्रत्येक सही उत्तर हेतु 2 अंक एवं प्रत्येक गलत उत्तर हेतु 1/3 अंक काटा जाएगा।',
+        'नकारात्मक अंकन (Negative Marking) लागू रहेगा।'
+      ]
+    },
+    howToApplySteps: [
+      'SSO Portal (sso.rajasthan.gov.in) खोलें और लॉगिन करें।',
+      'Citizen Apps (G2C) में Recruitment Portal का चयन करें।',
+      'Ongoing Recruitments में Patwari 2026 Apply Now पर क्लिक करें।',
+      'विवरण सत्यापित कर सबमिट करें एवं शुल्क भुगतान करें।'
+    ],
+    directLinks: [
+      { label: 'Apply Online (Rajasthan SSO Portal)', actionText: 'Apply Online', type: 'apply', url: 'https://sso.rajasthan.gov.in', isPrimary: true },
+      { label: 'Download Patwari Detailed Notification PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'Download Official Exam Syllabus', actionText: 'Syllabus PDF', type: 'syllabus' },
+      { label: 'RSMSSB Official Portal', actionText: 'rsmssb.rajasthan.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'job-rajasthan-reet-2026',
+    slug: 'rajasthan-reet-teacher-eligibility-recruitment-2026',
+    title: 'Rajasthan REET 2026 Online Form (Primary & Upper Primary Teacher 30,000+ Posts)',
+    shortTitle: 'Rajasthan REET 2026 Online Form (30,000+ Posts)',
+    hindiTitle: 'राजस्थान रीट (REET) अध्यापक पात्रता परीक्षा 2026',
+    category: 'latest_jobs',
+    department: 'Teaching',
+    qualifications: ['B.Ed / CTET', 'Graduate', '12th Pass'],
+    state: 'Rajasthan',
+    postDate: '16 October 2026',
+    notificationNumber: 'BSER/REET/2026/01',
+    totalVacancies: 30000,
+    isHot: true,
+    isNew: true,
+    lastDate: '20/11/2026',
+    examDate: 'February 2027',
+    salary: '₹ 23,700 - ₹ 78,800/- (Pay Matrix Level L-10)',
+    shortInfo: 'Board of Secondary Education, Rajasthan (BSER / RBSE), Ajmer invites online applications for Rajasthan Eligibility Examination for Teachers (REET) 2026 for Level 1 (Class 1-5 Primary Teachers) and Level 2 (Class 6-8 Upper Primary Teachers) for 30,000+ posts in Rajasthan Education Department.',
+    applicationFee: [
+      { category: 'Single Paper (Level-1 or Level-2 Only)', amount: '₹ 550/-' },
+      { category: 'Both Papers (Level-1 and Level-2 Both)', amount: '₹ 750/-' }
+    ],
+    feePaymentMode: 'Online Payment Gateway / e-Mitra Net Banking',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 18,
+      notes: 'No Upper Age Limit for REET Eligibility Examination.'
+    },
+    importantDates: [
+      { label: 'REET Online Application Starts', value: '16/10/2026' },
+      { label: 'Last Date for Online Apply', value: '20/11/2026', isHighlight: true },
+      { label: 'Last Date for Fee Payment', value: '20/11/2026' },
+      { label: 'Exam Date', value: 'February 2027', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'REET Level-1 (Primary Teacher Class 1-5)',
+        totalPosts: 15000,
+        eligibility: `• 12वीं (इंटरमीडिएट) न्यूनतम 50% अंकों सहित एवं 2 वर्षीय D.El.Ed / BSTC.
+• अथवा 12वीं न्यूनतम 50% अंक एवं 4 वर्षीय B.El.Ed.`,
+        modeOfSelection: 'REET Eligibility Exam -> Teacher Recruitment Selection Exam -> Merit List'
+      },
+      {
+        postName: 'REET Level-2 (Upper Primary Teacher Class 6-8)',
+        totalPosts: 15000,
+        eligibility: `• स्नातक (Graduation) एवं 2 वर्षीय D.El.Ed अथवा न्यूनतम 50% अंकों सहित स्नातक/स्नातकोत्तर एवं B.Ed.
+• अथवा 12वीं न्यूनतम 50% अंक एवं 4 वर्षीय B.A/B.Sc.B.Ed.`,
+        modeOfSelection: 'REET Scorecard -> Rajasthan 3rd Grade Teacher Exam -> Final Selection'
+      }
+    ],
+    paperPattern: {
+      examName: 'REET 2026 Examination Pattern (Level 1 & Level 2)',
+      examMode: 'Offline Written Examination (OMR Sheet Based)',
+      totalQuestions: 150,
+      totalMarks: 150,
+      totalDuration: '2 Hours 30 Minutes (150 Minutes)',
+      negativeMarking: 'No Negative Marking in REET Eligibility Test',
+      mediumOfExam: 'Bilingual (Hindi / English)',
+      subjects: [
+        { subjectName: 'बाल विकास एवं शिक्षण विधियां (Child Development & Pedagogy)', totalQuestions: 30, totalMarks: 30, remarks: 'अनिवार्य' },
+        { subjectName: 'भाषा-I (हिंदी/अंग्रेजी/संस्कृत/उर्दू/सिंधी/पंजाबी/गुजराती)', totalQuestions: 30, totalMarks: 30, remarks: 'चयनित भाषा' },
+        { subjectName: 'भाषा-II (प्रथम भाषा से भिन्न भाषा)', totalQuestions: 30, totalMarks: 30, remarks: 'चयनित भाषा' },
+        { subjectName: 'गणित एवं पर्यावरण अध्ययन (Level 1) अथवा गणित-विज्ञान / सामाजिक अध्ययन (Level 2)', totalQuestions: 60, totalMarks: 60, remarks: 'विषय अनुसार' }
+      ],
+      notes: [
+        'कुल 150 बहुविकल्पीय प्रश्न (MCQ) होंगे, प्रत्येक प्रश्न 1 अंक का होगा।',
+        'रीट पात्रता परीक्षा में कोई नकारात्मक अंकन (Negative Marking) नहीं होगी।',
+        'सामान्य वर्ग के अभ्यर्थियों को न्यूनतम 60% (90 अंक) लाना अनिवार्य है।'
+      ]
+    },
+    howToApplySteps: [
+      'REET RBSE आधिकारिक वेबसाइट (rajeduboard.rajasthan.gov.in) पर जाएं।',
+      'REET 2026 Online Application Form लिंक पर क्लिक करें।',
+      'चालान जनरेट कर परीक्षा शुल्क का भुगतान करें।',
+      'आवेदन फॉर्म में शैक्षणिक योग्यता व फोटो-हस्ताक्षर अपलोड कर सबमिट करें।'
+    ],
+    directLinks: [
+      { label: 'Apply Online for REET 2026', actionText: 'Apply Online', type: 'apply', url: 'https://rajeduboard.rajasthan.gov.in', isPrimary: true },
+      { label: 'Download REET Official Notification PDF', actionText: 'Click Here (PDF)', type: 'notification' },
+      { label: 'Download REET Syllabus Level 1 & 2', actionText: 'Syllabus PDF', type: 'syllabus' },
+      { label: 'Board of Secondary Education Rajasthan Portal', actionText: 'rajeduboard.rajasthan.gov.in', type: 'official' }
     ]
   },
   {
@@ -553,6 +942,24 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 65, obc: 40, ews: 15, sc: 20, st: 10 }
       }
     ],
+    paperPattern: {
+      examName: 'UPSC Civil Services (Preliminary) Examination Scheme 2026',
+      examMode: 'Offline (OMR Sheet Based)',
+      totalQuestions: 180,
+      totalMarks: 400,
+      totalDuration: '4 Hours (2 Hours each paper)',
+      negativeMarking: '1/3rd (33.33%) deduction per wrong answer',
+      mediumOfExam: 'Hindi & English (Bilingual)',
+      subjects: [
+        { subjectName: 'Paper-I: General Studies (GS Paper 1)', totalQuestions: 100, totalMarks: 200, duration: '2 Hours', remarks: 'Cutoff merit rank' },
+        { subjectName: 'Paper-II: Civil Services Aptitude Test (CSAT)', totalQuestions: 80, totalMarks: 200, duration: '2 Hours', remarks: 'Qualifying (Min 33% marks)' }
+      ],
+      notes: [
+        'Paper-I marks are counted for determining cutoff merit for Civil Services (Main) Examination.',
+        'Paper-II (CSAT) is qualifying in nature with minimum qualifying marks fixed at 33%.',
+        'One-third (1/3rd) negative marking is deducted for every incorrect response in both papers.'
+      ]
+    },
     howToApplySteps: [
       'Union Public Service Commission UPSC Civil Services IAS / IFS Recruitment 2026. Candidate can apply between 10/10/2026 to 05/11/2026.',
       'One Time Registration (OTR) is mandatory before applying for UPSC Civil Services 2026.',
@@ -634,6 +1041,26 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 1860, obc: 1255, ews: 465, sc: 698, st: 372 }
       }
     ],
+    paperPattern: {
+      examName: 'SSC CGL Tier-I Computer Based Examination 2026',
+      examMode: 'Computer Based Examination (CBE Tier-I)',
+      totalQuestions: 100,
+      totalMarks: 200,
+      totalDuration: '60 Minutes (1 Hour)',
+      negativeMarking: '0.50 marks deducted for each wrong answer',
+      mediumOfExam: 'English & Hindi (Bilingual)',
+      subjects: [
+        { subjectName: 'General Intelligence and Reasoning (तर्कशक्ति)', totalQuestions: 25, totalMarks: 50, remarks: '2 Marks per question' },
+        { subjectName: 'General Awareness (सामान्य ज्ञान व समसामयिकी)', totalQuestions: 25, totalMarks: 50, remarks: '2 Marks per question' },
+        { subjectName: 'Quantitative Aptitude (गणितीय अभिरुचि)', totalQuestions: 25, totalMarks: 50, remarks: '2 Marks per question' },
+        { subjectName: 'English Comprehension (अंग्रेजी भाषा व समझ)', totalQuestions: 25, totalMarks: 50, remarks: '2 Marks per question' }
+      ],
+      notes: [
+        'Tier-I is qualifying in nature; normalized marks will be used for shortlisting to Tier-II.',
+        'Negative marking of 0.50 marks applies for each incorrect response.',
+        'All 100 questions are objective multiple-choice (MCQ) carrying 2 marks each.'
+      ]
+    },
     howToApplySteps: [
       'Staff Selection Commission has launched new website ssc.gov.in. All candidates must complete One Time Registration (OTR).',
       'Live photo capture will be conducted via SSC mobile app / webcam during form submission. No pre-uploaded passport photo required.',
@@ -701,6 +1128,24 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 1378, obc: 930, ews: 344, sc: 517, st: 276 }
       }
     ],
+    paperPattern: {
+      examName: 'Railway RRB NTPC CEN 05 & 06/2026 First Stage CBT-1 Examination',
+      examMode: 'Computer Based Test (CBT-1 Online)',
+      totalQuestions: 100,
+      totalMarks: 100,
+      totalDuration: '90 Minutes (120 Minutes for PwBD)',
+      negativeMarking: '1/3rd Mark Deduction for each wrong answer',
+      mediumOfExam: '15 Regional Languages + English & Hindi',
+      subjects: [
+        { subjectName: 'General Awareness (सामान्य जागरूकता व विज्ञान)', totalQuestions: 40, totalMarks: 40, remarks: 'Science, GK & Current Affairs' },
+        { subjectName: 'Mathematics (गणित / अंकगणित)', totalQuestions: 30, totalMarks: 30, remarks: 'Arithmetic, Algebra & Geometry' },
+        { subjectName: 'General Intelligence & Reasoning (तर्कशक्ति)', totalQuestions: 30, totalMarks: 30, remarks: 'Verbal & Non-Verbal' }
+      ],
+      notes: [
+        'CBT-1 is screening in nature; marks are normalized for shortlisting to CBT-2.',
+        'Negative marking of 1/3 mark applies for each incorrect response.'
+      ]
+    },
     howToApplySteps: [
       'Candidates can apply through any one RRB zone only.',
       'Keep valid mobile number, active email, Aadhaar card number, and academic certificates ready.',
@@ -759,6 +1204,25 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 24102, ews: 6024, obc: 16264, sc: 12650, st: 1204 }
       }
     ],
+    paperPattern: {
+      examName: 'UP Police Constable Civil Police Written Examination 2026',
+      examMode: 'Offline Written Examination (OMR Sheet Based)',
+      totalQuestions: 150,
+      totalMarks: 300,
+      totalDuration: '2 Hours (120 Minutes)',
+      negativeMarking: '0.50 Marks (1/4th) for each incorrect answer',
+      mediumOfExam: 'Hindi & English (Bilingual)',
+      subjects: [
+        { subjectName: 'General Knowledge (सामान्य ज्ञान)', totalQuestions: 38, totalMarks: 76, remarks: '2 अंक प्रति प्रश्न' },
+        { subjectName: 'General Hindi (सामान्य हिन्दी)', totalQuestions: 37, totalMarks: 74, remarks: '2 अंक प्रति प्रश्न' },
+        { subjectName: 'Numerical & Mental Ability (संख्यात्मक व मानसिक योग्यता)', totalQuestions: 38, totalMarks: 76, remarks: '2 अंक प्रति प्रश्न' },
+        { subjectName: 'Mental Aptitude, I.Q. & Reasoning Ability (मानसिक अभिरुचि व तर्कशक्ति)', totalQuestions: 37, totalMarks: 74, remarks: '2 अंक प्रति प्रश्न' }
+      ],
+      notes: [
+        'परीक्षा कुल 300 अंकों की होगी जिसमें 150 वस्तुनिष्ठ बहुविकल्पीय प्रश्न होंगे।',
+        'प्रत्येक सही उत्तर के लिए 2 अंक मिलेंगे एवं गलत उत्तर के लिए 0.5 अंक काटे जाएंगे।'
+      ]
+    },
     howToApplySteps: [
       'Apply online on UPPRPB official portal uppbpb.gov.in.',
       'Candidate height requirement: Male Gen/OBC/SC 168 CM, ST 160 CM. Female Gen/OBC/SC 152 CM, ST 147 CM.',
@@ -817,6 +1281,25 @@ export const mockSarkariPosts: SarkariPost[] = [
         categoryBreakdown: { gen: 15800, obc: 9800, ews: 3900, sc: 6200, st: 3781 }
       }
     ],
+    paperPattern: {
+      examName: 'SSC GD Constable Computer Based Examination (CBE) 2026',
+      examMode: 'Computer Based Examination (CBE Online)',
+      totalQuestions: 80,
+      totalMarks: 160,
+      totalDuration: '60 Minutes (1 Hour)',
+      negativeMarking: '0.25 Marks deducted for each wrong answer',
+      mediumOfExam: 'English, Hindi and 13 Regional Languages',
+      subjects: [
+        { subjectName: 'Part-A: General Intelligence and Reasoning', totalQuestions: 20, totalMarks: 40, remarks: '2 Marks per question' },
+        { subjectName: 'Part-B: General Knowledge and General Awareness', totalQuestions: 20, totalMarks: 40, remarks: '2 Marks per question' },
+        { subjectName: 'Part-C: Elementary Mathematics', totalQuestions: 20, totalMarks: 40, remarks: '2 Marks per question' },
+        { subjectName: 'Part-D: English / Hindi', totalQuestions: 20, totalMarks: 40, remarks: 'Choice of language' }
+      ],
+      notes: [
+        'Each question will carry 2 marks with total 80 questions (160 marks).',
+        'Negative marking of 0.25 marks will be deducted for each incorrect attempt.'
+      ]
+    },
     howToApplySteps: [
       'Fill application form via SSC portal ssc.gov.in using OTR credentials.',
       'Check force preferences (BSF, CISF, CRPF, SSB, ITBP, Assam Rifles, SSF) carefully before final submission.'
@@ -1621,10 +2104,99 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
       { label: 'Check Voter Application Status', actionText: 'Check Status', type: 'official' }
     ]
+  },
+  {
+    id: 'important-rajasthan-samajik-suraksha-pension-2026',
+    slug: 'rajasthan-samajik-suraksha-pension-yojana-2026',
+    title: 'Rajasthan Samajik Suraksha Pension Yojana 2026 (RAJSSP Online Form / Varshik Bhautik Satypan)',
+    shortTitle: 'Rajasthan Samajik Suraksha Pension 2026',
+    hindiTitle: 'राजस्थान सामाजिक सुरक्षा पेंशन योजना 2026 (ऑनलाइन आवेदन व वार्षिक सत्यापन)',
+    category: 'important',
+    department: 'State PSC',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'Rajasthan',
+    postDate: '16 October 2026',
+    notificationNumber: 'RAJSSP/SJED/2026/PENSION-SCHEME',
+    isHot: true,
+    isNew: true,
+    lastDate: '31/12/2026 (वार्षिक सत्यापन जारी)',
+    shortInfo: 'Social Justice and Empowerment Department (SJED), Government of Rajasthan invites online applications and annual physical verification (वार्षिक भौतिक सत्यापन) for Rajasthan Samajik Suraksha Pension Yojana 2026 (RAJSSP). Under this welfare scheme, monthly financial assistance has been enhanced up to ₹1,450 / ₹1,250 per month for Old Age, Widows, Single Women, and Specially-Abled (Divyangjan) citizens of Rajasthan.',
+    applicationFee: [
+      { category: 'General / OBC / EWS / SC / ST (Citizen Online Application)', amount: '₹ 0/- (Free - कोई शुल्क नहीं)' },
+      { category: 'e-Mitra Kiosk Service Fee (यदि ई-मित्र से करवाएं)', amount: '₹ 30/- (निर्धारित सरकारी शुल्क)' }
+    ],
+    feePaymentMode: 'Free on SSO Portal / Nominal Kiosk Fee at e-Mitra',
+    ageLimit: {
+      asOnDate: '01/01/2026',
+      minAge: 18,
+      notes: 'वृद्धावस्था पेंशन: महिला 55+ वर्ष, पुरुष 58+ वर्ष | विधवा / एकल नारी: 18+ वर्ष | विशेष योग्यजन (दिव्यांग 40%+): कोई न्यूनतम आयु नहीं।'
+    },
+    importantDates: [
+      { label: 'Online Application Started', value: 'Active All Year (24x7)' },
+      { label: 'Annual Physical Verification (वार्षिक सत्यापन)', value: '31/12/2026 (Ongoing)', isHighlight: true },
+      { label: 'Pension Amount Revision', value: 'Enhanced up to ₹1,450 / Month', isHighlight: true },
+      { label: 'Next Monthly Pension Disbursement', value: 'Direct DBT into Bank Account' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'मुख्यमंत्री वृद्धजन सम्मान पेंशन योजना (Old Age Samman Pension Scheme)',
+        totalPosts: 'पात्र वरिष्ठ नागरिक',
+        eligibility: `• पात्रता: राजस्थान का मूल निवासी होना अनिवार्य।
+• आयु सीमा: महिला न्यूनतम 55 वर्ष, पुरुष न्यूनतम 58 वर्ष।
+• आय सीमा: प्रार्थी एवं पति/पत्नी की संयुक्त वार्षिक आय ₹48,000 से कम हो (बीपीएल/अंत्योदय/आस्था कार्ड धारकों हेतु आय सीमा से छूट)।
+• पेंशन राशि: प्रतिमाह ₹1,250 से ₹1,450 (आयु वर्गानुसार)।`,
+        modeOfSelection: 'Online Verification via Jan Aadhaar / SSO -> Approval by SDO / BDO -> Monthly Direct Benefit Transfer (DBT)',
+        categoryBreakdown: { gen: 'Eligible', obc: 'Eligible', ews: 'Eligible', sc: 'Eligible', st: 'Eligible' }
+      },
+      {
+        postName: 'मुख्यमंत्री एकल नारी सम्मान पेंशन योजना (Widow / Divorced / Deserted Women Pension)',
+        totalPosts: 'पात्र महिलाएं',
+        eligibility: `• पात्रता: 18 वर्ष या उससे अधिक आयु की विधवा, तलाकशुदा या परित्यक्ता महिला जो राजस्थान की मूल निवासी हो।
+• आय सीमा: प्रार्थी की स्वयं की वार्षिक आय ₹48,000 से कम हो।
+• आवश्यक दस्तावेज: जन आधार कार्ड, पति का मृत्यु प्रमाण पत्र / तलाक संबंधी दस्तावेज, बैंक खाता।
+• पेंशन राशि: ₹1,250 से ₹1,500 प्रतिमाह (आयु अनुसार)।`,
+        modeOfSelection: 'Jan Aadhaar Verification -> SDO Approval -> Monthly DBT Pension',
+        categoryBreakdown: { gen: 'Eligible', obc: 'Eligible', ews: 'Eligible', sc: 'Eligible', st: 'Eligible' }
+      },
+      {
+        postName: 'मुख्यमंत्री विशेष योग्यजन सम्मान पेंशन योजना (Specially Abled / Divyang Pension)',
+        totalPosts: 'विशेष योग्यजन',
+        eligibility: `• पात्रता: किसी भी आयु का व्यक्ति जो 40% या अधिक दिव्यांगता (Disability) रखता हो, बोनापन या हिजड़ापन से ग्रसित हो।
+• आय सीमा: परिवार की कुल वार्षिक आय ₹60,000 से अधिक न हो।
+• आवश्यक दस्तावेज: यूडीआईडी (UDID) कार्ड या सक्षम मेडिकल बोर्ड का दिव्यांगता प्रमाण पत्र, जन आधार कार्ड।
+• पेंशन राशि: ₹1,250 से ₹1,450 प्रतिमाह।`,
+        modeOfSelection: 'Medical Certificate Verification -> Verification -> Regular DBT Pension',
+        categoryBreakdown: { gen: 'Eligible', obc: 'Eligible', ews: 'Eligible', sc: 'Eligible', st: 'Eligible' }
+      },
+      {
+        postName: 'लघु एवं सीमांत वृद्ध कृषक पेंशन योजना (Small & Marginal Farmers Pension)',
+        totalPosts: 'वृद्ध कृषक',
+        eligibility: `• पात्रता: राजस्थान के लघु एवं सीमांत श्रेणी के वृद्ध किसान।
+• आयु सीमा: महिला 55 वर्ष या अधिक, पुरुष 58 वर्ष या अधिक।
+• अन्य शर्त: अन्य किसी नियमित पेंशन योजना का लाभ न मिल रहा हो।`,
+        modeOfSelection: 'Land Records (Jamabandi) & Jan Aadhaar Linkage -> Approval -> DBT',
+        categoryBreakdown: { gen: 'Eligible', obc: 'Eligible', ews: 'Eligible', sc: 'Eligible', st: 'Eligible' }
+      }
+    ],
+    howToApplySteps: [
+      'Jan Aadhaar e-KYC: Ensure all family members and bank details in Jan Aadhaar are updated and verified.',
+      'Citizen Online Apply: Login to SSO Rajasthan portal (sso.rajasthan.gov.in) -> Select RAJSSP (Social Security Pension) Application service.',
+      'Through e-Mitra: Visit your nearest e-Mitra kiosk along with Jan Aadhaar card and Aadhaar card.',
+      'Annual Physical Verification (वार्षिक भौतिक सत्यापन): Existing pensioners can verify through RajSSP Mobile App (Face RD Verification) from home, or visit nearest e-Mitra with biometric fingerprint.',
+      'Check Pension Status: You can track pension application status and monthly payment ledger on ssp.rajasthan.gov.in.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (SSO Rajasthan Portal)', actionText: 'Apply Online', type: 'apply', url: 'https://sso.rajasthan.gov.in/', isPrimary: true },
+      { label: 'Check Pension Application Status (RAJSSP Portal)', actionText: 'Check Status', type: 'official', url: 'https://ssp.rajasthan.gov.in/' },
+      { label: 'Download RajSSP Mobile App (Face Verification / बायोमेट्रिक)', actionText: 'Download App', type: 'official', url: 'https://play.google.com/store/apps/details?id=com.rajssp.app' },
+      { label: 'Download Scheme Guidelines & Eligibility PDF', actionText: 'Click Here (PDF)', type: 'notification', url: 'https://ssp.rajasthan.gov.in/' },
+      { label: 'Official RAJSSP Government Portal', actionText: 'ssp.rajasthan.gov.in', type: 'official', url: 'https://ssp.rajasthan.gov.in/' }
+    ]
   }
 ];
 
 export const trendingAlerts = [
+  { id: 't-ssp', title: '🏛️ Rajasthan Samajik Suraksha Pension 2026 (RAJSSP) Online Form & Varshik Satypan', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', category: 'important', badge: 'Hot' },
   { id: 't-sci', title: '⚖️ Supreme Court Attendant (130 Posts) Online Form 2026', slug: 'supreme-court-attendant-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't-itbp', title: '🛡️ ITBP Motor Mechanic (21 Posts) Online Form Active', slug: 'itbp-motor-mechanic-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't0', title: '🚂 Railway RRB NTPC 12th Level (3,445 Posts) Online Form Active', slug: 'rrb-ntpc-12th-level-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
@@ -1639,6 +2211,7 @@ export const trendingAlerts = [
 ];
 
 export const highlightBoxes = [
+  { id: 'h-ssp', title: 'Raj Samajik Suraksha Pension', sub: 'Online Form & Verification', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', color: 'from-purple-700 to-indigo-800' },
   { id: 'h-sci', title: 'Supreme Court Attendant', sub: 'Apply Online (130 Posts)', slug: 'supreme-court-attendant-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
   { id: 'h-itbp', title: 'ITBP Motor Mechanic', sub: 'Apply Online (21 Posts)', slug: 'itbp-motor-mechanic-recruitment-2026', color: 'from-blue-600 to-blue-700' },
   { id: 'h0', title: 'RRB NTPC 12th Level 2026', sub: 'Apply Online (3,445 Posts)', slug: 'rrb-ntpc-12th-level-recruitment-2026', color: 'from-amber-600 to-amber-700' },

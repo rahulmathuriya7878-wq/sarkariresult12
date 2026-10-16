@@ -73,6 +73,26 @@ export interface DirectLinkItem {
   isPrimary?: boolean;
 }
 
+export interface ExamSubjectItem {
+  subjectName: string;
+  totalQuestions?: number | string;
+  totalMarks?: number | string;
+  duration?: string;
+  remarks?: string;
+}
+
+export interface PaperPattern {
+  examName?: string;
+  examMode?: string;
+  totalQuestions?: number | string;
+  totalMarks?: number | string;
+  totalDuration?: string;
+  negativeMarking?: string;
+  mediumOfExam?: string;
+  subjects?: ExamSubjectItem[];
+  notes?: string[];
+}
+
 export interface SarkariPost {
   id: string;
   slug: string;
@@ -102,6 +122,7 @@ export interface SarkariPost {
   };
   importantDates: ImportantDateItem[];
   vacancyBreakdown: VacancyBreakdown[];
+  paperPattern?: PaperPattern;
   howToApplySteps: string[];
   selectionProcess?: string[];
   salary?: string;

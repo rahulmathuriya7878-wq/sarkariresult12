@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BellRing, X, CheckCircle, Mail, Globe, Send, ShieldCheck, Sparkles, AlertCircle } from 'lucide-react';
+import { BellRing, X, CheckCircle, Mail, Globe, Send, ShieldCheck, Sparkles, AlertCircle, MessageCircle } from 'lucide-react';
 
 interface JobAlertsModalProps {
   isOpen: boolean;
@@ -306,6 +306,22 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
                   <option value="B.Tech / BE">B.Tech / BE Engineering</option>
                   <option value="Medical / Nursing">Medical / Nursing</option>
                 </select>
+              </div>
+
+              {/* WhatsApp channel fast join option */}
+              <div className="bg-emerald-50 border border-emerald-300 rounded p-2.5 text-xs text-emerald-950 flex items-center justify-between gap-2 shadow-2xs">
+                <span className="flex items-center gap-1.5 font-bold">
+                  <MessageCircle className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <span>Join Official WhatsApp Channel for Instant Alerts</span>
+                </span>
+                <a
+                  href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 px-3 py-1 rounded text-[11px] font-black shrink-0 cursor-pointer shadow-xs inline-flex items-center gap-1"
+                >
+                  <span>Join Now</span>
+                </a>
               </div>
 
               {/* Social / Telegram fast link option */}

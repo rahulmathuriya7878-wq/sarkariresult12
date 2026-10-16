@@ -26,7 +26,9 @@ import {
   HelpCircle,
   Award,
   Users,
-  BookOpen
+  BookOpen,
+  FileSpreadsheet,
+  MessageCircle
 } from 'lucide-react';
 
 interface FullPagePostViewProps {
@@ -415,6 +417,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     });
   };
 
+  const isServiceOrScheme = post.category === 'important' || post.category === 'certificate_verification';
+
   return (
     <>
       <div className="w-full min-h-screen bg-slate-100/70 pb-16">
@@ -500,7 +504,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* WhatsApp */}
+                  {/* WhatsApp Share */}
                   <button
                     type="button"
                     onClick={() => handleSocialShare('whatsapp')}
@@ -530,7 +534,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     <Share2 className="w-4 h-4 text-white" />
                     <span>Share Job Vacancy</span>
                   </button>
-
                 </div>
               </div>
             </div>
@@ -585,33 +588,35 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               </div>
 
-              {/* 3. Application Fee Box */}
-              <div className="border-2 border-slate-800 rounded-md overflow-hidden bg-white shadow-2xs">
-                <div className="bg-slate-900 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
-                  <CreditCard className="w-4.5 h-4.5 text-amber-300" />
-                  Application Fee (आवेदन शुल्क)
-                </div>
-                <div className="divide-y divide-slate-100 text-sm sm:text-base">
-                  {post.applicationFee.length > 0 ? (
-                    post.applicationFee.map((fee, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3.5">
-                        <span className="text-slate-800 font-medium">{fee.category}</span>
-                        <strong className="text-slate-900 font-extrabold">{fee.amount}</strong>
+              {/* 3. Application Fee Box - Important / Certificate Verification me nahi darshana */}
+              {!isServiceOrScheme && (
+                <div className="border-2 border-slate-800 rounded-md overflow-hidden bg-white shadow-2xs">
+                  <div className="bg-slate-900 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                    <CreditCard className="w-4.5 h-4.5 text-amber-300" />
+                    Application Fee (आवेदन शुल्क)
+                  </div>
+                  <div className="divide-y divide-slate-100 text-sm sm:text-base">
+                    {post.applicationFee.length > 0 ? (
+                      post.applicationFee.map((fee, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3.5">
+                          <span className="text-slate-800 font-medium">{fee.category}</span>
+                          <strong className="text-slate-900 font-extrabold">{fee.amount}</strong>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-4 text-slate-500 italic">No Application Fee for this notification / Result update.</div>
+                    )}
+                    {post.feePaymentMode && (
+                      <div className="p-3.5 bg-slate-50 text-xs sm:text-sm text-slate-700">
+                        <strong>Payment Mode: </strong>{post.feePaymentMode}
                       </div>
-                    ))
-                  ) : (
-                    <div className="p-4 text-slate-500 italic">No Application Fee for this notification / Result update.</div>
-                  )}
-                  {post.feePaymentMode && (
-                    <div className="p-3.5 bg-slate-50 text-xs sm:text-sm text-slate-700">
-                      <strong>Payment Mode: </strong>{post.feePaymentMode}
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* 4. Age Limit Box */}
-              {post.ageLimit.asOnDate && (
+              {/* 4. Age Limit Box - Important / Certificate Verification me nahi darshana */}
+              {!isServiceOrScheme && post.ageLimit.asOnDate && (
                 <div className="border-2 border-emerald-800 rounded-md overflow-hidden bg-white shadow-2xs">
                   <div className="bg-emerald-800 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -639,8 +644,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               )}
 
-              {/* 5. Category Wise Posts Box - Data hone par hi list kare */}
-              {post.vacancyBreakdown && post.vacancyBreakdown.some(v => hasCategoryBreakdownData(v)) && (
+              {/* 5. Category Wise Posts Box - Important / Certificate Verification me nahi darshana */}
+              {!isServiceOrScheme && post.vacancyBreakdown && post.vacancyBreakdown.some(v => hasCategoryBreakdownData(v)) && (
                 <div className="border-2 border-emerald-900 rounded-md overflow-hidden bg-white shadow-2xs">
                   <div className="bg-emerald-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
                     <Users className="w-4.5 h-4.5 text-amber-300" />
@@ -668,8 +673,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               )}
 
-              {/* 6. Post-Wise Eligibility Box */}
-              {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
+              {/* 6. Post-Wise Eligibility Box - Important / Certificate Verification me nahi darshana */}
+              {!isServiceOrScheme && post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
                 <div className="border-2 border-amber-800 rounded-md overflow-hidden bg-white shadow-2xs">
                   <div className="bg-amber-900 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
                     <BookOpen className="w-4.5 h-4.5 text-amber-300" />
@@ -704,27 +709,189 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               )}
 
-              {/* 7. Mode of Selection Box (SABSE NICHE - Bottommost) */}
-              <div className="border-2 border-indigo-900 rounded-md overflow-hidden bg-white shadow-2xs">
-                <div className="bg-indigo-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
-                  <Award className="w-4.5 h-4.5 text-amber-300" />
-                  Mode of Selection (चयन प्रक्रिया)
-                </div>
-                <div className="p-4 text-sm sm:text-base space-y-3 bg-indigo-50/20 text-slate-800">
-                  {post.vacancyBreakdown.some(v => v.modeOfSelection) ? (
-                    post.vacancyBreakdown.map((v, idx) => (
-                      <div key={idx} className="space-y-1 pb-2 border-b border-indigo-100 last:border-0 last:pb-0">
-                        <strong className="text-indigo-950 block font-bold">{v.postName}:</strong>
-                        <p className="text-slate-800 leading-relaxed font-normal">{v.modeOfSelection}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="py-2 text-slate-800 font-medium">
-                      As per official notification (आधिकारिक अधिसूचना के अनुसार)
+              {/* 7. Paper Pattern & Exam Scheme Box - Ye box tabhi dikhega jab paper pattern or uski subject ki jaankari hogi */}
+              {post.paperPattern && post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
+                <div className="border-2 border-purple-900 rounded-md overflow-hidden bg-white shadow-sm">
+                  <div className="bg-purple-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <FileSpreadsheet className="w-4.5 h-4.5 text-amber-300 shrink-0" />
+                      <span>{post.paperPattern.examName ? `${post.paperPattern.examName} : Exam Scheme & Paper Pattern (परीक्षा पैटर्न व अंक भार)` : 'Exam Scheme & Paper Pattern (परीक्षा पैटर्न व विषय-वार अंक भार)'}</span>
                     </div>
-                  )}
+                    {post.paperPattern.examMode && (
+                      <span className="text-[11px] sm:text-xs bg-amber-400 text-slate-900 font-black px-2.5 py-0.5 rounded uppercase tracking-tight shrink-0 self-start sm:self-auto">
+                        {post.paperPattern.examMode}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="p-4 text-xs sm:text-sm space-y-4 bg-white text-slate-800">
+                    {/* Quick Metrics Bar - Sirf wahi metrics dikhenge jinka data darj hoga */}
+                    {(post.paperPattern.totalQuestions || post.paperPattern.totalMarks || post.paperPattern.totalDuration || post.paperPattern.negativeMarking || post.paperPattern.mediumOfExam) && (
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-purple-50/70 p-3 rounded-md border border-purple-200 text-slate-800 font-medium">
+                        {post.paperPattern.totalQuestions && (
+                          <div className="bg-white p-2.5 rounded border border-purple-100 flex flex-col justify-center shadow-2xs">
+                            <span className="text-[11px] text-slate-500 font-bold">Total Questions (कुल प्रश्न):</span>
+                            <strong className="text-purple-950 text-sm sm:text-base font-black">{post.paperPattern.totalQuestions} प्रश्न</strong>
+                          </div>
+                        )}
+                        {post.paperPattern.totalMarks && (
+                          <div className="bg-white p-2.5 rounded border border-purple-100 flex flex-col justify-center shadow-2xs">
+                            <span className="text-[11px] text-slate-500 font-bold">Total Marks (कुल पूर्णांक):</span>
+                            <strong className="text-emerald-800 text-sm sm:text-base font-black">{post.paperPattern.totalMarks} अंक</strong>
+                          </div>
+                        )}
+                        {post.paperPattern.totalDuration && (
+                          <div className="bg-white p-2.5 rounded border border-purple-100 flex flex-col justify-center shadow-2xs">
+                            <span className="text-[11px] text-slate-500 font-bold">Duration (समयावधि):</span>
+                            <strong className="text-blue-900 text-xs sm:text-sm font-black">{post.paperPattern.totalDuration}</strong>
+                          </div>
+                        )}
+                        {post.paperPattern.negativeMarking && (
+                          <div className="bg-white p-2.5 rounded border border-purple-100 flex flex-col justify-center shadow-2xs">
+                            <span className="text-[11px] text-slate-500 font-bold">Negative Marking:</span>
+                            <strong className="text-red-700 text-xs sm:text-sm font-black">{post.paperPattern.negativeMarking}</strong>
+                          </div>
+                        )}
+                        {post.paperPattern.mediumOfExam && (
+                          <div className="bg-white p-2.5 rounded border border-purple-100 flex flex-col justify-center shadow-2xs col-span-2 sm:col-span-4">
+                            <span className="text-[11px] text-slate-500 font-bold">Medium / Language of Exam:</span>
+                            <strong className="text-slate-800 text-xs sm:text-sm font-bold">{post.paperPattern.mediumOfExam}</strong>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Subject-Wise Paper Marks Weightage Table (Tabhi dikhega jab subjects ki jaankari darj hogi) */}
+                    {(() => {
+                      const subjects = post.paperPattern.subjects;
+                      const hasQuestions = subjects.some(s => s.totalQuestions !== undefined && s.totalQuestions !== null && s.totalQuestions !== '');
+                      const hasMarks = subjects.some(s => s.totalMarks !== undefined && s.totalMarks !== null && s.totalMarks !== '');
+                      const hasDuration = subjects.some(s => s.duration !== undefined && s.duration !== null && s.duration !== '');
+                      const hasRemarks = subjects.some(s => s.remarks !== undefined && s.remarks !== null && s.remarks !== '');
+
+                      return (
+                        <div className="overflow-x-auto border-2 border-purple-200 rounded-md shadow-2xs">
+                          <table className="w-full text-xs sm:text-sm text-slate-800 border-collapse">
+                            <thead className="bg-purple-100 text-purple-950 font-bold">
+                              <tr>
+                                <th className="p-2.5 text-center border-b border-purple-200 w-12">क्र.सं.</th>
+                                <th className="p-2.5 text-left border-b border-purple-200">विषय / सेक्शन का नाम (Subject / Section)</th>
+                                {hasQuestions && (
+                                  <th className="p-2.5 text-center border-b border-purple-200">प्रश्नों की संख्या (Questions)</th>
+                                )}
+                                {hasMarks && (
+                                  <th className="p-2.5 text-center border-b border-purple-200">विषय-वार अंक भार (Marks Weightage)</th>
+                                )}
+                                {hasDuration && (
+                                  <th className="p-2.5 text-center border-b border-purple-200">समयावधि (Duration)</th>
+                                )}
+                                {hasRemarks && (
+                                  <th className="p-2.5 text-left border-b border-purple-200">विवरण / स्तर (Remarks)</th>
+                                )}
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-purple-100">
+                              {subjects.map((sub, sIdx) => (
+                                <tr key={sIdx} className="hover:bg-purple-50/60 transition-colors">
+                                  <td className="p-2.5 text-slate-500 font-mono font-bold text-center">{sIdx + 1}</td>
+                                  <td className="p-2.5 font-bold text-purple-950">{sub.subjectName}</td>
+                                  {hasQuestions && (
+                                    <td className="p-2.5 text-center font-extrabold text-slate-900">{sub.totalQuestions ?? '-'}</td>
+                                  )}
+                                  {hasMarks && (
+                                    <td className="p-2.5 text-center font-black text-emerald-800">{sub.totalMarks ?? '-'} अंक</td>
+                                  )}
+                                  {hasDuration && (
+                                    <td className="p-2.5 text-center text-blue-900 font-semibold">{sub.duration ?? '-'}</td>
+                                  )}
+                                  {hasRemarks && (
+                                    <td className="p-2.5 text-slate-600 italic text-xs">{sub.remarks ?? '-'}</td>
+                                  )}
+                                </tr>
+                              ))}
+                            </tbody>
+                            {/* Total Row (Kul Yog) */}
+                            {(hasQuestions || hasMarks || post.paperPattern.totalQuestions || post.paperPattern.totalMarks) && (
+                              <tfoot className="bg-purple-950 text-white font-extrabold">
+                                <tr>
+                                  <td colSpan={2} className="p-2.5 text-right font-black uppercase tracking-wider text-xs sm:text-sm">
+                                    Total Weightage (कुल योग):
+                                  </td>
+                                  {hasQuestions && (
+                                    <td className="p-2.5 text-center font-black text-amber-300 text-xs sm:text-sm">
+                                      {post.paperPattern.totalQuestions !== undefined && post.paperPattern.totalQuestions !== null
+                                        ? post.paperPattern.totalQuestions
+                                        : (subjects.reduce((sum, s) => {
+                                            const val = typeof s.totalQuestions === 'number' ? s.totalQuestions : parseInt(String(s.totalQuestions || '0'), 10);
+                                            return sum + (isNaN(val) ? 0 : val);
+                                          }, 0) || '-')}
+                                    </td>
+                                  )}
+                                  {hasMarks && (
+                                    <td className="p-2.5 text-center font-black text-yellow-300 text-xs sm:text-sm">
+                                      {post.paperPattern.totalMarks ? `${post.paperPattern.totalMarks} अंक` : 
+                                        `${subjects.reduce((sum, s) => {
+                                          const val = typeof s.totalMarks === 'number' ? s.totalMarks : parseInt(String(s.totalMarks || '0'), 10);
+                                          return sum + (isNaN(val) ? 0 : val);
+                                        }, 0) || '-'} अंक`}
+                                    </td>
+                                  )}
+                                  {hasDuration && (
+                                    <td className="p-2.5 text-center text-slate-300 font-semibold text-xs">
+                                      {post.paperPattern.totalDuration || '-'}
+                                    </td>
+                                  )}
+                                  {hasRemarks && (
+                                    <td className="p-2.5"></td>
+                                  )}
+                                </tr>
+                              </tfoot>
+                            )}
+                          </table>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Paper Pattern Notes / Guidelines (agar data darj ho tabhi dikhega) */}
+                    {post.paperPattern.notes && post.paperPattern.notes.length > 0 && (
+                      <div className="bg-amber-50/90 border-l-4 border-amber-600 p-3 rounded-r text-amber-950 space-y-1">
+                        <strong className="block text-xs sm:text-sm font-bold text-amber-900">
+                          महत्वपूर्ण परीक्षा निर्देश एवं अंकन नियम (Exam Marking Rules & Pattern Guidelines):
+                        </strong>
+                        <ul className="list-disc list-inside space-y-0.5 text-xs text-slate-800">
+                          {post.paperPattern.notes.map((note, nIdx) => (
+                            <li key={nIdx} className="leading-relaxed">{note}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* 8. Mode of Selection Box - Important / Certificate Verification me nahi darshana */}
+              {!isServiceOrScheme && (
+                <div className="border-2 border-indigo-900 rounded-md overflow-hidden bg-white shadow-2xs">
+                  <div className="bg-indigo-950 text-white px-4 py-2.5 text-sm sm:text-base font-extrabold uppercase tracking-wider flex items-center gap-2">
+                    <Award className="w-4.5 h-4.5 text-amber-300" />
+                    Mode of Selection (चयन प्रक्रिया)
+                  </div>
+                  <div className="p-4 text-sm sm:text-base space-y-3 bg-indigo-50/20 text-slate-800">
+                    {post.vacancyBreakdown.some(v => v.modeOfSelection) ? (
+                      post.vacancyBreakdown.map((v, idx) => (
+                        <div key={idx} className="space-y-1 pb-2 border-b border-indigo-100 last:border-0 last:pb-0">
+                          <strong className="text-indigo-950 block font-bold">{v.postName}:</strong>
+                          <p className="text-slate-800 leading-relaxed font-normal">{v.modeOfSelection}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="py-2 text-slate-800 font-medium">
+                        As per official notification (आधिकारिक अधिसूचना के अनुसार)
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
 

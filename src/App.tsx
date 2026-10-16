@@ -337,6 +337,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 important={importantServices}
                 onSelectPost={handleOpenPostFullPage}
                 isHindi={isHindi}
+                onViewCategory={(cat) => setActiveCategory(cat)}
               />
 
               {/* Homepage FAQ Section */}
@@ -352,6 +353,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
         onOpenJobFinder={() => setIsJobFinderOpen(true)}
         onOpenSitemap={() => setIsSitemapOpen(true)}
+        onSelectPost={handleOpenPostFullPage}
         isHindi={isHindi}
       />
 

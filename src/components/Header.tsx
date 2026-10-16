@@ -6,7 +6,8 @@ import {
   Sparkles, 
   Globe, 
   Search,
-  BellRing
+  BellRing,
+  MessageCircle
 } from 'lucide-react';
 import { PostCategory } from '../types/job';
 
@@ -58,31 +59,42 @@ export const Header: React.FC<HeaderProps> = ({
               <h1 className="text-2xl sm:text-4xl font-black tracking-tight uppercase text-white font-sans drop-shadow-xs group-hover:opacity-95 leading-none">
                 SARKARI RESULT
               </h1>
-              <span className="text-[10px] sm:text-xs tracking-wider text-amber-300 font-bold block mt-1">
-                WWW.SARKARIRESULT.COM
-              </span>
             </div>
           </button>
-          
-          <button
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({
-                  title: 'Sarkari Result',
-                  text: 'Check Latest Govt Jobs, Admit Card and Results on Sarkari Result',
-                  url: window.location.href,
-                }).catch(() => {});
-              } else {
-                navigator.clipboard.writeText(window.location.href).then(() => {
-                    alert('Portal link copied to clipboard!');
-                }).catch(err => console.error('Failed to copy: ', err));
-              }
-            }}
-            className="bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 border border-white/20"
-            title="Share Portal"
-          >
-            <span>Share 🔗</span>
-          </button>
+
+          <div className="flex items-center gap-2">
+            <a
+              href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 px-2.5 sm:px-3 py-1.5 rounded text-xs font-black flex items-center gap-1.5 transition-all shadow-sm cursor-pointer shrink-0 border border-emerald-300 active:scale-95"
+              title="Join Official WhatsApp Channel"
+            >
+              <MessageCircle className="w-4 h-4 fill-slate-950 text-emerald-100" />
+              <span className="hidden sm:inline">Join</span>
+              <span>WhatsApp</span>
+            </a>
+
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: 'Sarkari Result',
+                    text: 'Check Latest Govt Jobs, Admit Card and Results on Sarkari Result',
+                    url: window.location.href,
+                  }).catch(() => {});
+                } else {
+                  navigator.clipboard.writeText(window.location.href).then(() => {
+                      alert('Portal link copied to clipboard!');
+                  }).catch(err => console.error('Failed to copy: ', err));
+                }
+              }}
+              className="bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 border border-white/20"
+              title="Share Portal"
+            >
+              <span>Share 🔗</span>
+            </button>
+          </div>
         </div>
       </div>
 
