@@ -3,27 +3,53 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { mockSarkariPosts } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
 import { MarqueeTicker } from './components/MarqueeTicker';
 import { QuickHighlightsGrid } from './components/QuickHighlightsGrid';
 import { SarkariThreeColumnGrid } from './components/SarkariThreeColumnGrid';
-import { SarkariSecondaryGrid } from './components/SarkariSecondaryGrid';
-import { CertificateVerificationSection } from './components/CertificateVerificationSection';
-import { CategoryDetailView } from './components/CategoryDetailView';
-import { FullPagePostView } from './components/FullPagePostView';
-import { AgeCalculatorModal } from './components/tools/AgeCalculatorModal';
-import { PhotoResizerTool } from './components/tools/PhotoResizerTool';
-import { EligibilityMatcherModal } from './components/tools/EligibilityMatcherModal';
-import { BookmarkedJobsModal } from './components/BookmarkedJobsModal';
 import { SarkariFooter } from './components/SarkariFooter';
 import { BackToTop } from './components/BackToTop';
 import { CriticalAlertBanner } from './components/CriticalAlertBanner';
-import { SitemapModal } from './components/SitemapModal';
-import { JobAlertsModal } from './components/JobAlertsModal';
-import { SarkariFAQSection } from './components/SarkariFAQSection';
+
+// Lazy-loaded secondary grids and detailed views (Code-splitting)
+const SarkariSecondaryGrid = lazy(() => 
+  import('./components/SarkariSecondaryGrid').then((m) => ({ default: m.SarkariSecondaryGrid }))
+);
+const CertificateVerificationSection = lazy(() => 
+  import('./components/CertificateVerificationSection').then((m) => ({ default: m.CertificateVerificationSection }))
+);
+const CategoryDetailView = lazy(() => 
+  import('./components/CategoryDetailView').then((m) => ({ default: m.CategoryDetailView }))
+);
+const FullPagePostView = lazy(() => 
+  import('./components/FullPagePostView').then((m) => ({ default: m.FullPagePostView }))
+);
+const SarkariFAQSection = lazy(() => 
+  import('./components/SarkariFAQSection').then((m) => ({ default: m.SarkariFAQSection }))
+);
+
+// Lazy-loaded modal components (Loaded only on user interaction)
+const AgeCalculatorModal = lazy(() => 
+  import('./components/tools/AgeCalculatorModal').then((m) => ({ default: m.AgeCalculatorModal }))
+);
+const PhotoResizerTool = lazy(() => 
+  import('./components/tools/PhotoResizerTool').then((m) => ({ default: m.PhotoResizerTool }))
+);
+const EligibilityMatcherModal = lazy(() => 
+  import('./components/tools/EligibilityMatcherModal').then((m) => ({ default: m.EligibilityMatcherModal }))
+);
+const BookmarkedJobsModal = lazy(() => 
+  import('./components/BookmarkedJobsModal').then((m) => ({ default: m.BookmarkedJobsModal }))
+);
+const SitemapModal = lazy(() => 
+  import('./components/SitemapModal').then((m) => ({ default: m.SitemapModal }))
+);
+const JobAlertsModal = lazy(() => 
+  import('./components/JobAlertsModal').then((m) => ({ default: m.JobAlertsModal }))
+);
 
 const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
   if (post.salaryBand) return post.salaryBand;
@@ -284,16 +310,24 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
       {/* 3. Conditional Full Page View or Main Home Portal */}
       {selectedPost ? (
         /* Full Page View when clicking any link */
-        <FullPagePostView
-          post={selectedPost}
-          onBack={handleBackToHome}
-          isBookmarked={bookmarkedIds.includes(selectedPost.id)}
-          onToggleBookmark={handleToggleBookmark}
-          onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
-          onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
-          isHindi={isHindi}
-          onSelectPost={handleOpenPostFullPage}
-        />
+        <Suspense fallback={
+          <div className="max-w-5xl mx-auto px-4 py-16 text-center text-slate-600 font-bold animate-pulse">
+            <div className="inline-block p-4 bg-white border border-slate-300 rounded shadow-xs">
+              Loading Official Post Details...
+            </div>
+          </div>
+        }>
+          <FullPagePostView
+            post={selectedPost}
+            onBack={handleBackToHome}
+            isBookmarked={bookmarkedIds.includes(selectedPost.id)}
+            onToggleBookmark={handleToggleBookmark}
+            onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
+            onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
+            isHindi={isHindi}
+            onSelectPost={handleOpenPostFullPage}
+          />
+        </Suspense>
       ) : (
         /* Home Main View */
         <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-3">
@@ -302,13 +336,21 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
 
           {/* Dynamic Content: Drill-down Category view or Authentic 3-Column Tables */}
           {activeCategory !== 'all' ? (
-            <CategoryDetailView
-              category={activeCategory}
-              posts={categorySpecificPosts}
-              onSelectPost={handleOpenPostFullPage}
-              onBackToHome={() => setActiveCategory('all')}
-              isHindi={isHindi}
-            />
+            <Suspense fallback={
+              <div className="max-w-5xl mx-auto px-4 py-12 text-center text-slate-600 font-bold animate-pulse">
+                <div className="inline-block p-4 bg-white border border-slate-300 rounded shadow-xs">
+                  Loading Category Posts...
+                </div>
+              </div>
+            }>
+              <CategoryDetailView
+                category={activeCategory}
+                posts={categorySpecificPosts}
+                onSelectPost={handleOpenPostFullPage}
+                onBackToHome={() => setActiveCategory('all')}
+                isHindi={isHindi}
+              />
+            </Suspense>
           ) : (
             <>
               {/* Primary 3-Column Core Grid: Result | Admit Card | Latest Jobs */}
@@ -321,27 +363,41 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 isHindi={isHindi}
               />
 
-              {/* Secondary 3-Column Grid: Answer Key | Syllabus | Admission */}
-              <SarkariSecondaryGrid
-                answerKeys={answerKeys}
-                syllabi={syllabi}
-                admissions={admissions}
-                onSelectPost={handleOpenPostFullPage}
-                onViewCategory={(cat) => setActiveCategory(cat)}
-                isHindi={isHindi}
-              />
+              {/* Secondary 3-Column Grid: Answer Key | Syllabus | Admission (Lazy Loaded) */}
+              <Suspense fallback={
+                <div className="h-44 my-5 bg-white border-2 border-slate-200 rounded-xs flex items-center justify-center text-slate-400 font-bold text-sm animate-pulse">
+                  Loading Answer Key, Syllabus & Admission Grids...
+                </div>
+              }>
+                <SarkariSecondaryGrid
+                  answerKeys={answerKeys}
+                  syllabi={syllabi}
+                  admissions={admissions}
+                  onSelectPost={handleOpenPostFullPage}
+                  onViewCategory={(cat) => setActiveCategory(cat)}
+                  isHindi={isHindi}
+                />
+              </Suspense>
 
-              {/* Certificate Verification & Important Links */}
-              <CertificateVerificationSection
-                certificates={certificates}
-                important={importantServices}
-                onSelectPost={handleOpenPostFullPage}
-                isHindi={isHindi}
-                onViewCategory={(cat) => setActiveCategory(cat)}
-              />
+              {/* Certificate Verification & Important Links (Lazy Loaded) */}
+              <Suspense fallback={
+                <div className="h-44 my-5 bg-white border-2 border-slate-200 rounded-xs flex items-center justify-center text-slate-400 font-bold text-sm animate-pulse">
+                  Loading Certificate Verification & Important Links...
+                </div>
+              }>
+                <CertificateVerificationSection
+                  certificates={certificates}
+                  important={importantServices}
+                  onSelectPost={handleOpenPostFullPage}
+                  isHindi={isHindi}
+                  onViewCategory={(cat) => setActiveCategory(cat)}
+                />
+              </Suspense>
 
-              {/* Homepage FAQ Section */}
-              <SarkariFAQSection isHindi={isHindi} />
+              {/* Homepage FAQ Section (Lazy Loaded) */}
+              <Suspense fallback={null}>
+                <SarkariFAQSection isHindi={isHindi} />
+              </Suspense>
             </>
           )}
         </main>
@@ -357,43 +413,67 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         isHindi={isHindi}
       />
 
-      {/* Candidate Tools Modals */}
-      <AgeCalculatorModal
-        isOpen={isAgeCalcOpen}
-        onClose={() => setIsAgeCalcOpen(false)}
-      />
+      {/* Candidate Tools Modals - Lazy loaded only when modal opens */}
+      {isAgeCalcOpen && (
+        <Suspense fallback={null}>
+          <AgeCalculatorModal
+            isOpen={isAgeCalcOpen}
+            onClose={() => setIsAgeCalcOpen(false)}
+          />
+        </Suspense>
+      )}
 
-      <PhotoResizerTool
-        isOpen={isPhotoResizerOpen}
-        onClose={() => setIsPhotoResizerOpen(false)}
-      />
+      {isPhotoResizerOpen && (
+        <Suspense fallback={null}>
+          <PhotoResizerTool
+            isOpen={isPhotoResizerOpen}
+            onClose={() => setIsPhotoResizerOpen(false)}
+          />
+        </Suspense>
+      )}
 
-      <EligibilityMatcherModal
-        isOpen={isJobFinderOpen}
-        onClose={() => setIsJobFinderOpen(false)}
-        posts={mockSarkariPosts}
-        onSelectPost={handleOpenPostFullPage}
-      />
+      {isJobFinderOpen && (
+        <Suspense fallback={null}>
+          <EligibilityMatcherModal
+            isOpen={isJobFinderOpen}
+            onClose={() => setIsJobFinderOpen(false)}
+            posts={mockSarkariPosts}
+            onSelectPost={handleOpenPostFullPage}
+          />
+        </Suspense>
+      )}
 
-      <BookmarkedJobsModal
-        isOpen={isBookmarksOpen}
-        onClose={() => setIsBookmarksOpen(false)}
-        bookmarkedPosts={bookmarkedPosts}
-        onSelectPost={handleOpenPostFullPage}
-        onRemoveBookmark={handleToggleBookmark}
-        onClearAll={handleClearAllBookmarks}
-      />
+      {isBookmarksOpen && (
+        <Suspense fallback={null}>
+          <BookmarkedJobsModal
+            isOpen={isBookmarksOpen}
+            onClose={() => setIsBookmarksOpen(false)}
+            bookmarkedPosts={bookmarkedPosts}
+            onSelectPost={handleOpenPostFullPage}
+            onRemoveBookmark={handleToggleBookmark}
+            onClearAll={handleClearAllBookmarks}
+          />
+        </Suspense>
+      )}
 
-      <SitemapModal
-        isOpen={isSitemapOpen}
-        onClose={() => setIsSitemapOpen(false)}
-        onSelectPost={handleSelectSlug}
-      />
+      {isSitemapOpen && (
+        <Suspense fallback={null}>
+          <SitemapModal
+            isOpen={isSitemapOpen}
+            onClose={() => setIsSitemapOpen(false)}
+            onSelectPost={handleSelectSlug}
+          />
+        </Suspense>
+      )}
 
-      <JobAlertsModal
-        isOpen={isJobAlertsOpen}
-        onClose={() => setIsJobAlertsOpen(false)}
-      />
+      {isJobAlertsOpen && (
+        <Suspense fallback={null}>
+          <JobAlertsModal
+            isOpen={isJobAlertsOpen}
+            onClose={() => setIsJobAlertsOpen(false)}
+          />
+        </Suspense>
+      )}
 
       <BackToTop />
 
