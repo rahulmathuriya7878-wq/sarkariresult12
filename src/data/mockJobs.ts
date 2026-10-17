@@ -3,6 +3,132 @@ import { SarkariPost } from '../types/job';
 export const mockSarkariPosts: SarkariPost[] = [
   // --- LATEST NOTICES OCTOBER 2026 ---
   {
+    id: 'job-nta-ugc-net-2026',
+    slug: 'nta-ugc-net-2026-online-form',
+    title: 'NTA UGC NET 2026 Online Form (Junior Research Fellowship JRF & Assistant Professor)',
+    shortTitle: 'NTA UGC NET 2026 Online Form',
+    hindiTitle: 'एनटीए यूजीसी नेट 2026 ऑनलाइन आवेदन फॉर्म (जेआरएफ एवं सहायक प्रोफेसर)',
+    category: 'latest_jobs',
+    department: 'Other',
+    qualifications: ['Post Graduate'],
+    state: 'All India',
+    postDate: '08 October 2026',
+    notificationNumber: 'NTA/UGC-NET/Dec-2026',
+    totalVacancies: 'JRF & Assistant Professor (83 Subjects)',
+    salary: 'JRF Fellowship: ₹ 37,000/- to ₹ 42,000/- p.m. | Assistant Professor: ₹ 57,700 - ₹ 1,82,400/- (Pay Level 10)',
+    salaryBand: '50K - 1 Lakh',
+    isHot: true,
+    isNew: true,
+    lastDate: '28/10/2026 (Late fee: 31/10/2026)',
+    admitCardDate: '07/12/2026',
+    examDate: '14-18 & 21 December 2026',
+    shortInfo: 'National Testing Agency (NTA) has released the official Information Bulletin for UGC-NET December 2026 Examination for Junior Research Fellowship (JRF) and eligibility for Assistant Professor in Indian Universities & Colleges. Online registration and submission of Application Form is active from 08 October 2026 to 28 October 2026 (up to 11:50 PM), with late submission allowed till 31 October 2026 (with ₹500 late fee). Examination will be held on 14-18 December 2026 and 21 December 2026.',
+    applicationFee: [
+      { category: 'General / Unreserved', amount: '₹ 1150/-' },
+      { category: 'Gen-EWS* / OBC-NCL**', amount: '₹ 600/-' },
+      { category: 'SC / ST / PwD / PwBD / Third Gender', amount: '₹ 325/-' },
+      { category: 'Late Fee (29 Oct to 31 Oct 2026)', amount: '₹ 500/- (Additional)' }
+    ],
+    feePaymentMode: 'Pay Examination Fee through Online Net Banking, Debit Card, Credit Card, or UPI (SBI / Canara / ICICI / HDFC Gateway).',
+    ageLimit: {
+      asOnDate: '01/12/2026',
+      minAge: 21,
+      maxAge: 30,
+      notes: 'For JRF: Maximum age 30 years (5 years relaxation for SC/ST/OBC-NCL/PwD/Women). For Assistant Professor: No upper age limit.'
+    },
+    importantDates: [
+      { label: 'Online Registration & Application Begin', value: '08/10/2026' },
+      { label: 'Last Date for Apply Online', value: '28/10/2026 (up to 11:50 PM)', isHighlight: true },
+      { label: 'Last Date for Successful Fee Payment', value: '28/10/2026 (up to 11:50 PM)' },
+      { label: 'Late Submission with Late Fee (Rs. 500)', value: '29/10/2026 to 31/10/2026 (11:50 PM)' },
+      { label: 'Last Date Fee Payment with Late Fee', value: '31/10/2026 (up to 11:50 PM)' },
+      { label: 'Online Correction Window', value: '02/11/2026 to 04/11/2026 (11:50 PM)' },
+      { label: 'Intimation of Cities of Exam Centres', value: '23/11/2026' },
+      { label: 'Downloading of Admit Card from NTA Website', value: '07/12/2026', isHighlight: true },
+      { label: 'Dates of Examination', value: '14 to 18 December 2026 & 21 December 2026', isHighlight: true },
+      { label: 'Display of Recorded Responses & Key', value: 'To be announced later' },
+      { label: 'Declaration of Result on NTA Website', value: 'To be announced later' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Junior Research Fellowship (JRF) & Assistant Professor (83 Subjects)',
+        totalPosts: 'Eligibility Across 83 Subjects',
+        eligibility: `• शैक्षणिक योग्यता: Passed or appearing in Final Year of Master’s Degree / Equivalent Exam from Universities/Institutions recognized by UGC with at least 55% Marks (50% for SC/ST/OBC-NCL/PwD/Third Gender).
+• आयु सीमा: JRF हेतु अधिकतम 30 वर्ष (आरक्षित वर्गों एवं महिला अभ्यर्थियों को 5 वर्ष की छूट)। असिस्टेंट प्रोफेसर पद हेतु कोई अधिकतम आयु सीमा नहीं है।
+• विषय: Humanities, Social Sciences, Computer Science, Environmental Sciences सहित कुल 83 विषयों में परीक्षा आयोजित की जाती है।
+• चयन प्रक्रिया: कंप्यूटर आधारित बहुविकल्पीय परीक्षा (CBT - Paper 1 & Paper 2) में प्राप्त अंकों के आधार पर मेरिट लिस्ट।`,
+        modeOfSelection: 'Computer Based Test (CBT: Paper 1 [100 Marks] + Paper 2 [200 Marks]) -> Final Cutoff & Merit List',
+        categoryBreakdown: { gen: '-', obc: '-', ews: '-', sc: '-', st: '-' }
+      }
+    ],
+    paperPattern: {
+      examName: 'NTA UGC NET Computer Based Online Examination (CBT)',
+      examMode: 'Online CBT Examination (Single 3-Hour Session without Break)',
+      totalQuestions: 150,
+      totalMarks: 300,
+      totalDuration: '180 Minutes (03 Hours) No break between Paper 1 & Paper 2',
+      negativeMarking: 'No Negative Marking (प्रत्येक सही उत्तर पर 2 अंक)',
+      mediumOfExam: 'Bilingual (Hindi & English except language papers)',
+      subjects: [
+        { subjectName: 'Paper-I: Teaching & Research Aptitude (शिक्षण व शोध अभिवृत्ति)', totalQuestions: 50, totalMarks: 100, remarks: 'Compulsory for All Candidates' },
+        { subjectName: 'Paper-II: Domain Subject Selected by Candidate (संबंधित मुख्य विषय)', totalQuestions: 100, totalMarks: 200, remarks: 'Based on Master Degree Syllabus' }
+      ],
+      notes: [
+        'There is no negative marking for incorrect response in both Paper 1 and Paper 2.',
+        'Candidates must appear in both papers in a continuous session of 3 hours.',
+        'Qualifying criteria: General candidates must score at least 40% aggregate marks, reserved categories must score at least 35% aggregate marks.'
+      ]
+    },
+    howToApplySteps: [
+      'Visit the official NTA UGC NET website: ugcnet.nta.ac.in.',
+      'Click on the link "UGC NET 2026 Online Registration / Application Form".',
+      'Register with candidate mobile number and active email address to generate Application Number.',
+      'Fill in personal, educational qualification, and subject details carefully.',
+      'Upload clear passport size photograph (10KB - 200KB) and candidate signature (4KB - 30KB).',
+      'Pay online examination fee according to your category via UPI / Net Banking / Debit Card.',
+      'Download and print the final Confirmation Page for future reference.'
+    ],
+    directLinks: [
+      { 
+        label: 'Apply Online (New Candidate Registration / OTR)', 
+        actionText: 'Apply Online', 
+        type: 'apply', 
+        url: 'https://examinationservices.nic.in/ExamSys27/root/Home.aspx?enc=Ei4cajBkK1gZSfgr53ImFV/yIzhTZHBze3wooSg9DjjOvzupXmjixBOc0vZyJQ9v', 
+        isPrimary: true 
+      },
+      { 
+        label: 'Candidate Login (Already Registered Candidates Sign In)', 
+        actionText: 'Candidate Login', 
+        type: 'apply', 
+        url: 'https://examinationservices.nic.in/ExamSys27/root/Home.aspx?enc=Ei4cajBkK1gZSfgr53ImFV/yIzhTZHBze3wooSg9DjjOvzupXmjixBOc0vZyJQ9v' 
+      },
+      { 
+        label: 'Official Website Link (NIC Examination Services)', 
+        actionText: 'Click Here', 
+        type: 'official', 
+        url: 'https://examinationservices.nic.in/ExamSys27/root/Home.aspx?enc=Ei4cajBkK1gZSfgr53ImFV/yIzhTZHBze3wooSg9DjjOvzupXmjixBOc0vZyJQ9v' 
+      },
+      { 
+        label: 'Official NTA UGC NET Portal', 
+        actionText: 'ugcnet.nta.ac.in', 
+        type: 'official', 
+        url: 'https://ugcnet.nta.ac.in/' 
+      },
+      { 
+        label: 'Download Official Information Bulletin / Notification PDF', 
+        actionText: 'Click Here (PDF)', 
+        type: 'notification', 
+        url: 'https://ugcnet.nta.ac.in/' 
+      },
+      { 
+        label: 'Download Subject-Wise UGC NET Syllabus (83 Subjects)', 
+        actionText: 'Download Syllabus', 
+        type: 'syllabus', 
+        url: 'https://www.ugcnetonline.in/syllabus-new.php' 
+      }
+    ]
+  },
+  {
     id: 'job-supreme-court-attendant-2026',
     slug: 'supreme-court-attendant-recruitment-2026',
     title: 'Supreme Court of India Junior Court Attendant Recruitment 2026 Online Form (130 Posts)',
@@ -2196,6 +2322,7 @@ export const mockSarkariPosts: SarkariPost[] = [
 ];
 
 export const trendingAlerts = [
+  { id: 't-ugc', title: '🎓 NTA UGC NET 2026 Online Form (Assistant Professor & JRF)', slug: 'nta-ugc-net-2026-online-form', category: 'latest_jobs', badge: 'New Job' },
   { id: 't-ssp', title: '🏛️ Rajasthan Samajik Suraksha Pension 2026 (RAJSSP) Online Form & Varshik Satypan', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', category: 'important', badge: 'Hot' },
   { id: 't-sci', title: '⚖️ Supreme Court Attendant (130 Posts) Online Form 2026', slug: 'supreme-court-attendant-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't-itbp', title: '🛡️ ITBP Motor Mechanic (21 Posts) Online Form Active', slug: 'itbp-motor-mechanic-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
@@ -2211,6 +2338,7 @@ export const trendingAlerts = [
 ];
 
 export const highlightBoxes = [
+  { id: 'h-ugc', title: 'NTA UGC NET 2026', sub: 'Apply Online (JRF & Asst Prof)', slug: 'nta-ugc-net-2026-online-form', color: 'from-emerald-700 to-teal-800' },
   { id: 'h-ssp', title: 'Raj Samajik Suraksha Pension', sub: 'Online Form & Verification', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', color: 'from-purple-700 to-indigo-800' },
   { id: 'h-sci', title: 'Supreme Court Attendant', sub: 'Apply Online (130 Posts)', slug: 'supreme-court-attendant-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
   { id: 'h-itbp', title: 'ITBP Motor Mechanic', sub: 'Apply Online (21 Posts)', slug: 'itbp-motor-mechanic-recruitment-2026', color: 'from-blue-600 to-blue-700' },
