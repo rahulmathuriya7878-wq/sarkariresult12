@@ -1,218 +1,436 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
-  Calculator, 
-  Image as ImageIcon, 
-  Bookmark, 
-  Sparkles, 
-  Globe, 
   Search,
-  BellRing,
-  MessageCircle
+  ChevronDown,
+  ChevronUp,
+  Menu,
+  X
 } from 'lucide-react';
 import { PostCategory } from '../types/job';
 
 interface HeaderProps {
   activeCategory: PostCategory | 'all';
   onCategoryChange: (category: PostCategory | 'all') => void;
-  bookmarkCount: number;
-  onOpenBookmarks: () => void;
-  onOpenAgeCalculator: () => void;
-  onOpenPhotoResizer: () => void;
-  onOpenJobFinder: () => void;
+  bookmarkCount?: number;
+  onOpenBookmarks?: () => void;
+  onOpenAgeCalculator?: () => void;
+  onOpenPhotoResizer?: () => void;
+  onOpenJobFinder?: () => void;
   onOpenJobAlerts?: () => void;
+  onOpenAdmin?: () => void;
   isHindi: boolean;
-  onToggleHindi: () => void;
-  onSearchFocus: () => void;
+  onToggleHindi?: () => void;
+  onSearchFocus?: () => void;
   isClassicTheme?: boolean;
   onToggleTheme?: () => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  onOpenPostBySlug: (slug: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeCategory,
   onCategoryChange,
-  bookmarkCount,
-  onOpenBookmarks,
-  onOpenAgeCalculator,
-  onOpenPhotoResizer,
-  onOpenJobFinder,
-  onOpenJobAlerts,
-  isHindi,
-  onToggleHindi,
-  onSearchFocus,
-  isClassicTheme = true,
-  onToggleTheme
+  isHindi: _isHindi,
+  searchQuery,
+  onSearchChange,
+  onOpenPostBySlug
 }) => {
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  // Close More dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+        setIsMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleNavClick = (cat: PostCategory | 'all') => {
+    onCategoryChange(cat);
+    setIsMoreOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleStaticDocClick = (slug: string) => {
+    onOpenPostBySlug(slug);
+    setIsMoreOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
+  const trendingTags = [
+    { label: 'Supreme Court Form 2026', slug: 'supreme-court-court-master-online-form-2026' },
+    { label: 'UP Primary Teacher', slug: 'upessc-up-primary-teacher-super-tet-2026' },
+    { label: 'BPSC TRE 4.0', slug: 'bpsc-school-teacher-tre-4-online-form-2026' },
+    { label: 'Railway NTPC', slug: 'rrb-ntpc-12th-level-recruitment-2026' },
+    { label: 'UP Police Constable', slug: 'up-police-constable-final-result-2026' },
+    { label: 'BAR AIBE 2026', slug: 'all-india-bar-aibe-xix-2026-online-form' },
+  ];
+
   return (
-    <header className="w-full">
-      {/* 1. Iconic Sarkari Result Top Banner (Normal Clean Look) */}
-      <div className="bg-[#ab1616] text-white py-3 sm:py-4 px-3 text-center border-b border-red-900 shadow-xs">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="w-10 hidden sm:block"></div>
-          <button
-            onClick={() => onCategoryChange('all')}
-            className="inline-flex items-center justify-center gap-2.5 text-center cursor-pointer group mx-auto"
+    <header className="w-full bg-white shadow-xs">
+      {/* 1. Authentic Sarkari Result Crimson Masthead (Exact Website Design) */}
+      <div className="bg-[#8b0000] text-white py-2.5 sm:py-3.5 px-3 sm:px-6 border-b border-red-950">
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-2">
+          
+          {/* Brand Logo & Title with Seal */}
+          <div 
+            onClick={() => handleNavClick('all')}
+            className="cursor-pointer group flex items-center justify-center gap-3 select-none"
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-400 text-slate-900 font-black flex items-center justify-center shadow-md border-2 border-amber-300 text-xl sm:text-2xl shrink-0">
-              ★
+            {/* Official Logo Image */}
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-yellow-400 shadow-md shrink-0 bg-white flex items-center justify-center">
+              <img 
+                src="/assets/aistudio/IMG_20261020_152004_993_1b3313f3.jpg" 
+                alt="Sarkari Result Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
-            <div className="text-left">
-              <h1 className="text-2xl sm:text-4xl font-black tracking-tight uppercase text-white font-sans drop-shadow-xs group-hover:opacity-95 leading-none">
-                SARKARI RESULT
-              </h1>
+
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                <span className="text-[#facc15] font-serif text-2xl sm:text-3xl leading-none">★</span>
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase text-white font-serif drop-shadow-sm leading-none">
+                  SARKARI RESULT
+                </h1>
+                <span className="text-[#facc15] font-serif text-2xl sm:text-3xl leading-none">★</span>
+              </div>
             </div>
-          </button>
-
-          <div className="flex items-center gap-2">
-            <a
-              href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 px-2.5 sm:px-3 py-1.5 rounded text-xs font-black flex items-center gap-1.5 transition-all shadow-sm cursor-pointer shrink-0 border border-emerald-300 active:scale-95"
-              title="Join Official WhatsApp Channel"
-            >
-              <MessageCircle className="w-4 h-4 fill-slate-950 text-emerald-100" />
-              <span className="hidden sm:inline">Join</span>
-              <span>WhatsApp</span>
-            </a>
-
-            <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: 'Sarkari Result',
-                    text: 'Check Latest Govt Jobs, Admit Card and Results on Sarkari Result',
-                    url: window.location.href,
-                  }).catch(() => {});
-                } else {
-                  navigator.clipboard.writeText(window.location.href).then(() => {
-                      alert('Portal link copied to clipboard!');
-                  }).catch(err => console.error('Failed to copy: ', err));
-                }
-              }}
-              className="bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 border border-white/20"
-              title="Share Portal"
-            >
-              <span>Share 🔗</span>
-            </button>
           </div>
         </div>
       </div>
 
-      {/* 2. Black Navigation Ribbon (Sarkari Result menu) */}
-      <div className="bg-black text-white border-b-2 border-slate-700 sticky top-0 z-30 shadow-md">
-        <div className="max-w-7xl mx-auto px-2 flex items-center justify-between">
-          <nav className="flex items-center overflow-x-auto no-scrollbar py-0.5 text-xs font-bold divide-x divide-neutral-800">
+      {/* 2. Responsive Navigation Bar:
+          - Mobile (md:hidden): Black bar with [✕/☰ Menu] on left and [🔍] on right + Vertical black drawer (Screenshot_20261020-085212.Chrome.png)
+          - Desktop (hidden md:block): Classic Sarkari Result horizontal black bar
+      */}
+      <div className="bg-black text-white border-b-2 border-red-900 sticky top-0 z-40 shadow-md">
+        {/* Mobile Header Bar (md:hidden) */}
+        <div className="md:hidden flex items-center justify-between px-3 py-2">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="flex items-center gap-2 text-white font-extrabold text-sm sm:text-base cursor-pointer py-1 px-2 hover:bg-neutral-800 rounded-xs select-none transition-colors"
+          >
+            {isMobileMenuOpen ? (
+              <>
+                <X className="w-5 h-5 text-white" />
+                <span>Menu</span>
+              </>
+            ) : (
+              <>
+                <Menu className="w-5 h-5 text-white" />
+                <span>Menu</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={() => setIsSearchVisible(!isSearchVisible)}
+            className="p-1.5 text-white hover:bg-neutral-800 rounded-xs cursor-pointer select-none transition-colors"
+            title="Search Sarkari Result"
+          >
+            <Search className="w-5 h-5 text-white" />
+          </button>
+        </div>
+
+        {/* Mobile Vertical Drawer (Exact Match to Screenshot_20261020-085212.Chrome.png) */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-black text-white border-t border-neutral-800 pb-2 animate-in fade-in slide-in-from-top-1 duration-150">
+            <div className="flex flex-col py-1">
+              <button
+                onClick={() => handleNavClick('all')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'all' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Home
+              </button>
+
+              <button
+                onClick={() => handleNavClick('latest_jobs')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'latest_jobs' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Latest Job
+              </button>
+
+              <button
+                onClick={() => handleNavClick('admit_card')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'admit_card' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Admit Card
+              </button>
+
+              <button
+                onClick={() => handleNavClick('result')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'result' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Results
+              </button>
+
+              <button
+                onClick={() => handleNavClick('admission')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'admission' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Admission
+              </button>
+
+
+
+              <button
+                onClick={() => handleNavClick('syllabus')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'syllabus' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Syllabus
+              </button>
+
+              {/* Mobile More Accordion */}
+              <div>
+                <button
+                  onClick={() => setIsMobileMoreOpen(!isMobileMoreOpen)}
+                  className="w-full flex items-center justify-between px-5 py-3 text-[16px] font-bold text-white hover:bg-neutral-900 tracking-wide transition-colors cursor-pointer"
+                >
+                  <span>More</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileMoreOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isMobileMoreOpen && (
+                  <div className="bg-neutral-950 pl-4 border-l-2 border-red-700 my-1 divide-y divide-neutral-900 text-[15px]">
+                    <button
+                      onClick={() => handleNavClick('answer_key')}
+                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                    >
+                      🔑 Answer Key
+                    </button>
+                    <button
+                      onClick={() => handleNavClick('certificate_verification')}
+                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                    >
+                      📜 Certificate Verification
+                    </button>
+                    <button
+                      onClick={() => handleNavClick('important')}
+                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                    >
+                      📌 Important Links
+                    </button>
+                    <button
+                      onClick={() => handleStaticDocClick('disclaimer')}
+                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                    >
+                      ⚠️ Disclaimer
+                    </button>
+                    <button
+                      onClick={() => handleStaticDocClick('rules-and-regulations')}
+                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                    >
+                      📋 Rules & Regulations
+                    </button>
+                    <button
+                      onClick={() => handleStaticDocClick('contact-us')}
+                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                    >
+                      📞 Contact Us
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Desktop Navigation Bar (hidden md:flex) */}
+        <div className="hidden md:flex max-w-7xl mx-auto items-center justify-between">
+          <nav className="flex items-stretch flex-1 overflow-x-auto no-scrollbar divide-x divide-neutral-700 text-xs sm:text-sm font-black tracking-wide uppercase">
             <button
-              onClick={() => onCategoryChange('all')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'all' ? 'bg-slate-800 text-white' : 'text-neutral-200'
+              onClick={() => handleNavClick('all')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+                activeCategory === 'all' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
               Home
             </button>
+
             <button
-              onClick={() => onCategoryChange('latest_jobs')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'latest_jobs' ? 'bg-slate-800 text-white' : 'text-neutral-200'
+              onClick={() => handleNavClick('latest_jobs')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+                activeCategory === 'latest_jobs' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
-              Latest Jobs
+              Latest Job
             </button>
+
             <button
-              onClick={() => onCategoryChange('result')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'result' ? 'bg-slate-800 text-white' : 'text-neutral-200'
-              }`}
-            >
-              Results
-            </button>
-            <button
-              onClick={() => onCategoryChange('admit_card')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'admit_card' ? 'bg-slate-800 text-white' : 'text-neutral-200'
+              onClick={() => handleNavClick('admit_card')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+                activeCategory === 'admit_card' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
               Admit Card
             </button>
+
             <button
-              onClick={() => onCategoryChange('answer_key')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'answer_key' ? 'bg-slate-800 text-white' : 'text-neutral-200'
+              onClick={() => handleNavClick('result')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+                activeCategory === 'result' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
-              Answer Key
+              Results
             </button>
+
             <button
-              onClick={() => onCategoryChange('syllabus')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'syllabus' ? 'bg-slate-800 text-white' : 'text-neutral-200'
-              }`}
-            >
-              Syllabus
-            </button>
-            <button
-              onClick={() => onCategoryChange('admission')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'admission' ? 'bg-slate-800 text-white' : 'text-neutral-200'
+              onClick={() => handleNavClick('admission')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+                activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
               Admission
             </button>
+
+
+
             <button
-              onClick={() => onCategoryChange('certificate_verification')}
-              className={`px-3 py-2 whitespace-nowrap hover:bg-slate-800 transition-colors uppercase cursor-pointer ${
-                activeCategory === 'certificate_verification' ? 'bg-slate-800 text-white' : 'text-neutral-200'
+              onClick={() => handleNavClick('syllabus')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+                activeCategory === 'syllabus' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
-              Certificates
+              Syllabus
             </button>
+
+            {/* Desktop More Button */}
+            <div className="relative shrink-0" ref={moreRef}>
+              <button
+                onClick={() => setIsMoreOpen(!isMoreOpen)}
+                className="bg-white text-black font-extrabold px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-1 hover:bg-neutral-200 transition-colors cursor-pointer h-full text-xs sm:text-sm"
+              >
+                <span>More</span>
+                {isMoreOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </button>
+
+              {isMoreOpen && (
+                <div className="absolute left-0 sm:right-0 sm:left-auto top-full mt-0 w-52 bg-white text-slate-900 shadow-xl border-2 border-red-800 z-50 py-1 divide-y divide-slate-100 animate-fade-in font-bold text-xs normal-case">
+                  <button
+                    onClick={() => handleNavClick('answer_key')}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <span>🔑 Answer Key</span>
+                  </button>
+                  <button
+                    onClick={() => handleNavClick('certificate_verification')}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <span>📜 Certificate Verification</span>
+                  </button>
+                  <button
+                    onClick={() => handleNavClick('important')}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between"
+                  >
+                    <span>📌 Important Links</span>
+                  </button>
+                  <button
+                    onClick={() => handleStaticDocClick('disclaimer')}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-amber-800"
+                  >
+                    <span>⚠️ Disclaimer</span>
+                  </button>
+                  <button
+                    onClick={() => handleStaticDocClick('rules-and-regulations')}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-blue-800"
+                  >
+                    <span>📋 Rules & Regulations</span>
+                  </button>
+                  <button
+                    onClick={() => handleStaticDocClick('contact-us')}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-emerald-800"
+                  >
+                    <span>📞 Contact Us</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </nav>
 
-          {/* Quick utility icons on right */}
-          <div className="flex items-center gap-1 shrink-0 pl-2">
-            <button
-              onClick={onSearchFocus}
-              className="p-1.5 text-neutral-300 hover:text-white hover:bg-neutral-800 rounded transition-colors cursor-pointer"
-              title="Search Vacancies"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onOpenAgeCalculator}
-              className="hidden md:flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-neutral-200 hover:text-white hover:bg-neutral-800 rounded transition-colors cursor-pointer"
-              title="Age Calculator"
-            >
-              <Calculator className="w-3.5 h-3.5 text-amber-300" />
-              <span>Age Calc</span>
-            </button>
-            <button
-              onClick={onOpenPhotoResizer}
-              className="hidden md:flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-neutral-200 hover:text-white hover:bg-neutral-800 rounded transition-colors cursor-pointer"
-              title="Photo Resizer"
-            >
-              <ImageIcon className="w-3.5 h-3.5 text-amber-300" />
-              <span>Photo Tool</span>
-            </button>
-            <button
-              onClick={onOpenJobAlerts}
-              className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold bg-amber-400 hover:bg-amber-300 text-slate-900 rounded transition-colors cursor-pointer shadow-2xs"
-              title="Get Job Alerts"
-            >
-              <BellRing className="w-3.5 h-3.5 text-slate-900 animate-pulse" />
-              <span className="hidden sm:inline">Job Alerts</span>
-            </button>
-
-            <button
-              onClick={onOpenBookmarks}
-              className="flex items-center gap-1 px-2 py-1 text-[11px] font-bold bg-[#ab1616] text-white rounded transition-colors cursor-pointer"
-              title="Saved Jobs"
-            >
-              <Bookmark className="w-3.5 h-3.5" />
-              <span>{bookmarkCount}</span>
-            </button>
-          </div>
+          {/* Desktop Search Icon */}
+          <button
+            onClick={() => setIsSearchVisible(!isSearchVisible)}
+            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-black hover:bg-neutral-800 text-white transition-colors cursor-pointer flex items-center justify-center shrink-0 border-l border-neutral-700"
+            title="Search Sarkari Result"
+          >
+            <Search className="w-4 h-4 text-white" />
+          </button>
         </div>
       </div>
+
+      {/* 3. Search Bar Dropdown when search icon is clicked */}
+      {isSearchVisible && (
+        <div className="bg-slate-100 border-b-2 border-red-800 py-2.5 px-3 sm:px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  autoFocus
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  placeholder="Search here for any Result, Admit Card, Latest Job, Syllabus..."
+                  className="w-full pl-9 pr-20 py-2 text-sm bg-white border-2 border-red-800 rounded-xs focus:outline-hidden focus:ring-2 focus:ring-red-600 font-medium text-slate-900"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => onSearchChange('')}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold bg-slate-200 px-2 py-0.5 rounded cursor-pointer"
+                  >
+                    Clear ✕
+                  </button>
+                )}
+              </div>
+
+              <button
+                onClick={() => {
+                  if (!searchQuery.trim()) {
+                    onSearchChange('Supreme Court');
+                  }
+                }}
+                className="bg-[#ab1616] hover:bg-red-800 text-white px-5 py-2 rounded-xs text-xs font-black uppercase tracking-wide cursor-pointer transition-colors shrink-0"
+              >
+                Search Sarkari
+              </button>
+            </div>
+
+            {/* Quick Trending Keyword Pills */}
+            <div className="flex flex-wrap items-center gap-1.5 mt-2 text-[11px] sm:text-xs">
+              <span className="font-extrabold text-[#ab1616] shrink-0">Trending:</span>
+              {trendingTags.map((tag) => (
+                <button
+                  key={tag.slug}
+                  onClick={() => onSearchChange(tag.label)}
+                  className="text-blue-800 hover:text-[#ab1616] hover:underline cursor-pointer font-bold"
+                >
+                  {tag.label} |
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

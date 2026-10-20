@@ -1,75 +1,58 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { SarkariPost } from '../types/job';
-import { mockSarkariPosts } from '../data/mockJobs';
 
 interface QuickHighlightsGridProps {
   onSelectHighlight: (slug: string) => void;
   posts?: SarkariPost[];
 }
 
-const GRADIENT_PALETTE = [
-  'from-[#ab1616] to-red-800',
-  'from-blue-600 to-blue-800',
-  'from-amber-600 to-amber-700',
-  'from-emerald-600 to-emerald-800',
-  'from-purple-600 to-purple-800',
-  'from-teal-600 to-teal-800',
-  'from-indigo-600 to-indigo-800',
-  'from-orange-600 to-orange-700'
+const HIGHLIGHT_COLORS = [
+  { bgColor: 'bg-[#828800]', borderColor: 'border-[#6c7100]' },
+  { bgColor: 'bg-[#1432c7]', borderColor: 'border-[#0f269a]' },
+  { bgColor: 'bg-[#f45700]', borderColor: 'border-[#c94800]' },
+  { bgColor: 'bg-[#850000]', borderColor: 'border-[#660000]' },
+  { bgColor: 'bg-[#ea1b0d]', borderColor: 'border-[#bd1408]' },
+  { bgColor: 'bg-[#007b22]', borderColor: 'border-[#005f1a]' },
+  { bgColor: 'bg-[#cf2489]', borderColor: 'border-[#aa1c6f]' },
+  { bgColor: 'bg-[#2185d0]', borderColor: 'border-[#196aa7]' },
 ];
 
 export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({ 
   onSelectHighlight,
-  posts = mockSarkariPosts 
+  posts = []
 }) => {
-  // Dynamically select latest added posts
-  const dynamicHighlights = useMemo(() => {
-    // Filter posts marked as new or hot, maintaining newest order
-    const latestItems = [...posts]
-      .filter((p) => p.isNew || p.isHot)
-      .slice(0, 6);
+  // Dynamically select top 8 latest added posts from state
+  const highlightItems = React.useMemo(() => {
+    if (!posts || posts.length === 0) return [];
 
-    const selected = latestItems.length >= 6 ? latestItems : posts.slice(0, 6);
-
-    return selected.map((post, idx) => {
-      let subText = 'Apply Online';
-      if (post.category === 'admit_card') {
-        subText = 'Download Admit Card';
-      } else if (post.category === 'result') {
-        subText = 'Check Result / Score';
-      } else if (post.category === 'answer_key') {
-        subText = 'Check Answer Key';
-      } else if (post.category === 'admission') {
-        subText = 'Admission Open 2026';
-      } else if (post.totalVacancies) {
-        subText = `${post.totalVacancies} Posts Online Form`;
-      }
-
+    // Take the top 8 posts directly (most recently added posts are at index 0..7)
+    return posts.slice(0, 8).map((post, idx) => {
+      const colorScheme = HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length];
       return {
         id: post.id,
         slug: post.slug,
         title: post.shortTitle || post.title,
-        sub: subText,
-        color: GRADIENT_PALETTE[idx % GRADIENT_PALETTE.length],
+        bgColor: colorScheme.bgColor,
+        borderColor: colorScheme.borderColor,
         isNew: post.isNew
       };
     });
   }, [posts]);
 
+  if (highlightItems.length === 0) return null;
+
   return (
     <div className="w-full pt-2 pb-3">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-1.5 sm:gap-2">
-        {dynamicHighlights.map((box) => (
+      {/* 2-column grid on mobile, 4-col on tablet, 8-col on desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-1.5 sm:gap-2">
+        {highlightItems.map((box) => (
           <button
             key={box.id}
             onClick={() => onSelectHighlight(box.slug)}
-            className={`bg-gradient-to-r ${box.color} hover:opacity-95 text-white p-2 sm:p-2.5 rounded-xs shadow-xs transition-all text-center flex flex-col items-center justify-center min-h-[56px] border border-black/15 group cursor-pointer active:scale-98 relative overflow-hidden`}
+            className={`${box.bgColor} ${box.borderColor} hover:opacity-95 text-white px-2 py-3 sm:py-3.5 rounded-xs shadow-xs transition-transform active:scale-98 text-center flex items-center justify-center min-h-[58px] sm:min-h-[64px] border cursor-pointer select-none group relative overflow-hidden`}
           >
-            <span className="font-extrabold text-xs sm:text-sm tracking-tight leading-tight line-clamp-1 group-hover:underline">
+            <span className="font-black text-xs sm:text-[13px] leading-tight text-white group-hover:underline">
               {box.title}
-            </span>
-            <span className="text-[10px] text-yellow-200 font-semibold leading-tight mt-0.5 line-clamp-1">
-              {box.sub}
             </span>
           </button>
         ))}

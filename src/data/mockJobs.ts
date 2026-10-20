@@ -1,6 +1,9 @@
 import { SarkariPost } from '../types/job';
+import { screenshotResultPosts, screenshotLatestJobPosts } from './screenshotPosts';
 
 export const mockSarkariPosts: SarkariPost[] = [
+  ...screenshotResultPosts,
+  ...screenshotLatestJobPosts,
   // --- LATEST NOTICES OCTOBER 2026 ---
   {
     id: 'job-nta-ugc-net-2026',
@@ -1639,6 +1642,163 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'Official UPSC Portal', actionText: 'upsc.gov.in', type: 'official' }
     ]
   },
+  {
+    id: 'admit-rrb-ntpc-2026',
+    slug: 'railway-rrb-ntpc-cbt-1-admit-card-2026',
+    title: 'Railway RRB NTPC (Graduate & Under Graduate) CBT-1 Exam City & Admit Card 2026',
+    shortTitle: 'Railway RRB NTPC CBT-1 Admit Card',
+    hindiTitle: 'रेलवे आरआरबी एनटीपीसी सीबीटी-1 प्रवेश पत्र 2026',
+    category: 'admit_card',
+    department: 'Railway',
+    qualifications: ['12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '12 October 2026',
+    isHot: true,
+    isNew: true,
+    examDate: 'November 2026',
+    shortInfo: 'Railway Recruitment Boards (RRBs) have announced the CBT-1 Exam City Intimation and Admit Card download schedule for NTPC (Graduate & Under Graduate Posts) Recruitment 2026.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/01/2026' },
+    importantDates: [
+      { label: 'Exam City Slip Available', value: '10 Days Before Exam', isHighlight: true },
+      { label: 'CBT-1 Admit Card Available', value: '4 Days Before Exam', isHighlight: true },
+      { label: 'CBT-1 Exam Dates', value: 'November 2026' }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Login with Registration Number and Date of Birth on the respective RRB portal.',
+      'Check exam date, shift timing, and examination city details.',
+      'Download and print the e-Call Letter and bring original Aadhaar Card.'
+    ],
+    directLinks: [
+      { label: 'Download RRB NTPC CBT-1 Admit Card', actionText: 'Click Here', type: 'admit_card', isPrimary: true },
+      { label: 'Check Exam City & Shift Details', actionText: 'Click Here', type: 'admit_card' },
+      { label: 'Official Indian Railways Portal', actionText: 'indianrailways.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'admit-bpsc-tre4-2026',
+    slug: 'bpsc-school-teacher-tre-4-admit-card-2026',
+    title: 'BPSC Bihar School Teacher TRE 4.0 Exam Admit Card & Center Code 2026',
+    shortTitle: 'BPSC Teacher TRE 4.0 Admit Card',
+    hindiTitle: 'बीपीएससी स्कूल शिक्षक टीआरई 4.0 प्रवेश पत्र 2026',
+    category: 'admit_card',
+    department: 'Teaching',
+    qualifications: ['Graduate', 'Post Graduate'],
+    state: 'Bihar',
+    postDate: '11 October 2026',
+    isHot: true,
+    isNew: true,
+    examDate: '24-27 October 2026',
+    shortInfo: 'Bihar Public Service Commission (BPSC) has released the e-Admit Card and District Code list for Bihar School Teacher TRE 4.0 Examination for Primary, Middle, Secondary, and Higher Secondary posts.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/08/2026' },
+    importantDates: [
+      { label: 'Admit Card Available', value: '11/10/2026', isHighlight: true },
+      { label: 'Examination Dates', value: '24 to 27 October 2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Login to BPSC Online Dashboard using Username and Password.',
+      'Upload passport size photograph (25 KB) if required before downloading.',
+      'Download admit card containing Roll Number and Exam Center details.'
+    ],
+    directLinks: [
+      { label: 'Download BPSC TRE 4.0 Admit Card', actionText: 'Download', type: 'admit_card', isPrimary: true },
+      { label: 'Check Exam Center Code List', actionText: 'Click Here', type: 'admit_card' },
+      { label: 'BPSC Official Website', actionText: 'bpsc.bih.nic.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'admit-upsssc-pet-2026',
+    slug: 'upsssc-preliminary-eligibility-test-pet-admit-card-2026',
+    title: 'UPSSSC Preliminary Eligibility Test (PET) 2026 Admit Card & District Slip',
+    shortTitle: 'UPSSSC PET Admit Card 2026',
+    hindiTitle: 'यूपीएसएसएससी पीईटी प्रवेश पत्र 2026',
+    category: 'admit_card',
+    department: 'State PSC',
+    qualifications: ['10th Pass', '12th Pass'],
+    state: 'Uttar Pradesh',
+    postDate: '10 October 2026',
+    isHot: true,
+    isNew: true,
+    examDate: '28-29 October 2026',
+    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) has released the admit cards for Preliminary Eligibility Test (PET) 2026 across 75 districts of Uttar Pradesh.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2026' },
+    importantDates: [
+      { label: 'Admit Card Released', value: '10/10/2026', isHighlight: true },
+      { label: 'PET Examination Dates', value: '28 & 29 October 2026' }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Enter Registration Number, Date of Birth, Gender, and Verification Code.',
+      'Click Download Admit Card and verify shift timing and allotted test center.'
+    ],
+    directLinks: [
+      { label: 'Download UPSSSC PET Admit Card (Server 1)', actionText: 'Server 1', type: 'admit_card', isPrimary: true },
+      { label: 'Download UPSSSC PET Admit Card (Server 2)', actionText: 'Server 2', type: 'admit_card' },
+      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'admit-neet-ug-2026',
+    slug: 'nta-neet-ug-admit-card-2026',
+    title: 'NTA National Eligibility Cum Entrance Test NEET (UG) 2026 Admit Card & Undertaking',
+    shortTitle: 'NTA NEET UG Admit Card',
+    hindiTitle: 'एनटीए नीट यूजी प्रवेश पत्र 2026',
+    category: 'admit_card',
+    department: 'Medical',
+    qualifications: ['12th Pass'],
+    state: 'All India',
+    postDate: '09 October 2026',
+    isHot: false,
+    isNew: true,
+    examDate: 'Sunday Exam Shift',
+    shortInfo: 'National Testing Agency has uploaded the hall tickets along with self-declaration undertaking for National Eligibility cum Entrance Test (UG) 2026.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '31/12/2026' },
+    importantDates: [
+      { label: 'Admit Card Live Date', value: '09/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Enter Application Number and Date of Birth with Security PIN to access admit card.'
+    ],
+    directLinks: [
+      { label: 'Download NEET UG Admit Card', actionText: 'Click Here', type: 'admit_card', isPrimary: true },
+      { label: 'Official NEET Portal', actionText: 'exams.nta.ac.in/NEET', type: 'official' }
+    ]
+  },
+  {
+    id: 'admit-ibps-po-2026',
+    slug: 'ibps-po-mt-xiv-prelims-admit-card-2026',
+    title: 'IBPS Probationary Officers PO / MT XIV Preliminary Online Exam Call Letter 2026',
+    shortTitle: 'IBPS PO Prelims Call Letter',
+    hindiTitle: 'आईबीपीएस पीओ प्रीलिम्स कॉल लेटर 2026',
+    category: 'admit_card',
+    department: 'Banking',
+    qualifications: ['Graduate'],
+    state: 'All India',
+    postDate: '08 October 2026',
+    isHot: false,
+    isNew: false,
+    examDate: '19-20 October 2026',
+    shortInfo: 'Institute of Banking Personnel Selection (IBPS) has activated the online exam call letter download link for CRP PO/MT-XIV Preliminary Examination.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/08/2026' },
+    importantDates: [
+      { label: 'Call Letter Live', value: '08/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Enter Registration / Roll Number and Password / DOB to print prelims call letter.'
+    ],
+    directLinks: [
+      { label: 'Download IBPS PO Prelims Call Letter', actionText: 'Download', type: 'admit_card', isPrimary: true },
+      { label: 'IBPS Official Portal', actionText: 'ibps.in', type: 'official' }
+    ]
+  },
 
   // --- RESULTS ---
   {
@@ -1846,6 +2006,151 @@ export const mockSarkariPosts: SarkariPost[] = [
     howToApplySteps: ['Download subject-wise final key master sheet.'],
     directLinks: [
       { label: 'Download All Subjects Final Answer Key (PDF)', actionText: 'Click Here', type: 'answer_key', isPrimary: true }
+    ]
+  },
+  {
+    id: 'ak-bpsc-tre-2026',
+    slug: 'bpsc-school-teacher-tre-final-answer-key-2026',
+    title: 'BPSC Bihar School Teacher TRE Final Answer Key & Question Booklet (All Subjects)',
+    shortTitle: 'BPSC Teacher TRE Final Key',
+    hindiTitle: 'बीपीएससी स्कूल शिक्षक टीआरई फाइनल उत्तर कुंजी',
+    category: 'answer_key',
+    department: 'Teaching',
+    qualifications: ['Graduate', 'Post Graduate'],
+    state: 'Bihar',
+    postDate: '12 October 2026',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Bihar Public Service Commission (BPSC) has published the Second Provisional & Final Answer Key for School Teacher Competitive Examination for Classes 1-5, 6-8, 9-10 and 11-12.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/08/2026' },
+    importantDates: [
+      { label: 'Final Answer Key Available', value: '12/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Click on the respective subject link below to download final answer booklet.'
+    ],
+    directLinks: [
+      { label: 'Download Primary (Class 1-5) Final Key', actionText: 'Click Here', type: 'answer_key', isPrimary: true },
+      { label: 'Download Middle (Class 6-8) Final Key', actionText: 'Click Here', type: 'answer_key' },
+      { label: 'Download Secondary / Higher Secondary Key', actionText: 'Click Here', type: 'answer_key' },
+      { label: 'BPSC Official Website', actionText: 'bpsc.bih.nic.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'ak-upsssc-pet-2026',
+    slug: 'upsssc-pet-revised-official-answer-key-2026',
+    title: 'UPSSSC Preliminary Eligibility Test (PET) 2026 Revised Official Answer Key & Master Booklet',
+    shortTitle: 'UPSSSC PET Revised Answer Key',
+    hindiTitle: 'यूपीएसएसएससी पीईटी संशोधित उत्तर कुंजी 2026',
+    category: 'answer_key',
+    department: 'State PSC',
+    qualifications: ['10th Pass', '12th Pass'],
+    state: 'Uttar Pradesh',
+    postDate: '11 October 2026',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission has released the Shift 1 and Shift 2 Revised Final Answer Key for UPSSSC PET 2026 Examination.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2026' },
+    importantDates: [
+      { label: 'Revised Key Released', value: '11/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Compare your carbon copy OMR response sheet with the revised master answer sheet.'
+    ],
+    directLinks: [
+      { label: 'Download Shift 1 Revised Answer Key (PDF)', actionText: 'Shift 1', type: 'answer_key', isPrimary: true },
+      { label: 'Download Shift 2 Revised Answer Key (PDF)', actionText: 'Shift 2', type: 'answer_key' },
+      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'ak-ssc-cgl-tier1-2026',
+    slug: 'ssc-cgl-tier-i-tentative-answer-key-2026',
+    title: 'SSC CGL Tier-I Examination 2026 Tentative Answer Key & Response Sheet with Objection',
+    shortTitle: 'SSC CGL Tier-I Answer Key',
+    hindiTitle: 'एसएससी सीजीएल टियर-1 उत्तर कुंजी 2026',
+    category: 'answer_key',
+    department: 'SSC',
+    qualifications: ['Graduate'],
+    state: 'All India',
+    postDate: '10 October 2026',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Staff Selection Commission (SSC) has activated the candidate login to challenge Tentative Answer Keys and verify responses for Combined Graduate Level Examination (Tier-I) 2026.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/08/2026' },
+    importantDates: [
+      { label: 'Answer Key Live', value: '10/10/2026', isHighlight: true },
+      { label: 'Objection Last Date', value: '15/10/2026 (5:00 PM)' }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Login with SSC Roll Number and Exam Password to see your marked responses.'
+    ],
+    directLinks: [
+      { label: 'Download Answer Key & Response Sheet', actionText: 'Click Here', type: 'answer_key', isPrimary: true },
+      { label: 'Raise Representation / Challenge', actionText: 'Click Here', type: 'answer_key' },
+      { label: 'Official SSC Portal', actionText: 'ssc.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'ak-railway-alp-2026',
+    slug: 'railway-rrb-alp-cbt-1-answer-key-2026',
+    title: 'Railway RRB ALP (Assistant Loco Pilot) CBT-1 Answer Key & Master Question Paper 2026',
+    shortTitle: 'Railway RRB ALP Answer Key',
+    hindiTitle: 'रेलवे आरआरबी एएलपी उत्तर कुंजी 2026',
+    category: 'answer_key',
+    department: 'Railway',
+    qualifications: ['10th Pass', 'Diploma / ITI'],
+    state: 'All India',
+    postDate: '09 October 2026',
+    isHot: false,
+    isNew: true,
+    shortInfo: 'Railway Recruitment Boards (RRBs) have uploaded the viewing of question paper, responses and keys with raising of objections for Assistant Loco Pilot (CEN 01/2024 / 2026).',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2026' },
+    importantDates: [
+      { label: 'Question Paper & Key Live', value: '09/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Login using Registration Number and Date of Birth on the RRB candidate portal.'
+    ],
+    directLinks: [
+      { label: 'Download RRB ALP Response Sheet & Key', actionText: 'Click Here', type: 'answer_key', isPrimary: true },
+      { label: 'RRB Official Portal', actionText: 'indianrailways.gov.in', type: 'official' }
+    ]
+  },
+  {
+    id: 'ak-ctet-2026',
+    slug: 'ctet-official-provisional-answer-key-2026',
+    title: 'Central Teacher Eligibility Test CTET 2026 Official Provisional Answer Key (Paper I & II)',
+    shortTitle: 'CTET Official Answer Key 2026',
+    hindiTitle: 'सीटेट आधिकारिक उत्तर कुंजी 2026',
+    category: 'answer_key',
+    department: 'Teaching',
+    qualifications: ['12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '08 October 2026',
+    isHot: false,
+    isNew: false,
+    shortInfo: 'Central Board of Secondary Education (CBSE) has displayed OMR Answer Sheets and official Answer Keys for Central Teacher Eligibility Test (CTET).',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/01/2026' },
+    importantDates: [
+      { label: 'Answer Key Live', value: '08/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [],
+    howToApplySteps: [
+      'Enter Roll Number and Date of Birth to download scanned OMR copy and official key.'
+    ],
+    directLinks: [
+      { label: 'Download CTET Paper 1 & 2 Answer Key', actionText: 'Click Here', type: 'answer_key', isPrimary: true },
+      { label: 'Official CTET Portal', actionText: 'ctet.nic.in', type: 'official' }
     ]
   },
 
@@ -2098,137 +2403,473 @@ export const mockSarkariPosts: SarkariPost[] = [
     ]
   },
 
-  // --- CERTIFICATE VERIFICATION & IMPORTANT ---
+  // --- CERTIFICATE VERIFICATION (10 LATEST POSTS) ---
   {
-    id: 'cert-1',
+    id: 'cert-pan-card',
     slug: 'pan-card-apply-online-instant-e-pan',
-    title: 'Apply New PAN Card Online / Instant e-PAN / Correction in Existing PAN Card',
+    title: 'Apply New PAN Card Online / Instant e-PAN / Correction & Update in Existing PAN Card',
     shortTitle: 'PAN Card Online Apply & Correction',
-    hindiTitle: 'पैन कार्ड ऑनलाइन आवेदन व सुधार',
+    hindiTitle: 'नया पैन कार्ड ऑनलाइन आवेदन, सुधार व इंस्टेंट ई-पैन',
     category: 'certificate_verification',
     department: 'Other',
     qualifications: ['10th Pass', '12th Pass', 'Graduate'],
     state: 'All India',
-    postDate: '10 October 2026',
+    postDate: '18 October 2026',
+    notificationNumber: 'INCOMETAX/PAN/2026/01',
+    salary: 'Official Identity Document Service',
     isHot: true,
-    isNew: false,
-    shortInfo: 'UTIITSL / NSDL (Protean) e-Governance PAN card application services. Apply new PAN Card (Form 49A), change or correction in PAN details, link PAN with Aadhaar card.',
+    isNew: true,
+    shortInfo: 'Income Tax Department, Government of India NSDL Protean and UTIITSL PAN portal. Candidates can apply for New PAN Card (Form 49A for Indian Citizens), Correction / Name / DOB Change in existing PAN card, or download instant free e-PAN card using Aadhaar e-KYC.',
     applicationFee: [
-      { category: 'Indian Citizen (Physical Card dispatched to Indian Address)', amount: '₹ 107/-' },
-      { category: 'Instant e-PAN (e-Filing Income Tax Portal)', amount: '₹ 0/- Free' }
+      { category: 'Physical PAN Card (Despatched to Indian Address)', amount: '₹ 107/-' },
+      { category: 'Instant e-PAN (Income Tax e-Filing Portal)', amount: '₹ 0/- (Free)' }
     ],
-    ageLimit: { asOnDate: '01/01/2026' },
-    importantDates: [{ label: 'Service Status', value: 'Available 24x7', isHighlight: true }],
-    vacancyBreakdown: [],
+    feePaymentMode: 'Pay via Net Banking, Debit Card, Credit Card or UPI',
+    ageLimit: { asOnDate: '01/01/2026', notes: 'No age limit. Minor PAN card can be applied through Parent/Guardian.' },
+    importantDates: [
+      { label: 'Service Status', value: 'Active 24x7', isHighlight: true },
+      { label: 'Aadhaar Linkage Deadline', value: 'Mandatory for All PAN Holders', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: '1. New PAN Card (Form 49A / Instant e-PAN)',
+        totalPosts: 'Online Portal',
+        eligibility: '• Valid Aadhaar Card with linked active mobile number for Instant OTP e-KYC.'
+      },
+      {
+        postName: '2. PAN Card Correction / Name & DOB Change',
+        totalPosts: 'Online Portal',
+        eligibility: '• Existing PAN Number, Aadhaar Card, Proof of Identity, Address & Date of Birth.'
+      }
+    ],
     howToApplySteps: [
-      'For Instant free e-PAN, visit Income Tax e-Filing portal with Aadhaar registered mobile number.',
-      'For Physical PAN Card, submit Form 49A on NSDL Protean or UTIITSL portal with Aadhaar eKYC.'
+      'For Instant Free e-PAN: Visit Income Tax e-Filing Portal -> Instant e-PAN -> Enter 12 Digit Aadhaar Number -> Submit OTP.',
+      'For Physical PAN Card: Visit NSDL Protean or UTIITSL website -> Fill Form 49A -> Upload Photo, Signature & Aadhaar -> Pay ₹ 107 fee.'
     ],
     directLinks: [
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Link PAN with Aadhaar Card', actionText: 'Check Status', type: 'official' }
+      { label: 'Apply Instant Free e-PAN (Income Tax Portal)', actionText: 'Apply Free', type: 'apply', url: 'https://www.incometax.gov.in/iec/foportal/', isPrimary: true },
+      { label: 'Apply New PAN Card (NSDL Protean Portal)', actionText: 'NSDL Portal', type: 'apply', url: 'https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html' },
+      { label: 'Apply PAN Card / Correction (UTIITSL Portal)', actionText: 'UTIITSL Portal', type: 'apply', url: 'https://www.pan.utiitsl.com/' },
+      { label: 'Link PAN Card with Aadhaar Card', actionText: 'Check Status', type: 'official', url: 'https://eportal.incometax.gov.in/iec/foservices/#/pre-login/link-aadhaar-status' },
+      { label: 'Official Income Tax e-Filing Portal', actionText: 'incometax.gov.in', type: 'official', url: 'https://www.incometax.gov.in' }
     ]
   },
   {
-    id: 'cert-2',
+    id: 'cert-aadhaar-card',
     slug: 'uidai-aadhaar-card-download-update-online',
-    title: 'UIDAI Aadhaar Card Online Services: Download e-Aadhaar, PVC Card Order & Address Update',
+    title: 'UIDAI Aadhaar Card Online Services: Download e-Aadhaar, Order PVC Smart Card & Address Update',
     shortTitle: 'Aadhaar Card Download & Update',
-    hindiTitle: 'आधार कार्ड डाउनलोड व पता अपडेट',
+    hindiTitle: 'आधार कार्ड ऑनलाइन डाउनलोड, पीवीसी कार्ड व पता अपडेट',
+    category: 'certificate_verification',
+    department: 'Other',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '17 October 2026',
+    notificationNumber: 'UIDAI/MYAADHAAR/2026/02',
+    salary: 'Official Identity Document Service',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Unique Identification Authority of India (UIDAI) MyAadhaar Portal services. Citizens can download digital e-Aadhaar PDF, order durable plastic PVC Aadhaar card delivered via speed post, update address, verify email/mobile number, or generate Virtual ID (VID).',
+    applicationFee: [
+      { category: 'Download e-Aadhaar PDF', amount: '₹ 0/- (Free)' },
+      { category: 'Order Aadhaar PVC Card (Speed Post Delivery)', amount: '₹ 50/-' }
+    ],
+    feePaymentMode: 'Pay via Net Banking, Debit Card, Credit Card or UPI',
+    ageLimit: { asOnDate: '01/01/2026', notes: 'Available for all Indian residents and infants (Baal Aadhaar).' },
+    importantDates: [
+      { label: 'Service Status', value: 'Active 24x7', isHighlight: true },
+      { label: 'Document Update Facility', value: 'Free Document Re-Validation Active', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: '1. Download Masked / Normal e-Aadhaar',
+        totalPosts: 'Online Portal',
+        eligibility: '• 12 Digit Aadhaar Number or 16 Digit Virtual ID or 28 Digit Enrollment ID.'
+      },
+      {
+        postName: '2. Order Aadhaar PVC Card',
+        totalPosts: 'Online Portal',
+        eligibility: '• Aadhaar Number + ₹50 online payment. Mobile registration optional for ordering PVC card.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit official UIDAI portal: myaadhaar.uidai.gov.in.',
+      'Click Login -> Enter Aadhaar Number and Captcha -> Submit OTP received on registered mobile.',
+      'Select desired service: Download e-Aadhaar, Order PVC Card, Document Update or Address Update.'
+    ],
+    directLinks: [
+      { label: 'Download e-Aadhaar Card PDF', actionText: 'Download', type: 'apply', url: 'https://myaadhaar.uidai.gov.in/genricDownloadAadhaar', isPrimary: true },
+      { label: 'Order Aadhaar PVC Smart Card', actionText: 'Order PVC', type: 'apply', url: 'https://myaadhaar.uidai.gov.in/genricPVC' },
+      { label: 'Check Aadhaar PVC Card Order Status', actionText: 'Check Status', type: 'official', url: 'https://myaadhaar.uidai.gov.in/check-aadhaar-pvc-card-status' },
+      { label: 'Verify Aadhaar Number / Registered Mobile', actionText: 'Verify Mobile', type: 'official', url: 'https://myaadhaar.uidai.gov.in/verify-email-mobile' },
+      { label: 'Official UIDAI Portal', actionText: 'uidai.gov.in', type: 'official', url: 'https://uidai.gov.in/' }
+    ]
+  },
+  {
+    id: 'cert-voter-id',
+    slug: 'voter-id-card-apply-online-form-6',
+    title: 'Election Commission of India: Apply New Voter ID Card (Form 6), Correction (Form 8) & Download Digital e-EPIC',
+    shortTitle: 'Voter ID Apply & Download e-EPIC',
+    hindiTitle: 'वोटर कार्ड नया पंजीकरण (फॉर्म 6) व ई-एपिक डाउनलोड',
+    category: 'certificate_verification',
+    department: 'Other',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '16 October 2026',
+    notificationNumber: 'ECI/VOTERS/2026/03',
+    salary: 'Constitutional Electoral Services',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Election Commission of India (ECI) Voters Service Portal. Any citizen attaining the age of 18 years can apply for new Voter ID card (Form 6), shift constituency / correction in name, age, address (Form 8), track application status, or download digital e-EPIC card PDF.',
+    applicationFee: [
+      { category: 'New Registration (Form 6) / Correction (Form 8)', amount: '₹ 0/- (Free Service)' }
+    ],
+    feePaymentMode: 'No fee required',
+    ageLimit: { asOnDate: '01/01/2026', minAge: 18, notes: 'Citizens turning 18 years as on 1st January, April, July or October can register.' },
+    importantDates: [
+      { label: 'Special Summary Revision 2026', value: 'Active Nationwide', isHighlight: true },
+      { label: 'e-EPIC Download', value: 'Instant PDF Download Active', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'New Voter Registration (Form 6)',
+        totalPosts: 'ECI Portal',
+        eligibility: '• Indian Citizen aged 18+ years with Proof of Age & Resident Proof.'
+      },
+      {
+        postName: 'Download Digital e-EPIC Card',
+        totalPosts: 'ECI Portal',
+        eligibility: '• Valid EPIC Number / Reference ID with unique mobile registered in voter portal.'
+      }
+    ],
+    howToApplySteps: [
+      'Go to ECI official portal: voters.eci.gov.in.',
+      'Sign up with mobile number and complete OTP verification.',
+      'Fill Form 6 for new voter registration or Form 8 for correction/shifting and upload photo & age proof.'
+    ],
+    directLinks: [
+      { label: 'Apply Online New Voter ID Card (Form 6)', actionText: 'Form 6 Apply', type: 'apply', url: 'https://voters.eci.gov.in/', isPrimary: true },
+      { label: 'Download Digital e-EPIC Card PDF', actionText: 'Download e-EPIC', type: 'apply', url: 'https://voters.eci.gov.in/download-epic' },
+      { label: 'Track Voter ID Application Status', actionText: 'Check Status', type: 'official', url: 'https://voters.eci.gov.in/track-application-status' },
+      { label: 'Search Name in Electoral Roll / Voter List', actionText: 'Search Name', type: 'official', url: 'https://electoralsearch.eci.gov.in/' },
+      { label: 'Official Election Commission Portal', actionText: 'eci.gov.in', type: 'official', url: 'https://eci.gov.in/' }
+    ]
+  },
+  {
+    id: 'cert-passport-seva',
+    slug: 'passport-seva-online-application-form-2026',
+    title: 'Passport Seva Portal 2026: Apply Online New Indian Passport, Re-Issue, Tatkaal & Appointment Booking',
+    shortTitle: 'Passport Seva Apply Online',
+    hindiTitle: 'पासपोर्ट सेवा ऑनलाइन आवेदन व अपॉइंटमेंट बुकिंग',
+    category: 'certificate_verification',
+    department: 'Other',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '15 October 2026',
+    notificationNumber: 'MEA/PASSPORT/2026/04',
+    salary: 'Ministry of External Affairs Services',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Ministry of External Affairs (MEA), Government of India Passport Seva Portal. Candidates can register and apply online for Fresh Ordinary Passport (36 Pages / 60 Pages), Re-issue of Passport, Tatkaal Passport, Police Clearance Certificate (PCC), or track application file status.',
+    applicationFee: [
+      { category: 'Fresh Passport 36 Pages (Normal)', amount: '₹ 1500/-' },
+      { category: 'Fresh Passport 60 Pages (Normal)', amount: '₹ 2000/-' },
+      { category: 'Tatkaal Scheme (Additional Fee)', amount: '₹ 2000/- Extra' },
+      { category: 'Police Clearance Certificate (PCC)', amount: '₹ 500/-' }
+    ],
+    feePaymentMode: 'Pay fee online via SBI Payment Gateway / Debit Card / Credit Card / UPI',
+    ageLimit: { asOnDate: '01/01/2026', notes: 'Adult (18+ Years: 10 Years Validity) | Minor (Under 18 Years: 5 Years / Till 18 Years Age Validity).' },
+    importantDates: [
+      { label: 'Online Application Portal', value: 'Active 24x7', isHighlight: true },
+      { label: 'Passport Seva Kendra Appointment', value: 'Book Slot Online', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Fresh Passport / Re-issue / PCC',
+        totalPosts: 'MEA Portal',
+        eligibility: '• Proof of Birth (10th Marksheet / Birth Cert), Proof of Present Address (Aadhaar / Voter ID / Bank Passbook) & ECNR eligibility.'
+      }
+    ],
+    howToApplySteps: [
+      'Register on Passport Seva Portal (passportindia.gov.in) and create User ID.',
+      'Fill Application Form online for Fresh / Re-issue Passport or PCC.',
+      'Pay fee and book appointment slot at nearest Passport Seva Kendra (PSK) / Post Office Passport Seva Kendra (POPSK).'
+    ],
+    directLinks: [
+      { label: 'Apply Online (New User Registration)', actionText: 'Registration', type: 'apply', url: 'https://www.passportindia.gov.in/AppOnlineProject/user/RegistrationBaseAction', isPrimary: true },
+      { label: 'Existing User Login & Application Form', actionText: 'Login', type: 'apply', url: 'https://www.passportindia.gov.in/AppOnlineProject/welcomeLink' },
+      { label: 'Track Passport Application Status', actionText: 'Track Status', type: 'official', url: 'https://www.passportindia.gov.in/AppOnlineProject/statusTracker/trackStatusInp' },
+      { label: 'Check PSK Appointment Availability', actionText: 'Check Slots', type: 'official', url: 'https://www.passportindia.gov.in/AppOnlineProject/online/appointmentPayment' },
+      { label: 'Official Passport Seva Portal', actionText: 'passportindia.gov.in', type: 'official', url: 'https://www.passportindia.gov.in' }
+    ]
+  },
+  {
+    id: 'cert-driving-license',
+    slug: 'parivahan-driving-license-online-apply-sewa',
+    title: 'Ministry of Road Transport Parivahan Sewa: Apply Learner License (LL), Permanent Driving License (DL) & RC Status',
+    shortTitle: 'Driving License (DL) Online Apply',
+    hindiTitle: 'ड्राइविंग लाइसेंस (DL) एवं लर्नर लाइसेंस (LL) ऑनलाइन',
+    category: 'certificate_verification',
+    department: 'Other',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '14 October 2026',
+    notificationNumber: 'MORTH/SARATHI/2026/05',
+    salary: 'Transport Department Citizen Services',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Ministry of Road Transport and Highways (MoRTH) Sarathi Parivahan portal. Citizens can apply online for Learner License (LL) with contactless Aadhaar authentication test from home, Permanent Driving License (DL), DL Renewal, Duplicate DL, International Driving Permit, and Vehicle RC Status.',
+    applicationFee: [
+      { category: 'Learner License (LL) Test Fee', amount: '₹ 150 - ₹ 350/- (State-wise)' },
+      { category: 'Permanent DL Issue Fee', amount: '₹ 200 - ₹ 700/-' }
+    ],
+    feePaymentMode: 'Pay online via e-Gras / Treasury Gateway / Net Banking / UPI',
+    ageLimit: { asOnDate: '01/01/2026', minAge: 16, notes: '16 Years for Gearless 50cc Two Wheeler | 18 Years for Light Motor Vehicle (LMV) Car/Bike | 20 Years for Commercial Heavy Vehicle.' },
+    importantDates: [
+      { label: 'Online Portal Status', value: 'Active Across All States / UTs', isHighlight: true },
+      { label: 'Face Authentication Test', value: 'Online LL Exam from Home Active', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Learner License (LL) & Permanent Driving License (DL)',
+        totalPosts: 'Parivahan Portal',
+        eligibility: '• Age proof, Address proof (Aadhaar Card), Medical Certificate (Form 1A) & 10th pass certificate.'
+      }
+    ],
+    howToApplySteps: [
+      'Select your state on Sarathi Parivahan portal (parivahan.gov.in).',
+      'Fill Learner License application with Aadhaar e-KYC for online exam exemption.',
+      'Pass online stall test from home or book slot at RTO office for driving test.'
+    ],
+    directLinks: [
+      { label: 'Apply Online Learner License (LL)', actionText: 'Apply LL', type: 'apply', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do', isPrimary: true },
+      { label: 'Apply Permanent Driving License (DL)', actionText: 'Apply DL', type: 'apply', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+      { label: 'Book RTO Driving Test Slot', actionText: 'Book Slot', type: 'official', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+      { label: 'Check Application Status / Download License', actionText: 'Check Status', type: 'official', url: 'https://sarathi.parivahan.gov.in/sarathiservice/applViewStatus.do' },
+      { label: 'Official Parivahan Sewa Portal', actionText: 'parivahan.gov.in', type: 'official', url: 'https://parivahan.gov.in/' }
+    ]
+  },
+  {
+    id: 'cert-edistrict-certificates',
+    slug: 'edistrict-income-caste-domicile-certificate-verification',
+    title: 'e-District State Portals: Online Certificate Verification (Income, Caste, Domicile, EWS & Character Certificate)',
+    shortTitle: 'Income, Caste, Domicile Certificate Verification',
+    hindiTitle: 'आय, जाति, निवास प्रमाण पत्र सत्यापन एवं आवेदन',
+    category: 'certificate_verification',
+    department: 'State PSC',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '13 October 2026',
+    notificationNumber: 'EDISTRICT/CERT/2026/06',
+    salary: 'State Citizen Revenue Services',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'e-District Governance Portals (eDistrict UP, Bihar RTPS, MP eDistrict, Raj eMitra, Delhi eDistrict, CG eDistrict). Candidates can verify official authenticity of Income Certificate (आय प्रमाण पत्र), Caste Certificate (जाति प्रमाण पत्र), Domicile/Residence Certificate (निवास प्रमाण पत्र), Non-Creamy Layer OBC & EWS Certificates before government job document verification.',
+    applicationFee: [
+      { category: 'Certificate Verification (प्रमाण पत्र सत्यापन)', amount: '₹ 0/- Free Service' },
+      { category: 'Citizen Application Service Fee', amount: '₹ 15 - ₹ 30/-' }
+    ],
+    feePaymentMode: 'Free Verification / Online Portal Gateway',
+    ageLimit: { asOnDate: '01/01/2026', notes: 'Applicable for all students and recruitment aspirants.' },
+    importantDates: [
+      { label: 'Online Verification Portal', value: 'Active 24x7', isHighlight: true },
+      { label: 'Verification Window', value: 'Instant Digital Verification', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Digital Certificate Authentication',
+        totalPosts: 'eDistrict Portal',
+        eligibility: '• Application Number (आवेदन क्रमांक) and Certificate ID (प्रमाण पत्र क्रमांक).'
+      }
+    ],
+    howToApplySteps: [
+      'Select your state e-District / Citizen portal link below.',
+      'Click on Certificate Verification (प्रमाण पत्र का सत्यापन) option.',
+      'Enter Application Number & Certificate ID mentioned on digital certificate and click Search.'
+    ],
+    directLinks: [
+      { label: 'Verify Certificate (e-District UP Portal)', actionText: 'Verify UP', type: 'apply', url: 'https://edistrict.up.gov.in/edistrictup/Users/CertificateVerification.aspx', isPrimary: true },
+      { label: 'Verify Certificate (Bihar RTPS Service Plus)', actionText: 'Verify Bihar', type: 'apply', url: 'https://serviceonline.bihar.gov.in/' },
+      { label: 'Verify Certificate (Rajasthan e-Mitra Portal)', actionText: 'Verify Raj', type: 'apply', url: 'https://emitra.rajasthan.gov.in/' },
+      { label: 'Verify Certificate (MP e-District Portal)', actionText: 'Verify MP', type: 'apply', url: 'https://mpedistrict.gov.in/' },
+      { label: 'Official Digital India e-District Services', actionText: 'edistrict.gov.in', type: 'official', url: 'https://edistrict.gov.in/' }
+    ]
+  },
+  {
+    id: 'cert-ayushman-bharat',
+    slug: 'ayushman-bharat-pmjay-golden-card-online-apply',
+    title: 'Ayushman Bharat PM-JAY National Health Authority: Apply Online & Download Ayushman Golden Card (₹ 5 Lakh Free Treatment)',
+    shortTitle: 'Ayushman Card Apply & Download (₹ 5 Lakh)',
+    hindiTitle: 'आयुष्मान भारत कार्ड (₹5 लाख मुफ्त इलाज) डाउनलोड व आवेदन',
+    category: 'certificate_verification',
+    department: 'Medical',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '12 October 2026',
+    notificationNumber: 'NHA/PMJAY/2026/07',
+    salary: 'National Health Protection Scheme',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'National Health Authority (NHA) Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (PM-JAY). Beneficiary portal permits online e-KYC, family member addition, and downloading plastic Ayushman Card providing free health coverage up to ₹ 5 Lakh per family per year across empaneled hospitals. Also covers Senior Citizens aged 70+ years regardless of income under Ayushman Vaya Vandana Card.',
+    applicationFee: [
+      { category: 'Ayushman Card Download / e-KYC', amount: '₹ 0/- Free Service' }
+    ],
+    feePaymentMode: 'Free Service',
+    ageLimit: { asOnDate: '01/01/2026', notes: 'No age limit for family members. Universal coverage for Senior Citizens aged 70+ years.' },
+    importantDates: [
+      { label: 'Beneficiary Portal Status', value: 'Active Nationwide', isHighlight: true },
+      { label: 'Ayushman Vaya Vandana Card (70+ Age)', value: 'Active for All Senior Citizens', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Ayushman Card e-KYC & Download',
+        totalPosts: 'NHA Portal',
+        eligibility: '• Ration Card / SECC Data / Jan Aadhaar / PM-JAY ID & Aadhaar linked mobile.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit official NHA portal: beneficiary.nha.gov.in.',
+      'Select Beneficiary option -> Enter mobile number and verify OTP.',
+      'Search family name using State, Scheme, Ration Card / Aadhaar Number -> Complete Face RD / OTP e-KYC to download card.'
+    ],
+    directLinks: [
+      { label: 'Apply Online & Download Ayushman Card', actionText: 'Download Card', type: 'apply', url: 'https://beneficiary.nha.gov.in/', isPrimary: true },
+      { label: 'Check Hospital Empanlement List', actionText: 'Hospitals List', type: 'official', url: 'https://hospitals.pmjay.gov.in/search/' },
+      { label: 'Senior Citizen (70+ Age) Ayushman Vaya Card', actionText: 'Apply Card', type: 'official', url: 'https://beneficiary.nha.gov.in/' },
+      { label: 'Official NHA PM-JAY Portal', actionText: 'pmjay.gov.in', type: 'official', url: 'https://pmjay.gov.in/' }
+    ]
+  },
+  {
+    id: 'cert-e-shram-card',
+    slug: 'e-shram-card-online-registration-download',
+    title: 'Ministry of Labour e-Shram Portal 2026: Online Registration, Update Address & Download UAN e-Shram Card',
+    shortTitle: 'e-Shram Card Online Registration & Download',
+    hindiTitle: 'ई-श्रम कार्ड (UAN Card) पंजीकरण व डाउनलोड',
+    category: 'certificate_verification',
+    department: 'Other',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'All India',
+    postDate: '11 October 2026',
+    notificationNumber: 'LABOUR/ESHRAM/2026/08',
+    salary: 'Unorganised Workers National Social Security',
+    isHot: false,
+    isNew: true,
+    shortInfo: 'Ministry of Labour and Employment, Government of India e-Shram National Database of Unorganised Workers (NDUW). Workers aged 16 to 59 years can register to get 12-digit Universal Account Number (UAN) e-Shram Card, accidental insurance cover under PMSBY, and access to central welfare schemes.',
+    applicationFee: [
+      { category: 'Self Online Registration & Card Download', amount: '₹ 0/- Free' },
+      { category: 'CSC Center Registration Fee', amount: '₹ 0/- Free (Government Subsidized)' }
+    ],
+    feePaymentMode: 'Free Service',
+    ageLimit: { asOnDate: '01/01/2026', minAge: 16, maxAge: 59, notes: 'Worker must not be a member of EPFO or ESIC or Income Tax Payer.' },
+    importantDates: [
+      { label: 'Self Registration Portal', value: 'Active All Year', isHighlight: true },
+      { label: 'UAN Card Download', value: 'Instant PDF Download', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'National Unorganised Worker UAN Card',
+        totalPosts: 'e-Shram Portal',
+        eligibility: '• Aadhaar Card, Aadhaar linked active mobile number & Bank Account details.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit eshram.gov.in and click Self Registration.',
+      'Enter Aadhaar linked mobile number and OTP -> Fill occupation details and Bank IFSC.',
+      'Download your 12-Digit UAN e-Shram Card PDF.'
+    ],
+    directLinks: [
+      { label: 'Apply Online e-Shram Self Registration', actionText: 'Registration', type: 'apply', url: 'https://register.eshram.gov.in/#/user/self', isPrimary: true },
+      { label: 'Update Existing e-Shram Profile / Address', actionText: 'Update Profile', type: 'apply', url: 'https://register.eshram.gov.in/#/user/login' },
+      { label: 'Download UAN e-Shram Card PDF', actionText: 'Download Card', type: 'apply', url: 'https://register.eshram.gov.in/' },
+      { label: 'Official Ministry of Labour e-Shram Portal', actionText: 'eshram.gov.in', type: 'official', url: 'https://eshram.gov.in/' }
+    ]
+  },
+  {
+    id: 'cert-rkvY-certificate',
+    slug: 'railway-rkvY-rail-kaushal-vikas-yojana-2026',
+    title: 'Railway Rail Kaushal Vikas Yojana RKVY 2026: Training Certificate Online Registration & Verification',
+    shortTitle: 'Rail Kaushal Vikas Yojana (RKVY) Certificate',
+    hindiTitle: 'रेल कौशल विकास योजना (RKVY) ट्रेनिंग व प्रमाण पत्र',
+    category: 'certificate_verification',
+    department: 'Railway',
+    qualifications: ['10th Pass', 'Diploma / ITI'],
+    state: 'All India',
+    postDate: '10 October 2026',
+    notificationNumber: 'RKVY/RAILWAY/2026/09',
+    salary: 'Ministry of Railways Skill Development Scheme',
+    isHot: true,
+    isNew: true,
+    shortInfo: 'Ministry of Railways, Government of India Rail Kaushal Vikas Yojana (RKVY) 10th Pass Skill Training Scheme under Pradhan Mantri Kaushal Vikas Yojana (PMKVY). 3-Week (100 Hours) free short-term skill training in trades like AC Mechanic, Carpenter, Electrician, Electronics, Fitter, Machinist, Instrument Mechanic, Welder across Railway Training Institutes. Issued NCVT/Railway Skill Certificate on completion.',
+    applicationFee: [
+      { category: 'All Candidates', amount: '₹ 0/- No Application / Training Fee' }
+    ],
+    feePaymentMode: 'Free Training Scheme',
+    ageLimit: { asOnDate: '01/01/2026', minAge: 18, maxAge: 35 },
+    importantDates: [
+      { label: 'Batch Notification Release', value: 'Monthly Batches Active', isHighlight: true },
+      { label: 'Certificate Verification', value: 'Digital QR Verification Active', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'RKVY Short Term Railway Skill Training Certificate',
+        totalPosts: 'All Railway Institutes',
+        eligibility: '• Class 10th (Matriculation) pass from recognized board.'
+      }
+    ],
+    howToApplySteps: [
+      'Register on railkvy.indianrailways.gov.in with 10th marks details.',
+      'Select Railway Training Institute preference and trade option.',
+      'Check merit list based on 10th percentage and attend 3-week free practical training to receive NCVT certificate.'
+    ],
+    directLinks: [
+      { label: 'Apply Online RKVY Trainee Registration', actionText: 'Registration', type: 'apply', url: 'https://railkvy.indianrailways.gov.in/rkvy_user/', isPrimary: true },
+      { label: 'Verify RKVY Issued Certificate Online', actionText: 'Verify Cert', type: 'official', url: 'https://railkvy.indianrailways.gov.in/' },
+      { label: 'Download RKVY Notification & Trade List', actionText: 'Download PDF', type: 'notification', url: 'https://railkvy.indianrailways.gov.in/' },
+      { label: 'Official RKVY Railways Portal', actionText: 'railkvy.indianrailways.gov.in', type: 'official', url: 'https://railkvy.indianrailways.gov.in/' }
+    ]
+  },
+  {
+    id: 'cert-birth-death-crs',
+    slug: 'crsorgi-birth-death-certificate-online-verification',
+    title: 'Civil Registration System (CRS ORGI): Online Birth & Death Certificate Registration, Verification & Download',
+    shortTitle: 'Birth & Death Certificate Verification (CRS Portal)',
+    hindiTitle: 'जन्म व मृत्यु प्रमाण पत्र सत्यापन (CRS Portal)',
     category: 'certificate_verification',
     department: 'Other',
     qualifications: ['10th Pass', '12th Pass', 'Graduate'],
     state: 'All India',
     postDate: '09 October 2026',
-    isHot: true,
-    isNew: false,
-    shortInfo: 'Unique Identification Authority of India (UIDAI) portal services. Download password-protected electronic Aadhaar PDF, verify Aadhaar number and registered mobile, update address and order PVC Smart Card for ₹ 50.',
-    applicationFee: [
-      { category: 'Download e-Aadhaar', amount: '₹ 0/- Free' },
-      { category: 'Order Aadhaar PVC Card (Speed Post delivery)', amount: '₹ 50/-' }
-    ],
-    ageLimit: { asOnDate: '01/01/2026' },
-    importantDates: [{ label: 'Service Status', value: 'Active 24x7', isHighlight: true }],
-    vacancyBreakdown: [],
-    howToApplySteps: [
-      'Visit myaadhaar.uidai.gov.in and log in using Aadhaar Number & OTP.',
-      'Password to open downloaded e-Aadhaar is FIRST 4 LETTERS OF YOUR NAME IN CAPITAL + YEAR OF BIRTH (e.g. RAHU1998).'
-    ],
-    directLinks: [
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Check Aadhaar Update Status', actionText: 'Check Status', type: 'official' },
-      { label: 'Official UIDAI Portal', actionText: 'myaadhaar.uidai.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'cert-3',
-    slug: 'up-scholarship-online-form-2026',
-    title: 'UP Scholarship 2026 Online Form for Pre-Matric (9th-10th) & Post-Matric (11th, 12th, Dashmottar Other Courses)',
-    shortTitle: 'UP Scholarship Online Form 2026',
-    hindiTitle: 'यूपी छात्रवृत्ति ऑनलाइन फॉर्म 2026',
-    category: 'important',
-    department: 'Teaching',
-    qualifications: ['10th Pass', '12th Pass', 'Graduate', 'Diploma / ITI'],
-    state: 'Uttar Pradesh',
-    postDate: '08 October 2026',
-    isHot: true,
-    isNew: true,
-    lastDate: '15 November 2026',
-    shortInfo: 'Social Welfare Department, Government of Uttar Pradesh invites online applications for Pre-Matric and Post-Matric Scholarship and Fee Reimbursement Scheme 2026-27.',
-    applicationFee: [{ category: 'All Students', amount: '₹ 0/- No Application Fee' }],
-    ageLimit: { asOnDate: '01/07/2026' },
-    importantDates: [
-      { label: 'Application Started', value: 'July 2026' },
-      { label: 'Last Date for Apply Online', value: '15/11/2026', isHighlight: true },
-      { label: 'Submit Hard Copy in College', value: 'Within 3 days of submission' }
-    ],
-    vacancyBreakdown: [],
-    howToApplySteps: [
-      'Complete DigiLocker verification and eKYC with Aadhaar card.',
-      'Fill academic fee details, submit income certificate and caste certificate numbers.'
-    ],
-    directLinks: [
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Check Scholarship Application Status', actionText: 'Click Here', type: 'official' },
-      { label: 'UP Scholarship Official Portal', actionText: 'scholarship.up.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'cert-4',
-    slug: 'voter-id-card-apply-online-form-6',
-    title: 'Election Commission of India: Apply New Voter ID Card (Form 6) & Download Digital e-EPIC',
-    shortTitle: 'Voter ID Apply & Download e-EPIC',
-    hindiTitle: 'वोटर कार्ड ऑनलाइन आवेदन व डाउनलोड',
-    category: 'important',
-    department: 'Other',
-    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
-    state: 'All India',
-    postDate: '05 October 2026',
+    notificationNumber: 'ORGI/CRS/2026/10',
+    salary: 'Registrar General of India Statutory Portal',
     isHot: false,
-    isNew: false,
-    shortInfo: 'Election Commission of India (ECI) Voters’ Services Portal. Any citizen having age 18 years can enroll as new voter using Form 6, correct name or shift assembly constituency via Form 8.',
-    applicationFee: [{ category: 'All Citizens', amount: '₹ 0/- Free Service' }],
-    ageLimit: { asOnDate: '01/01/2026', minAge: 18 },
-    importantDates: [{ label: 'National Voters Portal', value: 'Open All Year', isHighlight: true }],
-    vacancyBreakdown: [],
-    howToApplySteps: ['Register on voters.eci.gov.in with mobile number and submit Form 6.'],
+    isNew: true,
+    shortInfo: 'Office of the Registrar General & Census Commissioner, India Civil Registration System (CRS) portal (crsorgi.gov.in). Citizens can register birth and death events online within 21 days, track registration status, and verify official digital QR code certified Birth & Death Certificates issued by Gram Panchayats, Municipal Corporations, and Hospitals.',
+    applicationFee: [
+      { category: 'Registration within 21 Days', amount: '₹ 0/- Free' },
+      { category: 'Delayed Registration (Late Fee)', amount: '₹ 2 - ₹ 10/-' }
+    ],
+    feePaymentMode: 'Free / Municipal Treasury Gateway',
+    ageLimit: { asOnDate: '01/01/2026', notes: 'Statutory registration for all birth and death events in India.' },
+    importantDates: [
+      { label: 'CRS Portal Status', value: 'Active Across India', isHighlight: true },
+      { label: 'Digital QR Verification', value: '24x7 Verification Active', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Digital Birth & Death Certificate Verification',
+        totalPosts: 'CRS ORGI Portal',
+        eligibility: '• Registration Number or QR Code on certificate.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit crsorgi.gov.in or state urban body civil portal.',
+      'Click on Public Reporting / Certificate Verification.',
+      'Enter Registration Number & Date of Event to verify or download officially signed digital certificate.'
+    ],
     directLinks: [
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Apply Online (New Candidate Registration)', actionText: 'Registration', type: 'apply', isPrimary: true },
-      { label: 'Already Registered? Candidate Login', actionText: 'Login', type: 'apply' },
-      { label: 'Check Voter Application Status', actionText: 'Check Status', type: 'official' }
+      { label: 'Verify Birth / Death Certificate Online', actionText: 'Verify Certificate', type: 'apply', url: 'https://crsorgi.gov.in/web/index.php/auth/login', isPrimary: true },
+      { label: 'Public Reporting for Birth Registration', actionText: 'Public Apply', type: 'apply', url: 'https://crsorgi.gov.in/' },
+      { label: 'Official Registrar General of India Portal', actionText: 'crsorgi.gov.in', type: 'official', url: 'https://crsorgi.gov.in/' }
     ]
   },
   {
@@ -2317,6 +2958,182 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'Download RajSSP Mobile App (Face Verification / बायोमेट्रिक)', actionText: 'Download App', type: 'official', url: 'https://play.google.com/store/apps/details?id=com.rajssp.app' },
       { label: 'Download Scheme Guidelines & Eligibility PDF', actionText: 'Click Here (PDF)', type: 'notification', url: 'https://ssp.rajasthan.gov.in/' },
       { label: 'Official RAJSSP Government Portal', actionText: 'ssp.rajasthan.gov.in', type: 'official', url: 'https://ssp.rajasthan.gov.in/' }
+    ]
+  },
+  {
+    id: 'info-disclaimer',
+    slug: 'disclaimer',
+    title: 'Sarkari Result Official Disclaimer & Legal Information (अस्वीकरण सूचना)',
+    shortTitle: 'Disclaimer (अस्वीकरण)',
+    hindiTitle: 'सरकारी रिजल्ट आधिकारिक अस्वीकरण एवं सूचना नीति',
+    category: 'important',
+    department: 'Other',
+    qualifications: [],
+    state: 'All India',
+    postDate: '19 October 2026',
+    notificationNumber: 'SR/LEGAL/DISCLAIMER-2026',
+    salary: 'Non-Commercial Information Portal',
+    salaryBand: '25K - 50K',
+    isHot: false,
+    isNew: false,
+    shortInfo: 'Sarkari Result is an independent educational news and career information dissemination portal. We are not affiliated with, authorized by, endorsed by, or in any way officially connected with any government agency, ministry, or recruitment board.',
+    applicationFee: [],
+    ageLimit: {
+      asOnDate: '01/01/2026',
+      notes: 'This is an informational policy document.'
+    },
+    importantDates: [
+      { label: 'Policy Document Version', value: '2026 Edition' },
+      { label: 'Last Reviewed & Verified', value: '19/10/2026', isHighlight: true },
+      { label: 'Status', value: 'Legally Active & Binding', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: '1. गैर-सरकारी प्रकृति (Non-Governmental Entity)',
+        totalPosts: 'Notice 1',
+        eligibility: `• Sarkari Result (portal) पूर्णतः स्वतंत्र शैक्षणिक एवं रोजगार समाचार सूचना मंच है।
+• हमारा किसी भी केंद्र अथवा राज्य सरकार के विभाग, मंत्रालय, आयोग (जैसे UPSC, SSC, RPSC, UPPSC, BPSC, RRB, NTA) से प्रत्यक्ष अथवा परोक्ष संबंध नहीं है।`
+      },
+      {
+        postName: '2. सूचना की सत्यता एवं सत्यापन (Information Accuracy & Verification)',
+        totalPosts: 'Notice 2',
+        eligibility: `• यद्यपि हम सभी विज्ञप्तियों, तिथियों, परीक्षा परिणामों और एडमिट कार्ड्स की जानकारी आधिकारिक स्रोतों से गहन सत्यापन के उपरांत ही प्रकाशित करते हैं।
+• तथापि किसी भी अनजाने मुद्रण दोष (Typographical Error) या तिथियों में परिवर्तन के लिए उम्मीदवार संबंधित भर्ती बोर्ड की आधिकारिक वेबसाइट (Official Notification) अवश्य देखें।`
+      },
+      {
+        postName: '3. कोई शुल्क या गारंटी नहीं (No Fee or Service Guarantee)',
+        totalPosts: 'Notice 3',
+        eligibility: `• Sarkari Result किसी भी उम्मीदवार से किसी नौकरी की गारंटी, सिफारिश अथवा गुप्त शुल्क की मांग नहीं करता है।
+• उम्मीदवारों को सतर्क रहने और किसी भी संदिग्ध एजेंट अथवा मध्यस्थ के झांसे में न आने की सलाह दी जाती है।`
+      }
+    ],
+    howToApplySteps: [
+      'उम्मीदवार हमेशा संबंधित आयोग की आधिकारिक वेबसाइट (जैसे ssc.gov.in, upsc.gov.in, rrbapply.gov.in आदि) पर जाकर मूल विज्ञप्ति डाउनलोड करें।',
+      'ऑनलाइन आवेदन करते समय केवल आधिकारिक पोर्टल पर ही अपने दस्तावेज और परीक्षा शुल्क का भुगतान करें।',
+      'किसी भी विसंगति या प्रश्न की स्थिति में संबंधित भर्ती बोर्ड के आधिकारिक हेल्पलाइन नंबर अथवा ईमेल पर संपर्क करें।',
+      'पोर्टल पर प्रकाशित किसी भी जानकारी में संशोधन अथवा सुधार का सुझाव देने हेतु हमारे संपर्क पृष्ठ (Contact Us) पर लिखें।'
+    ],
+    directLinks: [
+      { label: 'Official UPSC Portal', actionText: 'upsc.gov.in', type: 'official', url: 'https://www.upsc.gov.in/' },
+      { label: 'Official Staff Selection Commission (SSC)', actionText: 'ssc.gov.in', type: 'official', url: 'https://ssc.gov.in/' },
+      { label: 'Official Railway Recruitment Board (RRB)', actionText: 'rrbapply.gov.in', type: 'official', url: 'https://www.rrbapply.gov.in/' },
+      { label: 'Official National Testing Agency (NTA)', actionText: 'nta.ac.in', type: 'official', url: 'https://nta.ac.in/' }
+    ]
+  },
+  {
+    id: 'info-rules-regulations',
+    slug: 'rules-and-regulations',
+    title: 'Sarkari Result Rules, Regulations & User Terms (नियम व शर्तें)',
+    shortTitle: 'Rules & Regulations (नियम व शर्तें)',
+    hindiTitle: 'सरकारी रिजल्ट उपयोग नियम, विनियम एवं दिशानिर्देश',
+    category: 'important',
+    department: 'Other',
+    qualifications: [],
+    state: 'All India',
+    postDate: '19 October 2026',
+    notificationNumber: 'SR/TERMS/RULES-2026',
+    salary: 'Public Advisory Guidelines',
+    salaryBand: '25K - 50K',
+    isHot: false,
+    isNew: false,
+    shortInfo: 'Rules and regulations governing the use of Sarkari Result website, fair use of exam updates, user privacy policies, and candidate advisory standards.',
+    applicationFee: [],
+    ageLimit: {
+      asOnDate: '01/01/2026',
+      notes: 'Applicable to all visitors and candidates.'
+    },
+    importantDates: [
+      { label: 'Terms Enforcement Date', value: '01/01/2026' },
+      { label: 'Latest Revision', value: '19/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: '1. वेबसाइट का उचित उपयोग (Acceptable Use Policy)',
+        totalPosts: 'Rule 1',
+        eligibility: `• उपयोगकर्ता केवल व्यक्तिगत एवं शैक्षणिक सूचना प्राप्ति हेतु इस पोर्टल का उपयोग कर सकते हैं।
+• किसी भी प्रकार की डेटा स्क्रैपिंग, अनधिकृत ऑटोमेशन अथवा सर्वर पर अनुचित लोड डालना सख्त वर्जित है।`
+      },
+      {
+        postName: '2. कॉपीराइट एवं बौद्धिक संपदा (Copyright & Fair Use)',
+        totalPosts: 'Rule 2',
+        eligibility: `• विभिन्न आयोगों के लोगो, नाम एवं मूल विज्ञप्ति संबंधित आयोगों की संपत्ति हैं।
+• पोर्टल पर तैयार किया गया सारांश, प्रारूपण एवं गाइड केवल परीक्षार्थियों के मार्गदर्शन हेतु प्रस्तुत है।`
+      },
+      {
+        postName: '3. गोपनीयता एवं डेटा सुरक्षा (User Privacy Policy)',
+        totalPosts: 'Rule 3',
+        eligibility: `• पोर्टल किसी भी उपयोगकर्ता का संवेदनशील व्यक्तिगत डेटा (जैसे पासवर्ड, बैंक विवरण) संग्रहीत नहीं करता है।
+• परीक्षा अलर्ट हेतु दर्ज की गई ईमेल अथवा मोबाइल सूचना केवल नोटिफिकेशन भेजने के प्रयोजन से उपयोग की जाती है।`
+      }
+    ],
+    howToApplySteps: [
+      'पोर्टल पर उपलब्ध सभी उपकरणों (जैसे Age Calculator, Photo Resizer) का उपयोग निःशुल्क है।',
+      'उपयोगकर्ता अपनी फोटो व हस्ताक्षर अपलोड करते समय यह सुनिश्चित करें कि वे केवल मानक विनिर्देशों (20KB - 100KB) का पालन करें।',
+      'नियमों अथवा शर्तों में किसी भी बदलाव की स्थिति में अद्यतन प्रति इसी पृष्ठ पर प्रदर्शित की जाएगी।'
+    ],
+    directLinks: [
+      { label: 'Read Privacy & Disclaimer Guidelines', actionText: 'Disclaimer', type: 'official', url: '#disclaimer' },
+      { label: 'Join Official WhatsApp Channel for Instant Alerts', actionText: 'Join WhatsApp', type: 'official', url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j' },
+      { label: 'Official Telegram Channel', actionText: 'Join Telegram', type: 'official', url: 'https://t.me/newsarkariresultt' }
+    ]
+  },
+  {
+    id: 'info-contact-us',
+    slug: 'contact-us',
+    title: 'Contact Us - Sarkari Result Official Support & Helpline 2026 (हमसे संपर्क करें)',
+    shortTitle: 'Contact Us (हमसे संपर्क करें)',
+    hindiTitle: 'सरकारी रिजल्ट हेल्पडेस्क - हमसे संपर्क करें',
+    category: 'important',
+    department: 'Other',
+    qualifications: [],
+    state: 'All India',
+    postDate: '19 October 2026',
+    notificationNumber: 'SR/SUPPORT/HELP-2026',
+    salary: 'Candidate Support Desk',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: false,
+    shortInfo: 'Get in touch with Sarkari Result editorial, recruitment notification, and candidate assistance desk. Have queries about any exam notification, corrections, or suggestions? Reach out via our verified channels.',
+    applicationFee: [],
+    ageLimit: {
+      asOnDate: '01/01/2026',
+      notes: 'Available for all candidates and educational institutions.'
+    },
+    importantDates: [
+      { label: 'Helpdesk Hours', value: '24x7 Digital Updates (Mon - Sun)' },
+      { label: 'Email Response Time', value: 'Within 24 to 48 Hours', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: '1. आधिकारिक ईमेल संपर्क (Official Email Support)',
+        totalPosts: 'Email Desk',
+        eligibility: `• सामान्य पूछताछ एवं सूचना सुधार: contact@sarkariresult.com
+• विज्ञापन एवं सहयोग: advertise@sarkariresult.com
+• तकनीकी सहायता एवं बग रिपोर्ट: support@sarkariresult.com`
+      },
+      {
+        postName: '2. सोशल मीडिया एवं त्वरित अलर्ट (Fast Alerts Community)',
+        totalPosts: 'Community',
+        eligibility: `• WhatsApp Channel: sarkariresult official channel (लाखों अभ्यर्थियों द्वारा विश्वसनीय)
+• Telegram Channel: @newsarkariresultt (सबसे तेज परीक्षा परिणाम व एडमिट कार्ड अलर्ट)`
+      },
+      {
+        postName: '3. कार्यालय का पता (Registered Office Address)',
+        totalPosts: 'Office',
+        eligibility: `• Sarkari Result Educational Media & News Bureau
+• New Delhi, India - 110001
+• कार्य समय: सोमवार से शनिवार (प्रातः 09:30 से सायं 06:30 तक)`
+      }
+    ],
+    howToApplySteps: [
+      'किसी भी भर्ती या परीक्षा परिणाम में विसंगति दिखने पर कृपया संबंधित विज्ञापन संख्या व लिंक के साथ ईमेल भेजें।',
+      'भर्ती फॉर्म में किसी भी तकनीकी त्रुटि (जैसे पेमेंट फेल, रोल नंबर भूलना) हेतु कृपया संबंधित विभाग की अधिकृत हेल्पलाइन पर ही संपर्क करें।',
+      'Sarkari Result का आधिकारिक WhatsApp व Telegram चैनल ज्वाइन करके रखें ताकि कोई भी अंतिम तिथि न छूटे।'
+    ],
+    directLinks: [
+      { label: 'Join Official WhatsApp Channel', actionText: 'Join WhatsApp', type: 'official', url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j', isPrimary: true },
+      { label: 'Join Official Telegram Channel', actionText: 'Join Telegram', type: 'official', url: 'https://t.me/newsarkariresultt' },
+      { label: 'Email Support Desk', actionText: 'contact@sarkariresult.com', type: 'official', url: 'mailto:contact@sarkariresult.com' }
     ]
   }
 ];

@@ -8,6 +8,20 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .font-handwriting {
+    font-family: 'Kalam', 'Caveat', cursive;
+  }
+  .font-signature {
+    font-family: 'Caveat', cursive;
+  }
+  .notebook-ruled {
+    background: repeating-linear-gradient(
+      transparent,
+      transparent 29px,
+      rgba(203, 213, 225, 0.5) 30px
+    );
+    line-height: 30px;
+  }
 }
 
 @media print {

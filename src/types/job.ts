@@ -93,6 +93,11 @@ export interface PaperPattern {
   notes?: string[];
 }
 
+export interface PostFAQItem {
+  question: string;
+  answer: string;
+}
+
 export interface SarkariPost {
   id: string;
   slug: string;
@@ -107,6 +112,8 @@ export interface SarkariPost {
   shortInfo: string;
   isHot?: boolean;
   isNew?: boolean;
+  status?: 'upcoming' | 'active' | 'closed';
+  isUpcoming?: boolean;
   lastDate?: string;
   examDate?: string;
   admitCardDate?: string;
@@ -129,4 +136,5 @@ export interface SarkariPost {
   salaryBand?: SalaryBand;
   directLinks: DirectLinkItem[];
   notificationNumber?: string;
+  customFaqs?: PostFAQItem[];
 }

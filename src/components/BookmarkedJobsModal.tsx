@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SarkariPost } from '../types/job';
 import { Bookmark, X, ArrowRight, Trash2, Calendar, Bell, BellRing, CheckCircle2 } from 'lucide-react';
+import { isPostAlertActive, getPostStatus } from '../utils/alertManager';
 
 interface BookmarkedJobsModalProps {
   isOpen: boolean;
@@ -137,11 +138,22 @@ export const BookmarkedJobsModal: React.FC<BookmarkedJobsModalProps> = ({
                         onClose();
                       }}
                     >
-                      <div className="flex items-center gap-2 text-[11px] text-slate-600 mb-1">
+                      <div className="flex items-center gap-2 text-[11px] text-slate-600 mb-1 flex-wrap">
                         <span className="font-bold text-[#ab1616] bg-red-100 px-1.5 py-0.5 rounded">
                           {post.department}
                         </span>
                         <span>{post.category.replace('_', ' ').toUpperCase()}</span>
+                        {isPostAlertActive(post.id) && (
+                          <span className="font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.2 rounded flex items-center gap-1 text-[10px]">
+                            <BellRing className="w-3 h-3 text-amber-600 animate-pulse" />
+                            <span>Alert Active</span>
+                          </span>
+                        )}
+                        {getPostStatus(post) === 'upcoming' && (
+                          <span className="font-bold text-amber-900 bg-amber-50 border border-amber-200 px-1.5 py-0.2 rounded text-[10px]">
+                            Upcoming
+                          </span>
+                        )}
                       </div>
                       <h4 className="font-bold text-xs sm:text-sm text-slate-900 hover:text-[#ab1616] transition-colors">
                         {post.shortTitle}

@@ -1,14 +1,15 @@
 import React from 'react';
-import { Send, AlertTriangle, MessageCircle } from 'lucide-react';
+import { Send, AlertTriangle, MessageCircle, ExternalLink } from 'lucide-react';
 import { SarkariPost } from '../types/job';
-import { mockSarkariPosts } from '../data/mockJobs';
 
 interface SarkariFooterProps {
   onOpenAgeCalculator?: () => void;
   onOpenPhotoResizer?: () => void;
   onOpenJobFinder?: () => void;
+  onOpenAdmin?: () => void;
   onOpenSitemap?: () => void;
   onSelectPost?: (post: SarkariPost) => void;
+  onOpenPostBySlug: (slug: string) => void;
   isHindi: boolean;
 }
 
@@ -16,89 +17,232 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
   onOpenAgeCalculator: _onOpenAgeCalculator,
   onOpenPhotoResizer: _onOpenPhotoResizer,
   onOpenJobFinder: _onOpenJobFinder,
+  onOpenAdmin,
   onOpenSitemap,
-  onSelectPost,
+  onOpenPostBySlug,
   isHindi
 }) => {
-  const rajasthanJobs = mockSarkariPosts.filter(p => p.state === 'Rajasthan');
-
   return (
-    <footer className="w-full bg-[#f8f9fa] border-t-2 border-slate-800 text-slate-700 text-xs mt-8">
-      {/* Social alert strip */}
-      <div className="bg-slate-900 text-white py-2.5 px-3 text-center text-xs font-bold border-b border-slate-800">
-        <div className="max-w-6xl mx-auto flex items-center justify-center gap-3">
-          <a 
-            href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 px-4 py-2 rounded-xs font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer border border-emerald-300"
-            title="Join Official WhatsApp Channel"
-          >
-            <MessageCircle className="w-4 h-4 fill-slate-950 text-emerald-100" />
-            <span>Join WhatsApp</span>
-          </a>
+    <footer className="w-full bg-[#1e293b] text-slate-300 text-xs mt-10 border-t-4 border-[#ab1616]">
+      {/* 1. Official Social Alert Ribbon */}
+      <div className="bg-[#ab1616] text-white py-3 px-4 text-center border-b border-red-950">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="text-sm font-bold flex items-center gap-2">
+            <span className="text-amber-300 font-black text-lg">★</span>
+            <span>Join Sarkari Result Official Channels for Fastest Job Alerts & Exam Updates</span>
+          </div>
 
-          <a 
-            href="https://t.me/newsarkariresultt"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#229ED9] hover:bg-[#1d8cb0] text-white px-4 py-2 rounded-xs font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer"
-            title="Join Official Telegram Channel"
-          >
-            <Send className="w-4 h-4 text-white" />
-            <span>Join Telegram</span>
-          </a>
+          <div className="flex items-center gap-3">
+            <a 
+              href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 px-4 py-2 rounded-xs font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer border border-emerald-300"
+              title="Join Official WhatsApp Channel"
+            >
+              <MessageCircle className="w-4 h-4 fill-slate-950 text-emerald-100" />
+              <span>WhatsApp Channel</span>
+            </a>
+
+            <a 
+              href="https://t.me/newsarkariresultt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#229ED9] hover:bg-[#1d8cb0] text-white px-4 py-2 rounded-xs font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+              title="Join Official Telegram Channel"
+            >
+              <Send className="w-4 h-4 text-white" />
+              <span>Telegram Channel</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-        {/* Authentic Sarkari Result SEO Information Text Block */}
-        <div className="border-2 border-[#ab1616] bg-white rounded-xs overflow-hidden shadow-2xs">
-          <div className="bg-[#ab1616] text-white py-3.5 px-4 text-center sm:text-left">
-            <h2 className="font-black text-lg sm:text-xl tracking-wide uppercase">
-              {isHindi ? 'सरकारी रिजल्ट पोर्टल : नवीनतम सरकारी नौकरियां व परीक्षा परिणाम' : 'Sarkari Result Portal : Latest Govt Jobs, Admit Cards & Exam Results'}
-            </h2>
+      {/* 2. Main 3-Column Directory Grid */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-8 border-b border-slate-700">
+          
+          {/* Column 1: Quick Links */}
+          <div className="space-y-3">
+            <h3 className="text-white font-black text-sm uppercase tracking-wider border-b border-slate-600 pb-1.5 flex items-center gap-1.5">
+              <span className="text-amber-400">■</span>
+              <span>Quick Links (महत्वपूर्ण लिंक्स)</span>
+            </h3>
+            <ul className="space-y-2 text-slate-300 text-xs">
+              <li>
+                <a href="#results" className="hover:text-amber-300 hover:underline flex items-center gap-1">
+                  <span>• Sarkari Result 2026</span>
+                </a>
+              </li>
+              <li>
+                <a href="#latest_jobs" className="hover:text-amber-300 hover:underline flex items-center gap-1">
+                  <span>• Latest Online Form 2026</span>
+                </a>
+              </li>
+              <li>
+                <a href="#admit_card" className="hover:text-amber-300 hover:underline flex items-center gap-1">
+                  <span>• Sarkari Admit Card Download</span>
+                </a>
+              </li>
+              <li>
+                <a href="#answer_key" className="hover:text-amber-300 hover:underline flex items-center gap-1">
+                  <span>• Official Answer Key & Solutions</span>
+                </a>
+              </li>
+              <li>
+                <a href="#syllabus" className="hover:text-amber-300 hover:underline flex items-center gap-1">
+                  <span>• Exam Scheme & Syllabus PDF</span>
+                </a>
+              </li>
+              <li>
+                <a href="#admission" className="hover:text-amber-300 hover:underline flex items-center gap-1">
+                  <span>• University & College Admission</span>
+                </a>
+              </li>
+            </ul>
           </div>
-          <div className="p-4 sm:p-5 space-y-3 text-base sm:text-lg leading-relaxed text-slate-800 bg-white">
-            <p>
-              Find all latest government jobs (Sarkari Naukri) and recruitment notifications issued by <strong className="text-slate-900 font-extrabold">UPSC, SSC, Banking, Railways, Defense, State PSC, Police, and Teaching examinations</strong> across India.
-            </p>
-            <p>
-              <strong className="text-[#ab1616] font-black">Sarkari Result</strong> is India's premier portal for <strong className="text-slate-900 font-extrabold">Latest Jobs, Admit Cards, Exam Results, Answer Keys, Detailed Syllabus, and Online Application Forms</strong> with direct verified official links.
-            </p>
+
+          {/* Column 2: Recruitment Boards */}
+          <div className="space-y-3">
+            <h3 className="text-white font-black text-sm uppercase tracking-wider border-b border-slate-600 pb-1.5 flex items-center gap-1.5">
+              <span className="text-amber-400">■</span>
+              <span>Top Recruitment (भर्ती बोर्ड)</span>
+            </h3>
+            <ul className="space-y-2 text-slate-300 text-xs">
+              <li>
+                <button onClick={() => onOpenPostBySlug('supreme-court-sci-attendant-admit-card-2026')} className="hover:text-amber-300 hover:underline text-left cursor-pointer">
+                  • Supreme Court of India (SCI)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onOpenPostBySlug('ssc-cgl-2026-online-form')} className="hover:text-amber-300 hover:underline text-left cursor-pointer">
+                  • Staff Selection Commission (SSC)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onOpenPostBySlug('upsc-civil-services-pre-2026-online-form')} className="hover:text-amber-300 hover:underline text-left cursor-pointer">
+                  • Union Public Service Commission (UPSC)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onOpenPostBySlug('rrb-technician-grade-i-iii-recruitment-2026')} className="hover:text-amber-300 hover:underline text-left cursor-pointer">
+                  • Railway Recruitment Board (RRB)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onOpenPostBySlug('up-police-constable-re-exam-result-2026')} className="hover:text-amber-300 hover:underline text-left cursor-pointer">
+                  • State Police Constable & SI
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onOpenPostBySlug('ctet-july-2026-online-form')} className="hover:text-amber-300 hover:underline text-left cursor-pointer">
+                  • Teaching (CTET / REET / TET)
+                </button>
+              </li>
+            </ul>
           </div>
+
+          {/* Column 3: State Government Jobs */}
+          <div className="space-y-3">
+            <h3 className="text-white font-black text-sm uppercase tracking-wider border-b border-slate-600 pb-1.5 flex items-center gap-1.5">
+              <span className="text-amber-400">■</span>
+              <span>State Jobs (राज्य-वार नौकरी)</span>
+            </h3>
+            <ul className="space-y-2 text-slate-300 text-xs">
+              <li>
+                <span className="hover:text-amber-300">• Uttar Pradesh Sarkari Result</span>
+              </li>
+              <li>
+                <span className="hover:text-amber-300">• Bihar Government Vacancy & BPSC</span>
+              </li>
+              <li>
+                <span className="hover:text-amber-300">• Rajasthan Govt Jobs & RSMSSB</span>
+              </li>
+              <li>
+                <span className="hover:text-amber-300">• Madhya Pradesh MPESB Online</span>
+              </li>
+              <li>
+                <span className="hover:text-amber-300">• Delhi DSSSB & High Court Recruitment</span>
+              </li>
+              <li>
+                <span className="hover:text-amber-300">• All India Central Government Jobs</span>
+              </li>
+            </ul>
+          </div>
+
         </div>
 
-
-
-        {/* Prominent Large Font Disclaimer Box */}
-        <div className="border-4 border-[#ab1616] bg-amber-50 rounded-xs p-5 sm:p-7 shadow-md space-y-3">
-          <div className="flex items-center gap-2.5 text-[#ab1616] font-black text-xl sm:text-2xl tracking-wide uppercase border-b-2 border-red-200 pb-2">
-            <AlertTriangle className="w-7 h-7 text-[#ab1616] shrink-0" />
-            <span>{isHindi ? 'महत्वपूर्ण अस्वीकरण (Disclaimer)' : 'Disclaimer (महत्वपूर्ण अस्वीकरण)'}</span>
+        {/* 3. Authentic Sarkari Result High-Visibility Disclaimer Box */}
+        <div className="my-6 border-2 border-red-600 bg-red-950/40 rounded-xs p-4 sm:p-5 shadow-sm space-y-2">
+          <div className="flex items-center gap-2 text-red-400 font-black text-sm uppercase">
+            <AlertTriangle className="w-5 h-5 text-red-400 shrink-0" />
+            <span>{isHindi ? 'महत्वपूर्ण अस्वीकरण (Disclaimer Note)' : 'Official Disclaimer Notice'}</span>
           </div>
-          <p className="text-lg sm:text-xl leading-relaxed text-slate-900 font-bold">
+          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
             {isHindi ? (
               <>
-                <strong className="text-red-800 font-black underline">नोट / Disclaimer: </strong>
-                Sarkari Result एक स्वतंत्र शैक्षणिक एवं रोजगार समाचार पोर्टल है और इसका किसी भी सरकारी विभाग, मंत्रालय अथवा भर्ती बोर्ड से कोई सीधा संबंध नहीं है। यद्यपि हम सभी जानकारियों को आधिकारिक विज्ञप्तियों से सत्यापित करके ही प्रकाशित करते हैं, फिर भी किसी भी भर्ती, प्रवेश या सेवा में आवेदन करने अथवा शुल्क भुगतान करने से पूर्व संबंधित विभाग की आधिकारिक अधिसूचना (Official Notification) अवश्य देखें।
+                <strong className="text-amber-300 font-bold">अस्वीकरण: </strong>
+                Sarkari Result एक स्वतंत्र शैक्षणिक समाचार व रोजगार सूचना मंच है। इस वेबसाइट पर प्रकाशित सभी जानकारियां केवल परीक्षार्थियों की तत्काल सूचना हेतु हैं और इसे किसी भी प्रकार से कानूनी दस्तावेज (Legal Document) नहीं माना जा सकता। यद्यपि हम सभी सूचनाओं को आधिकारिक विज्ञप्ति से जांचकर प्रकाशित करते हैं, फिर भी किसी भी भर्ती में आवेदन करने या शुल्क भुगतान करने से पहले संबंधित आयोग/विभाग की आधिकारिक वेबसाइट पर मूल अधिसूचना अवश्य पढ़ें।
               </>
             ) : (
               <>
-                <strong className="text-red-800 font-black underline">Disclaimer: </strong>
-                Sarkari Result is an independent educational news and career information portal and is not affiliated with any government agency, department, or recruitment board. While we strive to provide authentic and verified information from official sources, candidates are strictly advised to cross-check all details from official government notifications before taking any action.
+                <strong className="text-amber-300 font-bold">Disclaimer: </strong>
+                The Examination Results / Marks published on this Website are only for immediate information to examinees and do not constitute a legal document. While all efforts have been made to make the information on this website authentic, Sarkari Result is not responsible for any inadvertent error that may have crept into the results or notifications published. Candidates must cross-check all details with the official recruitment board website before taking action.
               </>
             )}
           </p>
         </div>
 
-        {/* Copyright */}
-        <div className="text-center text-xs sm:text-sm text-slate-600 border-t border-slate-200 pt-3 font-medium flex flex-wrap items-center justify-center gap-2">
-          <span>© 2026 Sarkari Result · All Rights Reserved · SARKARI RESULT</span>
-          <span>·</span>
-          <button onClick={onOpenSitemap} className="text-[#0000cc] hover:underline font-bold cursor-pointer">
-            sitemap.xml
-          </button>
+        {/* 4. Bottom Copyright & Admin Strip (sitemap.xml has been removed) */}
+        <div className="pt-4 border-t border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-400 text-xs">
+          <div className="text-center sm:text-left">
+            <span>Copyright © 2026 Sarkari Result - All Rights Reserved.</span>
+          </div>
+
+          <div className="flex items-center gap-4 text-xs font-semibold">
+            <button
+              onClick={() => onOpenPostBySlug('disclaimer')}
+              className="text-yellow-400 hover:text-white underline cursor-pointer font-bold"
+            >
+              Disclaimer
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onOpenPostBySlug('rules-and-regulations')}
+              className="text-yellow-400 hover:text-white underline cursor-pointer font-bold"
+            >
+              Rules
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => onOpenPostBySlug('contact-us')}
+              className="text-yellow-400 hover:text-white underline cursor-pointer font-bold"
+            >
+              Contact Us
+            </button>
+            {onOpenSitemap && (
+              <>
+                <span>•</span>
+                <button
+                  onClick={onOpenSitemap}
+                  className="text-amber-400 hover:text-amber-300 hover:underline cursor-pointer font-bold"
+                >
+                  sitemap.xml
+                </button>
+              </>
+            )}
+            {onOpenAdmin && (
+              <>
+                <span>•</span>
+                <button
+                  onClick={onOpenAdmin}
+                  className="text-emerald-400 hover:text-emerald-300 hover:underline cursor-pointer font-bold"
+                >
+                  Admin Panel
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </footer>
