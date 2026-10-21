@@ -172,9 +172,20 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
 
         {/* 3. Authentic Sarkari Result High-Visibility Disclaimer Box */}
         <div className="my-6 border-2 border-red-300 bg-slate-50 rounded-xs p-4 sm:p-5 shadow-xs space-y-2">
-          <div className="flex items-center gap-2 text-red-700 font-black text-sm uppercase">
-            <AlertTriangle className="w-5 h-5 text-red-600 shrink-0" />
-            <span>{isHindi ? 'महत्वपूर्ण सूचना (Disclaimer Notice)' : 'Official Disclaimer Notice'}</span>
+          <div className="flex items-center justify-between gap-2 text-red-700 font-black text-sm uppercase">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-600 shrink-0" />
+              <span>{isHindi ? 'महत्वपूर्ण सूचना (Disclaimer Notice)' : 'Official Disclaimer Notice'}</span>
+            </div>
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                className="text-slate-800 hover:text-black text-xs font-bold cursor-pointer underline normal-case transition-colors bg-slate-100 hover:bg-slate-200 border border-slate-300 px-2 py-0.5 rounded shadow-2xs"
+                title="Admin Panel"
+              >
+                ⚙️ Admin Panel
+              </button>
+            )}
           </div>
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
             {isHindi ? (
@@ -225,17 +236,18 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
             >
               Contact Us
             </button>
-            {/* {onOpenAdmin && (
+            {onOpenAdmin && (
               <>
                 <span>•</span>
                 <button
                   onClick={onOpenAdmin}
-                  className="text-blue-700 hover:text-blue-500 hover:underline cursor-pointer font-bold"
+                  className="text-slate-700 hover:text-slate-950 underline cursor-pointer font-bold transition-colors"
+                  title="Admin Panel"
                 >
                   Admin Panel
                 </button>
               </>
-            )} */}
+            )}
           </div>
         </div>
       </div>

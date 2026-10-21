@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface AdSectionProps {
   slotId?: string;
@@ -19,29 +19,36 @@ export const AdSection: React.FC<AdSectionProps> = ({
   slotId = '8892103412',
   clientPublisherId = 'ca-pub-XXXXXXXXXXXXXXXX',
   format = 'horizontal',
-  label = 'Advertisement / विज्ञापन',
   className = '',
   showPlaceholderNotice = true
 }) => {
+  const adRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        window.adsbygoogle = window.adsbygoogle || [];
-        window.adsbygoogle.push({});
+    const timer = setTimeout(() => {
+      try {
+        if (typeof window !== 'undefined' && adRef.current) {
+          const width = adRef.current.clientWidth;
+          if (width > 0) {
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.push({});
+          }
+        }
+      } catch (e) {
+        console.debug('AdSense initialization:', e);
       }
-    } catch (e) {
-      console.debug('AdSense initialization:', e);
-    }
+    }, 150);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <div 
+      ref={adRef}
       className={`w-full my-4 sm:my-6 p-2 sm:p-3 bg-slate-50 border border-slate-200 rounded-xs text-center shadow-2xs overflow-hidden transition-all ${className}`}
       role="region"
       aria-label="Advertisement"
     >
-
-
       {/* AdSense Unit Wrapper with fixed CLS protection height */}
       <div className="min-h-[90px] sm:min-h-[100px] max-h-[280px] w-full flex items-center justify-center bg-white border border-dashed border-slate-300 rounded-xs overflow-hidden p-2">
         {/* Live AdSense Tag Structure */}

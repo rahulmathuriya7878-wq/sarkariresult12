@@ -411,6 +411,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
             isHindi={isHindi}
             onSelectPost={handleOpenPostFullPage}
+            onOpenAdmin={() => setIsAdminOpen(true)}
           />
         </Suspense>
       ) : (

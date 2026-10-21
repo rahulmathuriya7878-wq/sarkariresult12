@@ -4,7 +4,69 @@ import { screenshotResultPosts, screenshotLatestJobPosts } from './screenshotPos
 export const mockSarkariPosts: SarkariPost[] = [
   ...screenshotResultPosts,
   ...screenshotLatestJobPosts,
-  // --- LATEST NOTICES OCTOBER 2026 ---
+  // --- RRB STATION MASTER RECRUITMENT 2026 ---
+  {
+    id: 'job-rrb-station-master-2026',
+    slug: 'rrb-station-master-recruitment-2026',
+    title: 'RRB Station Master Recruitment 2026 Online Form for 3,250 Posts (Railway CEN 07/2026)',
+    shortTitle: 'RRB Station Master 3,250 Posts Online Form 2026',
+    hindiTitle: 'रेलवे आरआरबी स्टेशन मास्टर भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Railway',
+    qualifications: ['Graduate'],
+    state: 'All India',
+    postDate: '20 October 2026',
+    notificationNumber: 'CEN 07/2026 (RRB Station Master)',
+    totalVacancies: '3,250 Posts',
+    isHot: true,
+    isNew: true,
+    lastDate: '30 November 2026',
+    examDate: 'March 2027 (CBT-1)',
+    salary: '₹ 35,400 - ₹ 1,12,400/- (Level 6)',
+    salaryBand: '50K - 1 Lakh',
+    shortInfo: 'Railway Recruitment Board (RRB) has officially released CEN 07/2026 notification for recruitment of Station Master across Indian Railways zones. Eligible graduate candidates can apply online from official portals.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 refundable after CBT-1)' },
+      { category: 'SC / ST / PwBD / Female / Minorities', amount: '₹ 250/- (₹ 250 full refundable after CBT-1)' }
+    ],
+    feePaymentMode: 'Online via Debit Card, Credit Card, Net Banking or UPI.',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 18,
+      maxAge: 33,
+      notes: 'Age relaxation applicable as per Railway Recruitment Board rules (OBC +3 years, SC/ST +5 years).'
+    },
+    importantDates: [
+      { label: 'Notification Release Date', value: '20/10/2026' },
+      { label: 'Online Application Begin Date', value: '25/10/2026', isHighlight: true },
+      { label: 'Last Date for Apply Online', value: '30/11/2026', isHighlight: true },
+      { label: 'Fee Payment Last Date', value: '02/12/2026' },
+      { label: 'CBT-1 Exam Date', value: 'March 2027', isHighlight: true },
+      { label: 'Admit Card Release', value: '10 Days Before Exam' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Station Master (स्टेशन मास्टर)',
+        totalPosts: '3,250 Posts',
+        eligibility: 'Bachelor Degree (Graduate) in any discipline from a recognized University in India. No percentage bar.',
+        modeOfSelection: '1. Computer Based Test (CBT-1 & CBT-2)\n2. Computer Based Aptitude Test (CBAT)\n3. Document Verification & Medical Examination',
+        categoryBreakdown: { gen: 1320, obc: 870, ews: 325, sc: 485, st: 250 }
+      }
+    ],
+    howToApplySteps: [
+      'Visit official Railway Recruitment Board (RRB) website or rrbapply.gov.in.',
+      'Click on New Registration and select your RRB Region (e.g. RRB Ajmer, Bhopal, Chandigarh, Mumbai, etc.).',
+      'Fill personal and educational details carefully.',
+      'Upload scanned passport size photograph and signature as per specified dimensions.',
+      'Pay application fee online and submit final application form.',
+      'Download and print confirmation page for future reference.'
+    ],
+    directLinks: [
+      { label: 'Apply Online (New Registration / Login)', actionText: 'Apply Online', type: 'apply', url: 'https://rrbapply.gov.in/', isPrimary: true },
+      { label: 'Download Official Notification PDF', actionText: 'Click Here (PDF)', type: 'notification', url: 'https://rrbapply.gov.in/' },
+      { label: 'Official RRB Portal', actionText: 'rrbapply.gov.in', type: 'official', url: 'https://rrbapply.gov.in/' }
+    ]
+  },
   {
     id: 'job-nta-ugc-net-2026',
     slug: 'nta-ugc-net-2026-online-form',
