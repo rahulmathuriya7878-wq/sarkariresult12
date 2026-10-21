@@ -8,10 +8,9 @@ import { mockSarkariPosts } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
 import { QuickHighlightsGrid } from './components/QuickHighlightsGrid';
-import { SarkariThreeColumnGrid } from './components/SarkariThreeColumnGrid';
+import { FastUpdatesGrid } from './components/FastUpdatesGrid';
 import { SarkariFooter } from './components/SarkariFooter';
 import { BackToTop } from './components/BackToTop';
-import { SitemapModal } from './components/SitemapModal';
 import { CategoryDetailView } from './components/CategoryDetailView';
 import { FullPagePostView } from './components/FullPagePostView';
 import { FloatingShareButton } from './components/FloatingShareButton';
@@ -104,7 +103,6 @@ export default function App() {
   const [isJobFinderOpen, setIsJobFinderOpen] = useState<boolean>(false);
   const [isBookmarksOpen, setIsBookmarksOpen] = useState<boolean>(false);
   const [isJobAlertsOpen, setIsJobAlertsOpen] = useState<boolean>(false);
-  const [isSitemapOpen, setIsSitemapOpen] = useState<boolean>(false);
 
   // Post Mutation Handlers for Admin Panel
   const handleAddPost = (newPost: SarkariPost) => {
@@ -173,6 +171,13 @@ export default function App() {
 
   // Handle URL hash routing to open full page for specific post or back to home
   useEffect(() => {
+    // Dynamic title management
+    if (selectedPost) {
+      document.title = `${selectedPost.shortTitle || selectedPost.title} - Sarkari Result`;
+    } else {
+      document.title = 'Sarkari Result 2026 - Official Job Alerts & Notifications';
+    }
+
     const handleHash = () => {
       // Check if user landed via shared link
       const isShare = 
@@ -210,7 +215,7 @@ export default function App() {
     handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
-  }, [allPosts]);
+  }, [allPosts, selectedPost]);
 
   // Monitor status changes for saved post alerts ('Upcoming' -> 'Active')
   useEffect(() => {
@@ -265,44 +270,42 @@ export default function App() {
 
   // Filtered posts based on search query, department, qualification, state
   const filteredPosts = useMemo(() => {
-    return allPosts.filter((post) => {
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const matchesText = 
-          post.title.toLowerCase().includes(q) ||
-          post.shortTitle.toLowerCase().includes(q) ||
-          post.department.toLowerCase().includes(q) ||
-          post.state.toLowerCase().includes(q) ||
-          post.shortInfo.toLowerCase().includes(q) ||
-          (post.hindiTitle && post.hindiTitle.toLowerCase().includes(q)) ||
-          post.qualifications.some((qual) => qual.toLowerCase().includes(q));
-        if (!matchesText) return false;
-      }
-
-      if (selectedDept !== 'All' && post.department !== selectedDept) {
-        return false;
-      }
-
-      if (selectedQual !== 'All' && !post.qualifications.includes(selectedQual)) {
-        return false;
-      }
-
+    let result = allPosts.filter((post) => {
+      if (selectedDept !== 'All' && post.department !== selectedDept) return false;
+      if (selectedQual !== 'All' && !post.qualifications.includes(selectedQual)) return false;
       if (selectedState !== 'All States') {
-        if (post.state !== 'All India' && post.state !== selectedState) {
-          return false;
-        }
+        if (post.state !== 'All India' && post.state !== selectedState) return false;
       }
-
       if (selectedSalary !== 'All') {
         const postBand = getPostSalaryBand(post);
-        if (postBand !== selectedSalary) {
-          return false;
-        }
+        if (postBand !== selectedSalary) return false;
       }
-
       return true;
     });
-  }, [searchQuery, selectedDept, selectedQual, selectedState, selectedSalary]);
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      
+      const scored = result.map(post => {
+        let score = 0;
+        if (post.title.toLowerCase().includes(q)) score += 10;
+        if (post.shortTitle.toLowerCase().includes(q)) score += 10;
+        if (post.department.toLowerCase().includes(q)) score += 5;
+        if (post.shortInfo.toLowerCase().includes(q)) score += 5;
+        if (post.state.toLowerCase().includes(q)) score += 3;
+        if (post.qualifications.some(qual => qual.toLowerCase().includes(q))) score += 3;
+        if (post.hindiTitle && post.hindiTitle.toLowerCase().includes(q)) score += 3;
+        return { post, score };
+      });
+
+      result = scored
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.post);
+    }
+    
+    return result;
+  }, [allPosts, searchQuery, selectedDept, selectedQual, selectedState, selectedSalary]);
 
 const parsePostDate = (dateStr?: string): number => {
   if (!dateStr) return 0;
@@ -391,6 +394,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onOpenPostBySlug={handleSelectSlug}
+        allPosts={allPosts}
       />
 
       {/* 2. Conditional Full Page View or Main Home Portal */}
@@ -413,7 +417,12 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         /* Home Main View */
         <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-3">
           {/* Quick Highlights 8-box Grid (Headlight: Dynamic Top 8 Latest Posts) */}
-          <QuickHighlightsGrid posts={allPosts} onSelectHighlight={handleSelectSlug} />
+          <QuickHighlightsGrid 
+            posts={allPosts} 
+            onSelectHighlight={handleSelectSlug} 
+            visitedPostIds={visitedPostIds}
+            bookmarkedIds={bookmarkedIds}
+          />
 
           {/* Active Search / Filter Status Banner */}
           {searchQuery.trim() && (
@@ -449,7 +458,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           ) : (
             <>
               {/* Primary Grid: Result | Latest Jobs / Admit Card (Authentic 2-Col Mobile & 3-Col Desktop) */}
-              <SarkariThreeColumnGrid
+              <FastUpdatesGrid
                 results={results}
                 admitCards={admitCards}
                 latestJobs={latestJobs}
@@ -476,17 +485,9 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
         onOpenJobFinder={() => setIsJobFinderOpen(true)}
         onOpenAdmin={() => setIsAdminOpen(true)}
-        onOpenSitemap={() => setIsSitemapOpen(true)}
         onSelectPost={handleOpenPostFullPage}
         onOpenPostBySlug={handleSelectSlug}
         isHindi={isHindi}
-      />
-
-      {/* XML Sitemap Generator Modal */}
-      <SitemapModal
-        isOpen={isSitemapOpen}
-        onClose={() => setIsSitemapOpen(false)}
-        posts={allPosts}
       />
 
       {/* Candidate Tools Modals - Lazy loaded only when modal opens */}

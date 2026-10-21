@@ -167,9 +167,11 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     setTimeout(() => setToastMessage(null), 3000);
   };
 
+  const ADMIN_PASSWORD = '78787739277877139203';
+
   const handleLogin = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (pinInput === '1234' || pinInput === 'admin2026' || pinInput === 'admin') {
+    if (pinInput.trim() === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       sessionStorage.setItem('sarkari_admin_auth', 'true');
       setPinError(false);
@@ -177,11 +179,6 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     } else {
       setPinError(true);
     }
-  };
-
-  const handleQuickLogin = () => {
-    setIsAuthenticated(true);
-    sessionStorage.setItem('sarkari_admin_auth', 'true');
   };
 
   const handleLogout = () => {
@@ -370,22 +367,22 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         {/* Content Body */}
         {!isAuthenticated ? (
           /* Login Guard View */
-          <div className="flex-1 flex items-center justify-center p-6 bg-slate-100">
-            <div className="bg-white p-6 sm:p-8 rounded-md border border-slate-300 shadow-md max-w-md w-full space-y-5 text-center">
-              <div className="w-14 h-14 bg-red-100 text-[#ab1616] rounded-full flex items-center justify-center mx-auto">
+          <div className="flex-1 flex items-center justify-center p-6 bg-white">
+            <div className="bg-white p-6 sm:p-8 rounded-md border border-slate-200 shadow-sm max-w-md w-full space-y-5 text-center">
+              <div className="w-14 h-14 bg-red-50 text-[#ab1616] rounded-full flex items-center justify-center mx-auto">
                 <Lock className="w-7 h-7" />
               </div>
               <div>
                 <h3 className="text-xl font-black text-slate-900">Admin Authentication Required</h3>
                 <p className="text-xs text-slate-500 mt-1">
-                  Enter Admin PIN to edit posts, create new notifications or update dates.
+                  Enter Admin Password to manage notifications, edit posts, and update dates.
                 </p>
               </div>
 
               <form onSubmit={handleLogin} className="space-y-3">
                 <div className="text-left">
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Enter PIN / Password (Default: 1234)
+                    Enter Admin Password
                   </label>
                   <input
                     type="password"
@@ -394,33 +391,25 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                       setPinInput(e.target.value);
                       setPinError(false);
                     }}
-                    placeholder="Enter PIN (e.g. 1234)"
+                    placeholder="Enter Admin Password"
                     className={`w-full px-3 py-2 border rounded text-sm focus:outline-none ${
-                      pinError ? 'border-red-600 bg-red-50' : 'border-slate-300 focus:border-red-700'
+                      pinError ? 'border-red-600 bg-red-50' : 'border-slate-300 focus:border-blue-500'
                     }`}
                     autoFocus
                   />
                   {pinError && (
                     <p className="text-xs text-red-600 font-bold mt-1">
-                      Incorrect PIN! You can use default PIN: <code className="bg-slate-100 px-1 rounded">1234</code>
+                      Incorrect Password! Please enter the authorized Admin Password.
                     </p>
                   )}
                 </div>
 
-                <div className="flex gap-2">
+                <div>
                   <button
                     type="submit"
-                    className="flex-1 bg-[#ab1616] hover:bg-red-800 text-white font-bold text-sm py-2 rounded transition-colors cursor-pointer shadow-xs"
+                    className="w-full bg-[#ab1616] hover:bg-red-800 text-white font-bold text-sm py-2.5 rounded transition-colors cursor-pointer shadow-sm"
                   >
                     Unlock Admin Panel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleQuickLogin}
-                    className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3 py-2 rounded transition-colors cursor-pointer"
-                    title="Instant Demo Access"
-                  >
-                    Quick Login
                   </button>
                 </div>
               </form>
@@ -430,7 +419,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           /* POST EDITOR FORM */
           <div className="flex-1 flex flex-col overflow-hidden bg-white">
             {/* Editor Subheader */}
-            <div className="bg-slate-100 border-b border-slate-300 px-4 py-2.5 flex items-center justify-between shrink-0">
+            <div className="bg-slate-50 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -452,7 +441,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                   type="button"
                   onClick={() => setActiveTab('basic')}
                   className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'basic' ? 'bg-[#ab1616] text-white' : 'bg-white text-slate-700 hover:bg-slate-200'
+                    activeTab === 'basic' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
                   General Info
@@ -461,7 +450,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                   type="button"
                   onClick={() => setActiveTab('dates_fees')}
                   className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'dates_fees' ? 'bg-[#ab1616] text-white' : 'bg-white text-slate-700 hover:bg-slate-200'
+                    activeTab === 'dates_fees' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
                   Dates, Fees & Age
@@ -470,7 +459,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                   type="button"
                   onClick={() => setActiveTab('links')}
                   className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'links' ? 'bg-[#ab1616] text-white' : 'bg-white text-slate-700 hover:bg-slate-200'
+                    activeTab === 'links' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
                   Direct Links
@@ -479,7 +468,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                   type="button"
                   onClick={() => setActiveTab('vacancy')}
                   className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'vacancy' ? 'bg-[#ab1616] text-white' : 'bg-white text-slate-700 hover:bg-slate-200'
+                    activeTab === 'vacancy' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
                   Vacancies & Steps
@@ -488,7 +477,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                   type="button"
                   onClick={() => setActiveTab('faqs')}
                   className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer flex items-center gap-1 ${
-                    activeTab === 'faqs' ? 'bg-[#ab1616] text-white' : 'bg-white text-slate-700 hover:bg-slate-200'
+                    activeTab === 'faqs' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
                   <HelpCircle className="w-3.5 h-3.5" />

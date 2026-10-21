@@ -7,6 +7,7 @@ import {
   X
 } from 'lucide-react';
 import { PostCategory } from '../types/job';
+import { SarkariPost } from '../types/job';
 
 interface HeaderProps {
   activeCategory: PostCategory | 'all';
@@ -26,6 +27,7 @@ interface HeaderProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onOpenPostBySlug: (slug: string) => void;
+  allPosts: SarkariPost[];
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -34,7 +36,8 @@ export const Header: React.FC<HeaderProps> = ({
   isHindi: _isHindi,
   searchQuery,
   onSearchChange,
-  onOpenPostBySlug
+  onOpenPostBySlug,
+  allPosts
 }) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
@@ -77,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="w-full bg-white shadow-xs">
       {/* 1. Authentic Sarkari Result Crimson Masthead (Exact Website Design) */}
-      <div className="bg-[#8b0000] text-white py-2.5 sm:py-3.5 px-3 sm:px-6 border-b border-red-950">
+      <div className="bg-[#ab1616] text-white py-2.5 sm:py-3.5 px-3 sm:px-6 border-b border-red-950">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-2">
           
           {/* Brand Logo & Title with Seal */}
@@ -147,7 +150,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => handleNavClick('all')}
                 className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'all' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                  activeCategory === 'all' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
                 }`}
               >
                 Home
@@ -156,7 +159,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => handleNavClick('latest_jobs')}
                 className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'latest_jobs' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                  activeCategory === 'latest_jobs' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
                 }`}
               >
                 Latest Job
@@ -165,7 +168,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => handleNavClick('admit_card')}
                 className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'admit_card' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                  activeCategory === 'admit_card' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
                 }`}
               >
                 Admit Card
@@ -174,30 +177,28 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => handleNavClick('result')}
                 className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'result' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                  activeCategory === 'result' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
                 }`}
               >
                 Results
               </button>
 
               <button
-                onClick={() => handleNavClick('admission')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'admission' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
-                }`}
-              >
-                Admission
-              </button>
-
-
-
-              <button
                 onClick={() => handleNavClick('syllabus')}
                 className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'syllabus' ? 'text-red-400 font-black' : 'text-white hover:bg-neutral-900'
+                  activeCategory === 'syllabus' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
                 }`}
               >
                 Syllabus
+              </button>
+
+              <button
+                onClick={() => handleNavClick('admission')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'admission' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Admission
               </button>
 
               {/* Mobile More Accordion */}
@@ -229,6 +230,12 @@ export const Header: React.FC<HeaderProps> = ({
                       className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
                     >
                       📌 Important Links
+                    </button>
+                    <button
+                      onClick={() => handleStaticDocClick('privacy-policy')}
+                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                    >
+                      🔒 Privacy Policy
                     </button>
                     <button
                       onClick={() => handleStaticDocClick('disclaimer')}
@@ -295,23 +302,21 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <button
-              onClick={() => handleNavClick('admission')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
-                activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Admission
-            </button>
-
-
-
-            <button
               onClick={() => handleNavClick('syllabus')}
               className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
                 activeCategory === 'syllabus' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
               Syllabus
+            </button>
+
+            <button
+              onClick={() => handleNavClick('admission')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+                activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
+              }`}
+            >
+              Admission
             </button>
 
             {/* Desktop More Button */}
@@ -343,6 +348,12 @@ export const Header: React.FC<HeaderProps> = ({
                     className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between"
                   >
                     <span>📌 Important Links</span>
+                  </button>
+                  <button
+                    onClick={() => handleStaticDocClick('privacy-policy')}
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-purple-800"
+                  >
+                    <span>🔒 Privacy Policy</span>
                   </button>
                   <button
                     onClick={() => handleStaticDocClick('disclaimer')}
@@ -378,25 +389,28 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 3. Search Bar Dropdown when search icon is clicked */}
+      {/* 3. Google Search Style Dropdown when search icon is clicked */}
       {isSearchVisible && (
-        <div className="bg-slate-100 border-b-2 border-red-800 py-2.5 px-3 sm:px-6">
-          <div className="max-w-7xl mx-auto">
+        <div className="bg-white border-b-2 border-slate-300 py-3 px-3 sm:px-6 shadow-md">
+          <div className="max-w-3xl mx-auto">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                {/* Google-style search icon */}
+                <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                  <Search className="w-4 h-4 text-blue-600" />
+                </div>
                 <input
                   type="text"
                   autoFocus
                   value={searchQuery}
                   onChange={(e) => onSearchChange(e.target.value)}
-                  placeholder="Search here for any Result, Admit Card, Latest Job, Syllabus..."
-                  className="w-full pl-9 pr-20 py-2 text-sm bg-white border-2 border-red-800 rounded-xs focus:outline-hidden focus:ring-2 focus:ring-red-600 font-medium text-slate-900"
+                  placeholder="Search Govt Jobs, Admit Card, Results, Syllabus (Google Style)..."
+                  className="w-full pl-10 pr-24 py-2.5 text-sm bg-white border border-slate-300 rounded-full shadow-inner focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 font-medium text-slate-900 transition-all"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => onSearchChange('')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold bg-slate-200 px-2 py-0.5 rounded cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded-full cursor-pointer transition-colors"
                   >
                     Clear ✕
                   </button>
@@ -406,28 +420,51 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => {
                   if (!searchQuery.trim()) {
-                    onSearchChange('Supreme Court');
+                    onSearchChange('UPSC');
                   }
                 }}
-                className="bg-[#ab1616] hover:bg-red-800 text-white px-5 py-2 rounded-xs text-xs font-black uppercase tracking-wide cursor-pointer transition-colors shrink-0"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wide cursor-pointer transition-all shadow-sm shrink-0 flex items-center justify-center gap-1"
               >
-                Search Sarkari
+                <Search className="w-3.5 h-3.5" />
+                <span>Google Search</span>
               </button>
             </div>
 
-            {/* Quick Trending Keyword Pills */}
-            <div className="flex flex-wrap items-center gap-1.5 mt-2 text-[11px] sm:text-xs">
-              <span className="font-extrabold text-[#ab1616] shrink-0">Trending:</span>
+            {/* Quick Trending Keyword Google-style Chips */}
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 mt-2.5 text-[11px] sm:text-xs">
+              <span className="font-bold text-slate-500 shrink-0">Trending Searches:</span>
               {trendingTags.map((tag) => (
                 <button
                   key={tag.slug}
                   onClick={() => onSearchChange(tag.label)}
-                  className="text-blue-800 hover:text-[#ab1616] hover:underline cursor-pointer font-bold"
+                  className="bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-medium px-2.5 py-1 rounded-full border border-slate-200 transition-colors cursor-pointer"
                 >
-                  {tag.label} |
+                  {tag.label}
                 </button>
               ))}
             </div>
+
+            {/* Auto-suggested Categories Dropdown */}
+            {searchQuery.length > 1 && (
+              <div className="absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200 rounded-lg shadow-lg z-50 p-2 text-sm">
+                {Array.from(new Set(allPosts
+                  .filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.department.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .slice(0, 5)
+                  .map(p => p.department)
+                )).map(dept => (
+                  <button
+                    key={dept}
+                    onClick={() => {
+                      onSearchChange(dept);
+                      setIsSearchVisible(false);
+                    }}
+                    className="w-full text-left px-4 py-2 hover:bg-blue-50 text-slate-700 rounded-md"
+                  >
+                    Filter by: {dept}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

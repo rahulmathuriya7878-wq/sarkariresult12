@@ -2,6 +2,7 @@ import React from 'react';
 import { SarkariPost } from '../types/job';
 import { ChevronRight, Newspaper } from 'lucide-react';
 import { isPostVisited } from '../utils/visitedPosts';
+import { AdSection } from './AdSection';
 
 interface SarkariThreeColumnGridProps {
   results: SarkariPost[];
@@ -125,6 +126,9 @@ export const SarkariThreeColumnGrid: React.FC<SarkariThreeColumnGridProps> = ({
         )}
       </div>
 
+      {/* AdSection 1: Responsive Banner Between Results/Jobs and Admit Card */}
+      <AdSection slotId="8892103412" format="horizontal" />
+
       {/* Pair 2: Admit Card (Left) | Answer Key (Right) - 2 Sections Horizontal Just Below Latest Jobs */}
       <div className="grid grid-cols-2 gap-3 sm:gap-5">
         {renderColumn(
@@ -166,6 +170,9 @@ export const SarkariThreeColumnGrid: React.FC<SarkariThreeColumnGridProps> = ({
           false
         )}
       </div>
+
+      {/* AdSection 2: Responsive Banner Between Syllabus/Important and Admission/Verification */}
+      <AdSection slotId="9923841029" format="horizontal" />
 
       {/* Pair 3: Admission (Left) | Certificate Verification (Right) */}
       <div className="grid grid-cols-2 gap-3 sm:gap-5">

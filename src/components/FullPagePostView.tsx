@@ -181,6 +181,34 @@ export const getCategoryLabel = (category: string): string => {
   }
 };
 
+const getDepartmentHeader = (dept: string, postTitle: string, isInfo: boolean): string => {
+  if (isInfo) return 'Sarkari Result Official Notice';
+  const titleLower = (postTitle + ' ' + dept).toLowerCase();
+  if (titleLower.includes('supreme court') || titleLower.includes('court master') || titleLower.includes('sci')) {
+    return 'Supreme Court of India (SCI)';
+  }
+  if (dept === 'UPSC' || titleLower.includes('upsc') || titleLower.includes('civil services') || titleLower.includes('cds')) {
+    return 'Union Public Service Commission (UPSC)';
+  }
+  if (dept === 'SSC' || titleLower.includes('staff selection') || titleLower.includes('ssc')) {
+    return 'Staff Selection Commission (SSC)';
+  }
+  if (dept === 'Railway' || titleLower.includes('railway') || titleLower.includes('rrb') || titleLower.includes('rrc') || titleLower.includes('alp')) {
+    return 'Railway Recruitment Board (RRB / RRC)';
+  }
+  if (dept === 'Banking' || titleLower.includes('ibps') || titleLower.includes('sbi') || titleLower.includes('bank')) {
+    return 'Institute of Banking Personnel Selection (IBPS / SBI)';
+  }
+  if (dept === 'Police' || titleLower.includes('police') || titleLower.includes('constable') || titleLower.includes('si ')) {
+    return 'Police Recruitment & Promotion Board';
+  }
+  if (dept === 'Teaching' || titleLower.includes('tet') || titleLower.includes('ctet') || titleLower.includes('teacher')) {
+    return 'Teacher Eligibility & Education Board';
+  }
+  if (dept && dept !== 'Other') return dept;
+  return 'Supreme Court of India (SCI)';
+};
+
 export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   post,
   onBack,
@@ -601,16 +629,19 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           {/* Section Body Details */}
           <div className="p-5 sm:p-8 md:p-10 space-y-7 sm:space-y-9 md:space-y-10 text-slate-900 text-[12pt]">
             
-            {/* Center Header Details (Organization, Title, Notification) */}
+            {/* Center Header Details (Organization, Title) - Matching Screenshot */}
             <div className="text-center py-4 border-b border-slate-200 space-y-2">
-              <h2 className="text-[#008000] font-black text-[16pt] font-serif uppercase tracking-tight">
-                {post.department === 'Other' ? (isInformationalPost ? 'Sarkari Result Official Notice' : 'Supreme Court of India (SCI)') : post.department}
+              <h2 
+                className="text-[#16a34a] font-black text-[16pt] sm:text-[18pt] font-sans uppercase tracking-tight"
+                style={{ color: '#16a34a' }}
+              >
+                {getDepartmentHeader(post.department, post.title, isInformationalPost)}
               </h2>
-              <div className="text-[#990099] font-bold text-[14pt] leading-snug">
-                {post.shortTitle}
-              </div>
-              <div className="text-[#990099] font-bold text-[12pt]">
-                {post.notificationNumber || 'SR/OFFICIAL-NOTICE/2026'} {isInformationalPost ? 'Official Document Guidelines' : 'Short Details of Notification'}
+              <div 
+                className="text-[#c026d3] font-bold text-[14pt] sm:text-[15pt] leading-snug font-sans"
+                style={{ color: '#c026d3' }}
+              >
+                {post.title || post.shortTitle}
               </div>
             </div>
 
@@ -622,7 +653,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   <div className="space-y-6">
                     {post.vacancyBreakdown.map((item, idx) => (
                       <div key={idx} className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3 shadow-2xs">
-                        <h4 className="text-[#008000] font-black text-[16pt] border-b border-slate-200 pb-2.5 font-serif">
+                        <h4 
+                          className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-2.5 font-sans"
+                          style={{ color: '#16a34a' }}
+                        >
                           {item.postName}
                         </h4>
                         <div className="text-slate-800 leading-relaxed whitespace-pre-line font-sans pt-1 text-[12pt]">
@@ -636,7 +670,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Informational Guidelines / Instructions */}
                 {post.howToApplySteps && post.howToApplySteps.length > 0 && (
                   <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
-                    <h4 className="text-[#008000] font-black text-[16pt] border-b border-slate-200 pb-3 font-serif">
+                    <h4 
+                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
+                      style={{ color: '#16a34a' }}
+                    >
                       {post.shortTitle} Guidelines & Important Information
                     </h4>
                     <ul className="space-y-3 text-slate-800 pt-1 leading-relaxed text-[12pt]">
@@ -657,14 +694,17 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   
                   {/* Left Column: Important Dates */}
                   <div className="p-5 sm:p-7 space-y-3.5">
-                    <h3 className="text-[#008000] font-black text-[16pt] border-b border-slate-200 pb-3 text-center font-serif">
+                    <h3 
+                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 text-center font-sans uppercase"
+                      style={{ color: '#16a34a' }}
+                    >
                       Important Dates
                     </h3>
                     <ul className="space-y-3 text-[12pt] text-slate-800 pt-1 leading-relaxed">
                       {getProcessedImportantDates(post).map((d, idx) => (
                         <li key={idx} className="leading-snug">
                           <span className="text-slate-800 font-medium">• {d.label} : </span>
-                          <span className={d.isHighlight ? 'text-[#cc0000] font-bold' : 'text-slate-900 font-bold'}>
+                          <span className={d.isHighlight ? 'text-[#dc2626] font-bold' : 'text-slate-900 font-bold'}>
                             {d.value}
                           </span>
                         </li>
@@ -674,7 +714,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                   {/* Right Column: Application Fee */}
                   <div className="p-5 sm:p-7 space-y-3.5">
-                    <h3 className="text-[#008000] font-black text-[16pt] border-b border-slate-200 pb-3 text-center font-serif">
+                    <h3 
+                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 text-center font-sans uppercase"
+                      style={{ color: '#16a34a' }}
+                    >
                       Application Fee
                     </h3>
                     <ul className="space-y-3 text-[12pt] text-slate-800 pt-1 leading-relaxed">
@@ -698,7 +741,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Age Limit Box */}
                 {!isServiceOrScheme && post.ageLimit.asOnDate && (
                   <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
-                    <h4 className="text-[#008000] font-black text-[16pt] border-b border-slate-200 pb-3 font-serif">
+                    <h4 
+                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
+                      style={{ color: '#16a34a' }}
+                    >
                       {post.shortTitle} Age Limit as on {post.ageLimit.asOnDate}
                     </h4>
                     <ul className="space-y-2.5 text-slate-800 pt-1 leading-relaxed text-[12pt]">
@@ -720,7 +766,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Category-Wise Age Relaxation Rule Table (Only for Latest Jobs, Result, Admit Card, Answer Key) */}
                 {showRecruitmentDetails && !isServiceOrScheme && post.ageLimit.asOnDate && (
                   <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                    <div className="bg-[#008000] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
                       {post.shortTitle} Category-Wise Age Relaxation Rules
                     </div>
                     <div className="overflow-x-auto">
@@ -757,7 +803,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Vacancy Details Table */}
                 {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
                   <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                    <div className="bg-[#008000] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
                       {post.shortTitle} Vacancy Details Total : {post.totalVacancies} Posts
                     </div>
                     <div className="overflow-x-auto">
@@ -792,7 +838,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Mode of Selection & Examination Scheme (Only for Latest Jobs, Result, Admit Card, Answer Key) */}
                 {showRecruitmentDetails && (
                   <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
-                    <h4 className="text-[#008000] font-black text-[16pt] border-b border-slate-200 pb-3 font-serif">
+                    <h4 
+                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
+                      style={{ color: '#16a34a' }}
+                    >
                       {post.shortTitle} Selection Process / Mode of Selection
                     </h4>
                     <div className="pt-1">
@@ -803,26 +852,26 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         {post.selectionProcess && post.selectionProcess.length > 0 ? (
                           post.selectionProcess.map((step, idx) => (
                             <li key={idx} className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#008000] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage {idx + 1}</span>
+                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage {idx + 1}</span>
                               <span className="leading-relaxed text-slate-800">{step}</span>
                             </li>
                           ))
                         ) : (
                           <>
                             <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#008000] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 1</span>
+                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 1</span>
                               <span className="leading-relaxed text-slate-800"><strong>Computer Based Test (CBT) / Written Entrance Exam :</strong> Objective type multiple choice questions covering General Awareness, Quantitative Aptitude, Reasoning Ability, and General Knowledge.</span>
                             </li>
                             <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#008000] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 2</span>
+                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 2</span>
                               <span className="leading-relaxed text-slate-800"><strong>Skill Test / Physical Standard & Efficiency Test (PET/PST) :</strong> Qualifying nature skill test or physical standards evaluation as applicable for specific post code.</span>
                             </li>
                             <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#008000] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 3</span>
+                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 3</span>
                               <span className="leading-relaxed text-slate-800"><strong>Document Verification (DV) :</strong> Verification of original educational certificates, category caste certificates, domicile proof, and photo identity proof.</span>
                             </li>
                             <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#008000] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 4</span>
+                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 4</span>
                               <span className="leading-relaxed text-slate-800"><strong>Detailed Medical Examination (DME) :</strong> Final medical fitness checkup by authorized medical board prior to issuance of appointment letter.</span>
                             </li>
                           </>
@@ -835,14 +884,17 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* How to Fill Form Section */}
                 {post.howToApplySteps && post.howToApplySteps.length > 0 && (
                   <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
-                    <h4 className="text-[#008000] font-black text-[16pt] border-b border-slate-200 pb-3 font-serif">
+                    <h4 
+                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
+                      style={{ color: '#16a34a' }}
+                    >
                       How to Fill {post.shortTitle} Online Form
                     </h4>
                     <ul className="space-y-3 text-slate-800 pt-1 leading-relaxed text-[12pt]">
                       {post.howToApplySteps.map((step, idx) => (
                         <li key={idx}>• {step}</li>
                       ))}
-                      <li className="text-[#cc0000] font-bold pt-1.5 border-t border-slate-100 mt-3">
+                      <li className="text-[#dc2626] font-bold pt-1.5 border-t border-slate-100 mt-3">
                         • Interested Candidate Can Read the Full Notification Before Apply Online.
                       </li>
                     </ul>
@@ -853,7 +905,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
             {/* Useful Important Links Table (Includes WhatsApp & Telegram for ALL Posts) */}
             <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-              <div className="bg-[#cc0000] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+              <div className="bg-[#dc2626] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
                 Some Useful Important Links
               </div>
               <div className="divide-y divide-slate-200 text-[12pt]">
@@ -883,7 +935,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             {/* Related Posts Section - 3 Suggestions from Same Category or Department (JUST ABOVE FAQ) */}
             {relatedPosts.length > 0 && (
               <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                <div className="bg-[#ab1616] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide flex items-center justify-between">
+                <div className="bg-[#dc2626] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide flex items-center justify-between">
                   <span>
                     {isHindi ? 'सम्बंधित रिक्तियां एवं अपडेट्स (Related Posts)' : 'Related Posts & Updates'}
                   </span>
@@ -916,7 +968,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                             </span>
                           )}
                         </div>
-                        <h4 className="font-bold text-[14pt] text-blue-900 group-hover:text-[#ab1616] group-hover:underline transition-colors leading-snug">
+                        <h4 className="font-bold text-[14pt] text-blue-900 group-hover:text-[#dc2626] group-hover:underline transition-colors leading-snug">
                           • {related.title}
                         </h4>
                       </div>
@@ -940,14 +992,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             {/* Frequently Asked Questions (FAQ) Section */}
             {faqs.length > 0 && (
               <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                <div className="bg-[#008000] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
                   Frequently Asked Questions (FAQ) – {post.shortTitle}
                 </div>
                 <div className="p-5 sm:p-8 divide-y divide-slate-100 space-y-5">
                   {faqs.map((faq, idx) => (
                     <div key={idx} className="pt-5 first:pt-0">
                       <h5 className="font-bold text-emerald-950 text-[14pt] leading-snug flex items-start gap-2">
-                        <span className="font-black text-[#cc0000] text-[14pt] shrink-0">Q.{idx + 1}</span>
+                        <span className="font-black text-[#dc2626] text-[14pt] shrink-0">Q.{idx + 1}</span>
                         <span className="text-[14pt]">{faq.question}</span>
                       </h5>
                       <p className="text-slate-800 text-[12pt] mt-2 pl-7 sm:pl-8 leading-normal font-sans">

@@ -104,7 +104,7 @@ export const PostViewSkeleton: React.FC = () => {
           {/* Center Title Skeleton */}
           <div className="text-center py-4 space-y-2 border-b border-slate-200">
             <div className="h-6 bg-emerald-200 rounded w-1/2 mx-auto"></div>
-            <div className="h-5 bg-purple-200 rounded w-2/3 mx-auto"></div>
+            <div className="h-5 bg-red-200 rounded w-2/3 mx-auto"></div>
             <div className="h-4 bg-slate-200 rounded w-1/3 mx-auto"></div>
           </div>
 

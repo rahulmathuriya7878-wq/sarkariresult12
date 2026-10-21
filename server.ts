@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { generateSitemapXml, generateRobotsTxt } from './src/utils/sitemapGenerator';
+import { generateRobotsTxt, generateSitemapXml } from './src/utils/sitemapGenerator';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,15 +11,15 @@ async function startServer() {
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
-  // Dynamic Sitemap XML Endpoint
-  app.get(['/sitemap.xml', '/sitemap', '/api/sitemap'], (req, res) => {
+  // Dynamic Sitemap XML Endpoint (serves real-time indexed active jobs, results, admissions)
+  app.get(['/sitemap.xml', '/sitemap', '/api/sitemap', '/api/sitemap.xml'], (req, res) => {
     const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
     const host = req.headers.host || 'ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app';
     const baseUrl = `${protocol}://${host}`;
-    
+
     const xml = generateSitemapXml(baseUrl);
     res.header('Content-Type', 'application/xml; charset=utf-8');
-    res.header('Cache-Control', 'public, max-age=3600');
+    res.header('Cache-Control', 'public, max-age=3600, must-revalidate');
     res.send(xml);
   });
 

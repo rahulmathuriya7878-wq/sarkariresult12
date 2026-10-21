@@ -2963,9 +2963,9 @@ export const mockSarkariPosts: SarkariPost[] = [
   {
     id: 'info-disclaimer',
     slug: 'disclaimer',
-    title: 'Sarkari Result Official Disclaimer & Legal Information (अस्वीकरण सूचना)',
-    shortTitle: 'Disclaimer (अस्वीकरण)',
-    hindiTitle: 'सरकारी रिजल्ट आधिकारिक अस्वीकरण एवं सूचना नीति',
+    title: 'Sarkari Result Official Disclaimer & Legal Information',
+    shortTitle: 'Disclaimer',
+    hindiTitle: 'सरकारी रिजल्ट आधिकारिक सूचना एवं डिस्क्लेमर नीति',
     category: 'important',
     department: 'Other',
     qualifications: [],
@@ -3135,6 +3135,63 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'Join Official Telegram Channel', actionText: 'Join Telegram', type: 'official', url: 'https://t.me/newsarkariresultt' },
       { label: 'Email Support Desk', actionText: 'contact@sarkariresult.com', type: 'official', url: 'mailto:contact@sarkariresult.com' }
     ]
+  },
+  {
+    id: 'info-privacy-policy',
+    slug: 'privacy-policy',
+    title: 'Privacy Policy & Google AdSense Compliance - Sarkari Result 2026',
+    shortTitle: 'Privacy Policy (गोपनीयता नीति)',
+    hindiTitle: 'सरकारी रिजल्ट गोपनीयता नीति एवं विज्ञापन अनुपालन (Privacy Policy)',
+    category: 'important',
+    department: 'Other',
+    qualifications: [],
+    state: 'All India',
+    postDate: '19 October 2026',
+    notificationNumber: 'SR/LEGAL/PRIVACY-2026',
+    salary: 'Google AdSense Compliant Policy',
+    salaryBand: '25K - 50K',
+    isHot: false,
+    isNew: false,
+    shortInfo: 'Sarkari Result respects your privacy and is fully compliant with Google AdSense policies regarding cookies, third-party advertising, and user data protection.',
+    applicationFee: [],
+    ageLimit: {
+      asOnDate: '01/01/2026',
+      notes: 'Applicable to all visitors.'
+    },
+    importantDates: [
+      { label: 'Effective Date', value: '01/01/2026' },
+      { label: 'Last Updated', value: '19/10/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: '1. Google AdSense & Advertising Cookies',
+        totalPosts: 'AdSense Policy',
+        eligibility: `• Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to your website or other websites.
+• Google's use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet.
+• Users may opt out of personalized advertising by visiting Ads Settings (https://myadcenter.google.com/).`
+      },
+      {
+        postName: '2. Information Collection & Usage',
+        totalPosts: 'Data Policy',
+        eligibility: `• We only collect basic non-personal log data (such as browser type, IP address, device type) for analytics and performance optimization.
+• Email addresses submitted for job alert subscriptions are securely stored and used strictly for sending exam updates and notifications.`
+      },
+      {
+        postName: '3. Children & Security Standards',
+        totalPosts: 'Security',
+        eligibility: `• Our website does not knowingly collect any personally identifiable information from children under 13.
+• We maintain strict security protocols to prevent unauthorized access or disclosure of stored alert preferences.`
+      }
+    ],
+    howToApplySteps: [
+      'You can browse all Sarkari Result job notifications and updates without creating an account.',
+      'To manage your ad personalization preferences, please visit Google Ad Settings.',
+      'For any privacy concerns or data requests, contact us at privacy@sarkariresult.com.'
+    ],
+    directLinks: [
+      { label: 'Google Ads Settings & Opt-Out', actionText: 'Ad Settings', type: 'official', url: 'https://myadcenter.google.com/', isPrimary: true },
+      { label: 'Official Contact Us', actionText: 'Contact Support', type: 'official', url: '#contact-us' }
+    ]
   }
 ];
 
@@ -3156,7 +3213,7 @@ export const trendingAlerts = [
 
 export const highlightBoxes = [
   { id: 'h-ugc', title: 'NTA UGC NET 2026', sub: 'Apply Online (JRF & Asst Prof)', slug: 'nta-ugc-net-2026-online-form', color: 'from-emerald-700 to-teal-800' },
-  { id: 'h-ssp', title: 'Raj Samajik Suraksha Pension', sub: 'Online Form & Verification', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', color: 'from-purple-700 to-indigo-800' },
+  { id: 'h-ssp', title: 'Raj Samajik Suraksha Pension', sub: 'Online Form & Verification', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', color: 'from-red-700 to-indigo-800' },
   { id: 'h-sci', title: 'Supreme Court Attendant', sub: 'Apply Online (130 Posts)', slug: 'supreme-court-attendant-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
   { id: 'h-itbp', title: 'ITBP Motor Mechanic', sub: 'Apply Online (21 Posts)', slug: 'itbp-motor-mechanic-recruitment-2026', color: 'from-blue-600 to-blue-700' },
   { id: 'h0', title: 'RRB NTPC 12th Level 2026', sub: 'Apply Online (3,445 Posts)', slug: 'rrb-ntpc-12th-level-recruitment-2026', color: 'from-amber-600 to-amber-700' },
