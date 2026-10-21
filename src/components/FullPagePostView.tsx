@@ -552,15 +552,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[12pt] align-top flex items-center justify-between flex-wrap gap-2">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span>{post.postDate} | 08:40 PM</span>
-                        {onOpenAdmin && (
-                          <button
-                            onClick={onOpenAdmin}
-                            className="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 text-xs font-bold px-2 py-0.5 rounded cursor-pointer transition-colors ml-1 shadow-2xs"
-                            title="Admin Panel"
-                          >
-                            ⚙️ Admin Panel
-                          </button>
-                        )}
                       </div>
                       <div className="flex items-center gap-2">
                         {getPostStatus(post) === 'upcoming' ? (

@@ -177,15 +177,6 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
               <AlertTriangle className="w-5 h-5 text-red-600 shrink-0" />
               <span>{isHindi ? 'महत्वपूर्ण सूचना (Disclaimer Notice)' : 'Official Disclaimer Notice'}</span>
             </div>
-            {onOpenAdmin && (
-              <button
-                onClick={onOpenAdmin}
-                className="text-slate-800 hover:text-black text-xs font-bold cursor-pointer underline normal-case transition-colors bg-slate-100 hover:bg-slate-200 border border-slate-300 px-2 py-0.5 rounded shadow-2xs"
-                title="Admin Panel"
-              >
-                ⚙️ Admin Panel
-              </button>
-            )}
           </div>
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
             {isHindi ? (
@@ -205,7 +196,14 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
         {/* 4. Bottom Copyright & Admin Strip */}
         <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-600 text-xs">
           <div className="text-center sm:text-left">
-            <span>Copyright © 2026 Sarkari Result - All Rights Reserved.</span>
+            <span>Copyright © 2026 Sarkari Result - </span>
+            <span 
+              onClick={onOpenAdmin} 
+              className="cursor-default select-none"
+              title="Sarkari Result"
+            >
+              All Rights Reserved.
+            </span>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-4 text-xs font-semibold flex-wrap justify-center sm:justify-end">
@@ -236,18 +234,6 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
             >
               Contact Us
             </button>
-            {onOpenAdmin && (
-              <>
-                <span>•</span>
-                <button
-                  onClick={onOpenAdmin}
-                  className="text-slate-700 hover:text-slate-950 underline cursor-pointer font-bold transition-colors"
-                  title="Admin Panel"
-                >
-                  Admin Panel
-                </button>
-              </>
-            )}
           </div>
         </div>
       </div>

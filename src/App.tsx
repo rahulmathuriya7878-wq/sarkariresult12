@@ -19,25 +19,12 @@ import { PostViewSkeleton, GridSectionSkeleton } from './components/Skeletons';
 import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
 
-// Lazy-loaded modal components (Loaded only on user interaction)
-const AgeCalculatorModal = lazy(() => 
-  import('./components/tools/AgeCalculatorModal').then((m) => ({ default: m.AgeCalculatorModal }))
-);
-const PhotoResizerTool = lazy(() => 
-  import('./components/tools/PhotoResizerTool').then((m) => ({ default: m.PhotoResizerTool }))
-);
-const EligibilityMatcherModal = lazy(() => 
-  import('./components/tools/EligibilityMatcherModal').then((m) => ({ default: m.EligibilityMatcherModal }))
-);
-const BookmarkedJobsModal = lazy(() => 
-  import('./components/BookmarkedJobsModal').then((m) => ({ default: m.BookmarkedJobsModal }))
-);
-const JobAlertsModal = lazy(() => 
-  import('./components/JobAlertsModal').then((m) => ({ default: m.JobAlertsModal }))
-);
-const AdminEditingPanelModal = lazy(() => 
-  import('./components/admin/AdminEditingPanelModal').then((m) => ({ default: m.AdminEditingPanelModal }))
-);
+import { AdminEditingPanelModal } from './components/admin/AdminEditingPanelModal';
+import { AgeCalculatorModal } from './components/tools/AgeCalculatorModal';
+import { PhotoResizerTool } from './components/tools/PhotoResizerTool';
+import { EligibilityMatcherModal } from './components/tools/EligibilityMatcherModal';
+import { BookmarkedJobsModal } from './components/BookmarkedJobsModal';
+import { JobAlertsModal } from './components/JobAlertsModal';
 
 const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
   if (post.salaryBand) return post.salaryBand;
@@ -167,7 +154,29 @@ export default function App() {
     }
   }, [bookmarkedIds]);
 
+  // Secret Keyboard Shortcut (Ctrl + Shift + A) & URL check to open Hidden Admin Panel
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        setIsAdminOpen(true);
+      }
+    };
 
+    const checkAdminQuery = () => {
+      if (window.location.hash === '#admin' || window.location.search.includes('admin=true')) {
+        setIsAdminOpen(true);
+      }
+    };
+
+    checkAdminQuery();
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('hashchange', checkAdminQuery);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('hashchange', checkAdminQuery);
+    };
+  }, []);
 
   // Handle URL hash routing to open full page for specific post or back to home
   useEffect(() => {
@@ -491,73 +500,61 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         isHindi={isHindi}
       />
 
-      {/* Candidate Tools Modals - Lazy loaded only when modal opens */}
+      {/* Candidate Tools Modals */}
       {isAgeCalcOpen && (
-        <Suspense fallback={null}>
-          <AgeCalculatorModal
-            isOpen={isAgeCalcOpen}
-            onClose={() => setIsAgeCalcOpen(false)}
-          />
-        </Suspense>
+        <AgeCalculatorModal
+          isOpen={isAgeCalcOpen}
+          onClose={() => setIsAgeCalcOpen(false)}
+        />
       )}
 
       {isPhotoResizerOpen && (
-        <Suspense fallback={null}>
-          <PhotoResizerTool
-            isOpen={isPhotoResizerOpen}
-            onClose={() => setIsPhotoResizerOpen(false)}
-          />
-        </Suspense>
+        <PhotoResizerTool
+          isOpen={isPhotoResizerOpen}
+          onClose={() => setIsPhotoResizerOpen(false)}
+        />
       )}
 
       {isJobFinderOpen && (
-        <Suspense fallback={null}>
-          <EligibilityMatcherModal
-            isOpen={isJobFinderOpen}
-            onClose={() => setIsJobFinderOpen(false)}
-            posts={allPosts}
-            onSelectPost={handleOpenPostFullPage}
-          />
-        </Suspense>
+        <EligibilityMatcherModal
+          isOpen={isJobFinderOpen}
+          onClose={() => setIsJobFinderOpen(false)}
+          posts={allPosts}
+          onSelectPost={handleOpenPostFullPage}
+        />
       )}
 
       {isBookmarksOpen && (
-        <Suspense fallback={null}>
-          <BookmarkedJobsModal
-            isOpen={isBookmarksOpen}
-            onClose={() => setIsBookmarksOpen(false)}
-            bookmarkedPosts={bookmarkedPosts}
-            onSelectPost={handleOpenPostFullPage}
-            onRemoveBookmark={handleToggleBookmark}
-            onClearAll={handleClearAllBookmarks}
-          />
-        </Suspense>
+        <BookmarkedJobsModal
+          isOpen={isBookmarksOpen}
+          onClose={() => setIsBookmarksOpen(false)}
+          bookmarkedPosts={bookmarkedPosts}
+          onSelectPost={handleOpenPostFullPage}
+          onRemoveBookmark={handleToggleBookmark}
+          onClearAll={handleClearAllBookmarks}
+        />
       )}
 
       {isJobAlertsOpen && (
-        <Suspense fallback={null}>
-          <JobAlertsModal
-            isOpen={isJobAlertsOpen}
-            onClose={() => setIsJobAlertsOpen(false)}
-          />
-        </Suspense>
+        <JobAlertsModal
+          isOpen={isJobAlertsOpen}
+          onClose={() => setIsJobAlertsOpen(false)}
+        />
       )}
 
       {/* Admin Post Editing & Management Panel */}
       {isAdminOpen && (
-        <Suspense fallback={null}>
-          <AdminEditingPanelModal
-            isOpen={isAdminOpen}
-            onClose={() => setIsAdminOpen(false)}
-            posts={allPosts}
-            onAddPost={handleAddPost}
-            onUpdatePost={handleUpdatePost}
-            onDeletePost={handleDeletePost}
-            onResetToDefault={handleResetToDefault}
-            onSelectPost={handleOpenPostFullPage}
-            isHindi={isHindi}
-          />
-        </Suspense>
+        <AdminEditingPanelModal
+          isOpen={isAdminOpen}
+          onClose={() => setIsAdminOpen(false)}
+          posts={allPosts}
+          onAddPost={handleAddPost}
+          onUpdatePost={handleUpdatePost}
+          onDeletePost={handleDeletePost}
+          onResetToDefault={handleResetToDefault}
+          onSelectPost={handleOpenPostFullPage}
+          isHindi={isHindi}
+        />
       )}
 
       <FloatingShareButton currentPost={selectedPost} isHindi={isHindi} />

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Share2, Check } from 'lucide-react';
 import { SarkariPost } from '../types/job';
-
 import { getCategoryShareText } from './FullPagePostView';
 
 interface FloatingShareButtonProps {
@@ -27,7 +26,7 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
     : `Sarkari Result 2026 - Check Official Govt Jobs, Admit Cards, Answer Keys & Results:\n${shareUrl}`;
 
   const handleDirectShare = async () => {
-    // 1. First priority: Direct Native System Share Dialog (No popup)
+    // 1. First priority: Direct Native System Share Dialog
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
@@ -37,23 +36,21 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
         });
         return;
       } catch (err) {
-        // User cancelled native share or not allowed
         if ((err as Error).name !== 'AbortError') {
           console.log('Native share error, falling back to direct link action', err);
         } else {
-          return; // User cancelled intent intentionally
+          return;
         }
       }
     }
 
-    // 2. Second priority (Fallback for Desktop/Unsupported browsers): Open WhatsApp directly
+    // 2. Second priority: Open WhatsApp directly
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`;
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
     if (isMobile) {
       window.open(whatsappUrl, '_blank');
     } else {
-      // On desktop, copy link directly to clipboard and show quick button badge feedback
       try {
         if (navigator.clipboard && window.isSecureContext) {
           await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
@@ -74,20 +71,20 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
   };
 
   return (
-    <div className="fixed bottom-5 left-4 z-40 flex items-center gap-2">
+    <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2">
       <button
         onClick={handleDirectShare}
         aria-label="Share"
-        className={`group relative inline-flex items-center gap-2 px-3.5 py-2.5 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:scale-105 active:scale-95 border border-white/20 ${
+        className={`group relative inline-flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-200 cursor-pointer transform hover:scale-105 active:scale-95 border border-emerald-400/30 ${
           copied 
-            ? 'bg-emerald-600 hover:bg-emerald-700' 
-            : 'bg-gradient-to-r from-red-600 via-red-700 to-red-800 hover:from-red-700 hover:to-red-900'
+            ? 'bg-emerald-700 hover:bg-emerald-800 ring-2 ring-emerald-300' 
+            : 'bg-emerald-600 hover:bg-emerald-700 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700'
         }`}
       >
         <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
           {copied ? <Check className="w-3.5 h-3.5 text-white" /> : <Share2 className="w-3.5 h-3.5 text-white" />}
         </div>
-        <span className="font-bold text-[13px] tracking-wide pr-1">
+        <span className="font-extrabold text-[13px] sm:text-sm tracking-wide pr-1">
           {copied 
             ? (isHindi ? 'लिंक कॉपी हो गया!' : 'Link Copied!') 
             : (isHindi ? 'शेयर करें' : 'Share')
@@ -96,7 +93,7 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
 
         {/* Pulse ring animation */}
         {!copied && (
-          <span className="absolute -inset-0.5 rounded-full bg-red-500 opacity-30 animate-ping pointer-events-none" />
+          <span className="absolute -inset-0.5 rounded-full bg-emerald-500 opacity-40 animate-ping pointer-events-none" />
         )}
       </button>
     </div>
