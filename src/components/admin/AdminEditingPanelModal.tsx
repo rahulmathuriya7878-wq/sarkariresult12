@@ -417,78 +417,80 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           </div>
         ) : editingPost ? (
           /* POST EDITOR FORM */
-          <div className="flex-1 flex flex-col overflow-hidden bg-white">
-            {/* Editor Subheader */}
-            <div className="bg-slate-50 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2">
+          <div className="flex-1 flex flex-col md:flex-row overflow-hidden bg-white">
+            {/* Editor Subheader / Vertical Navigation Sidebar */}
+            <div className="bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200 px-4 py-3 flex flex-col md:w-60 shrink-0 gap-3">
+              <div className="flex items-center justify-between md:flex-col md:items-start gap-2">
                 <button
                   type="button"
                   onClick={() => setEditingPost(null)}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-black bg-white border border-slate-300 px-2.5 py-1.5 rounded cursor-pointer transition-colors"
+                  className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 hover:text-black bg-white border border-slate-300 px-3 py-2 rounded cursor-pointer transition-colors shadow-2xs w-full"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back to Posts List</span>
                 </button>
-                <span className="text-slate-400">|</span>
-                <span className="text-xs font-black text-slate-900 uppercase">
+                <div className="text-xs font-black text-slate-900 uppercase tracking-tight truncate w-full">
                   {isCreatingNew ? 'Create New Post' : `Editing: ${editingPost.shortTitle || editingPost.title}`}
-                </span>
+                </div>
               </div>
 
-              {/* Navigation Tabs */}
-              <div className="flex items-center gap-1 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('basic')}
-                  className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'basic' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  General Info
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('dates_fees')}
-                  className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'dates_fees' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  Dates, Fees & Age
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('links')}
-                  className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'links' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  Direct Links
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('vacancy')}
-                  className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer ${
-                    activeTab === 'vacancy' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  Vacancies & Steps
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('faqs')}
-                  className={`px-3 py-1 rounded font-bold transition-colors cursor-pointer flex items-center gap-1 ${
-                    activeTab === 'faqs' ? 'bg-[#ab1616] text-white' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  <HelpCircle className="w-3.5 h-3.5" />
-                  <span>FAQs ({editingPost.customFaqs?.length || 0})</span>
-                </button>
+              {/* Vertical Section Quick Navigation Links */}
+              <div className="space-y-1.5 pt-2 border-t border-slate-200">
+                <div className="hidden md:block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">
+                  Vertical Sections
+                </div>
+                <div className="flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-visible">
+                  <a
+                    href="#sec-basic"
+                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                  >
+                    <span>📍</span>
+                    <span>1. General Info</span>
+                  </a>
+                  <a
+                    href="#sec-dates-fees"
+                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                  >
+                    <span>📅</span>
+                    <span>2. Dates & Fees</span>
+                  </a>
+                  <a
+                    href="#sec-links"
+                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                  >
+                    <span>🔗</span>
+                    <span>3. Direct Links</span>
+                  </a>
+                  <a
+                    href="#sec-vacancy"
+                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                  >
+                    <span>📊</span>
+                    <span>4. Vacancies & Steps</span>
+                  </a>
+                  <a
+                    href="#sec-faqs"
+                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                  >
+                    <span>❓</span>
+                    <span>5. FAQs ({editingPost.customFaqs?.length || 0})</span>
+                  </a>
+                </div>
               </div>
             </div>
 
-            {/* Form Fields */}
-            <form onSubmit={handleSavePost} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-              {activeTab === 'basic' && (
+            {/* Form Fields - All Sections Stacked Vertically */}
+            <form onSubmit={handleSavePost} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-8">
+              {/* SECTION 1: BASIC INFO */}
+              <div id="sec-basic" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs">
+                <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
+                  <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                    SECTION 1
+                  </span>
+                  <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                    📍 General Post Information (सामान्य जानकारी)
+                  </h3>
+                </div>
                 <div className="space-y-4 max-w-4xl mx-auto">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="md:col-span-2">
@@ -715,9 +717,18 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                     />
                   </div>
                 </div>
-              )}
+              </div>
 
-              {activeTab === 'dates_fees' && (
+              {/* SECTION 2: DATES, FEES & AGE LIMIT */}
+              <div id="sec-dates-fees" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-6 shadow-2xs">
+                <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
+                  <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                    SECTION 2
+                  </span>
+                  <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                    📅 Important Dates, Fees & Age Criteria (तिथि, शुल्क एवं आयु सीमा)
+                  </h3>
+                </div>
                 <div className="space-y-6 max-w-4xl mx-auto">
                   {/* Quick Dates Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -1010,9 +1021,18 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
 
-              {activeTab === 'links' && (
+              {/* SECTION 3: DIRECT OFFICIAL LINKS */}
+              <div id="sec-links" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs">
+                <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
+                  <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                    SECTION 3
+                  </span>
+                  <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                    🔗 Direct Important Links (आधिकारिक डायरेक्ट लिंक)
+                  </h3>
+                </div>
                 <div className="space-y-4 max-w-4xl mx-auto">
                   <div className="flex items-center justify-between">
                     <div>
@@ -1138,9 +1158,18 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                     ))}
                   </div>
                 </div>
-              )}
+              </div>
 
-              {activeTab === 'vacancy' && (
+              {/* SECTION 4: VACANCIES & STEPS */}
+              <div id="sec-vacancy" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-6 shadow-2xs">
+                <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
+                  <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                    SECTION 4
+                  </span>
+                  <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                    📊 Vacancies Breakdown & Application Steps (पद संख्या व प्रक्रिया)
+                  </h3>
+                </div>
                 <div className="space-y-6 max-w-4xl mx-auto">
                   {/* Vacancy Breakdown */}
                   <div className="border border-slate-300 rounded overflow-hidden">
@@ -1236,9 +1265,18 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                     />
                   </div>
                 </div>
-              )}
+              </div>
 
-              {activeTab === 'faqs' && (
+              {/* SECTION 5: CUSTOM FAQS */}
+              <div id="sec-faqs" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-6 shadow-2xs">
+                <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
+                  <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                    SECTION 5
+                  </span>
+                  <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                    ❓ Custom FAQs Manager (सामान्य प्रश्न - उत्तर)
+                  </h3>
+                </div>
                 <div className="space-y-6 max-w-4xl mx-auto">
                   <div className="bg-emerald-50 border border-emerald-200 p-4 rounded text-xs text-slate-800 space-y-1">
                     <div className="font-bold text-emerald-900 text-sm flex items-center gap-1.5">
@@ -1461,10 +1499,10 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                     </div>
                   )}
                 </div>
-              )}
+              </div>
 
               {/* Bottom Actions Bar */}
-              <div className="border-t border-slate-300 pt-4 flex items-center justify-between">
+              <div className="border border-slate-300 pt-3 pb-3 px-4 flex items-center justify-between sticky bottom-0 bg-white rounded shadow-md z-20 mt-4">
                 <button
                   type="button"
                   onClick={() => setEditingPost(null)}
@@ -1488,29 +1526,28 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         ) : (
           /* POSTS LIST DASHBOARD VIEW */
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Top Toolbar */}
-            <div className="bg-slate-100 border-b border-slate-300 p-3 sm:p-4 shrink-0 space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleStartCreate}
-                    className="inline-flex items-center gap-1.5 bg-[#ab1616] hover:bg-red-800 text-white px-3.5 py-2 rounded text-xs font-black shadow-xs cursor-pointer transition-colors"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>+ Add New Post (नई पोस्ट जोड़ें)</span>
-                  </button>
+            {/* Top Toolbar - Clean Vertical Stack */}
+            <div className="bg-slate-50 border-b border-slate-200 p-3 sm:p-4 shrink-0 space-y-3">
+              {/* Vertical Action Bar */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <button
+                  onClick={handleStartCreate}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-[#ab1616] hover:bg-red-800 text-white px-4 py-2.5 rounded text-xs font-black shadow-xs cursor-pointer transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>+ Add New Post (नई पोस्ट जोड़ें)</span>
+                </button>
 
+                <div className="flex items-center gap-2 text-xs flex-wrap">
                   <button
                     onClick={onResetToDefault}
-                    className="inline-flex items-center gap-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 px-3 py-2 rounded text-xs font-bold cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 px-3 py-1.5 rounded text-xs font-bold cursor-pointer transition-colors"
                     title="Reset all posts to default dataset"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Reset Defaults</span>
+                    <span>Reset Defaults</span>
                   </button>
-                </div>
 
-                <div className="flex items-center gap-2 text-xs">
                   <button
                     onClick={handleExportJSON}
                     className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-2.5 py-1.5 rounded font-bold cursor-pointer"
