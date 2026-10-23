@@ -96,14 +96,17 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
         <div className="my-6 space-y-5">
 
           {/* Section A: About the Portal & Educational Purpose */}
-          <div className="border border-slate-200 bg-white rounded-xs p-3.5 sm:p-4 shadow-xs">
-            <div className="flex items-center gap-2 text-[#ab1616] font-black text-xs sm:text-sm uppercase pb-1.5 border-b border-red-100">
+          <div className="border border-slate-200 bg-white rounded-xs p-4 sm:p-5 shadow-xs">
+            <div className="flex items-center gap-2 text-[#ab1616] font-black text-xs sm:text-sm uppercase pb-2 border-b border-red-100">
               <span className="text-base">🏛️</span>
-              <h4>{isHindi ? 'वेबसाइट के बारे में (About Sarkari Result)' : 'About Sarkari Result'}</h4>
+              <h4>{isHindi ? 'वेबसाइट के बारे में एवं शैक्षणिक उद्देश्य (About Sarkari Result & Educational Mission)' : 'About Sarkari Result & Educational Mission'}</h4>
             </div>
-            <div className="mt-2 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <div className="mt-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
               <p>
-                <strong>Sarkari Result (सरकारी रिजल्ट)</strong> एक स्वतंत्र शैक्षणिक सूचना मंच है जिसका उद्देश्य देश के युवाओं को सभी केंद्र एवं राज्य स्तरीय सरकारी भर्तियों, प्रवेश परीक्षाओं, एडमिट कार्ड, और परीक्षा परिणामों की समयबद्ध जानकारी एक ही स्थान पर निःशुल्क उपलब्ध कराना है।
+                <strong>Sarkari Result (सरकारी रिजल्ट)</strong> भारत का एक प्रमुख, स्वतंत्र और पूर्णतः निःशुल्क शैक्षणिक सूचना पोर्टल (Educational Information Portal) है। इस वेबसाइट का मुख्य उद्देश्य देश के ग्रामीण व शहरी क्षेत्रों के सभी छात्र-छात्राओं, युवा बेरोजगारों और प्रतियोगी परीक्षा अभ्यर्थियों को केंद्र एवं राज्य सरकारों द्वारा जारी की जाने वाली सभी भर्तियों (Recruitment Notifications), प्रवेश परीक्षाओं (Entrance Exams), परीक्षा तिथियों (Exam Dates), प्रवेश पत्र (Admit Cards), उत्तर कुंजी (Answer Keys), परिणाम (Results), पाठ्यक्रम (Syllabus) तथा प्रमाण पत्र सत्यापन (Certificate Verification) की समयबद्ध, सुलभ और सटीक जानकारी एक ही मंच पर उपलब्ध कराना है।
+              </p>
+              <p>
+                यह पोर्टल UPSC, SSC, Defence (Army, Navy, Airforce, NDA, CDS), Banking (IBPS, SBI, RBI), Teaching (CTET, State TET, REET), State Public Service Commissions (UPPSC, BPSC, RPSC, MPPSC, HSSC, UKPSC, WBPSC, आदि) एवं पुलिस भर्ती बोर्डों द्वारा जारी सार्वजनिक विज्ञप्तियों का संकलन कर छात्रों के मार्गदर्शन हेतु सरल भाषा में प्रस्तुत करता है।
               </p>
             </div>
           </div>

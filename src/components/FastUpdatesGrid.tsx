@@ -36,6 +36,11 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
   visitedPostIds = new Set()
 }) => {
 
+  const getLatestDateForPosts = (posts: SarkariPost[]) => {
+    if (!posts || posts.length === 0) return 'Today';
+    return posts[0]?.postDate || 'Today';
+  };
+
   const renderColumn = (
     title: string,
     hindiSub: string,
@@ -50,6 +55,9 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         </h2>
         <span className="block text-[11px] sm:text-xs font-handwriting text-yellow-200 font-bold tracking-normal normal-case mt-0.5">
           {hindiSub}
+        </span>
+        <span className="inline-block mt-1.5 bg-red-950/80 text-yellow-300 text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-xs tracking-wide shadow-2xs">
+          🕒 Last Updated: {getLatestDateForPosts(posts)}
         </span>
       </div>
 
@@ -107,16 +115,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         'View More Result'
       )}
 
-      {/* 2. Latest Jobs */}
-      {renderColumn(
-        isHindi ? 'सरकारी नौकरी (Latest Jobs)' : 'Latest Jobs',
-        '✍️ सम्पादक द्वारा जाँची नई भर्ती सूची',
-        latestJobs,
-        'latest_jobs',
-        'View More Latest Jobs'
-      )}
-
-      {/* 3. Admit Card */}
+      {/* 2. Admit Card */}
       {renderColumn(
         isHindi ? 'प्रवेश पत्र (Admit Card)' : 'Admit Card',
         '✍️ हॉल टिकट एवं परीक्षा तिथि विवरण',
@@ -125,18 +124,27 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         'View More Admit Card'
       )}
 
-      {/* Ad Section 1 */}
-      <div className="col-span-full">
-        <AdSection slotId="8892103412" format="horizontal" label="Sponsored Ad / प्रायोजित विज्ञापन" />
-      </div>
-
-      {/* 4. Answer Key */}
+      {/* 3. Answer Key */}
       {renderColumn(
         isHindi ? 'उत्तर कुंजी (Answer Key)' : 'Answer Key',
         '✍️ आधिकारिक उत्तर कुंजी व आपत्ति दर्ज',
         answerKeys,
         'answer_key',
         'View More Answer Key'
+      )}
+
+      {/* Ad Section 1 */}
+      <div className="col-span-full">
+        <AdSection slotId="8892103412" format="horizontal" label="Sponsored Ad / प्रायोजित विज्ञापन" />
+      </div>
+
+      {/* 4. Latest Jobs */}
+      {renderColumn(
+        isHindi ? 'सरकारी नौकरी (Latest Jobs)' : 'Latest Jobs',
+        '✍️ सम्पादक द्वारा जाँची नई भर्ती सूची',
+        latestJobs,
+        'latest_jobs',
+        'View More Latest Jobs'
       )}
 
       {/* 5. Syllabus */}
