@@ -116,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
           - Mobile (md:hidden): Black bar with [✕/☰ Menu] on left and [🔍] on right + Vertical black drawer (Screenshot_20261020-085212.Chrome.png)
           - Desktop (hidden md:block): Classic Sarkari Result horizontal black bar
       */}
-      <div className="bg-black text-white border-b-2 border-red-900 sticky top-0 z-40 shadow-md">
+      <div className="bg-black text-white border-b-2 border-red-900 sticky top-0 z-50 shadow-md">
         {/* Mobile Header Bar (md:hidden) */}
         <div className="md:hidden flex items-center justify-between px-3 py-2">
           <button
@@ -145,9 +145,9 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        {/* Mobile Vertical Drawer (Exact Match to Screenshot_20261020-085212.Chrome.png) */}
+        {/* Mobile Vertical Drawer (Exact Match to Screenshot) */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-black text-white border-t border-neutral-800 pb-2 animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="md:hidden sticky top-full bg-black text-white border-t border-neutral-800 pb-2 z-50 shadow-2xl animate-in fade-in slide-in-from-top-1 duration-150">
             <div className="flex flex-col py-1">
               <button
                 onClick={() => handleNavClick('all')}

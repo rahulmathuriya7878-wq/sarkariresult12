@@ -160,7 +160,6 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     return sessionStorage.getItem('sarkari_admin_auth') === 'true';
   });
   const [pinInput, setPinInput] = useState('');
-  const [pinError, setPinError] = useState(false);
 
   // Filter & Search in Table
   const [filterCategory, setFilterCategory] = useState<string>('all');
@@ -203,10 +202,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     if (pinInput.trim() === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       sessionStorage.setItem('sarkari_admin_auth', 'true');
-      setPinError(false);
       setPinInput('');
-    } else {
-      setPinError(true);
     }
   };
 
@@ -295,9 +291,19 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         .replace(/(^-|-$)/g, '');
     }
 
+    // Ensure updated post is marked as new so it goes live at the top of the section immediately
+    editingPost.isNew = true;
+
     if (isCreatingNew) {
       onAddPost(editingPost);
-      showToast(`New post "${editingPost.shortTitle}" added!`);
+      try {
+        const updatedList = [editingPost, ...posts];
+        localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(updatedList));
+        localStorage.setItem('sarkari_admin_posts_v2', JSON.stringify(updatedList));
+      } catch (err) {
+        console.error(err);
+      }
+      showToast(`🚀 Live Success: New post published live!`);
       if (!stayInEditor) {
         setEditingPost(null);
         setIsCreatingNew(false);
@@ -306,7 +312,14 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
       }
     } else {
       onUpdatePost(editingPost);
-      showToast(`⚡ Post "${editingPost.shortTitle}" updated directly!`);
+      try {
+        const updatedList = posts.map(p => p.id === editingPost.id ? editingPost : p);
+        localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(updatedList));
+        localStorage.setItem('sarkari_admin_posts_v2', JSON.stringify(updatedList));
+      } catch (err) {
+        console.error(err);
+      }
+      showToast(`🚀 Live Success: Post updated and published live!`);
       if (!stayInEditor) {
         setEditingPost(null);
       }
@@ -495,15 +508,28 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
               </button>
 
               {editingPost && (
-                <button
-                  type="button"
-                  onClick={() => handleQuickSave(true)}
-                  className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
-                  title="Quick Save and stay in editor"
-                >
-                  <Save className="w-3.5 h-3.5" />
-                  <span>अपडेट करें</span>
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickSave(true)}
+                    className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
+                    title="Quick Save and stay in editor"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>अपडेट करें</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleQuickSave(false);
+                      setTimeout(() => window.location.reload(), 400);
+                    }}
+                    className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
+                    title="Publish Live & Reload portal"
+                  >
+                    <span>🚀 पब्लिश लाइव</span>
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -532,21 +558,11 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                   <input
                     type="password"
                     value={pinInput}
-                    onChange={(e) => {
-                      setPinInput(e.target.value);
-                      setPinError(false);
-                    }}
+                    onChange={(e) => setPinInput(e.target.value)}
                     placeholder="Enter Admin Password"
-                    className={`w-full px-3 py-2 border rounded text-sm focus:outline-none ${
-                      pinError ? 'border-red-600 bg-red-50' : 'border-slate-300 focus:border-blue-500'
-                    }`}
+                    className="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-500"
                     autoFocus
                   />
-                  {pinError && (
-                    <p className="text-xs text-red-600 font-bold mt-1">
-                      Incorrect Password! Please enter the authorized Admin Password.
-                    </p>
-                  )}
                 </div>
 
                 <div>

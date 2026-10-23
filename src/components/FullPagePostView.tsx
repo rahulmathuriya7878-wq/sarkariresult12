@@ -6,9 +6,7 @@ import {
   ChevronRight,
   Home,
   Send,
-  MessageCircle,
-  Bell,
-  BellRing
+  MessageCircle
 } from 'lucide-react';
 import { isPostAlertActive, togglePostAlert, getPostStatus } from '../utils/alertManager';
 import { PostAlertModal } from './PostAlertModal';
@@ -25,7 +23,7 @@ interface FullPagePostViewProps {
   onSelectPost?: (post: SarkariPost) => void;
   allPosts?: SarkariPost[];
   onOpenAdmin?: () => void;
-  onOpenDirectEditor?: (post: SarkariPost) => void;
+  onOpenDirectEditor?: () => void;
 }
 
 export interface PostFAQ {
@@ -347,7 +345,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       breadcrumbScriptTag.type = 'application/ld+json';
       document.head.appendChild(breadcrumbScriptTag);
     }
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.sarkariresult.com';
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult.com';
     const currentUrl = typeof window !== 'undefined' ? window.location.href : `${baseUrl}/post/${post.slug}`;
     const categoryName = getCategoryLabel(post.category);
 
@@ -638,9 +636,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {post.shortTitle} Exam 2026 : Short Details of Notification
               </h2>
               <h2 className="text-[#ff0000] font-black text-[13pt] sm:text-[14pt] font-sans" style={{ color: '#ff0000' }}>
-                <a href="https://www.sarkariresult.com/" target="_blank" rel="noopener noreferrer" className="hover:underline text-[#ff0000]" style={{ color: '#ff0000' }}>
-                  Sarkari Result® WWW.SARKARIRESULT.COM Since 2012
-                </a>
+                <span className="hover:underline text-[#ff0000]" style={{ color: '#ff0000' }}>
+                  Sarkari Result® SarkariResult.Com Since 2012
+                </span>
               </h2>
             </div>
 

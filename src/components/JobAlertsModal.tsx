@@ -18,7 +18,6 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
   const [qualification, setQualification] = useState('All Qualifications');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [browserPermission, setBrowserPermission] = useState<string>('default');
-  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -58,17 +57,6 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage('');
-
-    if (!email && !enableBrowserPush) {
-      setErrorMessage('Please provide an email address or enable browser push notifications.');
-      return;
-    }
-
-    if (email && !email.includes('@')) {
-      setErrorMessage('Please enter a valid email address.');
-      return;
-    }
 
     // If browser push is requested, ask permission
     if (enableBrowserPush && typeof window !== 'undefined' && 'Notification' in window) {
@@ -198,13 +186,6 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
                   Stay ahead of competition! Get instant notifications as soon as UPSC, SSC, Railways, State PSC, Police, and Teacher notifications are released.
                 </span>
               </div>
-
-              {errorMessage && (
-                <div className="bg-red-50 border border-red-300 rounded p-2 text-xs text-red-700 flex items-center gap-2 font-medium">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{errorMessage}</span>
-                </div>
-              )}
 
               {/* Email Address */}
               <div>

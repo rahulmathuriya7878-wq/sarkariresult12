@@ -43,25 +43,21 @@ export default function App() {
   // Master Posts State (Persists custom edits, additions, and deletions)
   const [allPosts, setAllPosts] = useState<SarkariPost[]>(() => {
     try {
-      const saved = localStorage.getItem('sarkari_admin_posts_v3') || localStorage.getItem('sarkari_admin_posts_v2');
+      const saved = localStorage.getItem('sarkari_admin_posts_v3');
       if (saved) {
         let parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Double verification update for Railway NTPC and Station Master posts
-          const freshSM = mockSarkariPosts.find((p) => p.id === 'job-rrb-station-master-2026');
-          const freshNTPCGrad = mockSarkariPosts.find((p) => p.id === 'job-railway-ntpc-grad-2026');
-          parsed = parsed.map((p: SarkariPost) => {
-            if (p.id === 'job-rrb-station-master-2026' && freshSM) {
-              return freshSM;
-            }
-            if (p.id === 'job-railway-ntpc-grad-2026' && freshNTPCGrad) {
-              return freshNTPCGrad;
+          const mockMap = new Map(mockSarkariPosts.map(p => [p.id, p]));
+          const merged = parsed.map((p: SarkariPost) => {
+            if (mockMap.has(p.id)) {
+              const mockPost = mockMap.get(p.id)!;
+              mockMap.delete(p.id);
+              return { ...p, ...mockPost }; // Code updates take precedence over stale localStorage
             }
             return p;
           });
-          const existingIds = new Set(parsed.map((p: SarkariPost) => p.id));
-          const missingDefaults = mockSarkariPosts.filter((p) => !existingIds.has(p.id));
-          return [...parsed, ...missingDefaults];
+          const remainingMock = Array.from(mockMap.values());
+          return [...merged, ...remainingMock];
         }
       }
     } catch (e) {
@@ -70,24 +66,49 @@ export default function App() {
     return mockSarkariPosts;
   });
 
-  // Save posts to localStorage whenever updated
+  // Save posts to localStorage and broadcast real-time update whenever updated
   useEffect(() => {
     try {
       localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(allPosts));
       localStorage.setItem('sarkari_admin_posts_v2', JSON.stringify(allPosts));
+      window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: allPosts }));
     } catch (e) {
       console.error('Failed to save posts', e);
     }
   }, [allPosts]);
 
+  // Real-time event listener for synchronization across components without page refresh
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'sarkari_admin_posts_v3' && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          if (Array.isArray(parsed)) {
+            setAllPosts(parsed);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+
+    const handleCustomPostUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && Array.isArray(customEvent.detail)) {
+        setAllPosts(customEvent.detail);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('sarkari_posts_updated', handleCustomPostUpdate);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('sarkari_posts_updated', handleCustomPostUpdate);
+    };
+  }, []);
+
   // Admin Modal state
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
-  const [adminEditingTargetPost, setAdminEditingTargetPost] = useState<SarkariPost | null>(null);
-
-  const handleOpenDirectPostEditor = (post: SarkariPost) => {
-    setAdminEditingTargetPost(post);
-    setIsAdminOpen(true);
-  };
 
   // Navigation & Category filter state
   const [activeCategory, setActiveCategory] = useState<PostCategory | 'all'>('all');
@@ -446,7 +467,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             isHindi={isHindi}
             onSelectPost={handleOpenPostFullPage}
             onOpenAdmin={() => setIsAdminOpen(true)}
-            onOpenDirectEditor={handleOpenDirectPostEditor}
           />
         </Suspense>
       ) : (
@@ -589,10 +609,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
       {isAdminOpen && (
         <AdminEditingPanelModal
           isOpen={isAdminOpen}
-          onClose={() => {
-            setIsAdminOpen(false);
-            setAdminEditingTargetPost(null);
-          }}
+          onClose={() => setIsAdminOpen(false)}
           posts={allPosts}
           onAddPost={handleAddPost}
           onUpdatePost={handleUpdatePost}
@@ -600,7 +617,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onResetToDefault={handleResetToDefault}
           onSelectPost={handleOpenPostFullPage}
           isHindi={isHindi}
-          initialPostToEdit={adminEditingTargetPost}
         />
       )}
 

@@ -64,13 +64,17 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
 
       {/* 2. Official Welcome & Trademark Banner from SarkariResult.com */}
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-4 text-center space-y-3.5 border-b border-slate-300">
-        <p className="text-slate-800 font-bold leading-relaxed max-w-4xl mx-auto text-[11.5pt]">
-          Welcome to this official website of Sarkari Result <sup>®</sup><br />
-          Thank you for visiting the official website of Sarkari Result SarkariResult.Com, through this website you will get information related to Job / Recruitment / Admission / Admit Card / Answer Key very easily. For you our Sarkari Result Mobile App 2026 is also available for free on Google Play and Apple Store, as well as you can connect with Sarkari Result 2026 on our social media accounts: X Twitter, Facebook, Instagram, Threads, Telegram, WhatsApp, and YouTube.
-        </p>
+        <div className="text-slate-800 font-bold leading-relaxed max-w-4xl mx-auto text-[11.5pt] space-y-3">
+          <p>
+            Sarkari Result (सरकारी रिजल्ट) भारत का एक प्रमुख, स्वतंत्र और पूर्णतः निःशुल्क शैक्षणिक सूचना पोर्टल (Educational Information Portal) है। इस वेबसाइट का मुख्य उद्देश्य देश के ग्रामीण व शहरी क्षेत्रों के सभी छात्र-छात्राओं, युवा बेरोजगारों और प्रतियोगी परीक्षा अभ्यर्थियों को केंद्र एवं राज्य सरकारों द्वारा जारी की जाने वाली सभी भर्तियों (Recruitment Notifications), प्रवेश परीक्षाओं (Entrance Exams), परीक्षा तिथियों (Exam Dates), प्रवेश पत्र (Admit Cards), उत्तर कुंजी (Answer Keys), परिणाम (Results), पाठ्यक्रम (Syllabus) तथा प्रमाण पत्र सत्यापन (Certificate Verification) की समयबद्ध, सुलभ और सटीक जानकारी एक ही मंच पर उपलब्ध कराना है।
+          </p>
+          <p>
+            यह पोर्टल UPSC, SSC, Railway Recruitment Boards (RRB/RRC), Defence (Army, Navy, Airforce, NDA, CDS), Banking (IBPS, SBI, RBI), Teaching (CTET, State TET, REET), State Public Service Commissions (UPPSC, BPSC, RPSC, MPPSC, HSSC, UKPSC, WBPSC, आदि) एवं पुलिस भर्ती बोर्डों द्वारा जारी सार्वजनिक विज्ञप्तियों का संकलन कर छात्रों के मार्गदर्शन हेतु सरल भाषा में प्रस्तुत करता है।
+          </p>
+        </div>
 
         <p className="text-slate-700 font-semibold text-[11.5pt] max-w-3xl mx-auto">
-          Registered Trademark of <strong>Sarkari Result <sup>®</sup></strong> under Intellectual Property India. Official website: <strong>SarkariResult.com (Since 2012)</strong> www.sarkariresult.com<br />
+          Registered Trademark of <strong>Sarkari Result <sup>®</sup></strong> under Intellectual Property India. Official website: <strong>SarkariResult.Com (Since 2012)</strong><br />
           For Feedback / advertising on this website contact us at <span className="text-blue-700 font-bold">support@sarkariresult.com</span>
         </p>
 
@@ -95,17 +99,17 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
         </div>
       </div>
 
-      {/* 3. Main 3-Column Directory Grid (Page, App, Follow Us) */}
+      {/* 3. Main Directory Grid (Page) & Legal Sections */}
       <div className="max-w-7xl mx-auto px-4 py-7">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-6 border-b border-slate-300">
+        <div className="max-w-xl mx-auto pb-6 border-b border-slate-300">
           
           {/* Column 1: Page */}
           <div className="space-y-2.5">
-            <h3 className="text-slate-900 font-black text-[13pt] uppercase tracking-wider border-b border-slate-300 pb-1.5 flex items-center gap-1.5 font-sans">
+            <h3 className="text-slate-900 font-black text-[13pt] uppercase tracking-wider border-b border-slate-300 pb-1.5 flex items-center justify-center gap-1.5 font-sans text-center">
               <span className="text-amber-500">■</span>
               <span>Page (भर्ती एवं आयोग)</span>
             </h3>
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-slate-700 text-[11.5pt]">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-x-4 gap-y-2 text-slate-700 text-[11.5pt] text-center">
               <a href="#bpsc" className="hover:text-[#7e22ce] hover:underline">• BPSC</a>
               <a href="#up-scholarship" className="hover:text-[#7e22ce] hover:underline">• UP-Scholarship</a>
               <a href="#upsssc" className="hover:text-[#7e22ce] hover:underline">• UPSSSC</a>
@@ -120,83 +124,6 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
               <a href="#tet" className="hover:text-[#7e22ce] hover:underline">• TET / CTET</a>
               <a href="#police" className="hover:text-[#7e22ce] hover:underline">• Police</a>
               <a href="#railways" className="hover:text-[#7e22ce] hover:underline">• Railways (RRB)</a>
-            </div>
-          </div>
-
-          {/* Column 2: App & Official Portals */}
-          <div className="space-y-2.5">
-            <h3 className="text-slate-900 font-black text-[13pt] uppercase tracking-wider border-b border-slate-300 pb-1.5 flex items-center gap-1.5 font-sans">
-              <span className="text-amber-500">■</span>
-              <span>Mobile Apps (मोबाइल ऍप्स)</span>
-            </h3>
-            <ul className="space-y-2 text-slate-700 text-[11.5pt]">
-              <li>
-                <a 
-                  href="https://play.google.com/store/apps/details?id=com.app.app14f269771c01" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="hover:text-[#7e22ce] hover:underline flex items-center gap-1.5 font-semibold"
-                >
-                  <span>• Sarkari Result Android App (Google Play)</span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="https://apps.apple.com/us/app/sarkari-result/id1051363935?ls=1" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="hover:text-[#7e22ce] hover:underline flex items-center gap-1.5 font-semibold"
-                >
-                  <span>• Sarkari Result Apple iOS App (App Store)</span>
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="https://www.sarkariresult.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="hover:text-[#7e22ce] hover:underline flex items-center gap-1.5 font-semibold"
-                >
-                  <span>• SarkariResult.Com Official Web Portal</span>
-                </a>
-              </li>
-              <li>
-                <button 
-                  onClick={() => onOpenPostBySlug('supreme-court-of-india-jca-oct26')} 
-                  className="hover:text-[#7e22ce] hover:underline text-left cursor-pointer"
-                >
-                  • Supreme Court JCA Online Form 2026
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => onOpenPostBySlug('upessc-up-primary-teacher-05-2026')} 
-                  className="hover:text-[#7e22ce] hover:underline text-left cursor-pointer"
-                >
-                  • UP Primary Teacher Online Form 2026
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Follow Us & Social Accounts */}
-          <div className="space-y-2.5">
-            <h3 className="text-slate-900 font-black text-[13pt] uppercase tracking-wider border-b border-slate-300 pb-1.5 flex items-center gap-1.5 font-sans">
-              <span className="text-amber-500">■</span>
-              <span>Follow Us (सोशल मीडिया नेटवर्क)</span>
-            </h3>
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-slate-700 text-[11.5pt]">
-              <a href="https://www.instagram.com/sarkariresult.comofficial" target="_blank" rel="noopener noreferrer" className="hover:text-[#E1306C] hover:underline">• Instagram</a>
-              <a href="https://www.youtube.com/c/SarkariResultOfficial" target="_blank" rel="noopener noreferrer" className="hover:text-red-600 hover:underline">• YouTube</a>
-              <a href="https://t.me/newsarkariresultt" target="_blank" rel="noopener noreferrer" className="hover:text-[#229ED9] hover:underline">• Telegram</a>
-              <a href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j" target="_blank" rel="noopener noreferrer" className="hover:text-[#25D366] hover:underline">• WhatsApp</a>
-              <a href="https://x.com/srofficial2012" target="_blank" rel="noopener noreferrer" className="hover:text-black hover:underline">• X (Twitter)</a>
-              <a href="https://www.threads.com/@sarkariresult.comofficial" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 hover:underline">• Threads</a>
-              <a href="https://www.facebook.com/SarkariResult.ComOfficial/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700 hover:underline">• Facebook</a>
-              <a href="https://www.linkedin.com/company/sarkariresult-com/" target="_blank" rel="noopener noreferrer" className="hover:text-sky-700 hover:underline">• LinkedIn</a>
-              <button onClick={() => onOpenPostBySlug('contact-us')} className="hover:text-[#7e22ce] hover:underline text-left cursor-pointer font-bold col-span-2 mt-1">
-                • Contact Us (संपर्क करें)
-              </button>
             </div>
           </div>
 
