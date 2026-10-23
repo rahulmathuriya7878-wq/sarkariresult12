@@ -3182,9 +3182,9 @@ export const mockSarkariPosts: SarkariPost[] = [
       {
         postName: '1. आधिकारिक ईमेल संपर्क (Official Email Support)',
         totalPosts: 'Email Desk',
-        eligibility: `• सामान्य पूछताछ एवं सूचना सुधार: contact@sarkariresult.com
-• विज्ञापन एवं सहयोग: advertise@sarkariresult.com
-• तकनीकी सहायता एवं बग रिपोर्ट: support@sarkariresult.com`
+        eligibility: `• सामान्य पूछताछ एवं सूचना सुधार: rahulmathuriya7878@gmail.com
+• विज्ञापन एवं सहयोग: rahulmathuriya7878@gmail.com
+• तकनीकी सहायता एवं बग रिपोर्ट: rahulmathuriya7878@gmail.com`
       },
       {
         postName: '2. सोशल मीडिया एवं त्वरित अलर्ट (Fast Alerts Community)',
@@ -3206,9 +3206,7 @@ export const mockSarkariPosts: SarkariPost[] = [
       'Sarkari Result का आधिकारिक WhatsApp व Telegram चैनल ज्वाइन करके रखें ताकि कोई भी अंतिम तिथि न छूटे।'
     ],
     directLinks: [
-      { label: 'Join Official WhatsApp Channel', actionText: 'Join WhatsApp', type: 'official', url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j', isPrimary: true },
-      { label: 'Join Official Telegram Channel', actionText: 'Join Telegram', type: 'official', url: 'https://t.me/newsarkariresultt' },
-      { label: 'Email Support Desk', actionText: 'contact@sarkariresult.com', type: 'official', url: 'mailto:contact@sarkariresult.com' }
+      { label: 'Email Support Desk', actionText: 'rahulmathuriya7878@gmail.com', type: 'official', url: 'mailto:rahulmathuriya7878@gmail.com', isPrimary: true }
     ]
   },
   {
@@ -3261,7 +3259,7 @@ export const mockSarkariPosts: SarkariPost[] = [
     howToApplySteps: [
       'You can browse all Sarkari Result job notifications and updates without creating an account.',
       'To manage your ad personalization preferences, please visit Google Ad Settings.',
-      'For any privacy concerns or data requests, contact us at privacy@sarkariresult.com.'
+      'For any privacy concerns or data requests, contact us at rahulmathuriya7878@gmail.com.'
     ],
     directLinks: [
       { label: 'Google Ads Settings & Opt-Out', actionText: 'Ad Settings', type: 'official', url: 'https://myadcenter.google.com/', isPrimary: true },

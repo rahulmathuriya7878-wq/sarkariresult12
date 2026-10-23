@@ -1001,13 +1001,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </>
             )}
 
-            {/* Sarkari Result Mobile App Promo Strip */}
-            <div className="border border-slate-300 bg-emerald-50/50 p-3 sm:p-4 rounded-xs text-center shadow-2xs">
-              <h3 className="text-[12pt] sm:text-[13pt] font-black leading-snug" style={{ color: '#008000' }}>
-                Download the Sarkari Result® Mobile App from SarkariResult.com (Since 2012) for Instant Government Job Updates. Available for Free on Google Play and the Apple App Store.
-              </h3>
-            </div>
-
             {/* Useful Important Links Table (Includes WhatsApp, Telegram, Instagram & X) */}
             <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
               <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
