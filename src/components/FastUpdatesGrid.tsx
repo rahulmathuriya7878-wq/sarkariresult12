@@ -142,7 +142,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
       {/* Second AdSection between Syllabus and Admission */}
       <AdSection slotId="9923841029" format="horizontal" label="Advertisement / विज्ञापन" />
 
-      {/* Pair 2B: Syllabus | Important */}
+      {/* Pair 3: Syllabus | Admission */}
       <div className="grid grid-cols-2 gap-3 sm:gap-5">
         {renderColumn(
           isHindi ? 'पाठ्यक्रम (Syllabus)' : 'Syllabus',
@@ -153,30 +153,33 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
 
         {renderColumn(
-          isHindi ? 'महत्वपूर्ण लिंक (Important)' : 'Important',
-          '✍️ आवश्यक सरकारी पोर्टल, छात्रवृत्ति व महत्वपूर्ण सेवाएं',
-          important,
-          'important',
-          'View More Important'
-        )}
-      </div>
-
-      {/* Pair 3: Admission | Certificate Verification */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-5">
-        {renderColumn(
           isHindi ? 'प्रवेश (Admission)' : 'Admission',
           '✍️ यूनिवर्सिटी एवं कॉलेज प्रवेश फॉर्म',
           admissions,
           'admission',
           'View More Admission'
         )}
+      </div>
 
+      {/* Conditionally injected responsive AdSection between Admission and Certificate/Important */}
+      <AdSection slotId="9923841029" format="horizontal" label="Advertisement / विज्ञापन" />
+
+      {/* Pair 4 (Web ke sabse niche): Certificate Verification | Important */}
+      <div className="grid grid-cols-2 gap-3 sm:gap-5">
         {renderColumn(
           isHindi ? 'प्रमाण पत्र सत्यापन (Certificate Verification)' : 'Certificate Verification',
           '✍️ आधार, पैन, वोटर, जाति व आय सत्यापन',
           certificates,
           'certificate_verification',
           'View More Verification'
+        )}
+
+        {renderColumn(
+          isHindi ? 'महत्वपूर्ण लिंक (Important)' : 'Important',
+          '✍️ आवश्यक सरकारी पोर्टल, छात्रवृत्ति व महत्वपूर्ण सेवाएं',
+          important,
+          'important',
+          'View More Important'
         )}
       </div>
 

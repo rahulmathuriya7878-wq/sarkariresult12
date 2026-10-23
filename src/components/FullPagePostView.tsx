@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SarkariPost } from '../types/job';
 import { getProcessedImportantDates } from '../utils/dateUtils';
 import { 
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { isPostAlertActive, togglePostAlert, getPostStatus } from '../utils/alertManager';
 import { PostAlertModal } from './PostAlertModal';
+import { ALL_RRB_BOARDS } from '../data/rrbBoards';
 
 interface FullPagePostViewProps {
   post: SarkariPost;
@@ -24,6 +25,7 @@ interface FullPagePostViewProps {
   onSelectPost?: (post: SarkariPost) => void;
   allPosts?: SarkariPost[];
   onOpenAdmin?: () => void;
+  onOpenDirectEditor?: (post: SarkariPost) => void;
 }
 
 export interface PostFAQ {
@@ -218,7 +220,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   onSelectPost,
   isHindi,
   allPosts = [],
-  onOpenAdmin
+  onOpenAdmin,
+  onOpenDirectEditor
 }) => {
   const faqs = getPostFAQs(post);
 
@@ -401,6 +404,34 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     );
   }, [post.slug, post.category]);
 
+  // Check if post is Railway / RRB related to show All RRB Bharti Important Section
+  const isRailwayPost = useMemo(() => {
+    const titleLower = (post.title || '').toLowerCase();
+    const shortTitleLower = (post.shortTitle || '').toLowerCase();
+    return (
+      post.department === 'Railway' ||
+      titleLower.includes('railway') ||
+      titleLower.includes('rrb') ||
+      titleLower.includes('rrc') ||
+      titleLower.includes('station master') ||
+      titleLower.includes('ntpc') ||
+      shortTitleLower.includes('rrb') ||
+      shortTitleLower.includes('railway')
+    );
+  }, [post.department, post.title, post.shortTitle]);
+
+  const [rrbSearch, setRrbSearch] = useState('');
+  const filteredRrbBoards = useMemo(() => {
+    if (!rrbSearch.trim()) return ALL_RRB_BOARDS;
+    const q = rrbSearch.toLowerCase().trim();
+    return ALL_RRB_BOARDS.filter(
+      (b) =>
+        b.name.toLowerCase().includes(q) ||
+        b.hindiName.toLowerCase().includes(q) ||
+        b.zone.toLowerCase().includes(q)
+    );
+  }, [rrbSearch]);
+
   // Ensure WhatsApp & Telegram channel links are included in Useful Links for all posts
   const allDirectLinks = useMemo(() => {
     const existing = [...post.directLinks];
@@ -452,7 +483,13 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#f3f4f6] pb-20 text-[15px] font-sans">
+    <div 
+      className="w-full min-h-screen bg-[#f3f4f6] pb-20 font-post font-mangal"
+      style={{
+        fontFamily: "'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        fontSize: '11.5pt'
+      }}
+    >
       <div className="max-w-5xl mx-auto px-2 sm:px-4 py-3 sm:py-5">
         
         {/* Navigation Breadcrumbs (Home > Category > Post Title) & Actions */}
@@ -488,8 +525,19 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </li>
           </ol>
 
-          {/* Alert Me Quick Action Button */}
-          <div className="flex items-center shrink-0">
+          {/* Action Buttons: Direct Post Editor & Alert Me */}
+          <div className="flex items-center gap-2 shrink-0">
+            {onOpenDirectEditor && (
+              <button
+                type="button"
+                onClick={() => onOpenDirectEditor(post)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-400 hover:bg-amber-500 text-slate-950 rounded text-xs font-black shadow-xs cursor-pointer transition-colors border border-amber-500"
+                title="डायरेक्ट इस पोस्ट को एडमिन पैनल में एडिट करें"
+              >
+                <span>✏️ डायरेक्ट पोस्ट एडिटर</span>
+              </button>
+            )}
+
             <button
               onClick={() => setIsAlertModalOpen(true)}
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-[13px] font-bold cursor-pointer transition-all shadow-2xs ${
@@ -544,32 +592,13 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     </td>
                   </tr>
 
-                  {/* Row 2: Post Date / Update & Status */}
+                  {/* Row 2: Post Date / Update */}
                   <tr className="border-b border-slate-200">
                     <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[14pt] align-top border-r border-slate-200 w-28 sm:w-56 shrink-0 leading-tight">
-                      Post Date / Status :
+                      Post Date / Update :
                     </td>
-                    <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[12pt] align-top flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span>{post.postDate} | 08:40 PM</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {getPostStatus(post) === 'upcoming' ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-amber-100 border border-amber-300 text-amber-900 rounded-full font-bold text-xs">
-                            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
-                            <span>Upcoming (आगामी)</span>
-                          </span>
-                        ) : getPostStatus(post) === 'active' ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-100 border border-emerald-300 text-emerald-950 rounded-full font-bold text-xs">
-                            <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            <span>Active (आवेदन जारी)</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-700 rounded-full font-bold text-xs">
-                            <span>Closed</span>
-                          </span>
-                        )}
-                      </div>
+                    <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[12pt] align-top">
+                      <span>{post.postDate} | 08:40 PM</span>
                     </td>
                   </tr>
 
@@ -839,6 +868,110 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </div>
                 )}
 
+                {/* Salary & Pay Scale Table (वेतन सारणी) */}
+                {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
+                  <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
+                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                      {post.shortTitle} Pay Scale & Salary Details (वेतन सारणी)
+                    </div>
+                    <div className="p-4 sm:p-5 bg-slate-50 border-b border-slate-200">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[12pt]">
+                        <span><strong>Pay Scale (वेतनमान): </strong>{post.salary || 'As per 7th Pay Commission (7th CPC)'}</span>
+                        {post.salaryBand && (
+                          <span className="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded text-[11pt] border border-emerald-300">
+                            Band: {post.salaryBand}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {post.salaryBreakdown && post.salaryBreakdown.length > 0 && (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black text-[13pt]">
+                              <th className="p-3.5 border-r border-slate-300">Post Name</th>
+                              <th className="p-3.5 border-r border-slate-300 text-center">Pay Level</th>
+                              <th className="p-3.5 border-r border-slate-300">Basic Pay</th>
+                              <th className="p-3.5 border-r border-slate-300">In-Hand Salary</th>
+                              <th className="p-3.5">Allowances / Grade Pay</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-200 text-[12pt]">
+                            {post.salaryBreakdown.map((sal, idx) => (
+                              <tr key={idx} className="hover:bg-slate-50">
+                                <td className="p-3.5 font-bold text-blue-900 border-r border-slate-300">{sal.postName}</td>
+                                <td className="p-3.5 text-center font-bold text-emerald-700 border-r border-slate-300">{sal.payLevel}</td>
+                                <td className="p-3.5 font-bold text-slate-900 border-r border-slate-300">{sal.basicPay}</td>
+                                <td className="p-3.5 font-bold text-purple-900 border-r border-slate-300">{sal.inHandSalary || '-'}</td>
+                                <td className="p-3.5 text-slate-700">{sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Exam Scheme & Paper Pattern Table (परीक्षा पैटर्न व अंक योजना) */}
+                {post.paperPattern && (
+                  <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
+                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                      {post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}
+                    </div>
+                    <div className="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11pt]">
+                      {post.paperPattern.examMode && (
+                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                          <span className="text-slate-500 block text-[10pt]">Exam Mode</span>
+                          <strong className="text-slate-900">{post.paperPattern.examMode}</strong>
+                        </div>
+                      )}
+                      {post.paperPattern.totalDuration && (
+                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                          <span className="text-slate-500 block text-[10pt]">Total Duration</span>
+                          <strong className="text-blue-900">{post.paperPattern.totalDuration}</strong>
+                        </div>
+                      )}
+                      {post.paperPattern.totalQuestions && (
+                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                          <span className="text-slate-500 block text-[10pt]">Total Questions</span>
+                          <strong className="text-slate-900">{post.paperPattern.totalQuestions} Ques</strong>
+                        </div>
+                      )}
+                      {post.paperPattern.negativeMarking && (
+                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                          <span className="text-slate-500 block text-[10pt]">Negative Marking</span>
+                          <strong className="text-red-600">{post.paperPattern.negativeMarking}</strong>
+                        </div>
+                      )}
+                    </div>
+                    {post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black text-[13pt]">
+                              <th className="p-3.5 border-r border-slate-300">Subject / Test Paper</th>
+                              <th className="p-3.5 border-r border-slate-300 text-center">Questions</th>
+                              <th className="p-3.5 border-r border-slate-300 text-center">Maximum Marks</th>
+                              <th className="p-3.5">Duration / Remarks</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-200 text-[12pt]">
+                            {post.paperPattern.subjects.map((sub, idx) => (
+                              <tr key={idx} className="hover:bg-slate-50">
+                                <td className="p-3.5 font-bold text-slate-900 border-r border-slate-300">{sub.subjectName}</td>
+                                <td className="p-3.5 text-center font-bold text-blue-900 border-r border-slate-300">{sub.totalQuestions || '-'}</td>
+                                <td className="p-3.5 text-center font-bold text-emerald-800 border-r border-slate-300">{sub.totalMarks || '-'}</td>
+                                <td className="p-3.5 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Mode of Selection & Examination Scheme (Only for Latest Jobs, Result, Admit Card, Answer Key) */}
                 {showRecruitmentDetails && (
                   <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
@@ -935,6 +1068,85 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 ))}
               </div>
             </div>
+
+            {/* All RRB Bharti Region-Wise Important Section */}
+            {isRailwayPost && (
+              <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
+                <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center flex items-center justify-center gap-2">
+                  <span>🚆</span>
+                  <span>All RRB Bharti Region Wise Official Portal & Links (सभी 21 रेलवे भर्ती बोर्ड)</span>
+                </div>
+                <div className="bg-emerald-50 px-5 py-3 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="text-xs sm:text-sm text-emerald-950 font-bold">
+                    भारतीय रेलवे (Indian Railways) के सभी 21 भर्ती बोर्ड के आधिकारिक रीजनल पोर्टल एवं ऑनलाइन लिंक्स:
+                  </div>
+                  <div className="w-full sm:w-64">
+                    <input
+                      type="text"
+                      value={rrbSearch}
+                      onChange={(e) => setRrbSearch(e.target.value)}
+                      placeholder="Search RRB (e.g. Ajmer, Patna, Mumbai)..."
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs bg-white text-slate-800 font-medium focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-[11pt] sm:text-[12pt]">
+                    <thead>
+                      <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black">
+                        <th className="p-3 sm:p-3.5 border-r border-slate-300">RRB Name (रेलवे भर्ती बोर्ड)</th>
+                        <th className="p-3 sm:p-3.5 border-r border-slate-300">Railway Zone / Region</th>
+                        <th className="p-3 sm:p-3.5 border-r border-slate-300 text-center">Official Website</th>
+                        <th className="p-3 sm:p-3.5 text-center">Direct Apply / Link</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200">
+                      {filteredRrbBoards.map((rrb, idx) => (
+                        <tr key={idx} className="hover:bg-amber-50/50 transition-colors">
+                          <td className="p-3 sm:p-3.5 border-r border-slate-300 font-bold text-blue-900">
+                            <div>• {rrb.name}</div>
+                            <div className="text-[10pt] text-slate-500 font-normal">{rrb.hindiName}</div>
+                          </td>
+                          <td className="p-3 sm:p-3.5 border-r border-slate-300 text-slate-700 font-medium text-[11pt]">
+                            {rrb.zone}
+                          </td>
+                          <td className="p-3 sm:p-3.5 border-r border-slate-300 text-center">
+                            <a
+                              href={rrb.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#0000cc] hover:underline font-bold inline-flex items-center gap-1 text-[11pt]"
+                            >
+                              <span>Website</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          </td>
+                          <td className="p-3 sm:p-3.5 text-center">
+                            <a
+                              href={rrb.applyUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold px-3.5 py-1.5 rounded-xs text-xs inline-flex items-center gap-1 shadow-2xs transition-colors"
+                            >
+                              <span>Click Here</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                      {filteredRrbBoards.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="p-6 text-center text-slate-500 font-medium">
+                            No RRB Board found matching "{rrbSearch}". Please check the spelling.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
 
             {/* Related Posts Section - 3 Suggestions from Same Category or Department (JUST ABOVE FAQ) */}
             {relatedPosts.length > 0 && (

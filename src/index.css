@@ -14,6 +14,18 @@
   .font-signature {
     font-family: 'Caveat', cursive;
   }
+  .font-headlight {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    font-size: 12pt;
+  }
+  .font-post {
+    font-family: 'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 11.5pt;
+  }
+  .font-mangal {
+    font-family: 'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 11.5pt;
+  }
   .notebook-ruled {
     background: repeating-linear-gradient(
       transparent,
@@ -22,6 +34,17 @@
     );
     line-height: 30px;
   }
+}
+
+/* Global Headlight and Post typography defaults */
+.site-headlight {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+  font-size: 12pt !important;
+}
+
+.site-post-content {
+  font-family: 'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 11.5pt !important;
 }
 
 @media print {

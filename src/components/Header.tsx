@@ -262,12 +262,12 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
 
-        {/* Desktop Navigation Bar (hidden md:flex) */}
-        <div className="hidden md:flex max-w-7xl mx-auto items-center justify-between">
-          <nav className="flex items-stretch flex-1 overflow-x-auto no-scrollbar divide-x divide-neutral-700 text-xs sm:text-sm font-black tracking-wide uppercase">
+        {/* Desktop Navigation Bar (hidden md:flex) with Segoe UI 12pt */}
+        <div className="hidden md:flex max-w-7xl mx-auto items-center justify-between font-headlight">
+          <nav className="flex items-stretch flex-1 overflow-x-auto no-scrollbar divide-x divide-neutral-700 font-headlight font-black tracking-wide uppercase">
             <button
               onClick={() => handleNavClick('all')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
                 activeCategory === 'all' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
@@ -276,7 +276,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => handleNavClick('latest_jobs')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
                 activeCategory === 'latest_jobs' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
@@ -285,7 +285,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => handleNavClick('admit_card')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
                 activeCategory === 'admit_card' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
@@ -294,7 +294,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => handleNavClick('result')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
                 activeCategory === 'result' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
@@ -303,7 +303,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => handleNavClick('syllabus')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
                 activeCategory === 'syllabus' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
@@ -312,7 +312,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => handleNavClick('admission')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 ${
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
                 activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
               }`}
             >
@@ -320,10 +320,10 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* Desktop More Button */}
-            <div className="relative shrink-0" ref={moreRef}>
+            <div className="relative shrink-0 font-headlight" ref={moreRef}>
               <button
                 onClick={() => setIsMoreOpen(!isMoreOpen)}
-                className="bg-white text-black font-extrabold px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-1 hover:bg-neutral-200 transition-colors cursor-pointer h-full text-xs sm:text-sm"
+                className="bg-white text-black font-extrabold px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-1 hover:bg-neutral-200 transition-colors cursor-pointer h-full font-headlight"
               >
                 <span>More</span>
                 {isMoreOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

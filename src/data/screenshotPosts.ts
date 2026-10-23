@@ -1016,13 +1016,19 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
     ],
     ageLimit: { asOnDate: '01/01/2025', minAge: 18, maxAge: 36 },
     importantDates: [
-      { label: 'Online Application Begin', value: '14/09/2026' },
-      { label: 'Last Date for Apply Online', value: '13/11/2026', isHighlight: true }
+      { label: 'Notification Released Date', value: '13/09/2026' },
+      { label: 'Online Application Begin', value: '14/09/2026', isHighlight: true },
+      { label: 'Last Date for Apply Online', value: '13/11/2026 (11:59 PM)', isHighlight: true },
+      { label: 'Fee Payment Last Date', value: '14/11/2026 (11:59 PM)' },
+      { label: 'Form Correction / Modification Window', value: '15/11/2026 to 24/11/2026', isHighlight: true },
+      { label: 'CBT-1 Examination Schedule', value: 'March / April 2027 (Tentative)', isHighlight: true }
     ],
     vacancyBreakdown: [
-      { postName: 'Goods Train Manager (GTM)', totalPosts: '3,144 Posts', eligibility: 'Bachelor Degree in any stream from recognized University.' },
-      { postName: 'Station Master', totalPosts: '994 Posts', eligibility: 'Degree in any discipline from recognized University.' },
-      { postName: 'Senior Clerk Cum Typist', totalPosts: '2,429 Posts', eligibility: 'Bachelor Degree with English/Hindi Typing proficiency.' }
+      { postName: 'Chief Commercial cum Ticket Supervisor (Level 6)', totalPosts: '1,736 Posts', eligibility: 'Degree in any discipline from recognized University.' },
+      { postName: 'Station Master (Level 6)', totalPosts: '994 Posts', eligibility: 'Degree in any discipline with A-2 Medical Standard & CBAT.' },
+      { postName: 'Goods Train Manager (GTM - Level 5)', totalPosts: '3,144 Posts', eligibility: 'Bachelor Degree in any stream from recognized University.' },
+      { postName: 'Junior Account Assistant cum Typist (Level 5)', totalPosts: '1,507 Posts', eligibility: 'Bachelor Degree with English/Hindi typing.' },
+      { postName: 'Senior Clerk Cum Typist (Level 5)', totalPosts: '732 Posts', eligibility: 'Bachelor Degree with English/Hindi Typing proficiency.' }
     ],
     howToApplySteps: [
       'Visit rrbapply.gov.in and login to your existing account or register anew.',

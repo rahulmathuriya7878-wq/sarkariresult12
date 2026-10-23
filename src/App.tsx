@@ -10,7 +10,6 @@ import { Header } from './components/Header';
 import { QuickHighlightsGrid } from './components/QuickHighlightsGrid';
 import { FastUpdatesGrid } from './components/FastUpdatesGrid';
 import { SarkariFooter } from './components/SarkariFooter';
-import { BackToTop } from './components/BackToTop';
 import { CategoryDetailView } from './components/CategoryDetailView';
 import { FullPagePostView } from './components/FullPagePostView';
 import { FloatingShareButton } from './components/FloatingShareButton';
@@ -44,10 +43,22 @@ export default function App() {
   // Master Posts State (Persists custom edits, additions, and deletions)
   const [allPosts, setAllPosts] = useState<SarkariPost[]>(() => {
     try {
-      const saved = localStorage.getItem('sarkari_admin_posts_v2');
+      const saved = localStorage.getItem('sarkari_admin_posts_v3') || localStorage.getItem('sarkari_admin_posts_v2');
       if (saved) {
-        const parsed = JSON.parse(saved);
+        let parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          // Double verification update for Railway NTPC and Station Master posts
+          const freshSM = mockSarkariPosts.find((p) => p.id === 'job-rrb-station-master-2026');
+          const freshNTPCGrad = mockSarkariPosts.find((p) => p.id === 'job-railway-ntpc-grad-2026');
+          parsed = parsed.map((p: SarkariPost) => {
+            if (p.id === 'job-rrb-station-master-2026' && freshSM) {
+              return freshSM;
+            }
+            if (p.id === 'job-railway-ntpc-grad-2026' && freshNTPCGrad) {
+              return freshNTPCGrad;
+            }
+            return p;
+          });
           const existingIds = new Set(parsed.map((p: SarkariPost) => p.id));
           const missingDefaults = mockSarkariPosts.filter((p) => !existingIds.has(p.id));
           return [...parsed, ...missingDefaults];
@@ -62,6 +73,7 @@ export default function App() {
   // Save posts to localStorage whenever updated
   useEffect(() => {
     try {
+      localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(allPosts));
       localStorage.setItem('sarkari_admin_posts_v2', JSON.stringify(allPosts));
     } catch (e) {
       console.error('Failed to save posts', e);
@@ -70,6 +82,12 @@ export default function App() {
 
   // Admin Modal state
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const [adminEditingTargetPost, setAdminEditingTargetPost] = useState<SarkariPost | null>(null);
+
+  const handleOpenDirectPostEditor = (post: SarkariPost) => {
+    setAdminEditingTargetPost(post);
+    setIsAdminOpen(true);
+  };
 
   // Navigation & Category filter state
   const [activeCategory, setActiveCategory] = useState<PostCategory | 'all'>('all');
@@ -111,13 +129,14 @@ export default function App() {
   };
 
   const handleResetToDefault = () => {
-    if (window.confirm('Reset all posts to default official records? Any custom additions or edits will be restored.')) {
-      setAllPosts(mockSarkariPosts);
-      try {
-        localStorage.removeItem('sarkari_admin_posts_v2');
-      } catch (e) {
-        console.error(e);
-      }
+    setAllPosts(mockSarkariPosts);
+    try {
+      localStorage.removeItem('sarkari_admin_posts_v2');
+      localStorage.removeItem('sarkari_admin_posts_v3');
+      localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(mockSarkariPosts));
+      localStorage.setItem('sarkari_admin_posts_v2', JSON.stringify(mockSarkariPosts));
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -421,6 +440,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             isHindi={isHindi}
             onSelectPost={handleOpenPostFullPage}
             onOpenAdmin={() => setIsAdminOpen(true)}
+            onOpenDirectEditor={handleOpenDirectPostEditor}
           />
         </Suspense>
       ) : (
@@ -546,7 +566,10 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
       {isAdminOpen && (
         <AdminEditingPanelModal
           isOpen={isAdminOpen}
-          onClose={() => setIsAdminOpen(false)}
+          onClose={() => {
+            setIsAdminOpen(false);
+            setAdminEditingTargetPost(null);
+          }}
           posts={allPosts}
           onAddPost={handleAddPost}
           onUpdatePost={handleUpdatePost}
@@ -554,11 +577,11 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onResetToDefault={handleResetToDefault}
           onSelectPost={handleOpenPostFullPage}
           isHindi={isHindi}
+          initialPostToEdit={adminEditingTargetPost}
         />
       )}
 
       <FloatingShareButton currentPost={selectedPost} isHindi={isHindi} />
-      <BackToTop />
 
 
     </div>

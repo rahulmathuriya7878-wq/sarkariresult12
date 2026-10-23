@@ -68,7 +68,7 @@ export interface ApplicationFeeItem {
 export interface DirectLinkItem {
   label: string;
   actionText: string;
-  type: 'apply' | 'admit_card' | 'result' | 'answer_key' | 'notification' | 'official' | 'syllabus';
+  type: 'apply' | 'admit_card' | 'result' | 'answer_key' | 'notification' | 'official' | 'syllabus' | 'other' | 'exam_city';
   url?: string;
   isPrimary?: boolean;
 }
@@ -96,6 +96,16 @@ export interface PaperPattern {
 export interface PostFAQItem {
   question: string;
   answer: string;
+}
+
+export interface SalaryBreakdownItem {
+  postName: string;
+  payLevel: string;
+  basicPay: string;
+  inHandSalary?: string;
+  grossSalary?: string;
+  gradePay?: string;
+  allowances?: string;
 }
 
 export interface SarkariPost {
@@ -134,6 +144,7 @@ export interface SarkariPost {
   selectionProcess?: string[];
   salary?: string;
   salaryBand?: SalaryBand;
+  salaryBreakdown?: SalaryBreakdownItem[];
   directLinks: DirectLinkItem[];
   notificationNumber?: string;
   customFaqs?: PostFAQItem[];

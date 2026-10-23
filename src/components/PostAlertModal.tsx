@@ -113,7 +113,7 @@ export const PostAlertModal: React.FC<PostAlertModalProps> = ({
               ) : currentStatus === 'active' ? (
                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-emerald-100 border border-emerald-300 text-emerald-950 rounded font-bold text-[10px]">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                  Active (आवेदन जारी)
+                  Open (आवेदन चालू)
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-100 border border-slate-300 text-slate-700 rounded font-bold text-[10px]">

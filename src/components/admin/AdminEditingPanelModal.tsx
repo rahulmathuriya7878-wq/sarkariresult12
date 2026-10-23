@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   SarkariPost, 
   PostCategory, 
@@ -8,7 +8,10 @@ import {
   ApplicationFeeItem,
   ImportantDateItem,
   DirectLinkItem,
-  VacancyBreakdown
+  VacancyBreakdown,
+  SalaryBreakdownItem,
+  PaperPattern,
+  ExamSubjectItem
 } from '../../types/job';
 import { 
   X, 
@@ -32,9 +35,15 @@ import {
   Download, 
   Upload,
   ArrowLeft,
-  HelpCircle
+  HelpCircle,
+  Eye,
+  CheckCircle2,
+  Layers,
+  Sparkles,
+  Bot
 } from 'lucide-react';
 import { getPostFAQs } from '../FullPagePostView';
+import { AIBlogWriter } from './AIBlogWriter';
 
 interface AdminEditingPanelModalProps {
   isOpen: boolean;
@@ -46,6 +55,7 @@ interface AdminEditingPanelModalProps {
   onResetToDefault: () => void;
   onSelectPost?: (post: SarkariPost) => void;
   isHindi?: boolean;
+  initialPostToEdit?: SarkariPost | null;
 }
 
 const CATEGORIES: { value: PostCategory; label: string }[] = [
@@ -142,7 +152,8 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   onUpdatePost,
   onDeletePost,
   onResetToDefault,
-  onSelectPost
+  onSelectPost,
+  initialPostToEdit
 }) => {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -156,11 +167,29 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   const [filterDept, setFilterDept] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Main Admin Panel Modules: 1. Full Post Editor, 2. AI Blog Writer
+  const [adminMainTab, setAdminMainTab] = useState<'editor' | 'ai_blog'>('editor');
+
   // Editor State
   const [editingPost, setEditingPost] = useState<SarkariPost | null>(null);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
   const [activeTab, setActiveTab] = useState<'basic' | 'dates_fees' | 'links' | 'vacancy' | 'faqs'>('basic');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [postToDelete, setPostToDelete] = useState<SarkariPost | null>(null);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState<boolean>(false);
+
+  // Automatically open direct editor when initialPostToEdit is passed or select first post
+  useEffect(() => {
+    if (isOpen) {
+      if (initialPostToEdit) {
+        setEditingPost(JSON.parse(JSON.stringify(initialPostToEdit)));
+        setIsCreatingNew(false);
+      } else if (!editingPost && posts && posts.length > 0) {
+        setEditingPost(JSON.parse(JSON.stringify(posts[0])));
+        setIsCreatingNew(false);
+      }
+    }
+  }, [initialPostToEdit, isOpen, posts]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -199,6 +228,8 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           p.shortTitle.toLowerCase().includes(q) ||
           p.department.toLowerCase().includes(q) ||
           p.state.toLowerCase().includes(q) ||
+          p.id.toLowerCase().includes(q) ||
+          p.slug.toLowerCase().includes(q) ||
           (p.notificationNumber && p.notificationNumber.toLowerCase().includes(q));
         if (!matches) return false;
       }
@@ -234,24 +265,25 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     showToast(`Post duplicated successfully!`);
   };
 
-  // Delete a Post
-  const handleDelete = (post: SarkariPost) => {
-    if (window.confirm(`Are you sure you want to permanently delete: "${post.shortTitle}"?`)) {
-      onDeletePost(post.id);
-      if (editingPost?.id === post.id) {
-        setEditingPost(null);
-      }
-      showToast(`Post "${post.shortTitle}" deleted!`);
+  // Delete a Post confirmation trigger
+  const handleConfirmDelete = () => {
+    if (!postToDelete) return;
+    const deletedTitle = postToDelete.shortTitle || postToDelete.title;
+    onDeletePost(postToDelete.id);
+    if (editingPost?.id === postToDelete.id) {
+      setEditingPost(null);
     }
+    showToast(`Post "${deletedTitle}" deleted successfully!`);
+    setPostToDelete(null);
   };
 
   // Save changes
-  const handleSavePost = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleQuickSave = (stayInEditor: boolean = false, e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!editingPost) return;
 
     if (!editingPost.title.trim() || !editingPost.shortTitle.trim()) {
-      alert('Please provide both Title and Short Title.');
+      showToast('⚠️ Please provide both Title and Short Title.');
       return;
     }
 
@@ -266,13 +298,23 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     if (isCreatingNew) {
       onAddPost(editingPost);
       showToast(`New post "${editingPost.shortTitle}" added!`);
+      if (!stayInEditor) {
+        setEditingPost(null);
+        setIsCreatingNew(false);
+      } else {
+        setIsCreatingNew(false);
+      }
     } else {
       onUpdatePost(editingPost);
-      showToast(`Post "${editingPost.shortTitle}" updated successfully!`);
+      showToast(`⚡ Post "${editingPost.shortTitle}" updated directly!`);
+      if (!stayInEditor) {
+        setEditingPost(null);
+      }
     }
+  };
 
-    setEditingPost(null);
-    setIsCreatingNew(false);
+  const handleSavePost = (e: React.FormEvent) => {
+    handleQuickSave(false, e);
   };
 
   // Export JSON
@@ -364,6 +406,109 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           </div>
         </div>
 
+        {/* Two Exclusive Admin Modules: 1. Direct Section & Post Editor, 2. AI Blog Writer */}
+        {isAuthenticated && (
+          <div className="bg-slate-900 text-white px-3 sm:px-4 py-2 border-b border-slate-950 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0 shadow-md">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setAdminMainTab('editor');
+                  if (!editingPost && posts.length > 0) {
+                    handleStartEdit(posts[0]);
+                  }
+                }}
+                className={`px-3.5 py-1.5 rounded text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all cursor-pointer ${
+                  adminMainTab === 'editor'
+                    ? 'bg-[#ab1616] text-white shadow-md ring-2 ring-red-400'
+                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                }`}
+              >
+                <span>⚡</span>
+                <span>डायरेक्ट सेक्शन व पोस्ट अपडेट (Full Post Editor)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setAdminMainTab('ai_blog')}
+                className={`px-3.5 py-1.5 rounded text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all cursor-pointer ${
+                  adminMainTab === 'ai_blog'
+                    ? 'bg-amber-500 text-slate-950 shadow-md ring-2 ring-amber-300 font-extrabold'
+                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                }`}
+              >
+                <span>🤖</span>
+                <span>AI ब्लॉग राइटर (AI Blog Writer)</span>
+              </button>
+            </div>
+
+            <div className="text-[11px] text-slate-400 font-bold hidden md:flex items-center gap-2">
+              <span className="bg-slate-800 px-2.5 py-1 rounded border border-slate-700">
+                कुल पोस्ट्स: <strong className="text-white">{posts.length}</strong>
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Quick Direct Post Editor Bar (Shown in Editor Tab) */}
+        {isAuthenticated && adminMainTab === 'editor' && (
+          <div className="bg-amber-50 border-b border-amber-300 px-3 sm:px-4 py-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0 shadow-2xs">
+            <div className="flex items-center gap-2">
+              <span className="text-amber-950 text-xs sm:text-sm font-black flex items-center gap-1.5">
+                <span className="text-amber-600 text-base font-black">⚡</span>
+                <span>चयनित पोस्ट (Select Post):</span>
+              </span>
+              <span className="text-[11px] text-amber-800 font-semibold hidden md:inline">
+                पोस्ट चुनें और सीधे प्रत्येक बॉक्स, वेतन सारणी व पैटर्न अपडेट करें
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 flex-1 max-w-xl">
+              <select
+                value={editingPost?.id || ''}
+                onChange={(e) => {
+                  const selectedId = e.target.value;
+                  if (!selectedId) return;
+                  const target = posts.find((p) => p.id === selectedId);
+                  if (target) {
+                    handleStartEdit(target);
+                    showToast(`पोस्ट लोड की गई: ${target.shortTitle || target.title}`);
+                  }
+                }}
+                className="w-full bg-white border border-amber-400 text-slate-900 text-xs font-bold rounded px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-2xs cursor-pointer"
+              >
+                {posts.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    [{p.category.toUpperCase().replace('_', ' ')}] {p.shortTitle || p.title} (ID: {p.id})
+                  </option>
+                ))}
+              </select>
+
+              <button
+                type="button"
+                onClick={handleStartCreate}
+                className="bg-[#ab1616] hover:bg-red-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
+                title="नई पोस्ट बनाएं"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ नई पोस्ट</span>
+              </button>
+
+              {editingPost && (
+                <button
+                  type="button"
+                  onClick={() => handleQuickSave(true)}
+                  className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
+                  title="Quick Save and stay in editor"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>अपडेट करें</span>
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Content Body */}
         {!isAuthenticated ? (
           /* Login Guard View */
@@ -421,66 +566,185 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
             {/* Editor Subheader / Vertical Navigation Sidebar */}
             <div className="bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200 px-4 py-3 flex flex-col md:w-60 shrink-0 gap-3">
               <div className="flex items-center justify-between md:flex-col md:items-start gap-2">
-                <button
-                  type="button"
-                  onClick={() => setEditingPost(null)}
-                  className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-slate-700 hover:text-black bg-white border border-slate-300 px-3 py-2 rounded cursor-pointer transition-colors shadow-2xs w-full"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Back to Posts List</span>
-                </button>
+                <div className="flex items-center gap-1.5 w-full">
+                  <button
+                    type="button"
+                    onClick={handleStartCreate}
+                    className="inline-flex items-center justify-center gap-1 text-xs font-black text-white bg-[#ab1616] hover:bg-red-800 px-2.5 py-1.5 rounded cursor-pointer transition-colors shadow-2xs flex-1"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>+ नई पोस्ट</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setAdminMainTab('ai_blog')}
+                    className="inline-flex items-center justify-center gap-1 text-xs font-black text-slate-950 bg-amber-400 hover:bg-amber-500 px-2.5 py-1.5 rounded cursor-pointer transition-colors shadow-2xs flex-1"
+                    title="AI ब्लॉग राइटर पर जाएं"
+                  >
+                    <span>🤖 AI राइटर</span>
+                  </button>
+                </div>
                 <div className="text-xs font-black text-slate-900 uppercase tracking-tight truncate w-full">
                   {isCreatingNew ? 'Create New Post' : `Editing: ${editingPost.shortTitle || editingPost.title}`}
                 </div>
               </div>
 
               {/* Vertical Section Quick Navigation Links */}
-              <div className="space-y-1.5 pt-2 border-t border-slate-200">
+              <div className="space-y-1 pt-2 border-t border-slate-200">
                 <div className="hidden md:block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">
-                  Vertical Sections
+                  Direct Sections (डायरेक्ट सेक्शन)
                 </div>
-                <div className="flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-visible">
+                <div className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible">
                   <a
                     href="#sec-basic"
-                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
                   >
                     <span>📍</span>
-                    <span>1. General Info</span>
+                    <span>1. मूल बॉक्स (Info)</span>
                   </a>
                   <a
                     href="#sec-dates-fees"
-                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
                   >
                     <span>📅</span>
-                    <span>2. Dates & Fees</span>
-                  </a>
-                  <a
-                    href="#sec-links"
-                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
-                  >
-                    <span>🔗</span>
-                    <span>3. Direct Links</span>
+                    <span>2. तिथियां व शुल्क</span>
                   </a>
                   <a
                     href="#sec-vacancy"
-                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
                   >
                     <span>📊</span>
-                    <span>4. Vacancies & Steps</span>
+                    <span>3. पद विवरण (Vacancy)</span>
+                  </a>
+                  <a
+                    href="#sec-salary"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
+                  >
+                    <span>💵</span>
+                    <span>4. वेतन सारणी (Salary)</span>
+                  </a>
+                  <a
+                    href="#sec-exam-pattern"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-blue-50 text-blue-900 border border-blue-300 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
+                  >
+                    <span>📝</span>
+                    <span>5. परीक्षा पैटर्न (Pattern)</span>
+                  </a>
+                  <a
+                    href="#sec-links"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-purple-50 text-purple-900 border border-purple-300 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
+                  >
+                    <span>🔗</span>
+                    <span>6. डायरेक्ट लिंक्स</span>
+                  </a>
+                  <a
+                    href="#sec-steps"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-amber-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
+                  >
+                    <span>✍️</span>
+                    <span>7. आवेदन चरण (Steps)</span>
                   </a>
                   <a
                     href="#sec-faqs"
-                    className="px-3 py-2 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-2 transition-colors shadow-2xs"
+                    className="px-2.5 py-1.5 rounded text-xs font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-1.5 transition-colors shadow-2xs"
                   >
                     <span>❓</span>
-                    <span>5. FAQs ({editingPost.customFaqs?.length || 0})</span>
+                    <span>8. FAQs ({editingPost.customFaqs?.length || 0})</span>
                   </a>
                 </div>
+
+                {!isCreatingNew && (
+                  <button
+                    type="button"
+                    onClick={() => setPostToDelete(editingPost)}
+                    className="w-full mt-3 inline-flex items-center justify-center gap-1.5 bg-red-50 hover:bg-red-600 hover:text-white text-red-700 border border-red-200 px-3 py-2 rounded text-xs font-bold cursor-pointer transition-colors shadow-2xs"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete Post (हटाएं)</span>
+                  </button>
+                )}
               </div>
             </div>
 
             {/* Form Fields - All Sections Stacked Vertically */}
-            <form onSubmit={handleSavePost} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-8">
+            <form onSubmit={handleSavePost} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-8 relative">
+              {/* TOP STICKY BAR: DIRECT POST SWITCHER & DIRECT SECTION JUMP & QUICK SAVE */}
+              <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border border-slate-300 rounded p-3 shadow-md space-y-2.5">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="text-xs font-black text-slate-800 shrink-0 flex items-center gap-1">
+                      <span className="text-amber-500 text-sm">⚡</span>
+                      <span>पोस्ट बदलें:</span>
+                    </span>
+                    <select
+                      value={editingPost.id}
+                      onChange={(e) => {
+                        const target = posts.find(p => p.id === e.target.value);
+                        if (target) {
+                          setEditingPost(JSON.parse(JSON.stringify(target)));
+                          setIsCreatingNew(false);
+                          showToast(`Switched to "${target.shortTitle || target.title}"`);
+                        }
+                      }}
+                      className="px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold bg-white max-w-sm truncate text-slate-800 shadow-2xs focus:border-red-600 focus:outline-none"
+                    >
+                      {posts.map(p => (
+                        <option key={p.id} value={p.id}>
+                          {p.shortTitle || p.title} ({p.department} - {p.totalVacancies || 'Post'})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-2 justify-end shrink-0">
+                    {onSelectPost && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectPost(editingPost);
+                          onClose();
+                        }}
+                        className="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-black text-white text-xs font-bold px-3 py-1.5 rounded cursor-pointer transition-colors shadow-2xs"
+                        title="View post on live full page view"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-amber-300" />
+                        <span>लाइव देखें</span>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleQuickSave(true)}
+                      className="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black px-3.5 py-1.5 rounded cursor-pointer shadow-xs transition-transform active:scale-95"
+                      title="Save updates immediately and stay in editor"
+                    >
+                      <Save className="w-3.5 h-3.5" />
+                      <span>तुरंत अपडेट करें</span>
+                    </button>
+                    <button
+                      type="submit"
+                      className="inline-flex items-center gap-1.5 bg-[#ab1616] hover:bg-red-800 text-white text-xs font-black px-3.5 py-1.5 rounded cursor-pointer shadow-xs transition-transform active:scale-95"
+                      title="Save and exit editor"
+                    >
+                      <span>सेव व बाहर</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Direct Section Jump Badges */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 text-[11px] font-bold border-t border-slate-100 pt-2">
+                  <span className="text-slate-400 font-semibold shrink-0 text-[10px] uppercase">डायरेक्ट सेक्शन:</span>
+                  <a href="#sec-basic" className="px-2 py-0.5 bg-slate-100 hover:bg-red-50 hover:text-red-700 rounded border border-slate-200 shrink-0">📍 1. मूल बॉक्स</a>
+                  <a href="#sec-dates-fees" className="px-2 py-0.5 bg-slate-100 hover:bg-red-50 hover:text-red-700 rounded border border-slate-200 shrink-0">📅 2. तिथियां व शुल्क</a>
+                  <a href="#sec-vacancy" className="px-2 py-0.5 bg-slate-100 hover:bg-red-50 hover:text-red-700 rounded border border-slate-200 shrink-0">📊 3. पद विवरण</a>
+                  <a href="#sec-salary" className="px-2 py-0.5 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 rounded border border-emerald-300 shrink-0">💵 4. वेतन सारणी</a>
+                  <a href="#sec-exam-pattern" className="px-2 py-0.5 bg-blue-50 text-blue-800 hover:bg-blue-100 rounded border border-blue-300 shrink-0">📝 5. परीक्षा पैटर्न</a>
+                  <a href="#sec-links" className="px-2 py-0.5 bg-purple-50 text-purple-800 hover:bg-purple-100 rounded border border-purple-300 shrink-0">🔗 6. लिंक्स</a>
+                  <a href="#sec-steps" className="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 rounded border border-slate-200 shrink-0">✍️ 7. चरण</a>
+                  <a href="#sec-faqs" className="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 rounded border border-slate-200 shrink-0">❓ 8. FAQs</a>
+                </div>
+              </div>
+
               {/* SECTION 1: BASIC INFO */}
               <div id="sec-basic" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs">
                 <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
@@ -1023,46 +1287,869 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 </div>
               </div>
 
-              {/* SECTION 3: DIRECT OFFICIAL LINKS */}
-              <div id="sec-links" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs">
-                <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
-                  <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
-                    SECTION 3
-                  </span>
-                  <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
-                    🔗 Direct Important Links (आधिकारिक डायरेक्ट लिंक)
-                  </h3>
+              {/* SECTION 3: VACANCIES BREAKDOWN & ELIGIBILITY */}
+              <div id="sec-vacancy" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-6 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2.5 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                      SECTION 3
+                    </span>
+                    <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                      📊 Vacancy Breakdown & Eligibility (पद विवरण व योग्यता)
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingPost({
+                        ...editingPost,
+                        vacancyBreakdown: [
+                          ...editingPost.vacancyBreakdown,
+                          { 
+                            postName: 'New Post Name', 
+                            totalPosts: '0', 
+                            eligibility: 'Educational qualification details as per official gazette.',
+                            categoryBreakdown: { gen: 0, obc: 0, ews: 0, sc: 0, st: 0 }
+                          }
+                        ]
+                      });
+                    }}
+                    className="text-xs bg-[#ab1616] hover:bg-red-800 text-white px-3 py-1 rounded font-bold cursor-pointer transition-colors shadow-2xs"
+                  >
+                    + Add Post Breakdown
+                  </button>
                 </div>
+
                 <div className="space-y-4 max-w-4xl mx-auto">
-                  <div className="flex items-center justify-between">
+                  <div className="bg-white p-3.5 rounded border border-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
-                      <h4 className="text-sm font-black text-slate-900 uppercase">
-                        Direct Important Links
-                      </h4>
-                      <p className="text-xs text-slate-500">
-                        Links for Apply Online, Candidate Login, Notification PDF, Official Portal, etc.
-                      </p>
+                      <label className="block text-xs font-bold text-slate-700">Total Consolidated Vacancies (कुल पद संख्या):</label>
+                      <p className="text-[11px] text-slate-500">Total number of seats advertised across all categories.</p>
                     </div>
+                    <input
+                      type="text"
+                      value={editingPost.totalVacancies || ''}
+                      onChange={(e) => setEditingPost({ ...editingPost, totalVacancies: e.target.value })}
+                      placeholder="e.g. 130 or 2,987 Posts"
+                      className="w-full sm:w-48 px-3 py-1.5 border border-slate-300 rounded text-xs font-bold text-blue-900"
+                    />
+                  </div>
+
+                  {/* Vacancy Breakdown Cards */}
+                  <div className="space-y-3">
+                    {editingPost.vacancyBreakdown.map((item, idx) => (
+                      <div key={idx} className="bg-white border border-slate-300 p-4 rounded space-y-3 shadow-2xs">
+                        <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                          <span className="text-xs font-black text-slate-800 uppercase flex items-center gap-1.5">
+                            <span className="text-emerald-600">■</span>
+                            <span>Post Entry #{idx + 1}</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingPost({
+                                ...editingPost,
+                                vacancyBreakdown: editingPost.vacancyBreakdown.filter((_, i) => i !== idx)
+                              });
+                            }}
+                            className="text-red-600 hover:text-red-800 p-1 cursor-pointer"
+                            title="Delete this vacancy item"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                          <div className="sm:col-span-2">
+                            <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Post / Cadre Name</label>
+                            <input
+                              type="text"
+                              value={item.postName}
+                              onChange={(e) => {
+                                const updated = [...editingPost.vacancyBreakdown];
+                                updated[idx].postName = e.target.value;
+                                setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                              }}
+                              placeholder="Post Name (e.g. Station Master / Junior Court Attendant)"
+                              className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Total Posts for Cadre</label>
+                            <input
+                              type="text"
+                              value={item.totalPosts}
+                              onChange={(e) => {
+                                const updated = [...editingPost.vacancyBreakdown];
+                                updated[idx].totalPosts = e.target.value;
+                                setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                              }}
+                              placeholder="Total (e.g. 130)"
+                              className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold text-emerald-800"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Category Breakdown (UR, OBC, EWS, SC, ST) */}
+                        <div className="bg-slate-50 p-2.5 rounded border border-slate-200">
+                          <label className="block text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1.5">
+                            Category-wise Seat Quota (Optional)
+                          </label>
+                          <div className="grid grid-cols-5 gap-1.5">
+                            <div>
+                              <span className="block text-[10px] font-bold text-slate-600">UR / Gen</span>
+                              <input
+                                type="text"
+                                value={item.categoryBreakdown?.gen || ''}
+                                onChange={(e) => {
+                                  const updated = [...editingPost.vacancyBreakdown];
+                                  updated[idx].categoryBreakdown = { ...(updated[idx].categoryBreakdown || {}), gen: e.target.value };
+                                  setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                                }}
+                                placeholder="0"
+                                className="w-full px-1.5 py-1 border border-slate-300 rounded text-xs font-semibold text-center bg-white"
+                              />
+                            </div>
+                            <div>
+                              <span className="block text-[10px] font-bold text-slate-600">OBC</span>
+                              <input
+                                type="text"
+                                value={item.categoryBreakdown?.obc || ''}
+                                onChange={(e) => {
+                                  const updated = [...editingPost.vacancyBreakdown];
+                                  updated[idx].categoryBreakdown = { ...(updated[idx].categoryBreakdown || {}), obc: e.target.value };
+                                  setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                                }}
+                                placeholder="0"
+                                className="w-full px-1.5 py-1 border border-slate-300 rounded text-xs font-semibold text-center bg-white"
+                              />
+                            </div>
+                            <div>
+                              <span className="block text-[10px] font-bold text-slate-600">EWS</span>
+                              <input
+                                type="text"
+                                value={item.categoryBreakdown?.ews || ''}
+                                onChange={(e) => {
+                                  const updated = [...editingPost.vacancyBreakdown];
+                                  updated[idx].categoryBreakdown = { ...(updated[idx].categoryBreakdown || {}), ews: e.target.value };
+                                  setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                                }}
+                                placeholder="0"
+                                className="w-full px-1.5 py-1 border border-slate-300 rounded text-xs font-semibold text-center bg-white"
+                              />
+                            </div>
+                            <div>
+                              <span className="block text-[10px] font-bold text-slate-600">SC</span>
+                              <input
+                                type="text"
+                                value={item.categoryBreakdown?.sc || ''}
+                                onChange={(e) => {
+                                  const updated = [...editingPost.vacancyBreakdown];
+                                  updated[idx].categoryBreakdown = { ...(updated[idx].categoryBreakdown || {}), sc: e.target.value };
+                                  setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                                }}
+                                placeholder="0"
+                                className="w-full px-1.5 py-1 border border-slate-300 rounded text-xs font-semibold text-center bg-white"
+                              />
+                            </div>
+                            <div>
+                              <span className="block text-[10px] font-bold text-slate-600">ST</span>
+                              <input
+                                type="text"
+                                value={item.categoryBreakdown?.st || ''}
+                                onChange={(e) => {
+                                  const updated = [...editingPost.vacancyBreakdown];
+                                  updated[idx].categoryBreakdown = { ...(updated[idx].categoryBreakdown || {}), st: e.target.value };
+                                  setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                                }}
+                                placeholder="0"
+                                className="w-full px-1.5 py-1 border border-slate-300 rounded text-xs font-semibold text-center bg-white"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Eligibility Criteria & Educational Qualification</label>
+                          <textarea
+                            rows={3}
+                            value={item.eligibility}
+                            onChange={(e) => {
+                              const updated = [...editingPost.vacancyBreakdown];
+                              updated[idx].eligibility = e.target.value;
+                              setEditingPost({ ...editingPost, vacancyBreakdown: updated });
+                            }}
+                            placeholder="• Bachelor Degree in any stream from recognized University.&#10;• Basic computer operations knowledge."
+                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs leading-relaxed font-sans"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 4: PAY SCALE & SALARY DETAILS TABLE */}
+              <div id="sec-salary" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-5 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2.5 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                      SECTION 4
+                    </span>
+                    <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                      💵 Pay Scale & Salary Table (वेतन सारणी व पे-स्केल)
+                    </h3>
+                  </div>
+                  <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => {
+                        const vacs = editingPost.vacancyBreakdown || [];
+                        if (vacs.length === 0) {
+                          showToast('⚠️ No vacancies found to populate. Add vacancies first!');
+                          return;
+                        }
+                        const generated: SalaryBreakdownItem[] = vacs.map(v => ({
+                          postName: v.postName || 'Post Name',
+                          payLevel: 'Pay Level 6 (7th CPC)',
+                          basicPay: '₹ 35,400 - ₹ 1,12,400/-',
+                          inHandSalary: '₹ 56,000 - ₹ 62,000 / month',
+                          allowances: 'DA, HRA, TA & Medical as per Govt Norms'
+                        }));
+                        setEditingPost({ ...editingPost, salaryBreakdown: generated });
+                        showToast('Populated salary table rows from Vacancy Breakdown!');
+                      }}
+                      className="text-xs bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 py-1 rounded font-bold cursor-pointer transition-colors shadow-2xs"
+                      title="Auto populate salary table rows using post names from vacancy breakdown"
+                    >
+                      ⚡ Auto-Fill from Vacancies
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const current = editingPost.salaryBreakdown || [];
                         setEditingPost({
                           ...editingPost,
-                          directLinks: [
-                            ...editingPost.directLinks,
-                            { label: 'New Link Label', actionText: 'Click Here', type: 'apply', url: '', isPrimary: false }
+                          salaryBreakdown: [
+                            ...current,
+                            {
+                              postName: editingPost.vacancyBreakdown?.[0]?.postName || 'Post Name',
+                              payLevel: 'Pay Level 6',
+                              basicPay: '₹ 35,400 - ₹ 1,12,400/-',
+                              inHandSalary: '₹ 56,000 - ₹ 62,000/-',
+                              allowances: 'DA, HRA, Transport Allowance'
+                            }
                           ]
                         });
                       }}
-                      className="text-xs bg-[#ab1616] hover:bg-red-800 text-white px-3 py-1.5 rounded font-bold cursor-pointer"
+                      className="text-xs bg-[#ab1616] hover:bg-red-800 text-white px-3 py-1 rounded font-bold cursor-pointer transition-colors shadow-2xs"
                     >
-                      + Add New Link
+                      + Add Salary Row
                     </button>
                   </div>
+                </div>
 
+                <div className="space-y-4 max-w-4xl mx-auto">
+                  {/* Overall Summary Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3.5 rounded border border-slate-300">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Overall Pay Scale Text (मुख्य वेतनमान)
+                      </label>
+                      <input
+                        type="text"
+                        value={editingPost.salary || ''}
+                        onChange={(e) => setEditingPost({ ...editingPost, salary: e.target.value })}
+                        placeholder="e.g. ₹ 35,400 - ₹ 1,12,400/- (Pay Level 6)"
+                        className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-semibold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Salary Band Filter (वेतन श्रेणी)
+                      </label>
+                      <select
+                        value={editingPost.salaryBand || '25K - 50K'}
+                        onChange={(e: any) => setEditingPost({ ...editingPost, salaryBand: e.target.value })}
+                        className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-semibold bg-white"
+                      >
+                        {SALARY_BANDS.map(band => (
+                          <option key={band} value={band}>{band}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Post-wise Salary Breakdown Rows */}
+                  <div className="space-y-3">
+                    {(!editingPost.salaryBreakdown || editingPost.salaryBreakdown.length === 0) ? (
+                      <div className="border border-dashed border-slate-300 p-5 rounded text-center text-xs text-slate-600 bg-white">
+                        <p className="font-bold text-slate-800">No Post-Wise Salary Breakdown Rows Configured</p>
+                        <p className="text-[11px] text-slate-500 mt-1">
+                          Click "+ Add Salary Row" or "⚡ Auto-Fill from Vacancies" to show an official Pay Scale & Salary Table in this post.
+                        </p>
+                      </div>
+                    ) : (
+                      editingPost.salaryBreakdown.map((item, sIdx) => (
+                        <div key={sIdx} className="bg-white border border-slate-300 p-3.5 rounded space-y-2 shadow-2xs">
+                          <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+                            <span className="text-xs font-black text-slate-800 uppercase">
+                              Salary Row #{sIdx + 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const list = (editingPost.salaryBreakdown || []).filter((_, i) => i !== sIdx);
+                                setEditingPost({ ...editingPost, salaryBreakdown: list });
+                              }}
+                              className="text-red-600 hover:text-red-800 p-1 cursor-pointer"
+                              title="Remove Salary Row"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div>
+                              <label className="block text-[11px] font-bold text-slate-600">Post Name (पद का नाम)</label>
+                              <input
+                                type="text"
+                                value={item.postName}
+                                onChange={(e) => {
+                                  const list = [...(editingPost.salaryBreakdown || [])];
+                                  list[sIdx].postName = e.target.value;
+                                  setEditingPost({ ...editingPost, salaryBreakdown: list });
+                                }}
+                                placeholder="e.g. Station Master"
+                                className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold text-blue-900"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[11px] font-bold text-slate-600">Pay Level (वेतन स्तर)</label>
+                              <input
+                                type="text"
+                                value={item.payLevel}
+                                onChange={(e) => {
+                                  const list = [...(editingPost.salaryBreakdown || [])];
+                                  list[sIdx].payLevel = e.target.value;
+                                  setEditingPost({ ...editingPost, salaryBreakdown: list });
+                                }}
+                                placeholder="e.g. Level 6 (7th CPC)"
+                                className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold text-emerald-700"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[11px] font-bold text-slate-600">Basic Pay Range</label>
+                              <input
+                                type="text"
+                                value={item.basicPay}
+                                onChange={(e) => {
+                                  const list = [...(editingPost.salaryBreakdown || [])];
+                                  list[sIdx].basicPay = e.target.value;
+                                  setEditingPost({ ...editingPost, salaryBreakdown: list });
+                                }}
+                                placeholder="e.g. ₹ 35,400 - ₹ 1,12,400/-"
+                                className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-semibold"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                            <div>
+                              <label className="block text-[11px] font-bold text-slate-600">In-Hand / Gross Salary</label>
+                              <input
+                                type="text"
+                                value={item.inHandSalary || ''}
+                                onChange={(e) => {
+                                  const list = [...(editingPost.salaryBreakdown || [])];
+                                  list[sIdx].inHandSalary = e.target.value;
+                                  setEditingPost({ ...editingPost, salaryBreakdown: list });
+                                }}
+                                placeholder="e.g. ₹ 56,000 - ₹ 62,000 / month"
+                                className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-semibold text-purple-900"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[11px] font-bold text-slate-600">Allowances & Benefits</label>
+                              <input
+                                type="text"
+                                value={item.allowances || ''}
+                                onChange={(e) => {
+                                  const list = [...(editingPost.salaryBreakdown || [])];
+                                  list[sIdx].allowances = e.target.value;
+                                  setEditingPost({ ...editingPost, salaryBreakdown: list });
+                                }}
+                                placeholder="e.g. DA, HRA, Transport Allowance, Medical"
+                                className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 5: EXAM PATTERN & SELECTION PROCESS */}
+              <div id="sec-exam-pattern" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-5 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2.5 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                      SECTION 5
+                    </span>
+                    <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                      📝 Exam Pattern & Selection Scheme (परीक्षा पैटर्न व चयन प्रक्रिया)
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentSubjects = editingPost.paperPattern?.subjects || [];
+                      const updatedPattern: PaperPattern = {
+                        ...(editingPost.paperPattern || {
+                          examName: `${editingPost.shortTitle} CBT-1 Exam Pattern`,
+                          examMode: 'Computer Based Test (CBT)',
+                          totalQuestions: 100,
+                          totalMarks: 100,
+                          totalDuration: '90 Minutes',
+                          negativeMarking: '1/3rd Mark for each wrong answer',
+                          mediumOfExam: 'Hindi & English'
+                        }),
+                        subjects: [
+                          ...currentSubjects,
+                          { subjectName: 'New Subject / Section', totalQuestions: 25, totalMarks: 25, duration: 'As per schedule' }
+                        ]
+                      };
+                      setEditingPost({ ...editingPost, paperPattern: updatedPattern });
+                    }}
+                    className="text-xs bg-[#ab1616] hover:bg-red-800 text-white px-3 py-1 rounded font-bold cursor-pointer transition-colors shadow-2xs"
+                  >
+                    + Add Subject Row
+                  </button>
+                </div>
+
+                <div className="space-y-4 max-w-4xl mx-auto">
+                  {/* Exam Overview Inputs */}
+                  <div className="bg-white border border-slate-300 p-4 rounded space-y-3">
+                    <div className="text-xs font-black text-slate-800 uppercase border-b border-slate-200 pb-1">
+                      General Exam Scheme Parameters
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Exam Scheme Title</label>
+                        <input
+                          type="text"
+                          value={editingPost.paperPattern?.examName || ''}
+                          onChange={(e) => setEditingPost({
+                            ...editingPost,
+                            paperPattern: { ...(editingPost.paperPattern || {}), examName: e.target.value }
+                          })}
+                          placeholder="e.g. CBT-1 Computer Based Examination Scheme"
+                          className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Exam Mode</label>
+                        <input
+                          type="text"
+                          value={editingPost.paperPattern?.examMode || ''}
+                          onChange={(e) => setEditingPost({
+                            ...editingPost,
+                            paperPattern: { ...(editingPost.paperPattern || {}), examMode: e.target.value }
+                          })}
+                          placeholder="e.g. Online Computer Based Test (CBT) / Offline OMR"
+                          className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-semibold"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Total Questions</label>
+                        <input
+                          type="text"
+                          value={editingPost.paperPattern?.totalQuestions || ''}
+                          onChange={(e) => setEditingPost({
+                            ...editingPost,
+                            paperPattern: { ...(editingPost.paperPattern || {}), totalQuestions: e.target.value }
+                          })}
+                          placeholder="e.g. 100"
+                          className="w-full px-2 py-1.5 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Total Marks</label>
+                        <input
+                          type="text"
+                          value={editingPost.paperPattern?.totalMarks || ''}
+                          onChange={(e) => setEditingPost({
+                            ...editingPost,
+                            paperPattern: { ...(editingPost.paperPattern || {}), totalMarks: e.target.value }
+                          })}
+                          placeholder="e.g. 100"
+                          className="w-full px-2 py-1.5 border border-slate-300 rounded text-xs font-bold text-emerald-800"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Total Duration</label>
+                        <input
+                          type="text"
+                          value={editingPost.paperPattern?.totalDuration || ''}
+                          onChange={(e) => setEditingPost({
+                            ...editingPost,
+                            paperPattern: { ...(editingPost.paperPattern || {}), totalDuration: e.target.value }
+                          })}
+                          placeholder="e.g. 90 Minutes"
+                          className="w-full px-2 py-1.5 border border-slate-300 rounded text-xs font-bold text-blue-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Negative Marking</label>
+                        <input
+                          type="text"
+                          value={editingPost.paperPattern?.negativeMarking || ''}
+                          onChange={(e) => setEditingPost({
+                            ...editingPost,
+                            paperPattern: { ...(editingPost.paperPattern || {}), negativeMarking: e.target.value }
+                          })}
+                          placeholder="e.g. 1/3rd Mark"
+                          className="w-full px-2 py-1.5 border border-slate-300 rounded text-xs font-bold text-red-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Subject Breakdown Rows */}
+                  <div className="border border-slate-300 rounded overflow-hidden bg-white">
+                    <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 flex items-center justify-between">
+                      <span className="text-xs font-black uppercase text-slate-800">
+                        Subject-wise Questions & Marks Distribution
+                      </span>
+                    </div>
+                    <div className="p-3 space-y-2">
+                      {(!editingPost.paperPattern?.subjects || editingPost.paperPattern.subjects.length === 0) ? (
+                        <p className="text-xs text-slate-500 italic text-center py-2">
+                          No subjects added. Click "+ Add Subject Row" above to specify exam subjects.
+                        </p>
+                      ) : (
+                        editingPost.paperPattern.subjects.map((sub, subIdx) => (
+                          <div key={subIdx} className="flex flex-col sm:flex-row items-center gap-2 bg-slate-50 p-2.5 rounded border border-slate-200">
+                            <input
+                              type="text"
+                              value={sub.subjectName}
+                              onChange={(e) => {
+                                const list = [...(editingPost.paperPattern?.subjects || [])];
+                                list[subIdx].subjectName = e.target.value;
+                                setEditingPost({
+                                  ...editingPost,
+                                  paperPattern: { ...editingPost.paperPattern, subjects: list }
+                                });
+                              }}
+                              placeholder="Subject Name (e.g. Mathematics)"
+                              className="flex-1 w-full sm:w-auto px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold text-slate-900"
+                            />
+                            <input
+                              type="text"
+                              value={sub.totalQuestions || ''}
+                              onChange={(e) => {
+                                const list = [...(editingPost.paperPattern?.subjects || [])];
+                                list[subIdx].totalQuestions = e.target.value;
+                                setEditingPost({
+                                  ...editingPost,
+                                  paperPattern: { ...editingPost.paperPattern, subjects: list }
+                                });
+                              }}
+                              placeholder="Questions (e.g. 30)"
+                              className="w-full sm:w-28 px-2 py-1.5 border border-slate-300 rounded text-xs font-semibold text-blue-900"
+                            />
+                            <input
+                              type="text"
+                              value={sub.totalMarks || ''}
+                              onChange={(e) => {
+                                const list = [...(editingPost.paperPattern?.subjects || [])];
+                                list[subIdx].totalMarks = e.target.value;
+                                setEditingPost({
+                                  ...editingPost,
+                                  paperPattern: { ...editingPost.paperPattern, subjects: list }
+                                });
+                              }}
+                              placeholder="Marks (e.g. 30)"
+                              className="w-full sm:w-28 px-2 py-1.5 border border-slate-300 rounded text-xs font-semibold text-emerald-800"
+                            />
+                            <input
+                              type="text"
+                              value={sub.duration || ''}
+                              onChange={(e) => {
+                                const list = [...(editingPost.paperPattern?.subjects || [])];
+                                list[subIdx].duration = e.target.value;
+                                setEditingPost({
+                                  ...editingPost,
+                                  paperPattern: { ...editingPost.paperPattern, subjects: list }
+                                });
+                              }}
+                              placeholder="Remarks / Section Time"
+                              className="w-full sm:w-36 px-2 py-1.5 border border-slate-300 rounded text-xs"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const list = (editingPost.paperPattern?.subjects || []).filter((_, i) => i !== subIdx);
+                                setEditingPost({
+                                  ...editingPost,
+                                  paperPattern: { ...editingPost.paperPattern, subjects: list }
+                                });
+                              }}
+                              className="text-red-600 hover:text-red-800 p-1 cursor-pointer"
+                              title="Remove Subject"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Selection Process Stages */}
+                  <div className="bg-white border border-slate-300 p-4 rounded space-y-3">
+                    <div className="flex items-center justify-between border-b border-slate-200 pb-1">
+                      <span className="text-xs font-black text-slate-800 uppercase">
+                        Sequential Selection Process Stages (चयन प्रक्रिया के चरण)
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const list = editingPost.selectionProcess || [];
+                          setEditingPost({
+                            ...editingPost,
+                            selectionProcess: [...list, 'New Selection Stage Description']
+                          });
+                        }}
+                        className="text-xs bg-slate-800 hover:bg-black text-white px-2.5 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Add Stage
+                      </button>
+                    </div>
+                    <div className="space-y-2">
+                      {(!editingPost.selectionProcess || editingPost.selectionProcess.length === 0) ? (
+                        <p className="text-xs text-slate-500 italic py-1">
+                          Default 4 stages (CBT, Skill/PET, DV, Medical) will be displayed. Click "+ Add Stage" to customize.
+                        </p>
+                      ) : (
+                        editingPost.selectionProcess.map((stage, stIdx) => (
+                          <div key={stIdx} className="flex items-center gap-2">
+                            <span className="text-xs font-bold bg-[#16a34a] text-white px-2 py-1 rounded shrink-0">
+                              Stage {stIdx + 1}
+                            </span>
+                            <input
+                              type="text"
+                              value={stage}
+                              onChange={(e) => {
+                                const list = [...(editingPost.selectionProcess || [])];
+                                list[stIdx] = e.target.value;
+                                setEditingPost({ ...editingPost, selectionProcess: list });
+                              }}
+                              className="flex-1 px-2.5 py-1.5 border border-slate-300 rounded text-xs text-slate-800"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const list = (editingPost.selectionProcess || []).filter((_, i) => i !== stIdx);
+                                setEditingPost({ ...editingPost, selectionProcess: list });
+                              }}
+                              className="text-red-600 hover:text-red-800 p-1 cursor-pointer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 6: DIRECT OFFICIAL LINKS */}
+              <div id="sec-links" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2.5 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                      SECTION 6
+                    </span>
+                    <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
+                      🔗 Direct Important Links (आधिकारिक डायरेक्ट लिंक)
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingPost({
+                        ...editingPost,
+                        directLinks: [
+                          ...editingPost.directLinks,
+                          { label: 'New Link Label', actionText: 'Click Here', type: 'apply', url: '', isPrimary: false }
+                        ]
+                      });
+                    }}
+                    className="text-xs bg-[#ab1616] hover:bg-red-800 text-white px-3 py-1.5 rounded font-bold cursor-pointer"
+                  >
+                    + Add New Link
+                  </button>
+                </div>
+
+                <div className="space-y-4 max-w-4xl mx-auto">
+                  {/* Quick Template Link Buttons */}
+                  <div className="bg-white p-3 rounded border border-slate-300 space-y-2">
+                    <span className="text-[11px] font-black text-slate-700 uppercase tracking-wider block">
+                      ⚡ 1-Click Quick Add Link Templates (तुरंत लिंक जोड़ें):
+                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Apply Online (आवेदन करें)', actionText: 'Click Here', type: 'apply', url: 'https://', isPrimary: true }
+                            ]
+                          });
+                          showToast('Added "Apply Online" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Apply Online
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Check Application Status & Exam City Slip', actionText: 'Click Here', type: 'exam_city', url: 'https://', isPrimary: false }
+                            ]
+                          });
+                          showToast('Added "Exam City / Status" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Exam City Slip
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Download Admit Card', actionText: 'Click Here', type: 'admit_card', url: 'https://', isPrimary: false }
+                            ]
+                          });
+                          showToast('Added "Admit Card" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Admit Card
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Download Answer Key & Objection Link', actionText: 'Click Here', type: 'answer_key', url: 'https://', isPrimary: false }
+                            ]
+                          });
+                          showToast('Added "Answer Key" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Answer Key
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Download Result / Cutoff Marks', actionText: 'Click Here', type: 'result', url: 'https://', isPrimary: false }
+                            ]
+                          });
+                          showToast('Added "Result" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Result
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Download Official Notification PDF', actionText: 'Click Here', type: 'notification', url: 'https://', isPrimary: false }
+                            ]
+                          });
+                          showToast('Added "Notification PDF" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Notification PDF
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Download Syllabus & Exam Pattern', actionText: 'Click Here', type: 'syllabus', url: 'https://', isPrimary: false }
+                            ]
+                          });
+                          showToast('Added "Syllabus" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Syllabus PDF
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingPost({
+                            ...editingPost,
+                            directLinks: [
+                              ...editingPost.directLinks,
+                              { label: 'Official Website', actionText: 'Click Here', type: 'official', url: 'https://', isPrimary: false }
+                            ]
+                          });
+                          showToast('Added "Official Website" link!');
+                        }}
+                        className="text-[11px] bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-800 border border-slate-300 px-2 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Official Website
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Links List */}
                   <div className="space-y-3">
                     {editingPost.directLinks.map((link, idx) => (
-                      <div key={idx} className="bg-slate-50 border border-slate-300 p-3 rounded space-y-2">
+                      <div key={idx} className="bg-white border border-slate-300 p-3 rounded space-y-2 shadow-2xs">
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                           <div>
                             <label className="block text-[11px] font-bold text-slate-600">Link Label</label>
@@ -1106,12 +2193,14 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                               className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-semibold bg-white"
                             >
                               <option value="apply">Apply Online / Registration</option>
+                              <option value="exam_city">Exam City Slip / Status</option>
+                              <option value="admit_card">Admit Card Link</option>
+                              <option value="answer_key">Answer Key Link</option>
+                              <option value="result">Result Link</option>
                               <option value="notification">Notification PDF</option>
                               <option value="syllabus">Syllabus PDF</option>
-                              <option value="admit_card">Admit Card Link</option>
-                              <option value="result">Result Link</option>
-                              <option value="answer_key">Answer Key Link</option>
                               <option value="official">Official Website</option>
+                              <option value="other">Other Link</option>
                             </select>
                           </div>
                         </div>
@@ -1160,118 +2249,59 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 </div>
               </div>
 
-              {/* SECTION 4: VACANCIES & STEPS */}
-              <div id="sec-vacancy" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-6 shadow-2xs">
+              {/* SECTION 7: HOW TO APPLY STEPS */}
+              <div id="sec-steps" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs">
                 <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
                   <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
-                    SECTION 4
+                    SECTION 7
                   </span>
                   <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
-                    📊 Vacancies Breakdown & Application Steps (पद संख्या व प्रक्रिया)
+                    ✍️ How to Apply Online Steps (आवेदन करने के चरण)
                   </h3>
                 </div>
-                <div className="space-y-6 max-w-4xl mx-auto">
-                  {/* Vacancy Breakdown */}
-                  <div className="border border-slate-300 rounded overflow-hidden">
-                    <div className="bg-slate-100 px-4 py-2 flex items-center justify-between border-b border-slate-200">
-                      <span className="text-xs font-black uppercase text-slate-800">
-                        Post-wise Vacancy & Eligibility
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setEditingPost({
-                            ...editingPost,
-                            vacancyBreakdown: [
-                              ...editingPost.vacancyBreakdown,
-                              { postName: 'Post Name', totalPosts: '0', eligibility: 'Educational qualification details' }
-                            ]
-                          });
-                        }}
-                        className="text-xs bg-slate-800 hover:bg-black text-white px-2 py-1 rounded font-bold cursor-pointer"
-                      >
-                        + Add Post Breakdown
-                      </button>
-                    </div>
-                    <div className="p-3 space-y-3">
-                      {editingPost.vacancyBreakdown.map((item, idx) => (
-                        <div key={idx} className="bg-slate-50 border border-slate-200 p-3 rounded space-y-2">
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              value={item.postName}
-                              onChange={(e) => {
-                                const updated = [...editingPost.vacancyBreakdown];
-                                updated[idx].postName = e.target.value;
-                                setEditingPost({ ...editingPost, vacancyBreakdown: updated });
-                              }}
-                              placeholder="Post Name (e.g. Junior Court Attendant)"
-                              className="flex-1 px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold"
-                            />
-                            <input
-                              type="text"
-                              value={item.totalPosts}
-                              onChange={(e) => {
-                                const updated = [...editingPost.vacancyBreakdown];
-                                updated[idx].totalPosts = e.target.value;
-                                setEditingPost({ ...editingPost, vacancyBreakdown: updated });
-                              }}
-                              placeholder="Total Posts (e.g. 130)"
-                              className="w-32 px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setEditingPost({
-                                  ...editingPost,
-                                  vacancyBreakdown: editingPost.vacancyBreakdown.filter((_, i) => i !== idx)
-                                });
-                              }}
-                              className="text-red-600 hover:text-red-800 p-1 cursor-pointer"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                          <textarea
-                            rows={2}
-                            value={item.eligibility}
-                            onChange={(e) => {
-                              const updated = [...editingPost.vacancyBreakdown];
-                              updated[idx].eligibility = e.target.value;
-                              setEditingPost({ ...editingPost, vacancyBreakdown: updated });
-                            }}
-                            placeholder="Eligibility criteria for this post..."
-                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs leading-relaxed"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* How to Apply Steps */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      How to Apply Steps (1 Step per line):
+                <div className="space-y-3 max-w-4xl mx-auto">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-bold text-slate-700">
+                      Step by Step Instructions for Candidates (1 Step per line):
                     </label>
-                    <textarea
-                      rows={5}
-                      value={editingPost.howToApplySteps.join('\n')}
-                      onChange={(e) => {
-                        const lines = e.target.value.split('\n').filter(l => l.trim().length > 0);
-                        setEditingPost({ ...editingPost, howToApplySteps: lines });
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const standardSteps = [
+                          `${editingPost.department || 'Board'} Recruitment 2026 Notification has been issued. Candidate can apply online between specified dates.`,
+                          `Candidate Must Read the Full Gazette Notification Before Apply the Recruitment Application Form.`,
+                          `Kindly Check and Collect All Document - Eligibility, ID Proof, Address Details, Basic Details.`,
+                          `Kindly Ready Scan Document Related to Recruitment Form - Photo, Sign, ID Proof, Certificate etc.`,
+                          `Before Submit the Application Form Must Check the Preview and All Columns Carefully.`,
+                          `If Candidate Required to Paying the Application Fee Must Submit. If You have Not the Required Application Fees Your Form is Not Completed.`,
+                          `Take A Print Out of Final Submitted Form for Future Reference.`
+                        ];
+                        setEditingPost({ ...editingPost, howToApplySteps: standardSteps });
+                        showToast('Pre-filled standard 7 application steps!');
                       }}
-                      placeholder="Step 1: Visit official website...&#10;Step 2: Complete registration...&#10;Step 3: Upload photograph & signature..."
-                      className="w-full px-3 py-2 border border-slate-300 rounded text-xs text-slate-800 leading-relaxed font-mono"
-                    />
+                      className="text-xs bg-slate-800 hover:bg-black text-white px-2.5 py-1 rounded font-bold cursor-pointer"
+                    >
+                      Pre-fill Standard Steps
+                    </button>
                   </div>
+                  <textarea
+                    rows={6}
+                    value={editingPost.howToApplySteps.join('\n')}
+                    onChange={(e) => {
+                      const lines = e.target.value.split('\n').filter(l => l.trim().length > 0);
+                      setEditingPost({ ...editingPost, howToApplySteps: lines });
+                    }}
+                    placeholder="Step 1: Visit official website...&#10;Step 2: Complete registration...&#10;Step 3: Upload photograph & signature..."
+                    className="w-full px-3 py-2 border border-slate-300 rounded text-xs text-slate-800 leading-relaxed font-mono bg-white"
+                  />
                 </div>
               </div>
 
-              {/* SECTION 5: CUSTOM FAQS */}
+              {/* SECTION 8: CUSTOM FAQS */}
               <div id="sec-faqs" className="bg-slate-50 border border-slate-200 rounded-md p-4 sm:p-5 space-y-6 shadow-2xs">
                 <div className="flex items-center gap-2 border-b border-slate-200 pb-2.5 mb-2">
                   <span className="bg-[#ab1616] text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
-                    SECTION 5
+                    SECTION 8
                   </span>
                   <h3 className="font-black text-sm text-slate-900 uppercase tracking-wide">
                     ❓ Custom FAQs Manager (सामान्य प्रश्न - उत्तर)
@@ -1502,14 +2532,27 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
               </div>
 
               {/* Bottom Actions Bar */}
-              <div className="border border-slate-300 pt-3 pb-3 px-4 flex items-center justify-between sticky bottom-0 bg-white rounded shadow-md z-20 mt-4">
-                <button
-                  type="button"
-                  onClick={() => setEditingPost(null)}
-                  className="px-4 py-2 border border-slate-300 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
-                >
-                  Cancel & Discard
-                </button>
+              <div className="border border-slate-300 pt-3 pb-3 px-4 flex items-center justify-between sticky bottom-0 bg-white rounded shadow-md z-20 mt-4 flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingPost(null)}
+                    className="px-4 py-2 border border-slate-300 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
+                  >
+                    Cancel & Discard
+                  </button>
+                  {!isCreatingNew && (
+                    <button
+                      type="button"
+                      onClick={() => setPostToDelete(editingPost)}
+                      className="px-4 py-2 bg-red-50 hover:bg-red-600 hover:text-white text-red-700 border border-red-200 rounded text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                      title="Permanently delete this post"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Post (यह पोस्ट हटाएं)</span>
+                    </button>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-2">
                   <button
@@ -1523,216 +2566,142 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
               </div>
             </form>
           </div>
+        ) : adminMainTab === 'ai_blog' ? (
+          /* AI BLOG WRITER MODULE */
+          <AIBlogWriter
+            posts={posts}
+            currentPost={editingPost}
+            onApplyToPostInfo={(post, updatedInfo) => {
+              const updated = { ...post, shortInfo: updatedInfo };
+              onUpdatePost(updated);
+              setEditingPost(updated);
+              showToast(`ब्लॉग सामग्री पोस्ट "${post.shortTitle || post.title}" में सेट हो गई!`);
+            }}
+            onSwitchToPostEditor={(post) => {
+              setEditingPost(JSON.parse(JSON.stringify(post)));
+              setIsCreatingNew(false);
+              setAdminMainTab('editor');
+            }}
+          />
         ) : (
-          /* POSTS LIST DASHBOARD VIEW */
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Top Toolbar - Clean Vertical Stack */}
-            <div className="bg-slate-50 border-b border-slate-200 p-3 sm:p-4 shrink-0 space-y-3">
-              {/* Vertical Action Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          /* Direct Editor Prompt if editingPost is unselected */
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-500 space-y-3 bg-white">
+            <div className="w-14 h-14 bg-red-50 text-[#ab1616] rounded-full flex items-center justify-center text-2xl shadow-inner mx-auto">
+              ⚡
+            </div>
+            <h4 className="text-base font-black text-slate-900">
+              संपूर्ण पोस्ट संपादक (Full Admin Post Editor)
+            </h4>
+            <p className="text-xs text-slate-500 max-w-md">
+              प्रत्येक बॉक्स, पद विवरण, वेतन सारणी, परीक्षा पैटर्न और लिंक्स को आसानी से अपडेट करें।
+            </p>
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (posts.length > 0) handleStartEdit(posts[0]);
+                  else handleStartCreate();
+                }}
+                className="bg-[#ab1616] hover:bg-red-800 text-white px-4 py-2 rounded text-xs font-black cursor-pointer shadow-xs"
+              >
+                पोस्ट लोड करें व एडिट करें
+              </button>
+              <button
+                type="button"
+                onClick={handleStartCreate}
+                className="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded text-xs font-black cursor-pointer shadow-xs"
+              >
+                + नई पोस्ट बनाएं
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Custom Non-blocking Delete Confirmation Modal */}
+        {postToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
+            <div className="bg-white rounded-lg p-5 max-w-md w-full shadow-2xl border-2 border-red-300 space-y-4">
+              <div className="flex items-center gap-3 text-red-600">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                  <Trash2 className="w-5 h-5 text-red-600" />
+                </div>
+                <div>
+                  <h3 className="font-black text-base text-slate-900">Delete Post Confirmation</h3>
+                  <p className="text-xs text-slate-500">क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-3 rounded border border-slate-200 text-xs text-slate-700 space-y-1">
+                <div className="font-bold text-slate-900 text-sm leading-snug">{postToDelete.title}</div>
+                <div className="text-slate-500 text-[11px]">
+                  <strong>Category:</strong> {postToDelete.category} • <strong>ID:</strong> {postToDelete.id}
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-600 leading-relaxed">
+                यह पोस्ट पोर्टल और सभी सेक्शन्स से तुरंत हटा दी जाएगी। क्या आप आगे बढ़ना चाहते हैं?
+              </p>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
                 <button
-                  onClick={handleStartCreate}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-[#ab1616] hover:bg-red-800 text-white px-4 py-2.5 rounded text-xs font-black shadow-xs cursor-pointer transition-colors"
+                  type="button"
+                  onClick={() => setPostToDelete(null)}
+                  className="px-4 py-2 border border-slate-300 hover:bg-slate-100 rounded text-xs font-bold text-slate-700 cursor-pointer"
                 >
-                  <Plus className="w-4 h-4" />
-                  <span>+ Add New Post (नई पोस्ट जोड़ें)</span>
+                  Cancel (रद्द करें)
                 </button>
-
-                <div className="flex items-center gap-2 text-xs flex-wrap">
-                  <button
-                    onClick={onResetToDefault}
-                    className="inline-flex items-center gap-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 px-3 py-1.5 rounded text-xs font-bold cursor-pointer transition-colors"
-                    title="Reset all posts to default dataset"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Reset Defaults</span>
-                  </button>
-
-                  <button
-                    onClick={handleExportJSON}
-                    className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-2.5 py-1.5 rounded font-bold cursor-pointer"
-                    title="Export posts as JSON file"
-                  >
-                    <Download className="w-3.5 h-3.5 text-emerald-700" />
-                    <span>Export JSON</span>
-                  </button>
-
-                  <label className="inline-flex items-center gap-1 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-2.5 py-1.5 rounded font-bold cursor-pointer">
-                    <Upload className="w-3.5 h-3.5 text-blue-700" />
-                    <span>Import JSON</span>
-                    <input type="file" accept=".json" onChange={handleImportJSON} className="hidden" />
-                  </label>
-                </div>
-              </div>
-
-              {/* Filter and Search Bar */}
-              <div className="flex flex-col sm:flex-row items-center gap-2">
-                <div className="relative flex-1 w-full">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search posts by title, short title, department, state..."
-                    className="w-full pl-9 pr-3 py-1.5 border border-slate-300 rounded text-xs font-medium bg-white focus:outline-none focus:border-red-700"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 text-xs font-bold"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <select
-                    value={filterCategory}
-                    onChange={(e) => setFilterCategory(e.target.value)}
-                    className="flex-1 sm:flex-initial px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold bg-white text-slate-700 focus:outline-none focus:border-red-700"
-                  >
-                    <option value="all">All Categories ({posts.length})</option>
-                    {CATEGORIES.map((c) => (
-                      <option key={c.value} value={c.value}>
-                        {c.label.split(' ')[0]} ({posts.filter(p => p.category === c.value).length})
-                      </option>
-                    ))}
-                  </select>
-
-                  <select
-                    value={filterDept}
-                    onChange={(e) => setFilterDept(e.target.value)}
-                    className="flex-1 sm:flex-initial px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold bg-white text-slate-700 focus:outline-none focus:border-red-700"
-                  >
-                    <option value="all">All Depts</option>
-                    {DEPARTMENTS.map((d) => (
-                      <option key={d} value={d}>
-                        {d}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Posts Count Chip */}
-            <div className="px-4 py-2 bg-slate-200 border-b border-slate-300 text-xs font-bold text-slate-700 flex items-center justify-between">
-              <span>Showing {filteredPosts.length} of {posts.length} Total Posts (100+ Capacity Active)</span>
-              <span className="text-[11px] text-slate-500">Click Edit to modify dates, titles, or links in real-time</span>
-            </div>
-
-            {/* Posts Table List */}
-            <div className="flex-1 overflow-y-auto divide-y divide-slate-200 bg-white">
-              {filteredPosts.map((post) => (
-                <div
-                  key={post.id}
-                  className="p-3.5 hover:bg-slate-50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                <button
+                  type="button"
+                  onClick={handleConfirmDelete}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-black inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
                 >
-                  <div className="space-y-1 flex-1">
-                    <div className="flex items-center gap-2 flex-wrap text-[11px]">
-                      <span className="bg-[#ab1616] text-white px-1.5 py-0.5 rounded font-black uppercase text-[10px]">
-                        {post.category.replace('_', ' ')}
-                      </span>
-                      <span className="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded font-bold border border-slate-300">
-                        {post.department}
-                      </span>
-                      {post.isNew && (
-                        <span className="bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold text-[10px]">
-                          NEW
-                        </span>
-                      )}
-                      {post.isHot && (
-                        <span className="bg-amber-500 text-slate-900 px-1.5 py-0.5 rounded font-bold text-[10px]">
-                          HOT
-                        </span>
-                      )}
-                      <span className="text-slate-400 font-mono text-[10px]">ID: {post.id}</span>
-                    </div>
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Yes, Delete (हाँ, पोस्ट हटाएं)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-900 group-hover:text-[#0000cc] transition-colors leading-snug">
-                      {post.title}
-                    </h4>
-
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 font-medium">
-                      <span><strong>Short:</strong> {post.shortTitle}</span>
-                      {post.totalVacancies && (
-                        <span><strong>Vacancies:</strong> {post.totalVacancies}</span>
-                      )}
-                      {post.lastDate && (
-                        <span className="text-red-700 font-bold">
-                          <strong>Last Date:</strong> {post.lastDate}
-                        </span>
-                      )}
-                      {post.examDate && (
-                        <span><strong>Exam:</strong> {post.examDate}</span>
-                      )}
-                      {post.postDate && (
-                        <span><strong>Posted:</strong> {post.postDate}</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
-                    {onSelectPost && (
-                      <button
-                        onClick={() => {
-                          onSelectPost(post);
-                          onClose();
-                        }}
-                        className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-bold inline-flex items-center gap-1 cursor-pointer transition-colors"
-                        title="Preview post details page"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span className="hidden md:inline">View</span>
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => handleStartEdit(post)}
-                      className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-bold inline-flex items-center gap-1 cursor-pointer transition-colors"
-                      title="Edit this post"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                      <span>Edit</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleDuplicatePost(post)}
-                      className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-xs font-bold inline-flex items-center gap-1 cursor-pointer transition-colors"
-                      title="Duplicate as new post"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">Clone</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(post)}
-                      className="p-1 text-slate-400 hover:text-red-700 hover:bg-red-50 rounded cursor-pointer transition-colors"
-                      title="Delete post"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+        {/* Custom Non-blocking Reset Confirmation Modal */}
+        {isResetConfirmOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
+            <div className="bg-white rounded-lg p-5 max-w-md w-full shadow-2xl border-2 border-amber-300 space-y-4">
+              <div className="flex items-center gap-3 text-amber-600">
+                <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                  <RotateCcw className="w-5 h-5 text-amber-600" />
                 </div>
-              ))}
-
-              {filteredPosts.length === 0 && (
-                <div className="p-8 text-center text-slate-500 font-medium">
-                  <p>No posts match the current filter or search criteria.</p>
-                  <button
-                    onClick={() => {
-                      setSearchQuery('');
-                      setFilterCategory('all');
-                      setFilterDept('all');
-                    }}
-                    className="mt-2 text-xs text-[#ab1616] font-bold hover:underline cursor-pointer"
-                  >
-                    Clear Filters
-                  </button>
+                <div>
+                  <h3 className="font-black text-base text-slate-900">Reset All Posts to Default?</h3>
+                  <p className="text-xs text-slate-500">सभी आधिकारिक डिफ़ॉल्ट पोस्ट्स को पुनर्स्थापित करें?</p>
                 </div>
-              )}
+              </div>
+
+              <p className="text-xs text-slate-600 leading-relaxed">
+                वेबसाइट की सभी 87+ मूल डिफ़ॉल्ट सरकारी पोस्ट्स पुनः लोड हो जाएंगी।
+              </p>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsResetConfirmOpen(false)}
+                  className="px-4 py-2 border border-slate-300 hover:bg-slate-100 rounded text-xs font-bold text-slate-700 cursor-pointer"
+                >
+                  Cancel (रद्द करें)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onResetToDefault();
+                    setIsResetConfirmOpen(false);
+                    showToast('All 87+ official posts reset to defaults!');
+                  }}
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-black inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Confirm Reset (रीसेट करें)</span>
+                </button>
+              </div>
             </div>
           </div>
         )}

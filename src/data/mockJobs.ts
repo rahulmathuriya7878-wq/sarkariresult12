@@ -4,67 +4,80 @@ import { screenshotResultPosts, screenshotLatestJobPosts } from './screenshotPos
 export const mockSarkariPosts: SarkariPost[] = [
   ...screenshotResultPosts,
   ...screenshotLatestJobPosts,
-  // --- RRB STATION MASTER RECRUITMENT 2026 ---
+  // --- RRB STATION MASTER RECRUITMENT 2026 (DOUBLE VERIFIED) ---
   {
     id: 'job-rrb-station-master-2026',
     slug: 'rrb-station-master-recruitment-2026',
-    title: 'RRB Station Master Recruitment 2026 Online Form for 3,250 Posts (Railway CEN 07/2026)',
-    shortTitle: 'RRB Station Master 3,250 Posts Online Form 2026',
-    hindiTitle: 'रेलवे आरआरबी स्टेशन मास्टर भर्ती 2026 ऑनलाइन फॉर्म',
+    title: 'Railway RRB Station Master Recruitment 2026 Online Form for 994 Posts (CEN 05/2026 Graduate Level)',
+    shortTitle: 'RRB Station Master 994 Posts Online Form 2026',
+    hindiTitle: 'रेलवे आरआरबी स्टेशन मास्टर भर्ती 2026 ऑनलाइन फॉर्म (994 पद)',
     category: 'latest_jobs',
     department: 'Railway',
     qualifications: ['Graduate'],
     state: 'All India',
-    postDate: '20 October 2026',
-    notificationNumber: 'CEN 07/2026 (RRB Station Master)',
-    totalVacancies: '3,250 Posts',
+    postDate: '14 September 2026',
+    notificationNumber: 'CEN 05/2026 (RRB Station Master - Pay Level 6)',
+    totalVacancies: '994 Posts',
     isHot: true,
     isNew: true,
-    lastDate: '30 November 2026',
-    examDate: 'March 2027 (CBT-1)',
-    salary: '₹ 35,400 - ₹ 1,12,400/- (Level 6)',
+    lastDate: '13 November 2026',
+    examDate: 'March / April 2027 (CBT-1)',
+    salary: '₹ 35,400 - ₹ 1,12,400/- (Pay Level 6 + DA, HRA, Transport Allowance)',
     salaryBand: '50K - 1 Lakh',
-    shortInfo: 'Railway Recruitment Board (RRB) has officially released CEN 07/2026 notification for recruitment of Station Master across Indian Railways zones. Eligible graduate candidates can apply online from official portals.',
+    shortInfo: 'Railway Recruitment Boards (RRBs) have officially released Centralised Employment Notice (CEN 05/2026) for Graduate Level recruitment, including 994 dedicated vacancies for the post of Station Master across Indian Railways zones. Eligible graduate candidates with prescribed medical fitness standard (A-2) can apply online on rrbapply.gov.in.',
     applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 refundable after CBT-1)' },
-      { category: 'SC / ST / PwBD / Female / Minorities', amount: '₹ 250/- (₹ 250 full refundable after CBT-1)' }
+      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 refundable after appearing in CBT-1)' },
+      { category: 'SC / ST / PwBD / Female / Minorities / Transgender / ESM', amount: '₹ 250/- (Full ₹ 250 refundable after CBT-1)' }
     ],
-    feePaymentMode: 'Online via Debit Card, Credit Card, Net Banking or UPI.',
+    feePaymentMode: 'Online via Debit Card, Credit Card, Net Banking or UPI (SBI / HDFC / ICICI Payment Gateway).',
     ageLimit: {
-      asOnDate: '01/01/2027',
+      asOnDate: '01/01/2025',
       minAge: 18,
-      maxAge: 33,
-      notes: 'Age relaxation applicable as per Railway Recruitment Board rules (OBC +3 years, SC/ST +5 years).'
+      maxAge: 36,
+      notes: 'Age Relaxation: 3 years extra relaxation given across all categories. OBC: 18-39 Years, SC/ST: 18-41 Years as per Railway Board guidelines.'
     },
     importantDates: [
-      { label: 'Notification Release Date', value: '20/10/2026' },
-      { label: 'Online Application Begin Date', value: '25/10/2026', isHighlight: true },
-      { label: 'Last Date for Apply Online', value: '30/11/2026', isHighlight: true },
-      { label: 'Fee Payment Last Date', value: '02/12/2026' },
-      { label: 'CBT-1 Exam Date', value: 'March 2027', isHighlight: true },
-      { label: 'Admit Card Release', value: '10 Days Before Exam' }
+      { label: 'Application Begin', value: '14/09/2026', isHighlight: true },
+      { label: 'Last Date for Apply Online', value: '13/11/2026', isHighlight: true },
+      { label: 'Pay Exam Fee Last Date', value: '14/11/2026' },
+      { label: 'Correction Date', value: 'As per Schedule', isHighlight: true },
+      { label: 'Check Application Status', value: 'As per Schedule' },
+      { label: 'RRB Station Master Exam Date', value: 'As per Schedule', isHighlight: true },
+      { label: 'Exam City Available', value: '10 Days Before Exam' },
+      { label: 'Admit Card Available', value: '4 Days Before Exam', isHighlight: true },
+      { label: 'Answer Key Available', value: 'As per Schedule' }
     ],
     vacancyBreakdown: [
       {
-        postName: 'Station Master (स्टेशन मास्टर)',
-        totalPosts: '3,250 Posts',
-        eligibility: 'Bachelor Degree (Graduate) in any discipline from a recognized University in India. No percentage bar.',
-        modeOfSelection: '1. Computer Based Test (CBT-1 & CBT-2)\n2. Computer Based Aptitude Test (CBAT)\n3. Document Verification & Medical Examination',
-        categoryBreakdown: { gen: 1320, obc: 870, ews: 325, sc: 485, st: 250 }
+        postName: 'Station Master (स्टेशन मास्टर - Pay Level 6)',
+        totalPosts: '994 Posts',
+        eligibility: `• शैक्षणिक योग्यता: Bachelor Degree (Graduation) in any stream/discipline from a recognized University in India.
+• मेडिकल मानक (Medical Standard): A-2 (Distance Vision: 6/9, 6/9 without glasses; Near Vision: Sn: 0.6, 0.6 with/without glasses). Normal colour vision required.
+• चयन प्रक्रिया:
+  1. 1st Stage Computer Based Test (CBT-1 Screening)
+  2. 2nd Stage Computer Based Test (CBT-2 Mains)
+  3. Computer Based Aptitude Test (CBAT - 70% CBT-2 + 30% CBAT weightage)
+  4. Document Verification (DV) & Medical Examination in A-2 standard.`,
+        modeOfSelection: 'CBT-1 -> CBT-2 -> CBAT (Aptitude Test) -> DV & Medical Exam (Standard A-2)',
+        categoryBreakdown: { gen: 402, obc: 268, ews: 104, sc: 147, st: 73 }
       }
     ],
     howToApplySteps: [
-      'Visit official Railway Recruitment Board (RRB) website or rrbapply.gov.in.',
-      'Click on New Registration and select your RRB Region (e.g. RRB Ajmer, Bhopal, Chandigarh, Mumbai, etc.).',
-      'Fill personal and educational details carefully.',
-      'Upload scanned passport size photograph and signature as per specified dimensions.',
-      'Pay application fee online and submit final application form.',
-      'Download and print confirmation page for future reference.'
+      'Visit the official Railway Recruitment Board (RRB) apply portal: rrbapply.gov.in.',
+      'Create an account with Aadhaar verification, active mobile number, and email ID.',
+      'Select CEN 05/2026 (Graduate Level) and choose preference for Station Master (Pay Level 6).',
+      'Upload digital scanned photograph (white background) and signature.',
+      'Pay online examination fee of ₹500 (₹400 refundable) / ₹250 (full refundable) through UPI/Net Banking.',
+      'Submit the application and download confirmation receipt for future reference.'
     ],
     directLinks: [
-      { label: 'Apply Online (New Registration / Login)', actionText: 'Apply Online', type: 'apply', url: 'https://rrbapply.gov.in/', isPrimary: true },
-      { label: 'Download Official Notification PDF', actionText: 'Click Here (PDF)', type: 'notification', url: 'https://rrbapply.gov.in/' },
-      { label: 'Official RRB Portal', actionText: 'rrbapply.gov.in', type: 'official', url: 'https://rrbapply.gov.in/' }
+      { label: 'Apply Online (New Registration / Candidate Login)', actionText: 'Apply Online', type: 'apply', url: 'https://www.rrbapply.gov.in/#/auth/home?flag=true', isPrimary: true },
+      { label: 'Check Application Status', actionText: 'Click Here (As per Schedule)', type: 'other', url: 'https://www.rrbapply.gov.in/' },
+      { label: 'Check Exam City / Date Slip', actionText: 'Click Here (10 Days Before Exam)', type: 'exam_city', url: 'https://www.rrbapply.gov.in/' },
+      { label: 'Download CBT Admit Card', actionText: 'Click Here (4 Days Before Exam)', type: 'admit_card', url: 'https://www.rrbapply.gov.in/' },
+      { label: 'Download Answer Key & Objection', actionText: 'Click Here (As per Schedule)', type: 'answer_key', url: 'https://www.rrbapply.gov.in/' },
+      { label: 'Download CEN 05/2026 Official Notification PDF', actionText: 'Download (PDF)', type: 'notification', url: 'https://www.rrbapply.gov.in/' },
+      { label: 'Official RRB Recruitment Portal', actionText: 'rrbapply.gov.in', type: 'official', url: 'https://www.rrbapply.gov.in/' }
     ]
   },
   {
