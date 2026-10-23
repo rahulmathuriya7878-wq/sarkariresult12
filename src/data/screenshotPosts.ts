@@ -454,6 +454,108 @@ export const screenshotResultPosts: SarkariPost[] = [
 
 export const screenshotLatestJobPosts: SarkariPost[] = [
   {
+    id: 'job-sci-junior-court-attendant-2026',
+    slug: 'supreme-court-of-india-jca-oct26',
+    title: 'Supreme Court of India SCI Junior Court Attendant JCA Recruitment 2026 Exam for 130 Post',
+    shortTitle: 'Supreme Court of India Junior Court Attendant Online Form 2026',
+    hindiTitle: 'सुप्रीम कोर्ट ऑफ इंडिया जूनियर कोर्ट अटेंडेंट (जेसीए) भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Other',
+    qualifications: ['10th Pass'],
+    state: 'All India',
+    postDate: '15 October 2026',
+    notificationNumber: 'SCI/Estt.II/JCA-2026/05',
+    totalVacancies: '130 Post',
+    salary: '₹ 21,700 - ₹ 69,100/- (Pay Level 3) + Central Allowances',
+    salaryBand: 'Below 25K',
+    isHot: true,
+    isNew: true,
+    lastDate: '25/11/2026',
+    admitCardDate: 'Before Exam',
+    examDate: 'As Per Schedule',
+    shortInfo: 'Supreme Court of India SCI has released Junior Court Attendant JCA Notification. Those candidates who are interested in this SCI Junior Court Attendant JCA Recruitment 2025 Exam can can Apply Online from 04 November 2026 to 25 November 2026. Read the notification for SCI Junior Court Attendant 2026 Exam, eligibility, Subject Details information, Document Required, age limit, How to Apply and all other information.',
+    applicationFee: [
+      { category: 'General', amount: '1500/-' },
+      { category: 'OBC/ SC / ST / PH', amount: '750/-' }
+    ],
+    feePaymentMode: 'Pay the Examination Fee Through Debit Card / Credit Card / Net Banking / Online Only.',
+    ageLimit: {
+      asOnDate: '01/10/2026',
+      minAge: 18,
+      maxAge: 27,
+      notes: 'Age Relaxation as per SCI Junior Court Attendant Recruitment 2026 Rules.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '04/11/2026' },
+      { label: 'Last Date for Apply', value: '25/11/2026', isHighlight: true },
+      { label: 'Pay Exam Fee Last Date', value: '25/11/2026' },
+      { label: 'Exam Date', value: 'As Per Schedule' },
+      { label: 'Admit Card Available', value: 'Before Exam' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Junior Court Attendant (Group ‘C’ Non-Clerical post)',
+        totalPosts: '130',
+        eligibility: 'Class 10th Matric Exam Passed from Any Recognized Board in India.'
+      }
+    ],
+    salaryBreakdown: [
+      {
+        postName: 'Junior Court Attendant',
+        payLevel: 'Pay Level 3',
+        basicPay: '₹ 21,700/-',
+        grossSalary: '₹ 35,000/-',
+        inHandSalary: '₹ 31,500/-',
+        allowances: 'DA, HRA, Transport Allowance, Medical Benefits'
+      }
+    ],
+    howToApplySteps: [
+      'Supreme Court of India SCI has Released Junior Court Attendant Recruitment 2026 Notification. Candidate Can Apply Between 04 November 2026 to 25 November 2026.',
+      'Candidate Read the Notification Before Apply the Recruitment Application Form in SCI Apply Online for SCI Junior Court Attendant Recruitment 2026.',
+      'Kindly Check and College the All Document – Eligibility, ID Proof, Address Details, Basic Details.',
+      'Kindly Ready Scan Document Related to Recruitment Form – Photo, Sign, ID Proof, Etc.',
+      'Before Submit the Application Form Must Check the Preview and All Column Carefully.',
+      'Take A Print Out of Final Submitted Form.',
+      'For the latest updates on Sarkari Result, admit card, answer key, and result, always visit SarkariResult.com, the official website for Sarkari Result in India (Since 2012).'
+    ],
+    directLinks: [
+      { label: 'Apply Online', actionText: 'Link will be Activate on 04/11/2026', type: 'apply', url: 'https://www.sci.gov.in/', isPrimary: true },
+      { label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://cdnbbsr.s3waas.gov.in/s3ec0490f1f4972d133619a60c30f3559e/uploads/2026/10/2026101560.pdf' },
+      { label: 'Join Sarkari Result Channel', actionText: 'Telegram | WhatsApp', type: 'official', url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j' },
+      { label: 'Official Website', actionText: 'SCI Official Website', type: 'official', url: 'https://www.sci.gov.in/' }
+    ],
+    customFaqs: [
+      {
+        question: 'Supreme Court of India SCI Junior Court Attendant Online Form 2026 Start Date?',
+        answer: 'The online application process started on 04 November 2026.'
+      },
+      {
+        question: 'SCI Junior Court Attendant 2026 Exam Date?',
+        answer: 'The Examination will be conducted in As Per Schedule.'
+      },
+      {
+        question: 'Where can I find the syllabus for the SCI Junior Court Attendant Examination 2026?',
+        answer: 'The detailed syllabus and examination scheme for the SCI Junior Court Attendant Examination are available in the official notification. Candidates are advised to read the notification carefully for complete syllabus details.'
+      },
+      {
+        question: 'Supreme Court of India Junior Court Attendant 2026 Notification PDF?',
+        answer: 'Candidates can download the notification through SarkariResult.com.'
+      },
+      {
+        question: 'Supreme Court of India Junior Court Attendant Recruitment 2026 Last Date?',
+        answer: 'The last date to apply online is 25 November 2026.'
+      },
+      {
+        question: 'What is the last date to Pay Exam fee Details?',
+        answer: 'Candidates can pay the application fee up to 25 November 2026.'
+      },
+      {
+        question: 'How can I apply for Supreme Court of India Junior Court Attendant Exam 2026?',
+        answer: 'Candidates can apply online through the official recruitment link available on SarkariResult.com (Since 2012) – Official Website of Sarkari Result® Supreme Court of India Junior Court Attendant Online Form 2026.'
+      }
+    ]
+  },
+  {
     id: 'job-sci-court-master-2026',
     slug: 'sci-court-master-oct26',
     title: 'Supreme Court of India SCI Court Master (Shorthand) Recruitment 2026 Exam for 20 Post',

@@ -34,7 +34,7 @@ async function startServer() {
     res.send(txt);
   });
 
-  const isProduction = process.env.NODE_ENV === 'production' || fs.existsSync(path.join(__dirname, 'dist'));
+  const isProduction = process.env.NODE_ENV === 'production';
 
   if (!isProduction) {
     const { createServer: createViteServer } = await import('vite');
@@ -43,6 +43,18 @@ async function startServer() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
+
+    app.use('*', async (req, res, next) => {
+      const url = req.originalUrl;
+      try {
+        let template = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+      } catch (e) {
+        vite.ssrFixStacktrace(e as Error);
+        next(e);
+      }
+    });
   } else {
     app.use(express.static(path.join(__dirname, 'dist')));
     app.get('*', (req, res) => {

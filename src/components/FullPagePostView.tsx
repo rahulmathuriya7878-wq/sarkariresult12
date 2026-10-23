@@ -618,64 +618,100 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </div>
           </div>
 
-          {/* Social Channels 2x2 Grid Strip directly below Short Info - Matching Screenshot_20261020-155228.Chrome_5245ca1c.png */}
-          <div className="px-3 sm:px-5 py-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 bg-slate-50/50 border-b border-slate-200">
-            {/* Telegram Pill */}
-            <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-blue-300 transition-colors">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-full bg-[#229ED9] flex items-center justify-center text-white shrink-0 shadow-2xs">
-                  <Send className="w-4 h-4 ml-[-1px]" />
+          {/* Social Channels 4-Box Grid directly below Short Info - Matching Official Post Page */}
+          <div className="px-3 sm:px-5 py-3 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 bg-slate-50/70 border-b border-slate-200">
+            {/* Telegram */}
+            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-blue-300 transition-colors">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-6 h-6 rounded-full bg-[#229ED9] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
+                  ✈
                 </div>
-                <span className="font-bold text-[12pt] text-slate-900">Telegram</span>
+                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">Telegram</span>
               </div>
               <a
                 href="https://t.me/newsarkariresultt"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#229ED9] hover:bg-[#1a85ba] text-white text-[12pt] font-bold px-4 py-1.5 rounded-md shadow-2xs cursor-pointer transition-colors"
+                className="bg-[#229ED9] hover:bg-[#1a85ba] text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
               >
                 Join Us
               </a>
             </div>
 
-            {/* WhatsApp Pill */}
-            <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-emerald-300 transition-colors">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-full bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-2xs">
-                  <MessageCircle className="w-4 h-4" />
+            {/* WhatsApp */}
+            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-emerald-300 transition-colors">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-6 h-6 rounded-full bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
+                  💬
                 </div>
-                <span className="font-bold text-[12pt] text-slate-900">WhatsApp</span>
+                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">WhatsApp</span>
               </div>
               <a
                 href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#25D366] hover:bg-[#1fae53] text-white text-[12pt] font-bold px-4 py-1.5 rounded-md shadow-2xs cursor-pointer transition-colors"
+                className="bg-[#25D366] hover:bg-[#1fae53] text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
               >
                 Join Us
               </a>
             </div>
+
+            {/* Instagram */}
+            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-pink-300 transition-colors">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-6 h-6 rounded-full bg-[#E1306C] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
+                  📷
+                </div>
+                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">Instagram</span>
+              </div>
+              <a
+                href="https://www.instagram.com/sarkariresult.comofficial"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#E1306C] hover:bg-[#c7265c] text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
+              >
+                Follow
+              </a>
+            </div>
+
+            {/* Twitter / X */}
+            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-slate-500 transition-colors">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
+                  𝕏
+                </div>
+                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">X</span>
+              </div>
+              <a
+                href="https://x.com/srofficial2012"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-black hover:bg-neutral-800 text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
+              >
+                Follow
+              </a>
+            </div>
           </div>
 
-
-
           {/* Section Body Details */}
-          <div className="p-5 sm:p-8 md:p-10 space-y-7 sm:space-y-9 md:space-y-10 text-slate-900 text-[12pt]">
+          <div className="p-4 sm:p-7 md:p-9 space-y-6 sm:space-y-8 md:space-y-9 text-slate-900 text-[11.5pt] font-post">
             
-            {/* Center Header Details (Organization, Title) - Matching Screenshot */}
-            <div className="text-center py-4 border-b border-slate-200 space-y-2">
-              <h2 
-                className="text-[#16a34a] font-black text-[16pt] sm:text-[18pt] font-sans uppercase tracking-tight"
-                style={{ color: '#16a34a' }}
-              >
+            {/* Center Header Details (Authentic 4-Line Brand Heading) */}
+            <div className="text-center py-4 border-b border-slate-200 space-y-1.5">
+              <h2 className="text-[#ff00ff] font-black text-[15pt] sm:text-[17pt] font-sans tracking-tight" style={{ color: '#ff00ff' }}>
                 {getDepartmentHeader(post.department, post.title, isInformationalPost)}
               </h2>
-              <div 
-                className="text-[#c026d3] font-bold text-[14pt] sm:text-[15pt] leading-snug font-sans"
-                style={{ color: '#c026d3' }}
-              >
-                {post.title || post.shortTitle}
-              </div>
+              <h2 className="text-[#008000] font-black text-[15pt] sm:text-[17pt] font-sans leading-snug" style={{ color: '#008000' }}>
+                {post.shortTitle || post.title}
+              </h2>
+              <h2 className="text-[#ff00ff] font-bold text-[13pt] sm:text-[14pt] font-sans" style={{ color: '#ff00ff' }}>
+                {post.shortTitle} Exam 2026 : Short Details of Notification
+              </h2>
+              <h2 className="text-[#ff0000] font-black text-[13pt] sm:text-[14pt] font-sans" style={{ color: '#ff0000' }}>
+                <a href="https://www.sarkariresult.com/" target="_blank" rel="noopener noreferrer" className="hover:underline text-[#ff0000]" style={{ color: '#ff0000' }}>
+                  Sarkari Result® WWW.SARKARIRESULT.COM Since 2012
+                </a>
+              </h2>
             </div>
 
             {/* IF INFORMATIONAL POST (Disclaimer, Rules, Contact Us): Render Normal Article Layout */}
@@ -719,25 +755,25 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </div>
             )}
 
-            {/* IF RECRUITMENT JOB POST: Render Recruitment Specific Tables & Boxes */}
+            {/* IF RECRUITMENT JOB POST: Render Authentic Sarkari Result Tables & Boxes */}
             {!isInformationalPost && (
               <>
                 {/* Horizontal Side-by-Side 2-Column Table for Important Dates & Application Fee */}
-                <div className="border border-slate-300 bg-white grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-300 text-[12pt] shadow-2xs">
+                <div className="border border-slate-400 bg-white grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-400 text-[11.5pt] shadow-2xs">
                   
                   {/* Left Column: Important Dates */}
-                  <div className="p-5 sm:p-7 space-y-3.5">
+                  <div className="p-4 sm:p-6 space-y-3">
                     <h3 
-                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 text-center font-sans uppercase"
-                      style={{ color: '#16a34a' }}
+                      className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
+                      style={{ color: '#008000' }}
                     >
                       Important Dates
                     </h3>
-                    <ul className="space-y-3 text-[12pt] text-slate-800 pt-1 leading-relaxed">
+                    <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
                       {getProcessedImportantDates(post).map((d, idx) => (
                         <li key={idx} className="leading-snug">
                           <span className="text-slate-800 font-medium">• {d.label} : </span>
-                          <span className={d.isHighlight ? 'text-[#dc2626] font-bold' : 'text-slate-900 font-bold'}>
+                          <span className={d.isHighlight ? 'text-[#ff0000] font-bold' : 'text-slate-900 font-bold'}>
                             {d.value}
                           </span>
                         </li>
@@ -746,14 +782,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </div>
 
                   {/* Right Column: Application Fee */}
-                  <div className="p-5 sm:p-7 space-y-3.5">
+                  <div className="p-4 sm:p-6 space-y-3">
                     <h3 
-                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 text-center font-sans uppercase"
-                      style={{ color: '#16a34a' }}
+                      className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
+                      style={{ color: '#008000' }}
                     >
                       Application Fee
                     </h3>
-                    <ul className="space-y-3 text-[12pt] text-slate-800 pt-1 leading-relaxed">
+                    <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
                       {post.applicationFee.length > 0 ? (
                         post.applicationFee.map((fee, idx) => (
                           <li key={idx} className="leading-snug">
@@ -764,8 +800,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       ) : (
                         <li className="text-slate-600 italic leading-snug">• No Application Fee</li>
                       )}
-                      <li className="leading-snug text-slate-700 pt-1.5 border-t border-slate-100 mt-2.5">
-                        • Pay the Examination Fee Through Cash at E-Challan / Net Banking / Debit Card / Credit Card / UPI Mode Only
+                      <li className="leading-snug text-slate-700 pt-1.5 border-t border-slate-100 mt-2">
+                        • Pay the Examination Fee Through Debit Card, Credit Card, Net Banking or UPI Mode Only.
                       </li>
                     </ul>
                   </div>
@@ -773,14 +809,12 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Age Limit Box */}
                 {!isServiceOrScheme && post.ageLimit.asOnDate && (
-                  <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
-                    <h4 
-                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
-                      style={{ color: '#16a34a' }}
-                    >
-                      {post.shortTitle} Age Limit as on {post.ageLimit.asOnDate}
-                    </h4>
-                    <ul className="space-y-2.5 text-slate-800 pt-1 leading-relaxed text-[12pt]">
+                  <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs text-center">
+                    <h3 className="font-black text-[14pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 font-sans">
+                      <span style={{ color: '#008000' }}>{post.shortTitle} Notification 2026 : </span>
+                      <span style={{ color: '#ff00ff' }}>Age Limit as on {post.ageLimit.asOnDate}</span>
+                    </h3>
+                    <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[11.5pt] text-left max-w-2xl mx-auto">
                       {post.ageLimit.minAge && (
                         <li>• Minimum Age : <strong className="font-bold text-slate-900">{post.ageLimit.minAge} Years.</strong></li>
                       )}
@@ -790,7 +824,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       {post.ageLimit.notes ? (
                         <li className="text-slate-700">• {post.ageLimit.notes}</li>
                       ) : (
-                        <li className="text-slate-700">• Age Relaxation Extra as per Official Recruitment Rules for SC / ST / OBC / PwD / Ex-Servicemen.</li>
+                        <li className="text-slate-700">• Age Relaxation Extra as per {post.department} {post.shortTitle} Recruitment Rules.</li>
                       )}
                     </ul>
                   </div>
@@ -798,34 +832,34 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Category-Wise Age Relaxation Rule Table (Only for Latest Jobs, Result, Admit Card, Answer Key) */}
                 {showRecruitmentDetails && !isServiceOrScheme && post.ageLimit.asOnDate && (
-                  <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                       {post.shortTitle} Category-Wise Age Relaxation Rules
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse">
                         <thead>
-                          <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black text-[14pt]">
-                            <th className="p-4 sm:p-4.5 border-r border-slate-300 w-1/2">Reserved Category</th>
-                            <th className="p-4 sm:p-4.5">Age Relaxation Permissible (Upper Limit)</th>
+                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
+                            <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/2">Reserved Category</th>
+                            <th className="p-3 sm:p-3.5">Age Relaxation Permissible (Upper Limit)</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200 text-slate-800 text-[12pt]">
+                        <tbody className="divide-y divide-slate-300 text-slate-800 text-[11.5pt]">
                           <tr className="hover:bg-slate-50/50">
-                            <td className="p-4 sm:p-4.5 border-r border-slate-300 font-semibold">• OBC (Other Backward Classes)</td>
-                            <td className="p-4 sm:p-4.5 font-bold text-slate-900">03 Years Extra</td>
+                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• OBC (Other Backward Classes)</td>
+                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">03 Years Extra</td>
                           </tr>
                           <tr className="hover:bg-slate-50/50">
-                            <td className="p-4 sm:p-4.5 border-r border-slate-300 font-semibold">• SC / ST (Scheduled Castes / Scheduled Tribes)</td>
-                            <td className="p-4 sm:p-4.5 font-bold text-slate-900">05 Years Extra</td>
+                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• SC / ST (Scheduled Castes / Scheduled Tribes)</td>
+                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">05 Years Extra</td>
                           </tr>
                           <tr className="hover:bg-slate-50/50">
-                            <td className="p-4 sm:p-4.5 border-r border-slate-300 font-semibold">• PwD (Persons with Benchmark Disabilities)</td>
-                            <td className="p-4 sm:p-4.5 font-bold text-slate-900">10 Years Extra</td>
+                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• PwD (Persons with Benchmark Disabilities)</td>
+                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">10 Years Extra</td>
                           </tr>
                           <tr className="hover:bg-slate-50/50">
-                            <td className="p-4 sm:p-4.5 border-r border-slate-300 font-semibold">• Ex-Servicemen (ESM)</td>
-                            <td className="p-4 sm:p-4.5 font-bold text-slate-900">03 Years after military service deduction</td>
+                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• Ex-Servicemen (ESM)</td>
+                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">03 Years after military service deduction</td>
                           </tr>
                         </tbody>
                       </table>
@@ -835,29 +869,30 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Vacancy Details Table */}
                 {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
-                  <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
-                      {post.shortTitle} Vacancy Details Total : {post.totalVacancies} Posts
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
+                      <span className="text-white">{post.shortTitle} Recruitment 2026 : Vacancy Details Total </span>
+                      <span className="text-yellow-200">{post.totalVacancies} Post</span>
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse">
                         <thead>
-                          <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black text-[14pt]">
-                            <th className="p-4 sm:p-4.5 border-r border-slate-300 w-1/4">Post Name</th>
-                            <th className="p-4 sm:p-4.5 border-r border-slate-300 w-1/6 text-center">Total Post</th>
-                            <th className="p-4 sm:p-4.5">Eligibility Criteria</th>
+                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
+                            <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/4" style={{ color: '#ff00ff' }}>Post Name</th>
+                            <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/6 text-center" style={{ color: '#008000' }}>Total Post</th>
+                            <th className="p-3 sm:p-3.5" style={{ color: '#008000' }}>{post.shortTitle} Eligibility Criteria</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200 text-[12pt]">
+                        <tbody className="divide-y divide-slate-300 text-[11.5pt]">
                           {post.vacancyBreakdown.map((v, idx) => (
                             <tr key={idx} className="hover:bg-slate-50/50">
-                              <td className="p-4 sm:p-4.5 align-top font-bold text-blue-900 border-r border-slate-300">
+                              <td className="p-3 sm:p-3.5 align-top font-bold text-blue-900 border-r border-slate-400">
                                 {v.postName}
                               </td>
-                              <td className="p-4 sm:p-4.5 align-top text-center font-bold text-slate-900 border-r border-slate-300">
+                              <td className="p-3 sm:p-3.5 align-top text-center font-bold text-slate-900 border-r border-slate-400">
                                 {v.totalPosts}
                               </td>
-                              <td className="p-4 sm:p-4.5 align-top text-slate-800 leading-relaxed whitespace-pre-line font-sans">
+                              <td className="p-3 sm:p-3.5 align-top text-slate-800 leading-relaxed whitespace-pre-line font-sans">
                                 {v.eligibility}
                               </td>
                             </tr>
@@ -870,15 +905,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Salary & Pay Scale Table (वेतन सारणी) */}
                 {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
-                  <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                       {post.shortTitle} Pay Scale & Salary Details (वेतन सारणी)
                     </div>
-                    <div className="p-4 sm:p-5 bg-slate-50 border-b border-slate-200">
-                      <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[12pt]">
+                    <div className="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-300">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[11.5pt]">
                         <span><strong>Pay Scale (वेतनमान): </strong>{post.salary || 'As per 7th Pay Commission (7th CPC)'}</span>
                         {post.salaryBand && (
-                          <span className="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded text-[11pt] border border-emerald-300">
+                          <span className="bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded text-[11pt] border border-emerald-300">
                             Band: {post.salaryBand}
                           </span>
                         )}
@@ -888,22 +923,22 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black text-[13pt]">
-                              <th className="p-3.5 border-r border-slate-300">Post Name</th>
-                              <th className="p-3.5 border-r border-slate-300 text-center">Pay Level</th>
-                              <th className="p-3.5 border-r border-slate-300">Basic Pay</th>
-                              <th className="p-3.5 border-r border-slate-300">In-Hand Salary</th>
-                              <th className="p-3.5">Allowances / Grade Pay</th>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
+                              <th className="p-3 border-r border-slate-400">Post Name</th>
+                              <th className="p-3 border-r border-slate-400 text-center">Pay Level</th>
+                              <th className="p-3 border-r border-slate-400">Basic Pay</th>
+                              <th className="p-3 border-r border-slate-400">In-Hand Salary</th>
+                              <th className="p-3">Allowances / Grade Pay</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-200 text-[12pt]">
+                          <tbody className="divide-y divide-slate-300 text-[11.5pt]">
                             {post.salaryBreakdown.map((sal, idx) => (
                               <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-3.5 font-bold text-blue-900 border-r border-slate-300">{sal.postName}</td>
-                                <td className="p-3.5 text-center font-bold text-emerald-700 border-r border-slate-300">{sal.payLevel}</td>
-                                <td className="p-3.5 font-bold text-slate-900 border-r border-slate-300">{sal.basicPay}</td>
-                                <td className="p-3.5 font-bold text-purple-900 border-r border-slate-300">{sal.inHandSalary || '-'}</td>
-                                <td className="p-3.5 text-slate-700">{sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}</td>
+                                <td className="p-3 font-bold text-blue-900 border-r border-slate-400">{sal.postName}</td>
+                                <td className="p-3 text-center font-bold text-emerald-700 border-r border-slate-400">{sal.payLevel}</td>
+                                <td className="p-3 font-bold text-slate-900 border-r border-slate-400">{sal.basicPay}</td>
+                                <td className="p-3 font-bold text-purple-900 border-r border-slate-400">{sal.inHandSalary || '-'}</td>
+                                <td className="p-3 text-slate-700">{sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -915,31 +950,31 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Exam Scheme & Paper Pattern Table (परीक्षा पैटर्न व अंक योजना) */}
                 {post.paperPattern && (
-                  <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                    <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                       {post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}
                     </div>
-                    <div className="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11pt]">
+                    <div className="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-300 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11pt]">
                       {post.paperPattern.examMode && (
-                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                        <div className="bg-white p-2 rounded border border-slate-200">
                           <span className="text-slate-500 block text-[10pt]">Exam Mode</span>
                           <strong className="text-slate-900">{post.paperPattern.examMode}</strong>
                         </div>
                       )}
                       {post.paperPattern.totalDuration && (
-                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                        <div className="bg-white p-2 rounded border border-slate-200">
                           <span className="text-slate-500 block text-[10pt]">Total Duration</span>
                           <strong className="text-blue-900">{post.paperPattern.totalDuration}</strong>
                         </div>
                       )}
                       {post.paperPattern.totalQuestions && (
-                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                        <div className="bg-white p-2 rounded border border-slate-200">
                           <span className="text-slate-500 block text-[10pt]">Total Questions</span>
                           <strong className="text-slate-900">{post.paperPattern.totalQuestions} Ques</strong>
                         </div>
                       )}
                       {post.paperPattern.negativeMarking && (
-                        <div className="bg-white p-2.5 rounded border border-slate-200">
+                        <div className="bg-white p-2 rounded border border-slate-200">
                           <span className="text-slate-500 block text-[10pt]">Negative Marking</span>
                           <strong className="text-red-600">{post.paperPattern.negativeMarking}</strong>
                         </div>
@@ -949,20 +984,20 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black text-[13pt]">
-                              <th className="p-3.5 border-r border-slate-300">Subject / Test Paper</th>
-                              <th className="p-3.5 border-r border-slate-300 text-center">Questions</th>
-                              <th className="p-3.5 border-r border-slate-300 text-center">Maximum Marks</th>
-                              <th className="p-3.5">Duration / Remarks</th>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
+                              <th className="p-3 border-r border-slate-400">Subject / Test Paper</th>
+                              <th className="p-3 border-r border-slate-400 text-center">Questions</th>
+                              <th className="p-3 border-r border-slate-400 text-center">Maximum Marks</th>
+                              <th className="p-3">Duration / Remarks</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-200 text-[12pt]">
+                          <tbody className="divide-y divide-slate-300 text-[11.5pt]">
                             {post.paperPattern.subjects.map((sub, idx) => (
                               <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-3.5 font-bold text-slate-900 border-r border-slate-300">{sub.subjectName}</td>
-                                <td className="p-3.5 text-center font-bold text-blue-900 border-r border-slate-300">{sub.totalQuestions || '-'}</td>
-                                <td className="p-3.5 text-center font-bold text-emerald-800 border-r border-slate-300">{sub.totalMarks || '-'}</td>
-                                <td className="p-3.5 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
+                                <td className="p-3 font-bold text-slate-900 border-r border-slate-400">{sub.subjectName}</td>
+                                <td className="p-3 text-center font-bold text-blue-900 border-r border-slate-400">{sub.totalQuestions || '-'}</td>
+                                <td className="p-3 text-center font-bold text-emerald-800 border-r border-slate-400">{sub.totalMarks || '-'}</td>
+                                <td className="p-3 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -974,42 +1009,42 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Mode of Selection & Examination Scheme (Only for Latest Jobs, Result, Admit Card, Answer Key) */}
                 {showRecruitmentDetails && (
-                  <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
+                  <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
                     <h4 
-                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
-                      style={{ color: '#16a34a' }}
+                      className="font-black text-[14pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 font-sans"
+                      style={{ color: '#008000' }}
                     >
                       {post.shortTitle} Selection Process / Mode of Selection
                     </h4>
                     <div className="pt-1">
-                      <p className="text-slate-800 mb-3.5 leading-relaxed font-sans text-[12pt]">
+                      <p className="text-slate-800 mb-3 leading-relaxed font-sans text-[11.5pt]">
                         The recruitment board will select eligible candidates through the following sequential stages:
                       </p>
-                      <ol className="space-y-3 text-slate-900 font-medium text-[12pt]">
+                      <ol className="space-y-2.5 text-slate-900 font-medium text-[11.5pt]">
                         {post.selectionProcess && post.selectionProcess.length > 0 ? (
                           post.selectionProcess.map((step, idx) => (
-                            <li key={idx} className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage {idx + 1}</span>
+                            <li key={idx} className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
+                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage {idx + 1}</span>
                               <span className="leading-relaxed text-slate-800">{step}</span>
                             </li>
                           ))
                         ) : (
                           <>
-                            <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 1</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Computer Based Test (CBT) / Written Entrance Exam :</strong> Objective type multiple choice questions covering General Awareness, Quantitative Aptitude, Reasoning Ability, and General Knowledge.</span>
+                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
+                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 1</span>
+                              <span className="leading-relaxed text-slate-800"><strong>Written Entrance Examination / Computer Based Test (CBT) :</strong> Objective type questions evaluating General Knowledge, Numerical Aptitude, and Reasoning.</span>
                             </li>
-                            <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 2</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Skill Test / Physical Standard & Efficiency Test (PET/PST) :</strong> Qualifying nature skill test or physical standards evaluation as applicable for specific post code.</span>
+                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
+                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 2</span>
+                              <span className="leading-relaxed text-slate-800"><strong>Skill Test / Trade Test / Physical Test :</strong> Qualifying test according to the post requirements.</span>
                             </li>
-                            <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 3</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Document Verification (DV) :</strong> Verification of original educational certificates, category caste certificates, domicile proof, and photo identity proof.</span>
+                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
+                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 3</span>
+                              <span className="leading-relaxed text-slate-800"><strong>Document Verification (DV) :</strong> Scrutiny of original educational marksheets, caste & domicile certificates.</span>
                             </li>
-                            <li className="flex items-start gap-3 bg-slate-50/80 p-3.5 sm:p-4 rounded border border-slate-200">
-                              <span className="font-bold text-white bg-[#16a34a] text-[12pt] px-2.5 py-1 rounded shrink-0 mt-0.5">Stage 4</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Detailed Medical Examination (DME) :</strong> Final medical fitness checkup by authorized medical board prior to issuance of appointment letter.</span>
+                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
+                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 4</span>
+                              <span className="leading-relaxed text-slate-800"><strong>Medical Examination (ME) :</strong> Final medical fitness by competent medical officer.</span>
                             </li>
                           </>
                         )}
@@ -1020,19 +1055,17 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* How to Fill Form Section */}
                 {post.howToApplySteps && post.howToApplySteps.length > 0 && (
-                  <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
-                    <h4 
-                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
-                      style={{ color: '#16a34a' }}
-                    >
-                      How to Fill {post.shortTitle} Online Form
+                  <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
+                    <h4 className="font-black text-[14pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 font-sans">
+                      <span style={{ color: '#008000' }}>How to Fill </span>
+                      <span style={{ color: '#ff00ff' }}>{post.shortTitle} Recruitment Online Form 2026</span>
                     </h4>
-                    <ul className="space-y-3 text-slate-800 pt-1 leading-relaxed text-[12pt]">
+                    <ul className="space-y-2.5 text-slate-800 pt-1 leading-relaxed text-[11.5pt]">
                       {post.howToApplySteps.map((step, idx) => (
                         <li key={idx}>• {step}</li>
                       ))}
-                      <li className="text-[#dc2626] font-bold pt-1.5 border-t border-slate-100 mt-3">
-                        • Interested Candidate Can Read the Full Notification Before Apply Online.
+                      <li className="font-bold pt-2 border-t border-slate-200 mt-2.5 text-center text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
+                        Interested Candidates Can Read the Full Notification Before Apply Online
                       </li>
                     </ul>
                   </div>
@@ -1040,32 +1073,172 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </>
             )}
 
-            {/* Useful Important Links Table (Includes WhatsApp & Telegram for ALL Posts) */}
-            <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-              <div className="bg-[#dc2626] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+            {/* Sarkari Result Mobile App Promo Strip */}
+            <div className="border border-slate-300 bg-emerald-50/50 p-3 sm:p-4 rounded-xs text-center shadow-2xs">
+              <h3 className="text-[12pt] sm:text-[13pt] font-black leading-snug" style={{ color: '#008000' }}>
+                Download the Sarkari Result® Mobile App from SarkariResult.com (Since 2012) for Instant Government Job Updates. Available for Free on Google Play and the Apple App Store.
+              </h3>
+            </div>
+
+            {/* Useful Important Links Table (Includes WhatsApp, Telegram, Instagram & X) */}
+            <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+              <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                 Some Useful Important Links
               </div>
-              <div className="divide-y divide-slate-200 text-[12pt]">
-                {allDirectLinks.map((link, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 sm:p-4.5 hover:bg-slate-50 gap-4">
-                    <span className="font-bold text-slate-900">• {link.label}</span>
+              <div className="divide-y divide-slate-300 text-[11.5pt]">
+                {/* Apply Online Link */}
+                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
+                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
+                    • Apply Online
+                  </span>
+                  <a
+                    href={post.directLinks.find(l => l.label.toLowerCase().includes('apply'))?.url || 'https://main.sci.gov.in/'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
+                  >
+                    <span>Click Here</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
+                {/* Download Notification Link */}
+                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
+                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
+                    • Download Notification
+                  </span>
+                  <a
+                    href={post.directLinks.find(l => l.label.toLowerCase().includes('notification'))?.url || 'https://main.sci.gov.in/'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
+                  >
+                    <span>Click Here</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
+                {/* Sarkari Result Official Channels Link (WhatsApp | Telegram | Instagram | X) */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-2.5">
+                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
+                    • Join Sarkari Result Channel
+                  </span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <a
+                      href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2.5 py-1 bg-[#25D366] hover:bg-emerald-600 text-white font-bold rounded text-xs transition-colors"
+                    >
+                      WhatsApp
+                    </a>
+                    <a
+                      href="https://t.me/newsarkariresultt"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2.5 py-1 bg-[#229ED9] hover:bg-sky-600 text-white font-bold rounded text-xs transition-colors"
+                    >
+                      Telegram
+                    </a>
+                    <a
+                      href="https://www.instagram.com/sarkariresult.comofficial"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2.5 py-1 bg-[#E1306C] hover:bg-pink-600 text-white font-bold rounded text-xs transition-colors"
+                    >
+                      Instagram
+                    </a>
+                    <a
+                      href="https://x.com/srofficial2012"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2.5 py-1 bg-black hover:bg-neutral-800 text-white font-bold rounded text-xs transition-colors"
+                    >
+                      X
+                    </a>
+                  </div>
+                </div>
+
+                {/* Official Website Link */}
+                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
+                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
+                    • SCI Official Website
+                  </span>
+                  <a
+                    href="https://main.sci.gov.in/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
+                  >
+                    <span>Click Here</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
+                {/* Any additional direct links */}
+                {allDirectLinks.filter(l => 
+                  !l.label.toLowerCase().includes('apply') && 
+                  !l.label.toLowerCase().includes('notification') && 
+                  !l.label.toLowerCase().includes('whatsapp') && 
+                  !l.label.toLowerCase().includes('telegram') && 
+                  !l.label.toLowerCase().includes('official website')
+                ).map((link, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
+                    <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
+                      • {link.label}
+                    </span>
                     <a
                       href={link.url || 'https://main.sci.gov.in/'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex items-center justify-center gap-1.5 px-4.5 py-2 text-white font-bold rounded-xs text-[12pt] shadow-2xs cursor-pointer shrink-0 transition-colors ${
-                        link.label.toLowerCase().includes('whatsapp') 
-                          ? 'bg-[#25D366] hover:bg-[#1fae53] text-slate-950 font-black' 
-                          : link.label.toLowerCase().includes('telegram')
-                          ? 'bg-[#229ED9] hover:bg-[#1a85ba]'
-                          : 'bg-[#1432c7] hover:bg-blue-800'
-                      }`}
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
                     >
                       <span>{link.actionText || 'Click Here'}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Sarkari Result App Promo Box (.srapp-box) */}
+            <div className="bg-slate-900 text-white rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md border border-slate-800">
+              <div className="flex items-center gap-3.5">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-tr from-red-600 to-amber-500 p-0.5 shrink-0 flex items-center justify-center shadow-md">
+                  <div className="w-full h-full bg-[#ab183d] rounded-[10px] flex items-center justify-center text-white font-black text-xl">
+                    SR
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-black text-base sm:text-lg text-white">SarkariResult.com App</h4>
+                    <span className="bg-amber-400 text-slate-950 font-bold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      Trusted Since 2012
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    Fast Job, Admit Card & Result Updates Directly on Your Phone
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 shrink-0">
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.app.app14f269771c01"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors inline-flex items-center gap-1.5"
+                >
+                  <span>▶ Google Play</span>
+                </a>
+                <a
+                  href="https://itunes.apple.com/us/app/sarkari-result/id1051363935?ls=1&mt=8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors inline-flex items-center gap-1.5"
+                >
+                  <span> App Store</span>
+                </a>
               </div>
             </div>
 
@@ -1205,22 +1378,26 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </div>
             )}
 
-            {/* Frequently Asked Questions (FAQ) Section */}
+            {/* Frequently Asked Questions (FAQ) Section - Matching Official Sarkari Result Layout */}
             {faqs.length > 0 && (
-              <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center">
+              <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                   Frequently Asked Questions (FAQ) – {post.shortTitle}
                 </div>
-                <div className="p-5 sm:p-8 divide-y divide-slate-100 space-y-5">
+                <div className="p-4 sm:p-7 divide-y divide-slate-200 space-y-4">
                   {faqs.map((faq, idx) => (
-                    <div key={idx} className="pt-5 first:pt-0">
-                      <h5 className="font-bold text-emerald-950 text-[14pt] leading-snug flex items-start gap-2">
-                        <span className="font-black text-[#dc2626] text-[14pt] shrink-0">Q.{idx + 1}</span>
-                        <span className="text-[14pt]">{faq.question}</span>
+                    <div key={idx} className="pt-4 first:pt-0 space-y-1.5">
+                      <h5 
+                        className="font-bold text-[13pt] sm:text-[14pt] leading-snug flex items-start gap-1.5 font-sans"
+                        style={{ color: idx % 2 === 0 ? '#ff00ff' : '#008000' }}
+                      >
+                        <span>Q.{idx + 1} : </span>
+                        <span>{faq.question}</span>
                       </h5>
-                      <p className="text-slate-800 text-[12pt] mt-2 pl-7 sm:pl-8 leading-normal font-sans">
-                        <strong className="text-slate-900 font-bold text-[12pt]">Ans.</strong> {faq.answer}
-                      </p>
+                      <div className="text-slate-800 text-[11.5pt] pl-4 sm:pl-6 leading-relaxed font-sans">
+                        <span className="text-slate-900 font-bold text-[11.5pt] mr-1">Ans.</span> 
+                        <span>{faq.answer}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
