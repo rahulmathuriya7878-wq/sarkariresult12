@@ -97,7 +97,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
   );
 
   return (
-    <div className="my-5 sm:my-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="my-5 sm:my-7 grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
       {/* 1. Result */}
       {renderColumn(
         isHindi ? 'परिणाम (Result)' : 'Result',

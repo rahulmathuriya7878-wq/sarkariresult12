@@ -40,26 +40,19 @@ const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
 };
 
 export default function App() {
-  // Master Posts State (Persists custom edits, additions, and deletions)
+  // Master Posts State (Prioritizes code updates and mock posts over stale storage cache)
   const [allPosts, setAllPosts] = useState<SarkariPost[]>(() => {
     try {
-      const saved = localStorage.getItem('sarkari_admin_posts_v3');
+      const saved = localStorage.getItem('sarkari_admin_posts_v5');
+      let customAdminPosts: SarkariPost[] = [];
       if (saved) {
-        let parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          const mockMap = new Map(mockSarkariPosts.map(p => [p.id, p]));
-          const merged = parsed.map((p: SarkariPost) => {
-            if (mockMap.has(p.id)) {
-              const mockPost = mockMap.get(p.id)!;
-              mockMap.delete(p.id);
-              return { ...p, ...mockPost }; // Code updates take precedence over stale localStorage
-            }
-            return p;
-          });
-          const remainingMock = Array.from(mockMap.values());
-          return [...merged, ...remainingMock];
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const mockIds = new Set(mockSarkariPosts.map(p => p.id));
+          customAdminPosts = parsed.filter((p: SarkariPost) => !mockIds.has(p.id));
         }
       }
+      return [...mockSarkariPosts, ...customAdminPosts];
     } catch (e) {
       console.error('Failed to load posts from storage', e);
     }
@@ -69,8 +62,7 @@ export default function App() {
   // Save posts to localStorage and broadcast real-time update whenever updated
   useEffect(() => {
     try {
-      localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(allPosts));
-      localStorage.setItem('sarkari_admin_posts_v2', JSON.stringify(allPosts));
+      localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(allPosts));
       window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: allPosts }));
     } catch (e) {
       console.error('Failed to save posts', e);
