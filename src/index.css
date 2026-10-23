@@ -15,16 +15,16 @@
     font-family: 'Caveat', cursive;
   }
   .font-headlight {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-    font-size: 12pt;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 19pt;
   }
   .font-post {
-    font-family: 'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 11.5pt;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 10pt;
   }
   .font-mangal {
-    font-family: 'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 11.5pt;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 10pt;
   }
   .notebook-ruled {
     background: repeating-linear-gradient(
@@ -38,13 +38,13 @@
 
 /* Global Headlight and Post typography defaults */
 .site-headlight {
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
-  font-size: 12pt !important;
+  font-family: 'Georgia', 'Times New Roman', serif !important;
+  font-size: 19pt !important;
 }
 
 .site-post-content {
-  font-family: 'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  font-size: 11.5pt !important;
+  font-family: 'Georgia', 'Times New Roman', serif !important;
+  font-size: 10pt !important;
 }
 
 @media print {

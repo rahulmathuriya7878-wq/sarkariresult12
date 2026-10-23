@@ -358,8 +358,8 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-2 sm:p-4 overflow-y-auto">
-      <div className="bg-slate-50 w-full max-w-6xl h-[94vh] max-h-[94vh] rounded-md shadow-2xl border-2 border-slate-700 flex flex-col overflow-hidden relative text-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-1 sm:p-4 overflow-y-auto">
+      <div className="bg-slate-50 w-full max-w-6xl h-[98vh] sm:h-[94vh] max-h-[98vh] sm:max-h-[94vh] rounded-md shadow-2xl border-2 border-slate-700 flex flex-col overflow-hidden relative text-slate-800">
         
         {/* Toast Alert */}
         {toastMessage && (

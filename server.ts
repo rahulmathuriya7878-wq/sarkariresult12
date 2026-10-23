@@ -2,14 +2,14 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { generateRobotsTxt, generateSitemapXml } from './src/utils/sitemapGenerator';
+import { generateRobotsTxt, generateSitemapXml } from './src/utils/sitemapGenerator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+  const PORT = 3000;
 
   // Dynamic Sitemap XML Endpoint (serves real-time indexed active jobs, results, admissions)
   app.get(['/sitemap.xml', '/sitemap', '/api/sitemap', '/api/sitemap.xml'], (req, res) => {

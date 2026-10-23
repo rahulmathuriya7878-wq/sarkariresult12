@@ -60,12 +60,14 @@ export const Header: React.FC<HeaderProps> = ({
     onCategoryChange(cat);
     setIsMoreOpen(false);
     setIsMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStaticDocClick = (slug: string) => {
     onOpenPostBySlug(slug);
     setIsMoreOpen(false);
     setIsMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const trendingTags = [

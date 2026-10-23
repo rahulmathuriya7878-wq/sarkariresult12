@@ -404,6 +404,12 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         onCategoryChange={(cat) => {
           setSelectedPost(null);
           setActiveCategory(cat);
+          setSearchQuery('');
+          setSelectedDept('All');
+          setSelectedQual('All');
+          setSelectedState('All States');
+          setSelectedSalary('All');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         bookmarkCount={bookmarkedIds.length}
         onOpenBookmarks={() => setIsBookmarksOpen(true)}
@@ -480,7 +486,15 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 category={activeCategory}
                 posts={categorySpecificPosts}
                 onSelectPost={handleOpenPostFullPage}
-                onBackToHome={() => setActiveCategory('all')}
+                onBackToHome={() => {
+                  setActiveCategory('all');
+                  setSearchQuery('');
+                  setSelectedDept('All');
+                  setSelectedQual('All');
+                  setSelectedState('All States');
+                  setSelectedSalary('All');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 isHindi={isHindi}
                 visitedPostIds={visitedPostIds}
               />
@@ -498,7 +512,16 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 admissions={admissions}
                 certificates={certificates}
                 onSelectPost={handleOpenPostFullPage}
-                onViewCategory={(cat) => setActiveCategory(cat)}
+                onViewCategory={(cat) => {
+                  setSelectedPost(null);
+                  setActiveCategory(cat);
+                  setSearchQuery('');
+                  setSelectedDept('All');
+                  setSelectedQual('All');
+                  setSelectedState('All States');
+                  setSelectedSalary('All');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 isHindi={isHindi}
                 onOpenAppInfo={() => setIsJobAlertsOpen(true)}
                 visitedPostIds={visitedPostIds}

@@ -24,8 +24,8 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
     <footer 
       className="w-full bg-white text-slate-800 mt-10 border-t-4 border-[#ab1616] shadow-sm font-post font-mangal"
       style={{
-        fontFamily: "'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        fontSize: '11.5pt'
+        fontFamily: "'Georgia', 'Times New Roman', serif",
+        fontSize: '10pt'
       }}
     >
       {/* 1. Official Social Alert Ribbon */}

@@ -486,8 +486,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     <div 
       className="w-full min-h-screen bg-[#f3f4f6] pb-20 font-post font-mangal"
       style={{
-        fontFamily: "'Mangal', 'Noto Sans Devanagari', 'Tiro Devanagari Hindi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-        fontSize: '11.5pt'
+        fontFamily: "'Georgia', 'Times New Roman', serif",
+        fontSize: '10pt'
       }}
     >
       <div className="max-w-5xl mx-auto px-2 sm:px-4 py-3 sm:py-5">
@@ -525,41 +525,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </li>
           </ol>
 
-          {/* Action Buttons: Direct Post Editor & Alert Me */}
-          <div className="flex items-center gap-2 shrink-0">
-            {onOpenDirectEditor && (
-              <button
-                type="button"
-                onClick={() => onOpenDirectEditor(post)}
-                className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-400 hover:bg-amber-500 text-slate-950 rounded text-xs font-black shadow-xs cursor-pointer transition-colors border border-amber-500"
-                title="डायरेक्ट इस पोस्ट को एडमिन पैनल में एडिट करें"
-              >
-                <span>✏️ डायरेक्ट पोस्ट एडिटर</span>
-              </button>
-            )}
 
-            <button
-              onClick={() => setIsAlertModalOpen(true)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-[13px] font-bold cursor-pointer transition-all shadow-2xs ${
-                isAlertActive
-                  ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 ring-2 ring-amber-300'
-                  : 'bg-slate-900 hover:bg-black text-white'
-              }`}
-              title="Click to open Job Alert settings popup"
-            >
-              {isAlertActive ? (
-                <>
-                  <BellRing className="w-4 h-4 animate-bounce text-slate-950" />
-                  <span>Alert Set 🔔</span>
-                </>
-              ) : (
-                <>
-                  <Bell className="w-4 h-4 text-amber-400" />
-                  <span>Alert Me 🔔</span>
-                </>
-              )}
-            </button>
-          </div>
         </nav>
 
         {/* Alert Toast Feedback */}
@@ -618,77 +584,41 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </div>
           </div>
 
-          {/* Social Channels 4-Box Grid directly below Short Info - Matching Official Post Page */}
-          <div className="px-3 sm:px-5 py-3 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 bg-slate-50/70 border-b border-slate-200">
+          {/* Social Channels 2-Box Grid directly below Short Info (Telegram & WhatsApp) */}
+          <div className="px-3 sm:px-5 py-3 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 bg-slate-50/70 border-b border-slate-200">
             {/* Telegram */}
-            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-blue-300 transition-colors">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#229ED9] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
+            <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-blue-300 transition-colors">
+              <div className="flex items-center gap-2">
+                <div className="w-6.5 h-6.5 rounded-full bg-[#229ED9] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
                   ✈
                 </div>
-                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">Telegram</span>
+                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">Telegram Channel</span>
               </div>
               <a
                 href="https://t.me/newsarkariresultt"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#229ED9] hover:bg-[#1a85ba] text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
+                className="bg-[#229ED9] hover:bg-[#1a85ba] text-white text-[10pt] sm:text-[11pt] font-bold px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
               >
                 Join Us
               </a>
             </div>
 
             {/* WhatsApp */}
-            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-emerald-300 transition-colors">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
+            <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-emerald-300 transition-colors">
+              <div className="flex items-center gap-2">
+                <div className="w-6.5 h-6.5 rounded-full bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
                   💬
                 </div>
-                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">WhatsApp</span>
+                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">WhatsApp Channel</span>
               </div>
               <a
                 href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#25D366] hover:bg-[#1fae53] text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
+                className="bg-[#25D366] hover:bg-[#1fae53] text-white text-[10pt] sm:text-[11pt] font-bold px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
               >
                 Join Us
-              </a>
-            </div>
-
-            {/* Instagram */}
-            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-pink-300 transition-colors">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#E1306C] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
-                  📷
-                </div>
-                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">Instagram</span>
-              </div>
-              <a
-                href="https://www.instagram.com/sarkariresult.comofficial"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#E1306C] hover:bg-[#c7265c] text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
-              >
-                Follow
-              </a>
-            </div>
-
-            {/* Twitter / X */}
-            <div className="flex items-center justify-between px-3 py-2 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-slate-500 transition-colors">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <div className="w-6 h-6 rounded-full bg-black flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
-                  𝕏
-                </div>
-                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">X</span>
-              </div>
-              <a
-                href="https://x.com/srofficial2012"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-black hover:bg-neutral-800 text-white text-[10pt] sm:text-[11pt] font-bold px-2.5 sm:px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
-              >
-                Follow
               </a>
             </div>
           </div>
@@ -1118,7 +1048,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </a>
                 </div>
 
-                {/* Sarkari Result Official Channels Link (WhatsApp | Telegram | Instagram | X) */}
+                {/* Sarkari Result Official Channels Link (WhatsApp | Telegram) */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-2.5">
                   <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
                     • Join Sarkari Result Channel
@@ -1128,7 +1058,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-2.5 py-1 bg-[#25D366] hover:bg-emerald-600 text-white font-bold rounded text-xs transition-colors"
+                      className="px-3 py-1 bg-[#25D366] hover:bg-emerald-600 text-white font-bold rounded text-xs transition-colors"
                     >
                       WhatsApp
                     </a>
@@ -1136,25 +1066,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       href="https://t.me/newsarkariresultt"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-2.5 py-1 bg-[#229ED9] hover:bg-sky-600 text-white font-bold rounded text-xs transition-colors"
+                      className="px-3 py-1 bg-[#229ED9] hover:bg-sky-600 text-white font-bold rounded text-xs transition-colors"
                     >
                       Telegram
-                    </a>
-                    <a
-                      href="https://www.instagram.com/sarkariresult.comofficial"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2.5 py-1 bg-[#E1306C] hover:bg-pink-600 text-white font-bold rounded text-xs transition-colors"
-                    >
-                      Instagram
-                    </a>
-                    <a
-                      href="https://x.com/srofficial2012"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2.5 py-1 bg-black hover:bg-neutral-800 text-white font-bold rounded text-xs transition-colors"
-                    >
-                      X
                     </a>
                   </div>
                 </div>
