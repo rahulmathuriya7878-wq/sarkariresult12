@@ -994,6 +994,103 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </div>
                 )}
 
+                {/* State-Wise Vacancy Details Table (Renders ONLY IF stateBreakdown data exists) */}
+                {post.stateBreakdown && post.stateBreakdown.length > 0 && (
+                  !hiddenSections['sec_state_vacancy'] ? (
+                    <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                      <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                        <span>{post.shortTitle} State-Wise Vacancy Details</span>
+                        {renderSectionControls('sec_state_vacancy', 'State-Wise Vacancy')}
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[11.5pt] sm:text-[12.5pt]">
+                              <th className="p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>State / UT Name</th>
+                              <th className="p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-red-800">SC</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
+                              <th className="p-3">Eligibility / Remarks</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-300 text-[11pt]">
+                            {post.stateBreakdown.map((s, idx) => (
+                              <tr key={idx} className="hover:bg-slate-50">
+                                <td className="p-3 font-bold text-blue-900 border-r border-slate-400">• {s.stateName}</td>
+                                <td className="p-3 text-center font-bold text-slate-900 border-r border-slate-400">{s.totalPosts}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.genPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.obcPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.ewsPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.scPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.stPosts ?? '-'}</td>
+                                <td className="p-3 text-slate-700 font-sans">{s.eligibilityNote || '-'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ) : renderHiddenBanner('sec_state_vacancy', 'State-Wise Vacancy')
+                )}
+
+                {/* Zone-Wise / Regional Vacancy Details Table (Renders ONLY IF zoneBreakdown data exists) */}
+                {post.zoneBreakdown && post.zoneBreakdown.length > 0 && (
+                  !hiddenSections['sec_zone_vacancy'] ? (
+                    <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                      <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                        <span>{post.shortTitle} Zone-Wise / Regional Vacancy Details</span>
+                        {renderSectionControls('sec_zone_vacancy', 'Zone-Wise Vacancy')}
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[11.5pt] sm:text-[12.5pt]">
+                              <th className="p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>Zone / Board Name</th>
+                              <th className="p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-red-800">SC</th>
+                              <th className="p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
+                              <th className="p-3 text-center">Action / Portal</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-300 text-[11pt]">
+                            {post.zoneBreakdown.map((z, idx) => (
+                              <tr key={idx} className="hover:bg-slate-50">
+                                <td className="p-3 font-bold text-blue-900 border-r border-slate-400">
+                                  <div>• {z.zoneName}</div>
+                                  {z.hindiZoneName && <div className="text-[10pt] text-slate-500 font-normal">{z.hindiZoneName}</div>}
+                                </td>
+                                <td className="p-3 text-center font-bold text-slate-900 border-r border-slate-400">{z.totalPosts}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.genPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.obcPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.ewsPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.scPosts ?? '-'}</td>
+                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.stPosts ?? '-'}</td>
+                                <td className="p-3 text-center">
+                                  <a
+                                    href={z.applyLink || '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold px-3 py-1 rounded text-xs inline-flex items-center gap-1 shadow-2xs transition-colors"
+                                  >
+                                    <span>Apply</span>
+                                    <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ) : renderHiddenBanner('sec_zone_vacancy', 'Zone-Wise Vacancy')
+                )}
+
                 {/* Salary & Pay Scale Table (वेतन सारणी) */}
                 {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
                   <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
@@ -1039,39 +1136,40 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </div>
                 )}
 
-                {/* Exam Scheme & Paper Pattern Table (परीक्षा पैटर्न व अंक योजना) */}
-                {post.paperPattern && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                      {post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}
-                    </div>
-                    <div className="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-300 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11pt]">
-                      {post.paperPattern.examMode && (
-                        <div className="bg-white p-2 rounded border border-slate-200">
-                          <span className="text-slate-500 block text-[10pt]">Exam Mode</span>
-                          <strong className="text-slate-900">{post.paperPattern.examMode}</strong>
-                        </div>
-                      )}
-                      {post.paperPattern.totalDuration && (
-                        <div className="bg-white p-2 rounded border border-slate-200">
-                          <span className="text-slate-500 block text-[10pt]">Total Duration</span>
-                          <strong className="text-blue-900">{post.paperPattern.totalDuration}</strong>
-                        </div>
-                      )}
-                      {post.paperPattern.totalQuestions && (
-                        <div className="bg-white p-2 rounded border border-slate-200">
-                          <span className="text-slate-500 block text-[10pt]">Total Questions</span>
-                          <strong className="text-slate-900">{post.paperPattern.totalQuestions} Ques</strong>
-                        </div>
-                      )}
-                      {post.paperPattern.negativeMarking && (
-                        <div className="bg-white p-2 rounded border border-slate-200">
-                          <span className="text-slate-500 block text-[10pt]">Negative Marking</span>
-                          <strong className="text-red-600">{post.paperPattern.negativeMarking}</strong>
-                        </div>
-                      )}
-                    </div>
-                    {post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
+                {/* Exam Scheme & Paper Pattern Table (Renders ONLY IF post.paperPattern.subjects exists) */}
+                {post.paperPattern && post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
+                  !hiddenSections['sec_paper_pattern'] ? (
+                    <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                      <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                        <span>{post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}</span>
+                        {renderSectionControls('sec_paper_pattern', 'Paper Pattern')}
+                      </div>
+                      <div className="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-300 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11pt]">
+                        {post.paperPattern.examMode && (
+                          <div className="bg-white p-2 rounded border border-slate-200">
+                            <span className="text-slate-500 block text-[10pt]">Exam Mode</span>
+                            <strong className="text-slate-900">{post.paperPattern.examMode}</strong>
+                          </div>
+                        )}
+                        {post.paperPattern.totalDuration && (
+                          <div className="bg-white p-2 rounded border border-slate-200">
+                            <span className="text-slate-500 block text-[10pt]">Total Duration</span>
+                            <strong className="text-blue-900">{post.paperPattern.totalDuration}</strong>
+                          </div>
+                        )}
+                        {post.paperPattern.totalQuestions && (
+                          <div className="bg-white p-2 rounded border border-slate-200">
+                            <span className="text-slate-500 block text-[10pt]">Total Questions</span>
+                            <strong className="text-slate-900">{post.paperPattern.totalQuestions} Ques</strong>
+                          </div>
+                        )}
+                        {post.paperPattern.negativeMarking && (
+                          <div className="bg-white p-2 rounded border border-slate-200">
+                            <span className="text-slate-500 block text-[10pt]">Negative Marking</span>
+                            <strong className="text-red-600">{post.paperPattern.negativeMarking}</strong>
+                          </div>
+                        )}
+                      </div>
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
@@ -1094,54 +1192,38 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           </tbody>
                         </table>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  ) : renderHiddenBanner('sec_paper_pattern', 'Paper Pattern')
                 )}
 
-                {/* Mode of Selection & Examination Scheme (Only for Latest Jobs, Result, Admit Card, Answer Key) */}
-                {showRecruitmentDetails && (
-                  <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
-                    <h4 
-                      className="font-black text-[14pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 font-sans"
-                      style={{ color: '#008000' }}
-                    >
-                      {post.shortTitle} Selection Process / Mode of Selection
-                    </h4>
-                    <div className="pt-1">
-                      <p className="text-slate-800 mb-3 leading-relaxed font-sans text-[11.5pt]">
-                        The recruitment board will select eligible candidates through the following sequential stages:
-                      </p>
-                      <ol className="space-y-2.5 text-slate-900 font-medium text-[11.5pt]">
-                        {post.selectionProcess && post.selectionProcess.length > 0 ? (
-                          post.selectionProcess.map((step, idx) => (
+                {/* Mode of Selection (Renders ONLY IF post.selectionProcess data exists) */}
+                {post.selectionProcess && post.selectionProcess.length > 0 && (
+                  !hiddenSections['sec_selection_process'] ? (
+                    <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
+                      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2.5">
+                        <h4 
+                          className="font-black text-[14pt] sm:text-[16pt] font-sans"
+                          style={{ color: '#008000' }}
+                        >
+                          {post.shortTitle} Selection Process / Mode of Selection
+                        </h4>
+                        {renderSectionControls('sec_selection_process', 'Selection Process')}
+                      </div>
+                      <div className="pt-1">
+                        <p className="text-slate-800 mb-3 leading-relaxed font-sans text-[11.5pt]">
+                          The recruitment board will select eligible candidates through the following sequential stages:
+                        </p>
+                        <ol className="space-y-2.5 text-slate-900 font-medium text-[11.5pt]">
+                          {post.selectionProcess.map((step, idx) => (
                             <li key={idx} className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
                               <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage {idx + 1}</span>
                               <span className="leading-relaxed text-slate-800">{step}</span>
                             </li>
-                          ))
-                        ) : (
-                          <>
-                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
-                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 1</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Written Entrance Examination / Computer Based Test (CBT) :</strong> Objective type questions evaluating General Knowledge, Numerical Aptitude, and Reasoning.</span>
-                            </li>
-                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
-                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 2</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Skill Test / Trade Test / Physical Test :</strong> Qualifying test according to the post requirements.</span>
-                            </li>
-                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
-                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 3</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Document Verification (DV) :</strong> Scrutiny of original educational marksheets, caste & domicile certificates.</span>
-                            </li>
-                            <li className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
-                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage 4</span>
-                              <span className="leading-relaxed text-slate-800"><strong>Medical Examination (ME) :</strong> Final medical fitness by competent medical officer.</span>
-                            </li>
-                          </>
-                        )}
-                      </ol>
+                          ))}
+                        </ol>
+                      </div>
                     </div>
-                  </div>
+                  ) : renderHiddenBanner('sec_selection_process', 'Selection Process')
                 )}
 
                 {/* How to Fill Form Section */}

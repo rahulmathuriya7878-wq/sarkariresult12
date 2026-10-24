@@ -108,6 +108,29 @@ export interface SalaryBreakdownItem {
   allowances?: string;
 }
 
+export interface StateVacancyItem {
+  stateName: string;
+  totalPosts: string | number;
+  genPosts?: string | number;
+  obcPosts?: string | number;
+  ewsPosts?: string | number;
+  scPosts?: string | number;
+  stPosts?: string | number;
+  eligibilityNote?: string;
+}
+
+export interface ZoneVacancyItem {
+  zoneName: string;
+  hindiZoneName?: string;
+  totalPosts: string | number;
+  genPosts?: string | number;
+  obcPosts?: string | number;
+  ewsPosts?: string | number;
+  scPosts?: string | number;
+  stPosts?: string | number;
+  applyLink?: string;
+}
+
 export interface SarkariPost {
   id: string;
   slug: string;
@@ -139,6 +162,8 @@ export interface SarkariPost {
   };
   importantDates: ImportantDateItem[];
   vacancyBreakdown: VacancyBreakdown[];
+  stateBreakdown?: StateVacancyItem[];
+  zoneBreakdown?: ZoneVacancyItem[];
   paperPattern?: PaperPattern;
   howToApplySteps: string[];
   selectionProcess?: string[];

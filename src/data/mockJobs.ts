@@ -60,6 +60,11 @@ export const upscCdsResultPost: SarkariPost = {
       { subjectName: 'SSB Intelligence & Personality Test', totalQuestions: 'Stage I & II', totalMarks: 300, duration: '5 Days' }
     ]
   },
+  selectionProcess: [
+    'Stage 1: Written Examination conducted by UPSC (Objective OMR Papers in English, GK & Elementary Maths)',
+    'Stage 2: SSB Interview & Personality Test (5 Days Testing by Services Selection Board)',
+    'Stage 3: Document Verification & Medical Examination by Military Medical Board'
+  ],
   howToApplySteps: [
     'Visit UPSC official portal upsc.gov.in or upsconline.nic.in.',
     'Click on "Written Result: Combined Defence Services Examination (II), 2026".',

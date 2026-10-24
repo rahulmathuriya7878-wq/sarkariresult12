@@ -6,60 +6,50 @@ import { SarkariPost, ImportantDateItem } from '../types/job';
  * - If admit card available date data exists in post.admitCardDate or importantDates, display it; otherwise "Before Exam".
  */
 export const getProcessedImportantDates = (post: SarkariPost): ImportantDateItem[] => {
-  const dates: ImportantDateItem[] = post.importantDates ? [...post.importantDates] : [];
+  if (!post.importantDates || post.importantDates.length === 0) {
+    const defaultDates: ImportantDateItem[] = [];
+    if (post.postDate) {
+      defaultDates.push({ label: 'Notification Released', value: post.postDate });
+    }
+    if (post.lastDate) {
+      defaultDates.push({ label: 'Last Date for Apply Online', value: post.lastDate, isHighlight: true });
+    }
+    if (post.examDate) {
+      defaultDates.push({ label: 'Exam Date', value: post.examDate, isHighlight: true });
+    }
+    if (post.admitCardDate) {
+      defaultDates.push({ label: 'Admit Card Available', value: post.admitCardDate });
+    }
+    if (post.resultDate) {
+      defaultDates.push({ label: 'Result Declared Date', value: post.resultDate, isHighlight: true });
+    }
+    return defaultDates;
+  }
 
-  // 1. Exam Date check
-  const examIndex = dates.findIndex(d => 
-    /exam|cbt|test date/i.test(d.label)
-  );
+  const dates: ImportantDateItem[] = [...post.importantDates];
 
-  let finalExamValue = '';
+  // If examDate field exists and is not present in importantDates, append it
   if (post.examDate && post.examDate.trim() !== '') {
-    finalExamValue = post.examDate.trim();
-  } else if (examIndex !== -1 && dates[examIndex].value && dates[examIndex].value.trim() !== '') {
-    finalExamValue = dates[examIndex].value.trim();
+    const hasExam = dates.some(d => /exam|cbt|test date/i.test(d.label));
+    if (!hasExam) {
+      dates.push({ label: 'Exam Date', value: post.examDate, isHighlight: true });
+    }
   }
 
-  if (examIndex !== -1) {
-    dates[examIndex] = {
-      ...dates[examIndex],
-      label: dates[examIndex].label || 'Exam Date',
-      value: finalExamValue || 'As Per Schedule',
-      isHighlight: dates[examIndex].isHighlight ?? true,
-    };
-  } else {
-    dates.push({
-      label: 'Exam Date',
-      value: finalExamValue || 'As Per Schedule',
-      isHighlight: true,
-    });
-  }
-
-  // 2. Admit Card Available date check
-  const admitIndex = dates.findIndex(d => 
-    /admit card|hall ticket/i.test(d.label)
-  );
-
-  let finalAdmitValue = '';
+  // If admitCardDate field exists and is not present in importantDates, append it
   if (post.admitCardDate && post.admitCardDate.trim() !== '') {
-    finalAdmitValue = post.admitCardDate.trim();
-  } else if (admitIndex !== -1 && dates[admitIndex].value && dates[admitIndex].value.trim() !== '') {
-    finalAdmitValue = dates[admitIndex].value.trim();
+    const hasAdmit = dates.some(d => /admit card|hall ticket/i.test(d.label));
+    if (!hasAdmit) {
+      dates.push({ label: 'Admit Card Available', value: post.admitCardDate });
+    }
   }
 
-  if (admitIndex !== -1) {
-    dates[admitIndex] = {
-      ...dates[admitIndex],
-      label: dates[admitIndex].label || 'Admit Card Available',
-      value: finalAdmitValue || 'Before Exam',
-      isHighlight: dates[admitIndex].isHighlight ?? false,
-    };
-  } else {
-    dates.push({
-      label: 'Admit Card Available',
-      value: finalAdmitValue || 'Before Exam',
-      isHighlight: false,
-    });
+  // If resultDate field exists and is not present in importantDates, append it
+  if (post.resultDate && post.resultDate.trim() !== '') {
+    const hasResult = dates.some(d => /result|written result/i.test(d.label));
+    if (!hasResult) {
+      dates.push({ label: 'Result Declared Date', value: post.resultDate, isHighlight: true });
+    }
   }
 
   return dates;

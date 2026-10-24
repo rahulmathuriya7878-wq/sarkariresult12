@@ -84,18 +84,17 @@ export const Header: React.FC<HeaderProps> = ({
       {/* 1. Authentic Sarkari Result Crimson Masthead (Exact Website Design) */}
       <div className="bg-[#ab1616] text-white py-2.5 sm:py-3.5 px-3 sm:px-6 border-b border-red-950">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-2">
-          
           {/* Brand Logo & Title with Seal */}
           <div 
             onClick={() => handleNavClick('all')}
             className="cursor-pointer group flex items-center justify-center gap-3 select-none"
           >
             {/* Official Logo Image */}
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-yellow-400 shadow-md shrink-0 bg-white flex items-center justify-center">
+            <div className="w-14 h-14 sm:w-18 sm:h-18 rounded-full overflow-hidden border-2 border-amber-400 shadow-md shrink-0 bg-white flex items-center justify-center p-0.5">
               <img 
-                src="/assets/aistudio/IMG_20261020_152004_993_1b3313f3.jpg" 
-                alt="Sarkari Result Logo" 
-                className="w-full h-full object-cover"
+                src="/sarkari-result-logo.jpg" 
+                alt="Sarkari Result Official Emblem Logo" 
+                className="w-full h-full object-contain rounded-full"
               />
             </div>
 
@@ -112,10 +111,34 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 2. Responsive Navigation Bar:
-          - Mobile (md:hidden): Black bar with [✕/☰ Menu] on left and [🔍] on right + Vertical black drawer (Screenshot_20261020-085212.Chrome.png)
-          - Desktop (hidden md:block): Classic Sarkari Result horizontal black bar
-      */}
+      {/* Running Live Alert Ribbon (Header Ribbon) */}
+      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-bold py-1.5 px-3 overflow-hidden whitespace-nowrap shadow-inner border-y border-amber-600 text-xs sm:text-sm font-sans flex items-center gap-2">
+        <span className="bg-slate-950 text-amber-400 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full shrink-0 uppercase tracking-wider flex items-center gap-1 shadow-2xs">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          LIVE UPDATES
+        </span>
+        <div className="overflow-hidden whitespace-nowrap w-full">
+          <div className="inline-block animate-marquee hover:[animation-play-state:paused] cursor-pointer">
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('upsc-cds-ii-result-2026')}>
+              🔥 UPSC CDS II Result 2026 Written Exam Declared - Click to Check Roll No List!
+            </span>
+            <span className="text-red-900 font-extrabold mx-2">★</span>
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('rrb-station-master-recruitment-2026')}>
+              ⚡ Railway RRB Station Master 994 Posts Online Form 2026 Active!
+            </span>
+            <span className="text-red-900 font-extrabold mx-2">★</span>
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('bpsc-school-teacher-tre-4-online-form-2026')}>
+              📢 BPSC School Teacher TRE 4.0 Form Open Now!
+            </span>
+            <span className="text-red-900 font-extrabold mx-2">★</span>
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('up-police-constable-final-result-2026')}>
+              🏆 UP Police Constable Final Result 2026 Declared!
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Responsive Navigation Bar */}
       <div className="bg-black text-white border-b-2 border-red-900 sticky top-0 z-50 shadow-md">
         {/* Mobile Header Bar (md:hidden) */}
         <div className="md:hidden flex items-center justify-between px-3 py-2">
