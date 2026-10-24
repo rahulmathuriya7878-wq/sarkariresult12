@@ -450,6 +450,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           post={selectedPost}
           allPosts={allPosts}
           onBack={handleBackToHome}
+          onSelectPost={handleOpenPostFullPage}
           isBookmarked={bookmarkedIds.includes(selectedPost.id)}
           onToggleBookmark={handleToggleBookmark}
           onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}

@@ -1403,10 +1403,17 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     onClick={() => onSelectPost && onSelectPost(item)}
                     className="p-3.5 sm:p-4 hover:bg-slate-50 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
                   >
-                    <div className="space-y-1">
-                      <div className="text-[#0000cc] group-hover:text-red-700 font-bold text-[14px] sm:text-[16px] leading-snug">
+                    <div className="space-y-1 flex-1">
+                      <a
+                        href={`#post/${item.slug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (onSelectPost) onSelectPost(item);
+                        }}
+                        className="text-[#0000cc] group-hover:text-red-700 font-bold text-[14px] sm:text-[16px] leading-snug hover:underline block"
+                      >
                         • {item.title}
-                      </div>
+                      </a>
                       <div className="text-xs text-slate-500 font-medium flex items-center gap-2">
                         <span>{item.department || 'Government Job'}</span>
                         {item.lastDate && (
@@ -1445,10 +1452,17 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     onClick={() => onSelectPost && onSelectPost(related)}
                     className="p-3.5 sm:p-4 hover:bg-amber-50/40 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
                   >
-                    <div className="space-y-1">
-                      <div className="text-[#0000cc] group-hover:text-red-700 font-bold text-[14px] sm:text-[16px] leading-snug">
+                    <div className="space-y-1 flex-1">
+                      <a
+                        href={`#post/${related.slug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (onSelectPost) onSelectPost(related);
+                        }}
+                        className="text-[#0000cc] group-hover:text-red-700 font-bold text-[14px] sm:text-[16px] leading-snug hover:underline block"
+                      >
                         • {related.title}
-                      </div>
+                      </a>
                       <div className="text-xs text-slate-500 font-medium flex items-center gap-2">
                         <span>{related.department || 'Other'}</span>
                         {related.lastDate && (
