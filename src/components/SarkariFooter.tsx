@@ -1,6 +1,6 @@
 import React from 'react';
 import { Send, AlertTriangle, MessageCircle } from 'lucide-react';
-import { SarkariPost } from '../types/job';
+import { SarkariPost, PostCategory, Department } from '../types/job';
 
 interface SarkariFooterProps {
   onOpenAgeCalculator?: () => void;
@@ -10,6 +10,10 @@ interface SarkariFooterProps {
   onSelectPost?: (post: SarkariPost) => void;
   onOpenPostBySlug: (slug: string) => void;
   isHindi: boolean;
+  onCategoryChange?: (category: PostCategory | 'all') => void;
+  onSelectDept?: (dept: Department | 'All') => void;
+  onSelectState?: (state: string) => void;
+  onSearchQuery?: (query: string) => void;
 }
 
 export const SarkariFooter: React.FC<SarkariFooterProps> = ({
@@ -18,7 +22,11 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
   onOpenJobFinder: _onOpenJobFinder,
   onOpenAdmin,
   onOpenPostBySlug,
-  isHindi
+  isHindi,
+  onCategoryChange,
+  onSelectDept,
+  onSelectState,
+  onSearchQuery
 }) => {
   return (
     <footer className="w-full bg-white text-slate-800 mt-10 border-t-4 border-[#ab1616] shadow-sm font-serif">
@@ -56,44 +64,193 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
         </div>
       </div>
 
-      {/* 2. Official Welcome Banner from SarkariResult.com */}
-      <div className="max-w-7xl mx-auto px-4 py-3 text-center border-b border-slate-300">
-        <p className="text-slate-800 font-bold text-xs sm:text-sm">
-          Sarkari Result (सरकारी रिजल्ट) - भारत का प्रमुख, स्वतंत्र और पूर्णतः निःशुल्क शैक्षणिक सूचना पोर्टल, जहाँ सभी सरकारी नौकरियों, प्रवेश पत्रों, परिणामों और उत्तर कुंजियों की सटीक जानकारी उपलब्ध कराई जाती है।
-        </p>
-      </div>
 
       {/* 3. Main Directory Grid (Page) & Legal Sections */}
       <div className="max-w-7xl mx-auto px-4 py-7">
         <div className="max-w-xl mx-auto pb-6 border-b border-slate-300">
           
-          {/* Column 1: Page */}
-          <div className="space-y-2.5">
-            <h3 className="text-slate-900 font-black text-sm sm:text-base uppercase tracking-wider border-b border-slate-300 pb-1.5 flex items-center justify-center gap-1.5 text-center">
-              <span className="text-amber-500">■</span>
-              <span>Page (भर्ती एवं आयोग)</span>
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-2 gap-x-4 gap-y-2 text-slate-700 text-xs sm:text-sm text-center">
-              <a href="#bpsc" className="hover:text-[#7e22ce] hover:underline">• BPSC</a>
-              <a href="#up-scholarship" className="hover:text-[#7e22ce] hover:underline">• UP-Scholarship</a>
-              <a href="#upsssc" className="hover:text-[#7e22ce] hover:underline">• UPSSSC</a>
-              <a href="#ssc" className="hover:text-[#7e22ce] hover:underline">• SSC</a>
-              <a href="#ibps" className="hover:text-[#7e22ce] hover:underline">• IBPS</a>
-              <a href="#upsc" className="hover:text-[#7e22ce] hover:underline">• UPSC</a>
-              <a href="#airforce" className="hover:text-[#7e22ce] hover:underline">• Air Force</a>
-              <a href="#navy" className="hover:text-[#7e22ce] hover:underline">• Navy</a>
-              <a href="#rpsc" className="hover:text-[#7e22ce] hover:underline">• RPSC</a>
-              <a href="#delhi-dsssb" className="hover:text-[#7e22ce] hover:underline">• Delhi DSSSB</a>
-              <a href="#hssc" className="hover:text-[#7e22ce] hover:underline">• HSSC</a>
-              <a href="#tet" className="hover:text-[#7e22ce] hover:underline">• TET / CTET</a>
-              <a href="#police" className="hover:text-[#7e22ce] hover:underline">• Police</a>
-            </div>
-          </div>
-
         </div>
 
         {/* 3. Comprehensive Legal, Educational & Portal Information Section */}
         <div className="my-6 space-y-5">
+
+          {/* Quick Links & Categories Directory Section (Requested by User) */}
+          <div className="border-2 border-red-800 bg-white rounded-xs p-4 sm:p-6 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* Column 1: Quick Links (महत्वपूर्ण लिंक्स) */}
+              <div className="space-y-3">
+                <div className="bg-[#ab1616] text-white font-black text-sm uppercase px-3 py-2 rounded-xs tracking-wide text-center">
+                  Quick Links (महत्वपूर्ण लिंक्स)
+                </div>
+                <ul className="space-y-2 text-xs sm:text-sm font-bold text-slate-800">
+                  <li>
+                    <button 
+                      onClick={() => { if (onCategoryChange) onCategoryChange('latest_jobs'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#ab1616] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#ab1616]">•</span> Latest Online Form 2026
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onCategoryChange) onCategoryChange('admit_card'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#ab1616] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#ab1616]">•</span> Sarkari Admit Card Download
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onCategoryChange) onCategoryChange('answer_key'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#ab1616] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#ab1616]">•</span> Official Answer Key & Solutions
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onCategoryChange) onCategoryChange('syllabus'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#ab1616] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#ab1616]">•</span> Exam Scheme & Syllabus PDF
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onCategoryChange) onCategoryChange('admission'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#ab1616] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#ab1616]">•</span> University & College Admission
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onCategoryChange) onCategoryChange('result'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#ab1616] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#ab1616]">•</span> Sarkari Exam Results 2026
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Column 2: Top Recruitment (भर्ती बोर्ड) */}
+              <div className="space-y-3">
+                <div className="bg-[#008000] text-white font-black text-sm uppercase px-3 py-2 rounded-xs tracking-wide text-center">
+                  Top Recruitment (भर्ती बोर्ड)
+                </div>
+                <ul className="space-y-2 text-xs sm:text-sm font-bold text-slate-800">
+                  <li>
+                    <button 
+                      onClick={() => { if (onSearchQuery) onSearchQuery('Supreme Court'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#008000]">•</span> Supreme Court of India (SCI)
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectDept) onSelectDept('SSC'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#008000]">•</span> Staff Selection Commission (SSC)
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectDept) onSelectDept('UPSC'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#008000]">•</span> Union Public Service Commission (UPSC)
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectDept) onSelectDept('Railway'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#008000]">•</span> Railway Recruitment Board (RRB)
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectDept) onSelectDept('Police'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#008000]">•</span> State Police Constable & SI
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectDept) onSelectDept('Teaching'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#008000]">•</span> Teaching (CTET / REET / TET)
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Column 3: State Jobs (राज्य-वार नौकरी) */}
+              <div className="space-y-3">
+                <div className="bg-[#1d4ed8] text-white font-black text-sm uppercase px-3 py-2 rounded-xs tracking-wide text-center">
+                  State Jobs (राज्य-वार नौकरी)
+                </div>
+                <ul className="space-y-2 text-xs sm:text-sm font-bold text-slate-800">
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectState) onSelectState('Uttar Pradesh'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#1d4ed8] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#1d4ed8]">•</span> Uttar Pradesh Sarkari Result
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectState) onSelectState('Bihar'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#1d4ed8] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#1d4ed8]">•</span> Bihar Government Vacancy & BPSC
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectState) onSelectState('Rajasthan'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#1d4ed8] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#1d4ed8]">•</span> Rajasthan Govt Jobs & RSMSSB
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectState) onSelectState('Madhya Pradesh'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#1d4ed8] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#1d4ed8]">•</span> Madhya Pradesh MPESB Online
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectState) onSelectState('Delhi'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#1d4ed8] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#1d4ed8]">•</span> Delhi DSSSB & High Court Recruitment
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => { if (onSelectState) onSelectState('All India'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="hover:text-[#1d4ed8] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                    >
+                      <span className="text-[#1d4ed8]">•</span> All India Central Government Job
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
 
           {/* Section A: About the Portal & Educational Purpose */}
           <div className="border border-slate-200 bg-white rounded-xs p-4 sm:p-5 shadow-xs">
@@ -176,22 +333,6 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
 
           </div>
 
-          {/* Section C: Candidate Support & Transparency Commitment Banner */}
-          <div className="bg-slate-100 border border-slate-300 rounded-xs p-3.5 text-xs sm:text-sm text-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-center sm:text-left">
-              <span className="text-blue-600 text-base font-bold">ℹ️</span>
-              <span>
-                <strong>पारदर्शिता एवं त्रुटि निवारण (Grievance Redressal): </strong>
-                यदि आपको किसी अधिसूचना, परीक्षा तिथि अथवा लिंक में कोई विसंगति दिखाई दे, तो कृपया तुरंत आधिकारिक आयोग की वेबसाइट से मिलान करें अथवा हमें सूचित करें।
-              </span>
-            </div>
-            <button
-              onClick={() => onOpenPostBySlug('contact-us')}
-              className="shrink-0 bg-[#ab1616] hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded-xs text-xs cursor-pointer shadow-xs"
-            >
-              Contact Support
-            </button>
-          </div>
 
         </div>
 

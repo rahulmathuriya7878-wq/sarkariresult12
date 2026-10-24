@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BellRing, X, CheckCircle, Mail, Globe, Send, ShieldCheck, Sparkles, AlertCircle, MessageCircle } from 'lucide-react';
+import { requestFcmPermissionAndToken, simulatePushNotification } from '../utils/fcm';
 
 interface JobAlertsModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
   const [qualification, setQualification] = useState('All Qualifications');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [browserPermission, setBrowserPermission] = useState<string>('default');
+  const [fcmTokenStatus, setFcmTokenStatus] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -58,23 +60,14 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // If browser push is requested, ask permission
-    if (enableBrowserPush && typeof window !== 'undefined' && 'Notification' in window) {
-      try {
-        const perm = await Notification.requestPermission();
-        setBrowserPermission(perm);
-        if (perm === 'granted') {
-          try {
-            new Notification('Sarkari Job Alerts Active 🔔', {
-              body: 'You will receive immediate alerts for new Govt Jobs, Admit Cards, and Results!',
-              icon: '/favicon.ico'
-            });
-          } catch {
-            // Notification display fallback
-          }
-        }
-      } catch (err) {
-        console.warn('Browser notification permission issue:', err);
+    // If browser push is requested, register with FCM
+    if (enableBrowserPush) {
+      const result = await requestFcmPermissionAndToken();
+      if (result.success) {
+        setBrowserPermission('granted');
+        setFcmTokenStatus('FCM Push Notifications successfully activated!');
+      } else {
+        setFcmTokenStatus(`FCM Notice: ${result.error || 'Permission not granted'}`);
       }
     }
 
@@ -150,24 +143,38 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
                     {browserPermission === 'granted' ? 'Enabled (Active)' : 'Requested'}
                   </span>
                 </div>
+                {fcmTokenStatus && <div className="text-[11px] text-emerald-800 font-semibold">{fcmTokenStatus}</div>}
                 <div><strong>Qualification:</strong> {qualification}</div>
               </div>
 
+              <div className="space-y-2">
+                <div className="text-xs font-bold text-slate-800">Test Push Notifications (FCM):</div>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => simulatePushNotification('job_alert', 'New Job Alert', 'UPSC Civil Services 2026 Notification Released!')}
+                    className="px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold rounded text-[11px] transition-colors cursor-pointer border border-blue-200"
+                  >
+                    🚨 Job Alert
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => simulatePushNotification('exam_date', 'Exam Date Update', 'RRB NTPC CBT-1 Exam Date Announced for May 2026.')}
+                    className="px-2 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold rounded text-[11px] transition-colors cursor-pointer border border-amber-200"
+                  >
+                    📅 Exam Date
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => simulatePushNotification('result', 'Result Declared', 'UP Police Constable 2026 Final Result Out!')}
+                    className="px-2 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded text-[11px] transition-colors cursor-pointer border border-emerald-200"
+                  >
+                    🏆 Result
+                  </button>
+                </div>
+              </div>
+
               <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
-                      new Notification('Sample Job Alert: UPSC / Police Bharti 🔔', {
-                        body: 'This is a test notification from Sarkari Result Portal.',
-                        icon: '/favicon.ico'
-                      });
-                    }
-                  }}
-                  className="w-full sm:w-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-xs transition-colors cursor-pointer"
-                >
-                  Send Test Notification
-                </button>
                 <button
                   type="button"
                   onClick={onClose}

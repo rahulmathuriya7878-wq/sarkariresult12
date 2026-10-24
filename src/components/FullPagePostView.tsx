@@ -345,7 +345,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       breadcrumbScriptTag.type = 'application/ld+json';
       document.head.appendChild(breadcrumbScriptTag);
     }
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult.com';
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
     const currentUrl = typeof window !== 'undefined' ? window.location.href : `${baseUrl}/post/${post.slug}`;
     const categoryName = getCategoryLabel(post.category);
 
@@ -624,21 +624,13 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           {/* Section Body Details */}
           <div className="p-4 sm:p-7 md:p-9 space-y-6 sm:space-y-8 md:space-y-9 text-slate-900 text-[11.5pt] font-post">
             
-            {/* Center Header Details (Authentic 4-Line Brand Heading) */}
+            {/* Center Header Details */}
             <div className="text-center py-4 border-b border-slate-200 space-y-1.5">
               <h2 className="text-[#ff00ff] font-black text-[15pt] sm:text-[17pt] font-sans tracking-tight" style={{ color: '#ff00ff' }}>
                 {getDepartmentHeader(post.department, post.title, isInformationalPost)}
               </h2>
               <h2 className="text-[#008000] font-black text-[15pt] sm:text-[17pt] font-sans leading-snug" style={{ color: '#008000' }}>
                 {post.shortTitle || post.title}
-              </h2>
-              <h2 className="text-[#ff00ff] font-bold text-[13pt] sm:text-[14pt] font-sans" style={{ color: '#ff00ff' }}>
-                {post.shortTitle} Exam 2026 : Short Details of Notification
-              </h2>
-              <h2 className="text-[#ff0000] font-black text-[13pt] sm:text-[14pt] font-sans" style={{ color: '#ff0000' }}>
-                <span className="hover:underline text-[#ff0000]" style={{ color: '#ff0000' }}>
-                  Sarkari Result® SarkariResult.Com Since 2012
-                </span>
               </h2>
             </div>
 
@@ -1106,46 +1098,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </div>
             </div>
 
-            {/* Sarkari Result App Promo Box (.srapp-box) */}
-            <div className="bg-slate-900 text-white rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md border border-slate-800">
-              <div className="flex items-center gap-3.5">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-tr from-red-600 to-amber-500 p-0.5 shrink-0 flex items-center justify-center shadow-md">
-                  <div className="w-full h-full bg-[#ab183d] rounded-[10px] flex items-center justify-center text-white font-black text-xl">
-                    SR
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-black text-base sm:text-lg text-white">SarkariResult.com App</h4>
-                    <span className="bg-amber-400 text-slate-950 font-bold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">
-                      Trusted Since 2012
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-300 mt-0.5">
-                    Fast Job, Admit Card & Result Updates Directly on Your Phone
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5 shrink-0">
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.app.app14f269771c01"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors inline-flex items-center gap-1.5"
-                >
-                  <span>▶ Google Play</span>
-                </a>
-                <a
-                  href="https://itunes.apple.com/us/app/sarkari-result/id1051363935?ls=1&mt=8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors inline-flex items-center gap-1.5"
-                >
-                  <span> App Store</span>
-                </a>
-              </div>
-            </div>
 
             {/* All RRB Bharti Region-Wise Important Section */}
             {isRailwayPost && (

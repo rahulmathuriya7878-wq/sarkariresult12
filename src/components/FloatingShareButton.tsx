@@ -16,7 +16,7 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
     ? `${currentPost.title} - Sarkari Result` 
     : 'Sarkari Result - Latest Govt Jobs, Admit Card & Exam Results';
 
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.sarkariresult.com';
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
   const shareUrl = currentPost 
     ? `${baseUrl}/#post/${currentPost.slug}?ref=share`
     : `${baseUrl}/?ref=share`;

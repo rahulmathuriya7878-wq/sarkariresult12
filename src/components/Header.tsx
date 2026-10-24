@@ -251,12 +251,6 @@ export const Header: React.FC<HeaderProps> = ({
                     >
                       📋 Rules & Regulations
                     </button>
-                    <button
-                      onClick={() => handleStaticDocClick('contact-us')}
-                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
-                    >
-                      📞 Contact Us
-                    </button>
                   </div>
                 )}
               </div>
@@ -368,12 +362,6 @@ export const Header: React.FC<HeaderProps> = ({
                     className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-blue-800"
                   >
                     <span>📋 Rules & Regulations</span>
-                  </button>
-                  <button
-                    onClick={() => handleStaticDocClick('contact-us')}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-emerald-800"
-                  >
-                    <span>📞 Contact Us</span>
                   </button>
                 </div>
               )}

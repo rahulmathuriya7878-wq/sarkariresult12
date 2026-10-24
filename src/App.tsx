@@ -553,6 +553,42 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         onSelectPost={handleOpenPostFullPage}
         onOpenPostBySlug={handleSelectSlug}
         isHindi={isHindi}
+        onCategoryChange={(cat) => {
+          setSelectedPost(null);
+          setActiveCategory(cat);
+          setSearchQuery('');
+          setSelectedDept('All');
+          setSelectedQual('All');
+          setSelectedState('All States');
+          setSelectedSalary('All');
+        }}
+        onSelectDept={(dept) => {
+          setSelectedPost(null);
+          setActiveCategory('all');
+          setSelectedDept(dept);
+          setSearchQuery('');
+          setSelectedQual('All');
+          setSelectedState('All States');
+          setSelectedSalary('All');
+        }}
+        onSelectState={(state) => {
+          setSelectedPost(null);
+          setActiveCategory('all');
+          setSelectedState(state);
+          setSearchQuery('');
+          setSelectedDept('All');
+          setSelectedQual('All');
+          setSelectedSalary('All');
+        }}
+        onSearchQuery={(q) => {
+          setSelectedPost(null);
+          setActiveCategory('all');
+          setSearchQuery(q);
+          setSelectedDept('All');
+          setSelectedQual('All');
+          setSelectedState('All States');
+          setSelectedSalary('All');
+        }}
       />
 
       {/* Candidate Tools Modals */}

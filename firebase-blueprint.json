@@ -1,0 +1,20 @@
+{
+  "entities": {
+    "FcmToken": {
+      "title": "FCM Token",
+      "description": "FCM device tokens for push notifications",
+      "type": "object",
+      "properties": {
+        "token": { "type": "string", "maxLength": 512 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["token", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/fcm_tokens/{tokenId}": {
+      "schema": { "$ref": "FcmToken" },
+      "description": "Store registered FCM push tokens"
+    }
+  }
+}

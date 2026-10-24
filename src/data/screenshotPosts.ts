@@ -516,7 +516,7 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
       'Kindly Ready Scan Document Related to Recruitment Form – Photo, Sign, ID Proof, Etc.',
       'Before Submit the Application Form Must Check the Preview and All Column Carefully.',
       'Take A Print Out of Final Submitted Form.',
-      'For the latest updates on Sarkari Result, admit card, answer key, and result, always visit SarkariResult.com, the official website for Sarkari Result in India (Since 2012).'
+      'For the latest updates on Sarkari Result, admit card, answer key, and result, always visit our official portal.'
     ],
     directLinks: [
       { label: 'Apply Online', actionText: 'Link will be Activate on 04/11/2026', type: 'apply', url: 'https://www.sci.gov.in/', isPrimary: true },
@@ -539,7 +539,7 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
       },
       {
         question: 'Supreme Court of India Junior Court Attendant 2026 Notification PDF?',
-        answer: 'Candidates can download the notification through SarkariResult.com.'
+        answer: 'Candidates can download the notification through the official portal.'
       },
       {
         question: 'Supreme Court of India Junior Court Attendant Recruitment 2026 Last Date?',
@@ -551,7 +551,7 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
       },
       {
         question: 'How can I apply for Supreme Court of India Junior Court Attendant Exam 2026?',
-        answer: 'Candidates can apply online through the official recruitment link available on SarkariResult.com (Since 2012) – Official Website of Sarkari Result® Supreme Court of India Junior Court Attendant Online Form 2026.'
+        answer: 'Candidates can apply online through the official recruitment link available on Supreme Court of India Junior Court Attendant Online Form 2026.'
       }
     ]
   },
