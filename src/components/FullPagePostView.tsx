@@ -6,7 +6,12 @@ import {
   ChevronRight,
   Home,
   Send,
-  MessageCircle
+  MessageCircle,
+  Trash2,
+  Plus,
+  ShieldCheck,
+  Settings,
+  BookOpen
 } from 'lucide-react';
 import { isPostAlertActive, togglePostAlert, getPostStatus } from '../utils/alertManager';
 import { PostAlertModal } from './PostAlertModal';
@@ -226,6 +231,71 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   const [isAlertActive, setIsAlertActive] = React.useState<boolean>(() => isPostAlertActive(post.id));
   const [isAlertModalOpen, setIsAlertModalOpen] = React.useState<boolean>(false);
   const [alertFeedback, setAlertFeedback] = React.useState<string | null>(null);
+  const [hiddenSections, setHiddenSections] = React.useState<Record<string, boolean>>({});
+
+  const isAdmin = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('sarkari_admin_auth') === 'true';
+  }, []);
+
+  const renderSectionControls = (sectionId: string, sectionTitle: string) => {
+    if (!isAdmin) return null;
+    return (
+      <div className="flex items-center gap-1.5 font-sans font-normal text-xs my-1 sm:my-0">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onOpenDirectEditor) onOpenDirectEditor();
+            else if (onOpenAdmin) onOpenAdmin();
+          }}
+          className="bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 font-bold px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors shadow-2xs text-[11px]"
+          title={`${sectionTitle} एडिट करें`}
+        >
+          <span>✏️</span>
+          <span>एडिट करें</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (confirm(`क्या आप वाकई "${sectionTitle}" सेक्शन को इस पोस्ट से हटाना चाहते हैं?`)) {
+              setHiddenSections(prev => ({ ...prev, [sectionId]: true }));
+              setAlertFeedback(`"${sectionTitle}" सेक्शन हटा दिया गया है।`);
+            }
+          }}
+          className="bg-red-100 hover:bg-red-200 text-red-950 border border-red-300 font-bold px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors shadow-2xs text-[11px]"
+          title={`${sectionTitle} सेक्शन हटाएं`}
+        >
+          <Trash2 className="w-3 h-3 text-red-600" />
+          <span>सेक्शन हटाएं</span>
+        </button>
+      </div>
+    );
+  };
+
+  const renderHiddenBanner = (sectionId: string, sectionTitle: string) => {
+    if (!hiddenSections[sectionId]) return null;
+    return (
+      <div className="bg-slate-100 border border-dashed border-slate-300 p-3 rounded text-xs font-semibold text-slate-600 flex items-center justify-between gap-2 my-2 font-sans">
+        <span className="flex items-center gap-1.5">
+          <span>🚫</span>
+          <span><strong>{sectionTitle}</strong> (सेक्शन हटाया गया है)</span>
+        </span>
+        <button
+          type="button"
+          onClick={() => {
+            setHiddenSections(prev => ({ ...prev, [sectionId]: false }));
+            setAlertFeedback(`"${sectionTitle}" सेक्शन वापस ला दिया गया है।`);
+          }}
+          className="text-blue-700 hover:underline font-bold cursor-pointer"
+        >
+          ↩️ वापस लाएं (Restore)
+        </button>
+      </div>
+    );
+  };
 
   useEffect(() => {
     setIsAlertActive(isPostAlertActive(post.id));
@@ -248,6 +318,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
     const hasSeenAlert = localStorage.getItem(`sarkari_alert_seen_${post.id}`);
 
+    /*
     if (isSharedLink && !hasSeenAlert) {
       // Mark as seen so it will NOT auto-open again on subsequent visits
       try {
@@ -261,6 +332,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       }, 400);
       return () => clearTimeout(timer);
     }
+    */
   }, [post.id]);
 
   const handleAlertToggle = async () => {
@@ -283,30 +355,47 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     setTimeout(() => setAlertFeedback(null), 4000);
   };
 
-  // Related Posts: 3 other jobs from the same category or department
+  // Contextual Latest Jobs (excluding current open post)
+  const contextualLatestJobs = useMemo(() => {
+    if (!allPosts || allPosts.length === 0) return [];
+    return allPosts
+      .filter((p) => p.id !== post.id && p.slug !== post.slug)
+      .slice(0, 3);
+  }, [allPosts, post]);
+
+  // Related Posts: Strictly jobs related to current open post by department, keywords & category
   const relatedPosts = useMemo(() => {
     if (!allPosts || allPosts.length === 0) return [];
 
-    // Prioritize same category posts
-    const sameCat = allPosts.filter(
-      (p) => p.id !== post.id && p.category === post.category
-    );
+    const currentTitleWords = (post.title + ' ' + (post.shortTitle || '') + ' ' + (post.department || '')).toLowerCase().split(/\s+/).filter(w => w.length > 3);
 
-    // Same department
+    // 1. Same department posts
     const sameDept = allPosts.filter(
-      (p) => p.id !== post.id && p.department === post.department && !sameCat.some((c) => c.id === p.id)
+      (p) => p.id !== post.id && p.slug !== post.slug && p.department === post.department
     );
 
-    const candidates = [...sameCat, ...sameDept];
+    // 2. Matching title keywords
+    const keywordMatches = allPosts.filter(
+      (p) => p.id !== post.id && p.slug !== post.slug && !sameDept.some((s) => s.id === p.id) &&
+             currentTitleWords.some(w => p.title.toLowerCase().includes(w) || p.shortTitle.toLowerCase().includes(w))
+    );
 
-    if (candidates.length < 5) {
+    // 3. Same category posts
+    const sameCat = allPosts.filter(
+      (p) => p.id !== post.id && p.slug !== post.slug && p.category === post.category && 
+             !sameDept.some((s) => s.id === p.id) && !keywordMatches.some((k) => k.id === p.id)
+    );
+
+    const pool = [...sameDept, ...keywordMatches, ...sameCat];
+
+    if (pool.length < 3) {
       const remaining = allPosts.filter(
-        (p) => p.id !== post.id && !candidates.some((c) => c.id === p.id)
+        (p) => p.id !== post.id && p.slug !== post.slug && !pool.some((item) => item.id === p.id)
       );
-      return [...candidates, ...remaining].slice(0, 5);
+      return [...pool, ...remaining].slice(0, 3);
     }
 
-    return candidates.slice(0, 5);
+    return pool.slice(0, 3);
   }, [allPosts, post]);
 
   useEffect(() => {
@@ -493,10 +582,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
   return (
     <div 
-      className="w-full min-h-screen bg-[#f3f4f6] pb-20 font-post font-mangal"
+      className="w-full min-h-screen bg-[#f3f4f6] pb-20 font-post font-mangal text-[14px] sm:text-[16px] md:text-[18px]"
       style={{
-        fontFamily: "'Georgia', 'Times New Roman', serif",
-        fontSize: '10pt'
+        fontFamily: "'Georgia', 'Times New Roman', serif"
       }}
     >
       <div className="max-w-5xl mx-auto px-2 sm:px-4 py-3 sm:py-5">
@@ -533,9 +621,66 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               {post.shortTitle || post.title}
             </li>
           </ol>
-
-
         </nav>
+
+        {/* Admin Mode Active Controls Bar - Only visible when Admin is authenticated */}
+        {isAdmin && (
+          <div className="mb-2.5 bg-slate-900 text-white px-3 py-2 rounded border-b-2 border-red-600 flex flex-wrap items-center justify-between gap-2 shadow-xs font-sans">
+            <div className="flex items-center gap-2">
+              <span className="bg-emerald-500 text-slate-950 font-black text-[11px] px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1.5 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
+                कंट्रोल्स (Admin Mode Active)
+              </span>
+              <span className="text-xs text-slate-300 font-semibold hidden md:inline truncate max-w-xs">
+                {post.shortTitle || post.title}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {/* 1. Direct Post Editor */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenDirectEditor) onOpenDirectEditor();
+                  else if (onOpenAdmin) onOpenAdmin();
+                }}
+                className="bg-[#ab1616] hover:bg-red-700 text-white font-black text-xs px-2.5 py-1 rounded flex items-center gap-1 shadow-2xs cursor-pointer transition-colors"
+                title="डायरेक्ट पोस्ट एडिटर खोलें"
+              >
+                <span>⚡</span>
+                <span>डायरेक्ट पोस्ट एडिटर</span>
+              </button>
+
+              {/* 2. Add New Section */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenDirectEditor) onOpenDirectEditor();
+                  else if (onOpenAdmin) onOpenAdmin();
+                }}
+                className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs px-2.5 py-1 rounded flex items-center gap-1 shadow-2xs cursor-pointer transition-colors"
+                title="नया सेक्शन या लिंक जोड़ें"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ नया सेक्शन जोड़ें</span>
+              </button>
+
+              {/* 3. Delete Post - Only Admin */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenDirectEditor) onOpenDirectEditor();
+                  else if (onOpenAdmin) onOpenAdmin();
+                }}
+                className="bg-red-950 hover:bg-red-900 text-red-200 hover:text-white border border-red-700 font-bold text-xs px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer transition-colors"
+                title="डिलीट करें (केवल व्यवस्थापक / Admin Only)"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                <span>डिलीट (Only Admin)</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Alert Toast Feedback */}
         {alertFeedback && (
@@ -690,113 +835,89 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             {!isInformationalPost && (
               <>
                 {/* Horizontal Side-by-Side 2-Column Table for Important Dates & Application Fee */}
-                <div className="border border-slate-400 bg-white grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-400 text-[11.5pt] shadow-2xs">
-                  
-                  {/* Left Column: Important Dates */}
-                  <div className="p-4 sm:p-6 space-y-3">
-                    <h3 
-                      className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
-                      style={{ color: '#008000' }}
-                    >
-                      Important Dates
-                    </h3>
-                    <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
-                      {getProcessedImportantDates(post).map((d, idx) => (
-                        <li key={idx} className="leading-snug">
-                          <span className="text-slate-800 font-medium">• {d.label} : </span>
-                          <span className={d.isHighlight ? 'text-[#ff0000] font-bold' : 'text-slate-900 font-bold'}>
-                            {d.value}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                {!hiddenSections['sec_dates_fee'] ? (
+                  <div className="border border-slate-400 bg-white text-[11.5pt] shadow-2xs overflow-hidden">
+                    <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-300 flex items-center justify-between flex-wrap gap-2 text-xs font-bold text-slate-800 font-sans">
+                      <span>📍 Important Dates & Application Fee Section</span>
+                      {renderSectionControls('sec_dates_fee', 'Important Dates & Fee')}
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-400">
+                      {/* Left Column: Important Dates */}
+                      <div className="p-4 sm:p-6 space-y-3">
+                        <h3 
+                          className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
+                          style={{ color: '#008000' }}
+                        >
+                          Important Dates
+                        </h3>
+                        <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
+                          {getProcessedImportantDates(post).map((d, idx) => (
+                            <li key={idx} className="leading-snug">
+                              <span className="text-slate-800 font-medium">• {d.label} : </span>
+                              <span className={d.isHighlight ? 'text-[#ff0000] font-bold' : 'text-slate-900 font-bold'}>
+                                {d.value}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                  {/* Right Column: Application Fee */}
-                  <div className="p-4 sm:p-6 space-y-3">
-                    <h3 
-                      className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
-                      style={{ color: '#008000' }}
-                    >
-                      Application Fee
-                    </h3>
-                    <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
-                      {post.applicationFee.length > 0 ? (
-                        post.applicationFee.map((fee, idx) => (
-                          <li key={idx} className="leading-snug">
-                            <span className="text-slate-800 font-medium">• {fee.category} : </span>
-                            <span className="text-slate-900 font-bold">{fee.amount}</span>
+                      {/* Right Column: Application Fee */}
+                      <div className="p-4 sm:p-6 space-y-3">
+                        <h3 
+                          className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
+                          style={{ color: '#008000' }}
+                        >
+                          Application Fee
+                        </h3>
+                        <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
+                          {post.applicationFee.length > 0 ? (
+                            post.applicationFee.map((fee, idx) => (
+                              <li key={idx} className="leading-snug">
+                                <span className="text-slate-800 font-medium">• {fee.category} : </span>
+                                <span className="text-slate-900 font-bold">{fee.amount}</span>
+                              </li>
+                            ))
+                          ) : (
+                            <li className="text-slate-600 italic leading-snug">• No Application Fee</li>
+                          )}
+                          <li className="leading-snug text-slate-700 pt-1.5 border-t border-slate-100 mt-2">
+                            • Pay the Examination Fee Through Debit Card, Credit Card, Net Banking or UPI Mode Only.
                           </li>
-                        ))
-                      ) : (
-                        <li className="text-slate-600 italic leading-snug">• No Application Fee</li>
-                      )}
-                      <li className="leading-snug text-slate-700 pt-1.5 border-t border-slate-100 mt-2">
-                        • Pay the Examination Fee Through Debit Card, Credit Card, Net Banking or UPI Mode Only.
-                      </li>
-                    </ul>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : renderHiddenBanner('sec_dates_fee', 'Important Dates & Fee')}
 
                 {/* Age Limit Box */}
                 {!isServiceOrScheme && post.ageLimit.asOnDate && (
-                  <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs text-center">
-                    <h3 className="font-black text-[14pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 font-sans">
-                      <span style={{ color: '#008000' }}>{post.shortTitle} Notification 2026 : </span>
-                      <span style={{ color: '#ff00ff' }}>Age Limit as on {post.ageLimit.asOnDate}</span>
-                    </h3>
-                    <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[11.5pt] text-left max-w-2xl mx-auto">
-                      {post.ageLimit.minAge && (
-                        <li>• Minimum Age : <strong className="font-bold text-slate-900">{post.ageLimit.minAge} Years.</strong></li>
-                      )}
-                      {post.ageLimit.maxAge && (
-                        <li>• Maximum Age : <strong className="font-bold text-slate-900">{post.ageLimit.maxAge} Years.</strong></li>
-                      )}
-                      {post.ageLimit.notes ? (
-                        <li className="text-slate-700">• {post.ageLimit.notes}</li>
-                      ) : (
-                        <li className="text-slate-700">• Age Relaxation Extra as per {post.department} {post.shortTitle} Recruitment Rules.</li>
-                      )}
-                    </ul>
-                  </div>
+                  !hiddenSections['sec_age_limit'] ? (
+                    <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs text-center">
+                      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2.5">
+                        <h3 className="font-black text-[14pt] sm:text-[16pt] font-sans">
+                          <span style={{ color: '#008000' }}>{post.shortTitle} Notification 2026 : </span>
+                          <span style={{ color: '#ff00ff' }}>Age Limit as on {post.ageLimit.asOnDate}</span>
+                        </h3>
+                        {renderSectionControls('sec_age_limit', 'Age Limit Box')}
+                      </div>
+                      <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[11.5pt] text-left max-w-2xl mx-auto">
+                        {post.ageLimit.minAge && (
+                          <li>• Minimum Age : <strong className="font-bold text-slate-900">{post.ageLimit.minAge} Years.</strong></li>
+                        )}
+                        {post.ageLimit.maxAge && (
+                          <li>• Maximum Age : <strong className="font-bold text-slate-900">{post.ageLimit.maxAge} Years.</strong></li>
+                        )}
+                        {post.ageLimit.notes ? (
+                          <li className="text-slate-700">• {post.ageLimit.notes}</li>
+                        ) : (
+                          <li className="text-slate-700">• Age Relaxation Extra as per {post.department} {post.shortTitle} Recruitment Rules.</li>
+                        )}
+                      </ul>
+                    </div>
+                  ) : renderHiddenBanner('sec_age_limit', 'Age Limit Box')
                 )}
 
-                {/* Category-Wise Age Relaxation Rule Table (Only for Latest Jobs, Result, Admit Card, Answer Key) */}
-                {showRecruitmentDetails && !isServiceOrScheme && post.ageLimit.asOnDate && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                      {post.shortTitle} Category-Wise Age Relaxation Rules
-                    </div>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse">
-                        <thead>
-                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
-                            <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/2">Reserved Category</th>
-                            <th className="p-3 sm:p-3.5">Age Relaxation Permissible (Upper Limit)</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-300 text-slate-800 text-[11.5pt]">
-                          <tr className="hover:bg-slate-50/50">
-                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• OBC (Other Backward Classes)</td>
-                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">03 Years Extra</td>
-                          </tr>
-                          <tr className="hover:bg-slate-50/50">
-                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• SC / ST (Scheduled Castes / Scheduled Tribes)</td>
-                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">05 Years Extra</td>
-                          </tr>
-                          <tr className="hover:bg-slate-50/50">
-                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• PwD (Persons with Benchmark Disabilities)</td>
-                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">10 Years Extra</td>
-                          </tr>
-                          <tr className="hover:bg-slate-50/50">
-                            <td className="p-3 sm:p-3.5 border-r border-slate-400 font-semibold">• Ex-Servicemen (ESM)</td>
-                            <td className="p-3 sm:p-3.5 font-bold text-slate-900">03 Years after military service deduction</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
 
                 {/* Vacancy Details Table */}
                 {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
@@ -1156,169 +1277,118 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </div>
 
 
-            {/* All RRB Bharti Region-Wise Important Section */}
-            {isRailwayPost && (
-              <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                <div className="bg-[#16a34a] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide text-center flex items-center justify-center gap-2">
-                  <span>🚆</span>
-                  <span>All RRB Bharti Region Wise Official Portal & Links (सभी 21 रेलवे भर्ती बोर्ड)</span>
-                </div>
-                <div className="bg-emerald-50 px-5 py-3 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                  <div className="text-xs sm:text-sm text-emerald-950 font-bold">
-                    भारतीय रेलवे (Indian Railways) के सभी 21 भर्ती बोर्ड के आधिकारिक रीजनल पोर्टल एवं ऑनलाइन लिंक्स:
-                  </div>
-                  <div className="w-full sm:w-64">
-                    <input
-                      type="text"
-                      value={rrbSearch}
-                      onChange={(e) => setRrbSearch(e.target.value)}
-                      placeholder="Search RRB (e.g. Ajmer, Patna, Mumbai)..."
-                      className="w-full px-3 py-1.5 border border-slate-300 rounded text-xs bg-white text-slate-800 font-medium focus:outline-none focus:border-red-600"
-                    />
-                  </div>
-                </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse text-[11pt] sm:text-[12pt]">
-                    <thead>
-                      <tr className="bg-slate-100 border-b border-slate-300 text-slate-900 font-black">
-                        <th className="p-3 sm:p-3.5 border-r border-slate-300">RRB Name (रेलवे भर्ती बोर्ड)</th>
-                        <th className="p-3 sm:p-3.5 border-r border-slate-300">Railway Zone / Region</th>
-                        <th className="p-3 sm:p-3.5 border-r border-slate-300 text-center">Official Website</th>
-                        <th className="p-3 sm:p-3.5 text-center">Direct Apply / Link</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-200">
-                      {filteredRrbBoards.map((rrb, idx) => (
-                        <tr key={idx} className="hover:bg-amber-50/50 transition-colors">
-                          <td className="p-3 sm:p-3.5 border-r border-slate-300 font-bold text-blue-900">
-                            <div>• {rrb.name}</div>
-                            <div className="text-[10pt] text-slate-500 font-normal">{rrb.hindiName}</div>
-                          </td>
-                          <td className="p-3 sm:p-3.5 border-r border-slate-300 text-slate-700 font-medium text-[11pt]">
-                            {rrb.zone}
-                          </td>
-                          <td className="p-3 sm:p-3.5 border-r border-slate-300 text-center">
-                            <a
-                              href={rrb.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[#0000cc] hover:underline font-bold inline-flex items-center gap-1 text-[11pt]"
-                            >
-                              <span>Website</span>
-                              <ExternalLink className="w-3 h-3" />
-                            </a>
-                          </td>
-                          <td className="p-3 sm:p-3.5 text-center">
-                            <a
-                              href={rrb.applyUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold px-3.5 py-1.5 rounded-xs text-xs inline-flex items-center gap-1 shadow-2xs transition-colors"
-                            >
-                              <span>Click Here</span>
-                              <ExternalLink className="w-3 h-3" />
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                      {filteredRrbBoards.length === 0 && (
-                        <tr>
-                          <td colSpan={4} className="p-6 text-center text-slate-500 font-medium">
-                            No RRB Board found matching "{rrbSearch}". Please check the spelling.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+
+            {/* Frequently Asked Questions (FAQ) Section - Placed JUST BELOW Important Links */}
+            {faqs.length > 0 && (
+              !hiddenSections['sec_faqs'] ? (
+                <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
+                  <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                    <span>Frequently Asked Questions (FAQ) – {post.shortTitle}</span>
+                    {renderSectionControls('sec_faqs', 'FAQs')}
+                  </div>
+                  <div className="p-4 sm:p-7 divide-y divide-slate-200 space-y-4">
+                    {faqs.map((faq, idx) => (
+                      <div key={idx} className="pt-4 first:pt-0 space-y-1.5">
+                        <h5 
+                          className="font-bold text-[13pt] sm:text-[14pt] leading-snug flex items-start gap-1.5 font-sans"
+                          style={{ color: idx % 2 === 0 ? '#ff00ff' : '#008000' }}
+                        >
+                          <span>Q.{idx + 1} : </span>
+                          <span>{faq.question}</span>
+                        </h5>
+                        <div className="text-slate-800 text-[11.5pt] pl-4 sm:pl-6 leading-relaxed font-sans">
+                          <span className="text-slate-900 font-bold text-[11.5pt] mr-1">Ans.</span> 
+                          <span>{faq.answer}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : renderHiddenBanner('sec_faqs', 'FAQs')
             )}
 
-            {/* Related Posts Section - Vertical Card Stack matching Screenshot */}
-            {relatedPosts.length > 0 && (
-              <div className="border border-slate-300 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                <div className="bg-[#dc2626] text-white px-4 sm:px-5 py-3 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between">
-                  <span className="font-black tracking-wider text-[#ffffff]">
-                    RELATED POSTS & UPDATES
-                  </span>
-                  <span className="bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded capitalize font-sans">
-                    {getCategoryLabel(post.category)}
-                  </span>
-                </div>
-                <div className="divide-y divide-slate-200">
-                  {relatedPosts.map((related) => (
-                    <div 
-                      key={related.id} 
-                      className="p-4 sm:p-5 hover:bg-amber-50/40 transition-colors flex flex-col items-start gap-2.5 group cursor-pointer"
-                      onClick={() => {
+            {/* 1. Latest Jobs Section (Vertical Stack) */}
+            <div className="border border-slate-300 bg-white rounded-xs overflow-hidden shadow-2xs font-sans">
+              <div className="bg-[#1e3a8a] text-white px-4 sm:px-5 py-3 text-[14px] sm:text-[16px] font-black uppercase tracking-wide flex items-center justify-between">
+                <span>🔥 LATEST JOBS & NOTIFICATIONS</span>
+                <span className="text-xs bg-amber-400 text-slate-900 font-extrabold px-2 py-0.5 rounded uppercase">Latest Updates</span>
+              </div>
+              <div className="divide-y divide-slate-200">
+                {contextualLatestJobs.map((item) => (
+                  <div 
+                    key={item.id}
+                    onClick={() => onSelectPost && onSelectPost(item)}
+                    className="p-3.5 sm:p-4 hover:bg-slate-50 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
+                  >
+                    <div className="space-y-1">
+                      <div className="text-[#0000cc] group-hover:text-red-700 font-bold text-[14px] sm:text-[16px] leading-snug">
+                        • {item.title}
+                      </div>
+                      <div className="text-xs text-slate-500 font-medium flex items-center gap-2">
+                        <span>{item.department || 'Government Job'}</span>
+                        {item.lastDate && (
+                          <span>• Last Date: <strong className="text-slate-800">{item.lastDate}</strong></span>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onSelectPost) onSelectPost(item);
+                      }}
+                      className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold text-xs px-3 py-1.5 rounded flex items-center gap-1 shrink-0 cursor-pointer shadow-2xs"
+                    >
+                      <span>View</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 2. Recent Posts Section (Vertical Stack) */}
+            <div className="border border-slate-300 bg-white rounded-xs overflow-hidden shadow-2xs font-sans">
+              <div className="bg-[#ab1616] text-white px-4 sm:px-5 py-3 text-[14px] sm:text-[16px] font-black uppercase tracking-wide flex items-center justify-between">
+                <span>RELATED & RECENT POSTS</span>
+                <span className="text-xs bg-white/20 text-white font-bold px-2 py-0.5 rounded capitalize font-sans">
+                  {getCategoryLabel(post.category)}
+                </span>
+              </div>
+              <div className="divide-y divide-slate-200">
+                {relatedPosts.slice(0, 3).map((related) => (
+                  <div 
+                    key={related.id}
+                    onClick={() => onSelectPost && onSelectPost(related)}
+                    className="p-3.5 sm:p-4 hover:bg-amber-50/40 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
+                  >
+                    <div className="space-y-1">
+                      <div className="text-[#0000cc] group-hover:text-red-700 font-bold text-[14px] sm:text-[16px] leading-snug">
+                        • {related.title}
+                      </div>
+                      <div className="text-xs text-slate-500 font-medium flex items-center gap-2">
+                        <span>{related.department || 'Other'}</span>
+                        {related.lastDate && (
+                          <span>• Last Date: <strong className="text-slate-800">{related.lastDate}</strong></span>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
                         if (onSelectPost) onSelectPost(related);
                       }}
+                      className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold text-xs px-3 py-1.5 rounded flex items-center gap-1 shrink-0 cursor-pointer shadow-2xs"
                     >
-                      {/* Row 1: Category / Department Badge, NEW Badge, Last Date */}
-                      <div className="flex items-center gap-2 flex-wrap text-xs font-sans">
-                        <span className="bg-slate-100 text-slate-800 font-bold px-2.5 py-0.5 rounded border border-slate-200">
-                          {related.department || 'Other'}
-                        </span>
-                        {related.isNew !== false && (
-                          <span className="bg-red-600 text-white font-extrabold px-1.5 py-0.5 rounded uppercase">
-                            NEW
-                          </span>
-                        )}
-                        {related.lastDate && (
-                          <span className="text-slate-700 font-semibold">
-                            Last Date: <strong className="text-slate-900">{related.lastDate}</strong>
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Row 2: Title with bullet */}
-                      <h4 className="font-bold text-sm sm:text-base text-blue-900 group-hover:text-[#dc2626] group-hover:underline transition-colors leading-snug font-sans">
-                        • {related.title}
-                      </h4>
-
-                      {/* Row 3: Blue View Details Button stacked vertically below title */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (onSelectPost) onSelectPost(related);
-                        }}
-                        className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 bg-[#1432c7] hover:bg-blue-800 text-white font-bold rounded-xs text-xs sm:text-sm shadow-2xs cursor-pointer shrink-0 transition-colors mt-0.5"
-                      >
-                        <span>View Details</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+                      <span>View</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
               </div>
-            )}
-
-            {/* Frequently Asked Questions (FAQ) Section - Matching Official Sarkari Result Layout */}
-            {faqs.length > 0 && (
-              <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                  Frequently Asked Questions (FAQ) – {post.shortTitle}
-                </div>
-                <div className="p-4 sm:p-7 divide-y divide-slate-200 space-y-4">
-                  {faqs.map((faq, idx) => (
-                    <div key={idx} className="pt-4 first:pt-0 space-y-1.5">
-                      <h5 
-                        className="font-bold text-[13pt] sm:text-[14pt] leading-snug flex items-start gap-1.5 font-sans"
-                        style={{ color: idx % 2 === 0 ? '#ff00ff' : '#008000' }}
-                      >
-                        <span>Q.{idx + 1} : </span>
-                        <span>{faq.question}</span>
-                      </h5>
-                      <div className="text-slate-800 text-[11.5pt] pl-4 sm:pl-6 leading-relaxed font-sans">
-                        <span className="text-slate-900 font-bold text-[11.5pt] mr-1">Ans.</span> 
-                        <span>{faq.answer}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </article>
       </div>

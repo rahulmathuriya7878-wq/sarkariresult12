@@ -455,8 +455,8 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
           onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
           isHindi={isHindi}
-          onSelectPost={handleOpenPostFullPage}
           onOpenAdmin={() => setIsAdminOpen(true)}
+          onOpenDirectEditor={() => setIsAdminOpen(true)}
         />
       ) : (
         /* Home Main View */
@@ -639,6 +639,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onDeletePost={handleDeletePost}
           onResetToDefault={handleResetToDefault}
           onSelectPost={handleOpenPostFullPage}
+          initialPostToEdit={selectedPost}
           isHindi={isHindi}
         />
       )}

@@ -1,7 +1,82 @@
 import { SarkariPost } from '../types/job';
 import { screenshotResultPosts, screenshotLatestJobPosts } from './screenshotPosts';
 
+export const upscCdsResultPost: SarkariPost = {
+  id: 'res-upsc-cds-ii-2026',
+  slug: 'upsc-cds-ii-result-2026',
+  title: 'UPSC Combined Defence Services CDS II Exam 2026 Written Result with Name & Roll No List Out',
+  shortTitle: 'UPSC CDS II Result 2026',
+  hindiTitle: 'यूपीएससी सीडीएस-2 लिखित परीक्षा परिणाम 2026 जारी',
+  category: 'result',
+  department: 'UPSC',
+  qualifications: ['Graduate'],
+  state: 'All India',
+  postDate: '24 October 2026 | 08:40 PM',
+  notificationNumber: 'UPSC CDS II / 2026 Written Result',
+  totalVacancies: '459 Posts',
+  isHot: true,
+  isNew: true,
+  resultDate: '24/10/2026',
+  salary: '₹ 56,100 - ₹ 1,77,500/- (Pay Level 10 Lieutenant On Commissioning)',
+  salaryBand: 'Above 1 Lakh',
+  shortInfo: 'Union Public Service Commission (UPSC) has officially declared the Written Examination Result for Combined Defence Services Examination (II) 2026 on 24 October 2026. Candidates who appeared for Indian Military Academy (IMA), Indian Naval Academy (INA), Air Force Academy (AFA), and Officers Training Academy (OTA) can download their Roll Number & Name List PDF here.',
+  applicationFee: [
+    { category: 'General / OBC', amount: '₹ 200/-' },
+    { category: 'SC / ST / Female', amount: '₹ 0/- (Exempted)' }
+  ],
+  feePaymentMode: 'Online via Net Banking, Debit / Credit Card or State Bank UPI Payment Gateway.',
+  ageLimit: {
+    asOnDate: '01/07/2026',
+    minAge: 19,
+    maxAge: 25,
+    notes: 'For IMA & INA: Born not earlier than 2nd July 2003 and not later than 1st July 2008. For AFA: 20 to 24 Years as on 1st July 2026.'
+  },
+  importantDates: [
+    { label: 'Application Begin', value: '15/05/2026' },
+    { label: 'Last Date for Apply Online', value: '04/06/2026' },
+    { label: 'Written Exam Date', value: '01/09/2026' },
+    { label: 'Written Result Declared Date', value: '24/10/2026', isHighlight: true },
+    { label: 'SSB Interview Dates', value: 'November - December 2026', isHighlight: true },
+    { label: 'Final Merit List', value: 'To be notified', isHighlight: true }
+  ],
+  vacancyBreakdown: [
+    { postName: 'Indian Military Academy (IMA), Dehradun', totalPosts: '100 Posts', eligibility: 'Passed / Appearing Bachelor Degree in Any Stream from Any Recognized University in India.' },
+    { postName: 'Indian Naval Academy (INA), Ezhimala', totalPosts: '32 Posts', eligibility: 'Passed / Appearing Bachelor Degree in Engineering (B.E / B.Tech) from Any Recognized University.' },
+    { postName: 'Air Force Academy (AFA), Hyderabad', totalPosts: '32 Posts', eligibility: 'Bachelor Degree in Any Stream with Physics & Mathematics at 10+2 Level OR Bachelor of Engineering.' },
+    { postName: 'Officers Training Academy (OTA) Men, Chennai', totalPosts: '276 Posts', eligibility: 'Passed / Appearing Bachelor Degree in Any Stream from Any Recognized University.' },
+    { postName: 'Officers Training Academy (OTA) Women, Chennai', totalPosts: '19 Posts', eligibility: 'Passed / Appearing Bachelor Degree in Any Stream for Unmarried Women candidates.' }
+  ],
+  paperPattern: {
+    examName: 'UPSC CDS II Written Examination & SSB Interview Pattern',
+    examMode: 'Offline OMR Pen & Paper Mode',
+    totalQuestions: '300 Questions',
+    totalMarks: '300 Marks (IMA/INA/AFA) / 200 Marks (OTA)',
+    totalDuration: '2 Hours per Paper',
+    negativeMarking: '1/3rd (0.33 Marks Deduction for Each Wrong Answer)',
+    subjects: [
+      { subjectName: 'English Language', totalQuestions: 100, totalMarks: 100, duration: '2 Hours' },
+      { subjectName: 'General Knowledge', totalQuestions: 100, totalMarks: 100, duration: '2 Hours' },
+      { subjectName: 'Elementary Mathematics (Except OTA)', totalQuestions: 100, totalMarks: 100, duration: '2 Hours' },
+      { subjectName: 'SSB Intelligence & Personality Test', totalQuestions: 'Stage I & II', totalMarks: 300, duration: '5 Days' }
+    ]
+  },
+  howToApplySteps: [
+    'Visit UPSC official portal upsc.gov.in or upsconline.nic.in.',
+    'Click on "Written Result: Combined Defence Services Examination (II), 2026".',
+    'Open and download the Written Result PDF containing Qualified Candidates Roll Numbers & Names.',
+    'Press Ctrl + F and enter your Roll Number or Name to search your result status.',
+    'Candidates who qualified the written exam must register on Join Indian Army website joinindianarmy.nic.in within 2 weeks for SSB Interview call letter and center allocation.'
+  ],
+  directLinks: [
+    { label: 'Download Written Result (Roll No Wise PDF)', actionText: 'Click Here', type: 'result', isPrimary: true, url: 'https://upsc.gov.in/sites/default/files/WR-CDS-II-2026-Roll-List.pdf' },
+    { label: 'Download Written Result (Name Wise List)', actionText: 'Click Here', type: 'result', url: 'https://upsc.gov.in/sites/default/files/WR-CDS-II-2026-Name-List.pdf' },
+    { label: 'Download Official Cutoff Marks Notice', actionText: 'Click Here', type: 'result', url: 'https://upsc.gov.in/' },
+    { label: 'UPSC Official Website', actionText: 'upsc.gov.in', type: 'official', url: 'https://upsc.gov.in/' }
+  ]
+};
+
 export const mockSarkariPosts: SarkariPost[] = [
+  upscCdsResultPost,
   ...screenshotResultPosts,
   ...screenshotLatestJobPosts,
   // --- RRB STATION MASTER RECRUITMENT 2026 (DOUBLE VERIFIED) ---
