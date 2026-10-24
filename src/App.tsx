@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { mockSarkariPosts } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
@@ -13,7 +13,6 @@ import { SarkariFooter } from './components/SarkariFooter';
 import { CategoryDetailView } from './components/CategoryDetailView';
 import { FullPagePostView } from './components/FullPagePostView';
 import { FloatingShareButton } from './components/FloatingShareButton';
-import { PostViewSkeleton, GridSectionSkeleton } from './components/Skeletons';
 
 import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
@@ -256,7 +255,7 @@ export default function App() {
     handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
-  }, [allPosts, selectedPost]);
+  }, [allPosts]);
 
   // Monitor status changes for saved post alerts ('Upcoming' -> 'Active')
   useEffect(() => {
@@ -447,20 +446,18 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
       {/* 2. Conditional Full Page View or Main Home Portal */}
       {selectedPost ? (
         /* Full Page View when clicking any link */
-        <Suspense fallback={<PostViewSkeleton />}>
-          <FullPagePostView
-            post={selectedPost}
-            allPosts={allPosts}
-            onBack={handleBackToHome}
-            isBookmarked={bookmarkedIds.includes(selectedPost.id)}
-            onToggleBookmark={handleToggleBookmark}
-            onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
-            onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
-            isHindi={isHindi}
-            onSelectPost={handleOpenPostFullPage}
-            onOpenAdmin={() => setIsAdminOpen(true)}
-          />
-        </Suspense>
+        <FullPagePostView
+          post={selectedPost}
+          allPosts={allPosts}
+          onBack={handleBackToHome}
+          isBookmarked={bookmarkedIds.includes(selectedPost.id)}
+          onToggleBookmark={handleToggleBookmark}
+          onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
+          onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
+          isHindi={isHindi}
+          onSelectPost={handleOpenPostFullPage}
+          onOpenAdmin={() => setIsAdminOpen(true)}
+        />
       ) : (
         /* Home Main View */
         <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-3">
@@ -493,24 +490,22 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
 
           {/* Dynamic Content: Drill-down Category view or Authentic 3-Column Tables */}
           {activeCategory !== 'all' ? (
-            <Suspense fallback={<GridSectionSkeleton />}>
-              <CategoryDetailView
-                category={activeCategory}
-                posts={categorySpecificPosts}
-                onSelectPost={handleOpenPostFullPage}
-                onBackToHome={() => {
-                  setActiveCategory('all');
-                  setSearchQuery('');
-                  setSelectedDept('All');
-                  setSelectedQual('All');
-                  setSelectedState('All States');
-                  setSelectedSalary('All');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                isHindi={isHindi}
-                visitedPostIds={visitedPostIds}
-              />
-            </Suspense>
+            <CategoryDetailView
+              category={activeCategory}
+              posts={categorySpecificPosts}
+              onSelectPost={handleOpenPostFullPage}
+              onBackToHome={() => {
+                setActiveCategory('all');
+                setSearchQuery('');
+                setSelectedDept('All');
+                setSelectedQual('All');
+                setSelectedState('All States');
+                setSelectedSalary('All');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              isHindi={isHindi}
+              visitedPostIds={visitedPostIds}
+            />
           ) : (
             <>
               {/* Primary Grid: Result | Latest Jobs / Admit Card (Authentic 2-Col Mobile & 3-Col Desktop) */}

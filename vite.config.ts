@@ -95,6 +95,12 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    build: {
+      chunkSizeWarningLimit: 3000,
+      target: 'esnext',
+      sourcemap: false,
+      minify: 'esbuild',
+    },
     server: {
       host: '0.0.0.0',
       port: 3000,

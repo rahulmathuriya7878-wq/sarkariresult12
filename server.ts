@@ -11,6 +11,10 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // High Capacity Body Parsers
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
   // Dynamic Sitemap XML Endpoint (serves real-time indexed active jobs, results, admissions)
   app.get(['/sitemap.xml', '/sitemap', '/api/sitemap', '/api/sitemap.xml'], (req, res) => {
     const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';

@@ -622,14 +622,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           </div>
 
           {/* Section Body Details */}
-          <div className="p-4 sm:p-7 md:p-9 space-y-6 sm:space-y-8 md:space-y-9 text-slate-900 text-[11.5pt] font-post">
+          <div className="p-4 sm:p-7 md:p-9 space-y-6 sm:space-y-8 md:space-y-9 text-slate-900 text-[10pt] font-post">
             
             {/* Center Header Details */}
             <div className="text-center py-4 border-b border-slate-200 space-y-1.5">
-              <h2 className="text-[#ff00ff] font-black text-[15pt] sm:text-[17pt] font-sans tracking-tight" style={{ color: '#ff00ff' }}>
+              <h1 className="text-[#ff00ff] font-black text-[11pt] font-sans tracking-tight" style={{ color: '#ff00ff' }}>
                 {getDepartmentHeader(post.department, post.title, isInformationalPost)}
-              </h2>
-              <h2 className="text-[#008000] font-black text-[15pt] sm:text-[17pt] font-sans leading-snug" style={{ color: '#008000' }}>
+              </h1>
+              <h2 className="text-[#008000] font-black text-[11pt] font-sans leading-snug" style={{ color: '#008000' }}>
                 {post.shortTitle || post.title}
               </h2>
             </div>
