@@ -371,8 +371,8 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-1 sm:p-4 overflow-y-auto">
-      <div className="bg-slate-50 w-full max-w-6xl h-[98vh] sm:h-[94vh] max-h-[98vh] sm:max-h-[94vh] rounded-md shadow-2xl border-2 border-slate-700 flex flex-col overflow-hidden relative text-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 overflow-y-auto">
+      <div className="bg-slate-50 w-full max-w-6xl h-full sm:h-[94vh] max-h-full sm:max-h-[94vh] rounded-none sm:rounded-md shadow-2xl border-0 sm:border-2 border-slate-700 flex flex-col overflow-hidden relative text-slate-800">
         
         {/* Toast Alert */}
         {toastMessage && (
@@ -2547,13 +2547,13 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 </div>
               </div>
 
-              {/* Bottom Actions Bar */}
-              <div className="border border-slate-300 pt-3 pb-3 px-4 flex items-center justify-between sticky bottom-0 bg-white rounded shadow-md z-20 mt-4 flex-wrap gap-2">
-                <div className="flex items-center gap-2">
+              {/* Bottom Actions Bar - Optimized for Mobile & Desktop */}
+              <div className="border border-slate-300 py-3 px-3 sm:px-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between sticky bottom-0 bg-white rounded-none sm:rounded shadow-lg z-20 mt-4 gap-2.5">
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
                   <button
                     type="button"
                     onClick={() => setEditingPost(null)}
-                    className="px-4 py-2 border border-slate-300 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
+                    className="flex-1 sm:flex-none px-4 py-2.5 sm:py-2 border border-slate-300 rounded text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer text-center"
                   >
                     Cancel & Discard
                   </button>
@@ -2561,22 +2561,22 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setPostToDelete(editingPost)}
-                      className="px-4 py-2 bg-red-50 hover:bg-red-600 hover:text-white text-red-700 border border-red-200 rounded text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
+                      className="flex-1 sm:flex-none px-3.5 py-2.5 sm:py-2 bg-red-50 hover:bg-red-600 hover:text-white text-red-700 border border-red-200 rounded text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer transition-colors shadow-2xs"
                       title="Permanently delete this post"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                      <span>Delete Post (यह पोस्ट हटाएं)</span>
+                      <span>Delete (हटाएं)</span>
                     </button>
                   )}
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-1.5 bg-[#ab1616] hover:bg-red-800 text-white font-black text-sm px-6 py-2.5 rounded shadow-md cursor-pointer transition-colors"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-[#ab1616] hover:bg-red-800 text-white font-black text-sm px-6 py-3 sm:py-2.5 rounded shadow-md cursor-pointer transition-colors"
                   >
                     <Save className="w-4 h-4" />
-                    <span>{isCreatingNew ? 'Save New Post' : 'Save Changes'}</span>
+                    <span>{isCreatingNew ? 'Save New Post (नई पोस्ट सेव करें)' : 'Save Changes (अपडेट सेव करें)'}</span>
                   </button>
                 </div>
               </div>
