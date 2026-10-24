@@ -603,7 +603,8 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
 • Typing Speed on Computer : 40 WPM.
 • Knowledge of Computer Operation with 5 Year Experience.
 • For More Eligibility Details Read the Notification.`,
-        modeOfSelection: 'Objective Type Written Test -> Shorthand (English) Test -> Typing Speed Test on Computer -> Personal Interview'
+        modeOfSelection: 'Objective Type Written Test -> Shorthand (English) Test -> Typing Speed Test on Computer -> Personal Interview',
+        categoryBreakdown: { gen: 10, obc: 5, ews: 2, sc: 2, st: 1 }
       }
     ],
     howToApplySteps: [

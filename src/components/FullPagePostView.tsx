@@ -299,14 +299,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
     const candidates = [...sameCat, ...sameDept];
 
-    if (candidates.length < 3) {
+    if (candidates.length < 5) {
       const remaining = allPosts.filter(
         (p) => p.id !== post.id && !candidates.some((c) => c.id === p.id)
       );
-      return [...candidates, ...remaining].slice(0, 3);
+      return [...candidates, ...remaining].slice(0, 5);
     }
 
-    return candidates.slice(0, 3);
+    return candidates.slice(0, 5);
   }, [allPosts, post]);
 
   useEffect(() => {
@@ -479,6 +479,17 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         return 'Recruitment updates';
     }
   };
+
+  const categoryBreakdowns = useMemo(() => {
+    if (!post.vacancyBreakdown || post.vacancyBreakdown.length === 0) return [];
+    return post.vacancyBreakdown.filter(
+      (v) =>
+        v.categoryBreakdown &&
+        Object.values(v.categoryBreakdown).some(
+          (val) => val !== undefined && val !== '' && val !== null && val !== '-'
+        )
+    );
+  }, [post.vacancyBreakdown]);
 
   return (
     <div 
@@ -815,6 +826,45 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                               <td className="p-3 sm:p-3.5 align-top text-slate-800 leading-relaxed whitespace-pre-line font-sans">
                                 {v.eligibility}
                               </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Category Wise Vacancy Details Table (Renders ONLY if categoryBreakdown data exists) */}
+                {categoryBreakdowns.length > 0 && (
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                    <div className="text-white px-4 py-2.5 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
+                      <span className="text-white">{post.shortTitle} Category Wise Vacancy Details</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-center border-collapse">
+                        <thead>
+                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400 text-left">Post Name</th>
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>UR / GEN</th>
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#008000' }}>EWS</th>
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#0000ff' }}>OBC</th>
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ab1616' }}>SC</th>
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#7e22ce' }}>ST</th>
+                            <th className="p-2.5 sm:p-3 font-bold">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-300 text-[10pt]">
+                          {categoryBreakdowns.map((v, idx) => (
+                            <tr key={idx} className="hover:bg-slate-50/50">
+                              <td className="p-2.5 sm:p-3 text-left font-bold text-blue-900 border-r border-slate-400">
+                                {v.postName}
+                              </td>
+                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.gen ?? '-'}</td>
+                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.ews ?? '-'}</td>
+                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.obc ?? '-'}</td>
+                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.sc ?? '-'}</td>
+                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.st ?? '-'}</td>
+                              <td className="p-2.5 sm:p-3 font-black text-slate-900">{v.totalPosts}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -1178,56 +1228,58 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </div>
             )}
 
-            {/* Related Posts Section - 3 Suggestions from Same Category or Department (JUST ABOVE FAQ) */}
+            {/* Related Posts Section - Vertical Card Stack matching Screenshot */}
             {relatedPosts.length > 0 && (
-              <div className="border border-slate-300 bg-white overflow-hidden text-[12pt] shadow-2xs">
-                <div className="bg-[#dc2626] text-white px-5 py-3 text-[16pt] font-black uppercase tracking-wide flex items-center justify-between">
-                  <span>
-                    {isHindi ? 'सम्बंधित रिक्तियां एवं अपडेट्स (Related Posts)' : 'Related Posts & Updates'}
+              <div className="border border-slate-300 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                <div className="bg-[#dc2626] text-white px-4 sm:px-5 py-3 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between">
+                  <span className="font-black tracking-wider text-[#ffffff]">
+                    RELATED POSTS & UPDATES
                   </span>
-                  <span className="text-[12pt] bg-white/20 px-2.5 py-0.5 rounded font-normal capitalize">
-                    {post.category.replace('_', ' ')}
+                  <span className="bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded capitalize font-sans">
+                    {getCategoryLabel(post.category)}
                   </span>
                 </div>
-                <div className="divide-y divide-slate-200 text-[12pt]">
+                <div className="divide-y divide-slate-200">
                   {relatedPosts.map((related) => (
                     <div 
                       key={related.id} 
-                      className="p-4 sm:p-5 hover:bg-amber-50/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 group cursor-pointer"
+                      className="p-4 sm:p-5 hover:bg-amber-50/40 transition-colors flex flex-col items-start gap-2.5 group cursor-pointer"
                       onClick={() => {
                         if (onSelectPost) onSelectPost(related);
                       }}
                     >
-                      <div className="space-y-2 flex-1">
-                        <div className="flex items-center gap-2.5 flex-wrap">
-                          <span className="text-[12pt] font-bold px-2.5 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-200">
-                            {related.department}
+                      {/* Row 1: Category / Department Badge, NEW Badge, Last Date */}
+                      <div className="flex items-center gap-2 flex-wrap text-xs font-sans">
+                        <span className="bg-slate-100 text-slate-800 font-bold px-2.5 py-0.5 rounded border border-slate-200">
+                          {related.department || 'Other'}
+                        </span>
+                        {related.isNew !== false && (
+                          <span className="bg-red-600 text-white font-extrabold px-1.5 py-0.5 rounded uppercase">
+                            NEW
                           </span>
-                          {related.isNew && (
-                            <span className="text-[12pt] font-extrabold px-1.5 py-0.5 bg-red-600 text-white rounded">
-                              NEW
-                            </span>
-                          )}
-                          {related.lastDate && (
-                            <span className="text-[12pt] text-slate-600">
-                              Last Date: <strong className="text-slate-900">{related.lastDate}</strong>
-                            </span>
-                          )}
-                        </div>
-                        <h4 className="font-bold text-[14pt] text-blue-900 group-hover:text-[#dc2626] group-hover:underline transition-colors leading-snug">
-                          • {related.title}
-                        </h4>
+                        )}
+                        {related.lastDate && (
+                          <span className="text-slate-700 font-semibold">
+                            Last Date: <strong className="text-slate-900">{related.lastDate}</strong>
+                          </span>
+                        )}
                       </div>
 
+                      {/* Row 2: Title with bullet */}
+                      <h4 className="font-bold text-sm sm:text-base text-blue-900 group-hover:text-[#dc2626] group-hover:underline transition-colors leading-snug font-sans">
+                        • {related.title}
+                      </h4>
+
+                      {/* Row 3: Blue View Details Button stacked vertically below title */}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           if (onSelectPost) onSelectPost(related);
                         }}
-                        className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2 bg-[#1432c7] hover:bg-blue-800 text-white font-bold rounded-xs text-[12pt] shadow-2xs cursor-pointer shrink-0 transition-colors self-start sm:self-auto"
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 bg-[#1432c7] hover:bg-blue-800 text-white font-bold rounded-xs text-xs sm:text-sm shadow-2xs cursor-pointer shrink-0 transition-colors mt-0.5"
                       >
                         <span>View Details</span>
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   ))}
