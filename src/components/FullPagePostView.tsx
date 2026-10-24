@@ -1081,29 +1081,36 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </a>
                 </div>
 
-                {/* Sarkari Result Official Channels Link (WhatsApp | Telegram) */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-2.5">
-                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
-                    • Join Sarkari Result Channel
+                {/* Join Official WhatsApp Channel Link */}
+                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
+                  <span className="font-bold text-[11pt] sm:text-[12pt]" style={{ color: '#ff00ff' }}>
+                    • Join Official WhatsApp Channel
                   </span>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <a
-                      href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1 bg-[#25D366] hover:bg-emerald-600 text-white font-bold rounded text-xs transition-colors"
-                    >
-                      WhatsApp
-                    </a>
-                    <a
-                      href="https://t.me/newsarkariresultt"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1 bg-[#229ED9] hover:bg-sky-600 text-white font-bold rounded text-xs transition-colors"
-                    >
-                      Telegram
-                    </a>
-                  </div>
+                  <a
+                    href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[10pt] sm:text-[11pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#25D366] hover:bg-emerald-600"
+                  >
+                    <span>Click Here</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
+                {/* Join Official Telegram Channel Link */}
+                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
+                  <span className="font-bold text-[11pt] sm:text-[12pt]" style={{ color: '#ff00ff' }}>
+                    • Join Official Telegram Channel
+                  </span>
+                  <a
+                    href="https://t.me/newsarkariresultt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[10pt] sm:text-[11pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#229ED9] hover:bg-sky-600"
+                  >
+                    <span>Click Here</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </div>
 
                 {/* Official Website Link */}
