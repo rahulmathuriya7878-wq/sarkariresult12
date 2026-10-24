@@ -118,7 +118,25 @@ export const Header: React.FC<HeaderProps> = ({
           LIVE UPDATES
         </span>
         <div className="overflow-hidden whitespace-nowrap w-full">
-          <div className="inline-block animate-marquee hover:[animation-play-state:paused] cursor-pointer">
+          <div className="inline-block animate-marquee cursor-pointer select-none">
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('upsc-cds-ii-result-2026')}>
+              🔥 UPSC CDS II Result 2026 Written Exam Declared - Click to Check Roll No List!
+            </span>
+            <span className="text-red-900 font-extrabold mx-2">★</span>
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('rrb-station-master-recruitment-2026')}>
+              ⚡ Railway RRB Station Master 994 Posts Online Form 2026 Active!
+            </span>
+            <span className="text-red-900 font-extrabold mx-2">★</span>
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('bpsc-school-teacher-tre-4-online-form-2026')}>
+              📢 BPSC School Teacher TRE 4.0 Form Open Now!
+            </span>
+            <span className="text-red-900 font-extrabold mx-2">★</span>
+            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('up-police-constable-final-result-2026')}>
+              🏆 UP Police Constable Final Result 2026 Declared!
+            </span>
+            <span className="text-red-900 font-extrabold mx-2">★</span>
+
+            {/* Repeat for seamless continuous scrolling */}
             <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('upsc-cds-ii-result-2026')}>
               🔥 UPSC CDS II Result 2026 Written Exam Declared - Click to Check Roll No List!
             </span>
