@@ -10,6 +10,10 @@ interface CategoryDetailViewProps {
   onBackToHome: () => void;
   isHindi: boolean;
   visitedPostIds?: Set<string>;
+  isGlobalWordEditActive?: boolean;
+  onUpdatePost?: (updatedPost: SarkariPost) => void;
+  onDeletePost?: (postId: string) => void;
+  onAddNewPost?: (category: PostCategory) => void;
 }
 
 const CATEGORY_TITLES: Record<PostCategory, { en: string; hi: string; subtitle: string }> = {
@@ -61,7 +65,11 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
   onSelectPost,
   onBackToHome,
   isHindi,
-  visitedPostIds = new Set()
+  visitedPostIds = new Set(),
+  isGlobalWordEditActive = false,
+  onUpdatePost,
+  onDeletePost,
+  onAddNewPost
 }) => {
   const [filterQuery, setFilterQuery] = useState('');
 
@@ -83,6 +91,26 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
 
   return (
     <div className="space-y-3 mb-8">
+      {/* Live Word Edit Indicator Banner inside Section */}
+      {isGlobalWordEditActive && (
+        <div className="bg-emerald-900 text-emerald-100 border-2 border-emerald-400 p-2.5 rounded-xs flex items-center justify-between gap-2 text-xs sm:text-sm font-bold shadow-md animate-pulse">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>🟢 वर्ड एडिट चालू है (LIVE) — इस सेक्शन में किसी भी शीर्षक पर क्लिक करके सीधा एडिट करें</span>
+          </div>
+          {onAddNewPost && (
+            <button
+              type="button"
+              onClick={() => onAddNewPost(category)}
+              className="bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black px-2.5 py-1 rounded text-xs cursor-pointer shadow-xs shrink-0 flex items-center gap-1"
+            >
+              <span>+</span>
+              <span>{category === 'important' ? 'नया महत्वपूर्ण लिंक जोड़ें' : 'नया पोस्ट जोड़ें'}</span>
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Breadcrumb Navigation & Back Button */}
       <div className="flex items-center justify-between gap-2 py-2 border-b border-slate-200">
         <button
@@ -140,8 +168,19 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
 
       {/* Clean Bulleted Posts Listing Matching Screenshot */}
       <div className="bg-white border-2 border-[#ab1616] rounded-xs overflow-hidden shadow-xs">
-        <div className="bg-[#ab1616] text-white py-2.5 px-4 font-black text-center font-serif uppercase text-lg sm:text-xl border-b border-red-950">
-          All {categoryMeta.en} – Sarkari Result
+        <div className="bg-[#ab1616] text-white py-2.5 px-4 font-black text-center font-serif uppercase text-lg sm:text-xl border-b border-red-950 flex items-center justify-between">
+          <span className="flex-1 text-center">All {categoryMeta.en} – Sarkari Result</span>
+          {isGlobalWordEditActive && onAddNewPost && (
+            <button
+              type="button"
+              onClick={() => onAddNewPost(category)}
+              className="text-xs bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer shrink-0 flex items-center gap-1"
+              title={category === 'important' ? "नया महत्वपूर्ण लिंक जोड़ें" : "इस सेक्शन में नया पोस्ट जोड़ें"}
+            >
+              <span>+</span>
+              <span>{category === 'important' ? 'महत्वपूर्ण लिंक जोड़ें' : 'जोड़ें'}</span>
+            </button>
+          )}
         </div>
 
         <ul className="divide-y divide-slate-100 p-2 sm:p-3 bg-white">
@@ -150,15 +189,87 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
             return (
               <li
                 key={post.id}
-                onClick={() => onSelectPost(post)}
-                className="py-2.5 px-2 hover:bg-red-50/60 transition-colors cursor-pointer flex items-start gap-2 group"
+                onClick={() => {
+                  if (!isGlobalWordEditActive) {
+                    onSelectPost(post);
+                  }
+                }}
+                className="py-2.5 px-2 hover:bg-red-50/60 transition-colors cursor-pointer flex items-start justify-between gap-2 group"
               >
-                <span className="text-slate-800 font-black text-lg leading-none shrink-0 mt-0.5">•</span>
-                <div className="flex-1 min-w-0">
-                  <span className={`font-extrabold text-[15px] sm:text-[17px] md:text-[18px] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
-                    {post.title}
-                  </span>
+                <div className="flex items-start gap-2 flex-1 min-w-0">
+                  <span className="text-slate-800 font-black text-lg leading-none shrink-0 mt-0.5">•</span>
+                  <div className="flex-1 min-w-0">
+                    {isGlobalWordEditActive ? (
+                      <span
+                        contentEditable
+                        suppressContentEditableWarning
+                        onBlur={(e) => {
+                          const updated = e.currentTarget.innerText.trim();
+                          if (updated && updated !== post.title && onUpdatePost) {
+                            onUpdatePost({
+                              ...post,
+                              title: updated,
+                              shortTitle: updated
+                            });
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="font-extrabold text-[15px] sm:text-[17px] md:text-[18px] text-[#0000cc] underline leading-snug break-words block font-serif outline-none hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-1 border-b border-dashed border-amber-500 cursor-text"
+                        title="क्लिक करके पोस्ट का शीर्षक बदलें (Click to edit title)"
+                      >
+                        {post.title}
+                      </span>
+                    ) : (
+                      <span className={`font-extrabold text-[15px] sm:text-[17px] md:text-[18px] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
+                        {post.title}
+                      </span>
+                    )}
+
+                    {post.lastDate && (
+                      <div className="text-xs text-red-600 font-bold mt-1">
+                        <span>Last Date: </span>
+                        {isGlobalWordEditActive ? (
+                          <span
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => {
+                              const updated = e.currentTarget.innerText.trim();
+                              if (updated && updated !== post.lastDate && onUpdatePost) {
+                                onUpdatePost({
+                                  ...post,
+                                  lastDate: updated
+                                });
+                              }
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="outline-none hover:bg-amber-100 rounded px-1 border-b border-dashed border-amber-500 cursor-text"
+                            title="क्लिक करके अंतिम तिथि बदलें"
+                          >
+                            {post.lastDate}
+                          </span>
+                        ) : (
+                          <span>{post.lastDate}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
+
+                {isGlobalWordEditActive && onDeletePost && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm(`क्या आप वाकई "${post.shortTitle || post.title}" को डिलीट करना चाहते हैं?`)) {
+                        onDeletePost(post.id);
+                      }
+                    }}
+                    className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold shrink-0 mt-0.5"
+                    title="यह पोस्ट हटाएं"
+                  >
+                    ✕
+                  </button>
+                )}
               </li>
             );
           })}

@@ -2040,19 +2040,57 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                             />
                             <span>Primary Action</span>
                           </label>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditingPost({
-                                ...editingPost,
-                                directLinks: editingPost.directLinks.filter((_, i) => i !== idx)
-                              });
-                            }}
-                            className="text-red-600 hover:text-red-800 p-1 cursor-pointer"
-                            title="Delete link"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              disabled={idx === editingPost.directLinks.length - 1}
+                              onClick={() => {
+                                if (idx >= editingPost.directLinks.length - 1) return;
+                                const list = [...editingPost.directLinks];
+                                const temp = list[idx];
+                                list[idx] = list[idx + 1];
+                                list[idx + 1] = temp;
+                                setEditingPost({ ...editingPost, directLinks: list });
+                                showToast('लिंक नीचे कर दिया गया है (Link moved down)!');
+                              }}
+                              className="text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-950 px-2 py-1 rounded border border-amber-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-0.5"
+                              title="इस लिंक को नीचे करें (Move Link Down)"
+                            >
+                              <span>⬇️</span>
+                              <span>नीचे</span>
+                            </button>
+                            <button
+                              type="button"
+                              disabled={idx === 0}
+                              onClick={() => {
+                                if (idx === 0) return;
+                                const list = [...editingPost.directLinks];
+                                const temp = list[idx];
+                                list[idx] = list[idx - 1];
+                                list[idx - 1] = temp;
+                                setEditingPost({ ...editingPost, directLinks: list });
+                                showToast('लिंक ऊपर कर दिया गया है (Link moved up)!');
+                              }}
+                              className="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 px-2 py-1 rounded border border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-0.5"
+                              title="इस लिंक को ऊपर करें (Move Link Up)"
+                            >
+                              <span>⬆️</span>
+                              <span>ऊपर</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingPost({
+                                  ...editingPost,
+                                  directLinks: editingPost.directLinks.filter((_, i) => i !== idx)
+                                });
+                              }}
+                              className="text-red-600 hover:text-red-800 p-1 cursor-pointer"
+                              title="Delete link"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}

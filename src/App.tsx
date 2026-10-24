@@ -121,6 +121,27 @@ export default function App() {
   const [isBookmarksOpen, setIsBookmarksOpen] = useState<boolean>(false);
   const [isJobAlertsOpen, setIsJobAlertsOpen] = useState<boolean>(false);
 
+  // Global Live Word Edit State across the entire website and all sections
+  const [isGlobalWordEditActive, setIsGlobalWordEditActive] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('sarkari_global_word_edit') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleToggleGlobalWordEdit = () => {
+    setIsGlobalWordEditActive((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('sarkari_global_word_edit', String(next));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
+  };
+
   // Post Mutation Handlers for Admin Panel
   const handleAddPost = (newPost: SarkariPost) => {
     setAllPosts((prev) => [newPost, ...prev]);
@@ -410,6 +431,42 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
 
   return (
     <div className={`min-h-screen flex flex-col ${isClassicTheme ? 'bg-[#fffbf0]' : 'bg-slate-50'}`}>
+      {/* Global Live Word Edit Status & Control Bar */}
+      {isGlobalWordEditActive && (
+        <div className="bg-slate-950 text-amber-300 border-b-2 border-amber-400 py-2 px-3 sm:px-6 sticky top-0 z-50 flex items-center justify-between flex-wrap gap-2 text-xs sm:text-sm font-sans shadow-lg">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
+            <span className="bg-[#ab1616] text-white font-black text-[11px] px-2 py-0.5 rounded uppercase tracking-wider shadow-2xs">
+              LIVE
+            </span>
+            <span className="font-extrabold text-white text-sm">
+              वर्ड एडिट चालू है (LIVE)
+            </span>
+            <span className="text-amber-200 hidden md:inline font-medium">
+              — पूरी वेबसाइट, 8-बॉक्स हेडलाइट और सभी सेक्शन के किसी भी शब्द/शीर्षक पर क्लिक करके तुरंत एडिट करें!
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsAdminOpen(true)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded text-xs cursor-pointer shadow-xs"
+            >
+              + नया पोस्ट जोड़ें
+            </button>
+            <button
+              type="button"
+              onClick={handleToggleGlobalWordEdit}
+              className="bg-amber-400 hover:bg-yellow-300 text-slate-950 font-black px-3 py-1 rounded text-xs cursor-pointer shadow-xs transition-colors"
+              title="वर्ड एडिट मोड बंद करें"
+            >
+              ✕ एडिट मोड बंद करें
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 1. Header (Classic Sarkari Result Masthead, Black Menu Bar & Integrated Search) */}
       <Header
         activeCategory={activeCategory}
@@ -451,6 +508,8 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           allPosts={allPosts}
           onBack={handleBackToHome}
           onSelectPost={handleOpenPostFullPage}
+          onUpdatePost={handleUpdatePost}
+          onDeletePost={handleDeletePost}
           isBookmarked={bookmarkedIds.includes(selectedPost.id)}
           onToggleBookmark={handleToggleBookmark}
           onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
@@ -458,6 +517,8 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           isHindi={isHindi}
           onOpenAdmin={() => setIsAdminOpen(true)}
           onOpenDirectEditor={() => setIsAdminOpen(true)}
+          isGlobalWordEditActive={isGlobalWordEditActive}
+          onToggleGlobalWordEdit={handleToggleGlobalWordEdit}
         />
       ) : (
         /* Home Main View */
@@ -468,6 +529,8 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             onSelectHighlight={handleSelectSlug} 
             visitedPostIds={visitedPostIds}
             bookmarkedIds={bookmarkedIds}
+            isGlobalWordEditActive={isGlobalWordEditActive}
+            onUpdatePost={handleUpdatePost}
           />
 
           {/* Active Search / Filter Status Banner */}
@@ -506,6 +569,10 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
               }}
               isHindi={isHindi}
               visitedPostIds={visitedPostIds}
+              isGlobalWordEditActive={isGlobalWordEditActive}
+              onUpdatePost={handleUpdatePost}
+              onDeletePost={handleDeletePost}
+              onAddNewPost={() => setIsAdminOpen(true)}
             />
           ) : (
             <>
@@ -533,6 +600,10 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 isHindi={isHindi}
                 onOpenAppInfo={() => setIsJobAlertsOpen(true)}
                 visitedPostIds={visitedPostIds}
+                isGlobalWordEditActive={isGlobalWordEditActive}
+                onUpdatePost={handleUpdatePost}
+                onAddNewPost={() => setIsAdminOpen(true)}
+                onDeletePost={handleDeletePost}
               />
 
             </>
@@ -647,6 +718,22 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
 
       <FloatingShareButton currentPost={selectedPost} isHindi={isHindi} />
 
+      {/* Floating Live Word Edit Quick Toggle Pill (Accessible anywhere across the site) */}
+      <div className="fixed bottom-4 left-4 z-40">
+        <button
+          type="button"
+          onClick={handleToggleGlobalWordEdit}
+          className={`font-black text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-2xl flex items-center gap-2 cursor-pointer transition-all border ${
+            isGlobalWordEditActive
+              ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-300 ring-4 ring-emerald-300/40 animate-pulse'
+              : 'bg-slate-950 hover:bg-neutral-800 text-amber-300 border-amber-400 hover:scale-105'
+          }`}
+          title="पूरी वेबसाइट पर वर्ड एडिट चालू/बंद करें"
+        >
+          <span className={`w-2.5 h-2.5 rounded-full ${isGlobalWordEditActive ? 'bg-white animate-ping' : 'bg-emerald-400'}`}></span>
+          <span>{isGlobalWordEditActive ? '🟢 वर्ड एडिट चालू है (LIVE)' : '✏️ वर्ड एडिट चालू करें (LIVE)'}</span>
+        </button>
+      </div>
 
     </div>
   );

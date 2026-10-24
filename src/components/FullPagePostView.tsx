@@ -1,6 +1,50 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { SarkariPost } from '../types/job';
+import { SarkariPost, DirectLinkItem } from '../types/job';
 import { getProcessedImportantDates } from '../utils/dateUtils';
+
+export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => {
+  const existing: DirectLinkItem[] = post.directLinks && post.directLinks.length > 0 
+    ? post.directLinks.map(l => ({ ...l })) 
+    : [];
+  
+  if (existing.length === 0) {
+    if (post.category === 'result') {
+      existing.push({ label: 'Download Result / Score Card', actionText: 'Click Here', type: 'result', url: 'https://sarkariresult.com' });
+    } else if (post.category === 'admit_card') {
+      existing.push({ label: 'Download Admit Card / Hall Ticket', actionText: 'Click Here', type: 'admit_card', url: 'https://sarkariresult.com' });
+    } else if (post.category === 'answer_key') {
+      existing.push({ label: 'Download Answer Key & Solution Paper', actionText: 'Click Here', type: 'answer_key', url: 'https://sarkariresult.com' });
+    } else {
+      existing.push({ label: 'Apply Online', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult.com', isPrimary: true });
+    }
+    existing.push({ label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult.com' });
+    existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: 'https://sarkariresult.com' });
+  }
+
+  // Ensure WhatsApp & Telegram links are present
+  const hasWhatsapp = existing.some(l => l.label.toLowerCase().includes('whatsapp'));
+  const hasTelegram = existing.some(l => l.label.toLowerCase().includes('telegram'));
+
+  if (!hasWhatsapp) {
+    existing.push({
+      label: 'Join Official WhatsApp Channel',
+      actionText: 'Join WhatsApp',
+      type: 'official',
+      url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j'
+    });
+  }
+
+  if (!hasTelegram) {
+    existing.push({
+      label: 'Join Official Telegram Channel',
+      actionText: 'Join Telegram',
+      type: 'official',
+      url: 'https://t.me/newsarkariresultt'
+    });
+  }
+
+  return existing;
+};
 import { 
   ExternalLink, 
   ChevronRight,
@@ -29,6 +73,10 @@ interface FullPagePostViewProps {
   allPosts?: SarkariPost[];
   onOpenAdmin?: () => void;
   onOpenDirectEditor?: () => void;
+  onUpdatePost?: (updatedPost: SarkariPost) => void;
+  onDeletePost?: (postId: string) => void;
+  isGlobalWordEditActive?: boolean;
+  onToggleGlobalWordEdit?: () => void;
 }
 
 export interface PostFAQ {
@@ -224,9 +272,51 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   isHindi,
   allPosts = [],
   onOpenAdmin,
-  onOpenDirectEditor
+  onOpenDirectEditor,
+  onUpdatePost,
+  onDeletePost,
+  isGlobalWordEditActive = false,
+  onToggleGlobalWordEdit
 }) => {
-  const faqs = getPostFAQs(post);
+  // Direct In-Place Word & Section Edit Mode State
+  const [editablePost, setEditablePost] = useState<SarkariPost>(() => {
+    const processedDates = getProcessedImportantDates(post);
+    const processedLinks = getProcessedDirectLinks(post);
+    return {
+      ...post,
+      importantDates: post.importantDates && post.importantDates.length > 0 ? post.importantDates : processedDates,
+      directLinks: processedLinks,
+      customFaqs: post.customFaqs && post.customFaqs.length > 0 ? post.customFaqs : getPostFAQs(post)
+    };
+  });
+  const [isDirectEditMode, setIsDirectEditMode] = useState<boolean>(() => isGlobalWordEditActive);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
+
+  // Sync edit mode when global edit mode changes
+  useEffect(() => {
+    if (isGlobalWordEditActive !== undefined) {
+      setIsDirectEditMode(isGlobalWordEditActive);
+    }
+  }, [isGlobalWordEditActive]);
+
+  useEffect(() => {
+    const processedDates = getProcessedImportantDates(post);
+    const processedLinks = getProcessedDirectLinks(post);
+    setEditablePost({
+      ...post,
+      importantDates: post.importantDates && post.importantDates.length > 0 ? post.importantDates : processedDates,
+      directLinks: processedLinks,
+      customFaqs: post.customFaqs && post.customFaqs.length > 0 ? post.customFaqs : getPostFAQs(post)
+    });
+    setHasUnsavedChanges(false);
+  }, [post]);
+
+  const faqs = useMemo(() => {
+    if (editablePost.customFaqs && editablePost.customFaqs.length > 0) {
+      return editablePost.customFaqs;
+    }
+    return getPostFAQs(editablePost);
+  }, [editablePost]);
 
   const [isAlertActive, setIsAlertActive] = React.useState<boolean>(() => isPostAlertActive(post.id));
   const [isAlertModalOpen, setIsAlertModalOpen] = React.useState<boolean>(false);
@@ -237,6 +327,307 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     if (typeof window === 'undefined') return false;
     return sessionStorage.getItem('sarkari_admin_auth') === 'true';
   }, []);
+
+  // Save all in-place word & section updates
+  const handleSaveAllChanges = () => {
+    if (onUpdatePost) {
+      onUpdatePost(editablePost);
+    }
+    try {
+      const saved = localStorage.getItem('sarkari_admin_posts_v5');
+      let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
+      const idx = currentArr.findIndex(p => p.id === editablePost.id);
+      if (idx >= 0) {
+        currentArr[idx] = editablePost;
+      } else {
+        currentArr.push(editablePost);
+      }
+      localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
+      window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: currentArr }));
+    } catch (e) {
+      console.error(e);
+    }
+    setHasUnsavedChanges(false);
+    setAlertFeedback('✅ पोस्ट और सभी सेक्शन के शब्द तुरंत सेव हो गए हैं! (Changes Saved Successfully)');
+    setTimeout(() => setAlertFeedback(null), 4000);
+  };
+
+  // Reusable Word-by-Word In-Place Editable Component
+  const EditableText: React.FC<{
+    value: string | number | undefined;
+    onChange: (newVal: string) => void;
+    className?: string;
+    style?: React.CSSProperties;
+    as?: 'span' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'div' | 'p' | 'td';
+    placeholder?: string;
+    titlePrefix?: string;
+  }> = ({
+    value = '',
+    onChange,
+    className = '',
+    style,
+    as: Tag = 'span',
+    placeholder = '...',
+    titlePrefix = 'टेक्स्ट'
+  }) => {
+    const strVal = String(value ?? '');
+    if (!isDirectEditMode) {
+      return (
+        <Tag className={className} style={style}>
+          {strVal || placeholder}
+        </Tag>
+      );
+    }
+
+    return (
+      <Tag
+        contentEditable
+        suppressContentEditableWarning
+        style={style}
+        onBlur={(e) => {
+          const updated = e.currentTarget.innerText.trim();
+          if (updated !== strVal) {
+            onChange(updated);
+            setHasUnsavedChanges(true);
+          }
+        }}
+        className={`${className} outline-none cursor-text transition-all hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-0.5 border-b border-dashed border-amber-500 min-w-[20px] inline-block`}
+        title={`क्लिक करके ${titlePrefix} बदलें (Click to edit text)`}
+      >
+        {strVal || placeholder}
+      </Tag>
+    );
+  };
+
+  // Helper row actions for editing directly inside sections
+  const handleAddDateItem = () => {
+    setEditablePost(prev => ({
+      ...prev,
+      importantDates: [...(prev.importantDates || []), { label: 'New Date Label', value: 'DD/MM/2026' }]
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteDateItem = (index: number) => {
+    setEditablePost(prev => ({
+      ...prev,
+      importantDates: prev.importantDates.filter((_, i) => i !== index)
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleAddFeeItem = () => {
+    setEditablePost(prev => ({
+      ...prev,
+      applicationFee: [...(prev.applicationFee || []), { category: 'General / OBC / EWS', amount: '₹ 100/-' }]
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteFeeItem = (index: number) => {
+    setEditablePost(prev => ({
+      ...prev,
+      applicationFee: prev.applicationFee.filter((_, i) => i !== index)
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleAddVacancyRow = () => {
+    setEditablePost(prev => ({
+      ...prev,
+      vacancyBreakdown: [
+        ...(prev.vacancyBreakdown || []),
+        {
+          postName: 'New Recruitment Post Name',
+          totalPosts: '100',
+          eligibility: 'Bachelor Degree in Any Stream from Recognized University in India.'
+        }
+      ]
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteVacancyRow = (index: number) => {
+    setEditablePost(prev => ({
+      ...prev,
+      vacancyBreakdown: prev.vacancyBreakdown.filter((_, i) => i !== index)
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleAddSelectionStage = () => {
+    setEditablePost(prev => ({
+      ...prev,
+      selectionProcess: [...(prev.selectionProcess || []), 'Computer Based Examination / Interview Stage']
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteSelectionStage = (index: number) => {
+    setEditablePost(prev => ({
+      ...prev,
+      selectionProcess: (prev.selectionProcess || []).filter((_, i) => i !== index)
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleAddApplyStep = () => {
+    setEditablePost(prev => ({
+      ...prev,
+      howToApplySteps: [...(prev.howToApplySteps || []), 'Candidate must read notification thoroughly before applying.']
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteApplyStep = (index: number) => {
+    setEditablePost(prev => ({
+      ...prev,
+      howToApplySteps: prev.howToApplySteps.filter((_, i) => i !== index)
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleAddDirectLink = () => {
+    setEditablePost(prev => ({
+      ...prev,
+      directLinks: [
+        ...(prev.directLinks || []),
+        {
+          label: 'Direct Download Official Link',
+          actionText: 'Click Here',
+          type: 'official',
+          url: 'https://sarkariresult.com'
+        }
+      ]
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteDirectLink = (index: number) => {
+    setEditablePost(prev => ({
+      ...prev,
+      directLinks: prev.directLinks.filter((_, i) => i !== index)
+    }));
+    setHasUnsavedChanges(true);
+  };
+
+  // Move Important Link Down (नीचे करें)
+  const handleMoveDownDirectLink = (index: number) => {
+    const currentLinks = editablePost.directLinks || [];
+    if (index >= currentLinks.length - 1) return;
+    const nextList = [...currentLinks];
+    const temp = nextList[index];
+    nextList[index] = nextList[index + 1];
+    nextList[index + 1] = temp;
+    
+    const updatedPost = { ...editablePost, directLinks: nextList };
+    setEditablePost(updatedPost);
+    setHasUnsavedChanges(true);
+    
+    if (onUpdatePost) {
+      onUpdatePost(updatedPost);
+    }
+    try {
+      const saved = localStorage.getItem('sarkari_admin_posts_v5');
+      let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
+      const pIdx = currentArr.findIndex(p => p.id === updatedPost.id);
+      if (pIdx >= 0) {
+        currentArr[pIdx] = updatedPost;
+      } else {
+        currentArr.push(updatedPost);
+      }
+      localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
+      window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: currentArr }));
+    } catch (e) {
+      console.error(e);
+    }
+    setAlertFeedback(`⬇️ "${temp.label}" लिंक को नीचे कर दिया गया है!`);
+    setTimeout(() => setAlertFeedback(null), 3000);
+  };
+
+  // Move Important Link Up (ऊपर करें)
+  const handleMoveUpDirectLink = (index: number) => {
+    const currentLinks = editablePost.directLinks || [];
+    if (index <= 0) return;
+    const nextList = [...currentLinks];
+    const temp = nextList[index];
+    nextList[index] = nextList[index - 1];
+    nextList[index - 1] = temp;
+    
+    const updatedPost = { ...editablePost, directLinks: nextList };
+    setEditablePost(updatedPost);
+    setHasUnsavedChanges(true);
+    
+    if (onUpdatePost) {
+      onUpdatePost(updatedPost);
+    }
+    try {
+      const saved = localStorage.getItem('sarkari_admin_posts_v5');
+      let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
+      const pIdx = currentArr.findIndex(p => p.id === updatedPost.id);
+      if (pIdx >= 0) {
+        currentArr[pIdx] = updatedPost;
+      } else {
+        currentArr.push(updatedPost);
+      }
+      localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
+      window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: currentArr }));
+    } catch (e) {
+      console.error(e);
+    }
+    setAlertFeedback(`⬆️ "${temp.label}" लिंक को ऊपर कर दिया गया है!`);
+    setTimeout(() => setAlertFeedback(null), 3000);
+  };
+
+  // Delete Entire Post Handler for Word Editor
+  const handleDeleteCurrentPost = () => {
+    const postTitle = post.title || post.shortTitle;
+    if (confirm(`⚠️ क्या आप वाकई पूरी पोस्ट "${postTitle}" को डिलीट (Delete) करना चाहते हैं?\n\nयह पोस्ट वेबसाइट से पूरी तरह हट जाएगी।`)) {
+      if (onDeletePost) {
+        onDeletePost(post.id);
+      }
+      try {
+        const saved = localStorage.getItem('sarkari_admin_posts_v5');
+        if (saved) {
+          const parsed: SarkariPost[] = JSON.parse(saved);
+          const filtered = parsed.filter(p => p.id !== post.id);
+          localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(filtered));
+          window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: filtered }));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      onBack();
+    }
+  };
+
+  const handleAddFAQ = () => {
+    setEditablePost(prev => {
+      const currentList = prev.customFaqs || faqs || [];
+      return {
+        ...prev,
+        customFaqs: [
+          ...currentList,
+          {
+            question: `How to check ${prev.shortTitle || prev.title} latest status online?`,
+            answer: 'Candidates can visit Sarkari Result website and click on the direct official links provided in the Important Links table above.'
+          }
+        ]
+      };
+    });
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteFAQ = (index: number) => {
+    setEditablePost(prev => {
+      const currentList = prev.customFaqs || faqs || [];
+      return {
+        ...prev,
+        customFaqs: currentList.filter((_, i) => i !== index)
+      };
+    });
+    setHasUnsavedChanges(true);
+  };
 
   const renderSectionControls = (sectionId: string, sectionTitle: string) => {
     if (!isAdmin) return null;
@@ -623,6 +1014,64 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           </ol>
         </nav>
 
+        {/* Direct In-Place Click-to-Edit Mode Control Bar */}
+        <div className="mb-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 px-3.5 py-2.5 rounded shadow-xs border border-amber-600 flex flex-wrap items-center justify-between gap-2 font-sans">
+          <div className="flex items-center gap-2">
+            <span className="bg-slate-950 text-amber-300 font-extrabold text-xs px-2.5 py-1 rounded flex items-center gap-1.5 shadow-2xs">
+              <span className={`w-2.5 h-2.5 rounded-full ${isDirectEditMode ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'}`}></span>
+              {isDirectEditMode ? 'वर्ड एडिट चालू है (LIVE)' : 'डायरेक्ट वर्ड एडिट'}
+            </span>
+            <span className="text-xs sm:text-sm font-black text-slate-950">
+              {isDirectEditMode 
+                ? '⚡ पोस्ट के किसी भी शब्द, हेडिंग, तारीख, फीस या पद पर क्लिक करके सीधे टाइप करें!' 
+                : 'पेज पर सीधे क्लिक करके हर एक शब्द व सेक्शन एडिट करने के लिए मोड ऑन करें:'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                const nextState = !isDirectEditMode;
+                setIsDirectEditMode(nextState);
+                if (onToggleGlobalWordEdit) {
+                  onToggleGlobalWordEdit();
+                }
+              }}
+              className={`font-black text-xs px-3.5 py-1.5 rounded flex items-center gap-1.5 shadow-xs transition-all cursor-pointer ${
+                isDirectEditMode 
+                  ? 'bg-slate-950 text-amber-300 border border-amber-400 ring-2 ring-amber-300' 
+                  : 'bg-white hover:bg-slate-100 text-slate-950 border border-slate-300'
+              }`}
+            >
+              <span>{isDirectEditMode ? '✓ वर्ड एडिट सक्रिय (ON)' : '✏️ वर्ड एडिट चालू करें (Click to Edit)'}</span>
+            </button>
+
+            {hasUnsavedChanges && (
+              <button
+                type="button"
+                onClick={handleSaveAllChanges}
+                className="bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs px-3.5 py-1.5 rounded flex items-center gap-1.5 shadow-md animate-bounce cursor-pointer"
+              >
+                <span>💾 बदलाव सेव करें</span>
+              </button>
+            )}
+
+            {/* Word Editor Delete Post Option */}
+            {isDirectEditMode && (
+              <button
+                type="button"
+                onClick={handleDeleteCurrentPost}
+                className="bg-red-700 hover:bg-red-800 text-white font-black text-xs px-3 py-1.5 rounded flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer border border-red-900"
+                title="इस पूरी पोस्ट को हटाएं (Delete Post)"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>🗑️ पोस्ट Delete करें</span>
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Admin Mode Active Controls Bar - Only visible when Admin is authenticated */}
         {isAdmin && (
           <div className="mb-2.5 bg-slate-900 text-white px-3 py-2 rounded border-b-2 border-red-600 flex flex-wrap items-center justify-between gap-2 shadow-xs font-sans">
@@ -706,9 +1155,13 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       Name Of Post :
                     </td>
                     <td className="p-3 sm:p-4 align-top">
-                      <h1 className="text-[#ff0000] font-black text-[16pt] leading-snug tracking-tight font-serif">
-                        {post.title}
-                      </h1>
+                      <EditableText
+                        as="h1"
+                        value={editablePost.title}
+                        onChange={(val) => setEditablePost(prev => ({ ...prev, title: val }))}
+                        className="text-[#ff0000] font-black text-[16pt] leading-snug tracking-tight font-serif"
+                        titlePrefix="पोस्ट का शीर्षक (Title)"
+                      />
                     </td>
                   </tr>
 
@@ -718,7 +1171,13 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       Post Date / Update :
                     </td>
                     <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[12pt] align-top">
-                      <span>{post.postDate} | 08:40 PM</span>
+                      <EditableText
+                        value={editablePost.postDate}
+                        onChange={(val) => setEditablePost(prev => ({ ...prev, postDate: val }))}
+                        className="text-slate-900 font-semibold text-[12pt]"
+                        titlePrefix="पोस्ट की तिथि (Post Date)"
+                      />
+                      <span className="ml-1 text-slate-600 font-normal">| 08:40 PM</span>
                     </td>
                   </tr>
 
@@ -728,9 +1187,19 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       Short Information :
                     </td>
                     <td className="p-3 sm:p-4 text-slate-800 text-[12pt] leading-relaxed align-top">
-                      <div className="text-slate-900 text-[12pt] leading-relaxed font-sans">
-                        {renderFormattedShortInfo(post.shortInfo)}
-                      </div>
+                      {isDirectEditMode ? (
+                        <EditableText
+                          as="div"
+                          value={editablePost.shortInfo}
+                          onChange={(val) => setEditablePost(prev => ({ ...prev, shortInfo: val }))}
+                          className="text-slate-900 text-[12pt] leading-relaxed font-sans"
+                          titlePrefix="संक्षिप्त जानकारी (Short Info)"
+                        />
+                      ) : (
+                        <div className="text-slate-900 text-[12pt] leading-relaxed font-sans">
+                          {renderFormattedShortInfo(editablePost.shortInfo)}
+                        </div>
+                      )}
                     </td>
                   </tr>
                 </tbody>
@@ -851,15 +1320,58 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           Important Dates
                         </h3>
                         <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
-                          {getProcessedImportantDates(post).map((d, idx) => (
-                            <li key={idx} className="leading-snug">
-                              <span className="text-slate-800 font-medium">• {d.label} : </span>
-                              <span className={d.isHighlight ? 'text-[#ff0000] font-bold' : 'text-slate-900 font-bold'}>
-                                {d.value}
-                              </span>
+                          {(editablePost.importantDates || []).map((d, idx) => (
+                            <li key={idx} className="leading-snug flex items-center justify-between gap-2">
+                              <div>
+                                <span className="text-slate-800 font-medium">• </span>
+                                <EditableText
+                                  value={d.label}
+                                  onChange={(val) => {
+                                    setEditablePost(prev => {
+                                      const nextDates = [...prev.importantDates];
+                                      nextDates[idx] = { ...nextDates[idx], label: val };
+                                      return { ...prev, importantDates: nextDates };
+                                    });
+                                  }}
+                                  className="text-slate-800 font-medium"
+                                  titlePrefix="तारीख का नाम (Date Label)"
+                                />
+                                <span className="text-slate-800 font-medium"> : </span>
+                                <EditableText
+                                  value={d.value}
+                                  onChange={(val) => {
+                                    setEditablePost(prev => {
+                                      const nextDates = [...prev.importantDates];
+                                      nextDates[idx] = { ...nextDates[idx], value: val };
+                                      return { ...prev, importantDates: nextDates };
+                                    });
+                                  }}
+                                  className={d.isHighlight ? 'text-[#ff0000] font-bold' : 'text-slate-900 font-bold'}
+                                  titlePrefix="तारीख (Date Value)"
+                                />
+                              </div>
+                              {isDirectEditMode && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteDateItem(idx)}
+                                  className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                                  title="यह तारीख हटाएं"
+                                >
+                                  ✕ हटाएं
+                                </button>
+                              )}
                             </li>
                           ))}
                         </ul>
+                        {isDirectEditMode && (
+                          <button
+                            type="button"
+                            onClick={handleAddDateItem}
+                            className="mt-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>+ नई तारीख जोड़ें (Add Date)</span>
+                          </button>
+                        )}
                       </div>
 
                       {/* Right Column: Application Fee */}
@@ -871,11 +1383,47 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           Application Fee
                         </h3>
                         <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
-                          {post.applicationFee.length > 0 ? (
-                            post.applicationFee.map((fee, idx) => (
-                              <li key={idx} className="leading-snug">
-                                <span className="text-slate-800 font-medium">• {fee.category} : </span>
-                                <span className="text-slate-900 font-bold">{fee.amount}</span>
+                          {editablePost.applicationFee && editablePost.applicationFee.length > 0 ? (
+                            editablePost.applicationFee.map((fee, idx) => (
+                              <li key={idx} className="leading-snug flex items-center justify-between gap-2">
+                                <div>
+                                  <span className="text-slate-800 font-medium">• </span>
+                                  <EditableText
+                                    value={fee.category}
+                                    onChange={(val) => {
+                                      setEditablePost(prev => {
+                                        const nextFees = [...prev.applicationFee];
+                                        nextFees[idx] = { ...nextFees[idx], category: val };
+                                        return { ...prev, applicationFee: nextFees };
+                                      });
+                                    }}
+                                    className="text-slate-800 font-medium"
+                                    titlePrefix="शुल्क श्रेणी (Category)"
+                                  />
+                                  <span className="text-slate-800 font-medium"> : </span>
+                                  <EditableText
+                                    value={fee.amount}
+                                    onChange={(val) => {
+                                      setEditablePost(prev => {
+                                        const nextFees = [...prev.applicationFee];
+                                        nextFees[idx] = { ...nextFees[idx], amount: val };
+                                        return { ...prev, applicationFee: nextFees };
+                                      });
+                                    }}
+                                    className="text-slate-900 font-bold"
+                                    titlePrefix="शुल्क राशि (Amount)"
+                                  />
+                                </div>
+                                {isDirectEditMode && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFeeItem(idx)}
+                                    className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                                    title="यह फीस हटाएं"
+                                  >
+                                    ✕ हटाएं
+                                  </button>
+                                )}
                               </li>
                             ))
                           ) : (
@@ -885,34 +1433,69 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                             • Pay the Examination Fee Through Debit Card, Credit Card, Net Banking or UPI Mode Only.
                           </li>
                         </ul>
+                        {isDirectEditMode && (
+                          <button
+                            type="button"
+                            onClick={handleAddFeeItem}
+                            className="mt-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>+ नई फीस श्रेणी जोड़ें (Add Fee)</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
                 ) : renderHiddenBanner('sec_dates_fee', 'Important Dates & Fee')}
 
                 {/* Age Limit Box */}
-                {!isServiceOrScheme && post.ageLimit.asOnDate && (
+                {!isServiceOrScheme && editablePost.ageLimit.asOnDate && (
                   !hiddenSections['sec_age_limit'] ? (
                     <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs text-center">
                       <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2.5">
                         <h3 className="font-black text-[14pt] sm:text-[16pt] font-sans">
-                          <span style={{ color: '#008000' }}>{post.shortTitle} Notification 2026 : </span>
-                          <span style={{ color: '#ff00ff' }}>Age Limit as on {post.ageLimit.asOnDate}</span>
+                          <span style={{ color: '#008000' }}>{editablePost.shortTitle} Notification 2026 : </span>
+                          <span style={{ color: '#ff00ff' }}>
+                            Age Limit as on{' '}
+                            <EditableText
+                              value={editablePost.ageLimit.asOnDate}
+                              onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, asOnDate: val } }))}
+                              titlePrefix="आयु गणना तिथि (As On Date)"
+                            />
+                          </span>
                         </h3>
                         {renderSectionControls('sec_age_limit', 'Age Limit Box')}
                       </div>
                       <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[11.5pt] text-left max-w-2xl mx-auto">
-                        {post.ageLimit.minAge && (
-                          <li>• Minimum Age : <strong className="font-bold text-slate-900">{post.ageLimit.minAge} Years.</strong></li>
-                        )}
-                        {post.ageLimit.maxAge && (
-                          <li>• Maximum Age : <strong className="font-bold text-slate-900">{post.ageLimit.maxAge} Years.</strong></li>
-                        )}
-                        {post.ageLimit.notes ? (
-                          <li className="text-slate-700">• {post.ageLimit.notes}</li>
-                        ) : (
-                          <li className="text-slate-700">• Age Relaxation Extra as per {post.department} {post.shortTitle} Recruitment Rules.</li>
-                        )}
+                        <li>
+                          • Minimum Age :{' '}
+                          <strong className="font-bold text-slate-900">
+                            <EditableText
+                              value={editablePost.ageLimit.minAge}
+                              onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, minAge: Number(val) || undefined } }))}
+                              titlePrefix="न्यूनतम आयु (Min Age)"
+                            />
+                            {' '}Years.
+                          </strong>
+                        </li>
+                        <li>
+                          • Maximum Age :{' '}
+                          <strong className="font-bold text-slate-900">
+                            <EditableText
+                              value={editablePost.ageLimit.maxAge}
+                              onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, maxAge: Number(val) || undefined } }))}
+                              titlePrefix="अधिकतम आयु (Max Age)"
+                            />
+                            {' '}Years.
+                          </strong>
+                        </li>
+                        <li className="text-slate-700">
+                          •{' '}
+                          <EditableText
+                            value={editablePost.ageLimit.notes || `Age Relaxation Extra as per ${editablePost.department} ${editablePost.shortTitle} Recruitment Rules.`}
+                            onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, notes: val } }))}
+                            titlePrefix="आयु छूट नियम (Age Relaxation Notes)"
+                          />
+                        </li>
                       </ul>
                     </div>
                   ) : renderHiddenBanner('sec_age_limit', 'Age Limit Box')
@@ -920,11 +1503,18 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
 
                 {/* Vacancy Details Table */}
-                {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
+                {editablePost.vacancyBreakdown && editablePost.vacancyBreakdown.length > 0 && (
                   <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
                     <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                      <span className="text-white">{post.shortTitle} Recruitment 2026 : Vacancy Details Total </span>
-                      <span className="text-yellow-200">{post.totalVacancies} Post</span>
+                      <span className="text-white">{editablePost.shortTitle} Recruitment 2026 : Vacancy Details Total </span>
+                      <span className="text-yellow-200">
+                        <EditableText
+                          value={editablePost.totalVacancies}
+                          onChange={(val) => setEditablePost(prev => ({ ...prev, totalVacancies: val }))}
+                          titlePrefix="कुल पद (Total Vacancies)"
+                        />
+                        {' '}Post
+                      </span>
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse">
@@ -932,26 +1522,81 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
                             <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/4" style={{ color: '#ff00ff' }}>Post Name</th>
                             <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/6 text-center" style={{ color: '#008000' }}>Total Post</th>
-                            <th className="p-3 sm:p-3.5" style={{ color: '#008000' }}>{post.shortTitle} Eligibility Criteria</th>
+                            <th className="p-3 sm:p-3.5" style={{ color: '#008000' }}>{editablePost.shortTitle} Eligibility Criteria</th>
+                            {isDirectEditMode && <th className="p-3 text-center text-red-600">Action</th>}
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-300 text-[11.5pt]">
-                          {post.vacancyBreakdown.map((v, idx) => (
+                          {editablePost.vacancyBreakdown.map((v, idx) => (
                             <tr key={idx} className="hover:bg-slate-50/50">
                               <td className="p-3 sm:p-3.5 align-top font-bold text-blue-900 border-r border-slate-400">
-                                {v.postName}
+                                <EditableText
+                                  value={v.postName}
+                                  onChange={(val) => {
+                                    setEditablePost(prev => {
+                                      const nextV = [...prev.vacancyBreakdown];
+                                      nextV[idx] = { ...nextV[idx], postName: val };
+                                      return { ...prev, vacancyBreakdown: nextV };
+                                    });
+                                  }}
+                                  titlePrefix="पद का नाम (Post Name)"
+                                />
                               </td>
                               <td className="p-3 sm:p-3.5 align-top text-center font-bold text-slate-900 border-r border-slate-400">
-                                {v.totalPosts}
+                                <EditableText
+                                  value={v.totalPosts}
+                                  onChange={(val) => {
+                                    setEditablePost(prev => {
+                                      const nextV = [...prev.vacancyBreakdown];
+                                      nextV[idx] = { ...nextV[idx], totalPosts: val };
+                                      return { ...prev, vacancyBreakdown: nextV };
+                                    });
+                                  }}
+                                  titlePrefix="पद संख्या (Posts Count)"
+                                />
                               </td>
                               <td className="p-3 sm:p-3.5 align-top text-slate-800 leading-relaxed whitespace-pre-line font-sans">
-                                {v.eligibility}
+                                <EditableText
+                                  as="div"
+                                  value={v.eligibility}
+                                  onChange={(val) => {
+                                    setEditablePost(prev => {
+                                      const nextV = [...prev.vacancyBreakdown];
+                                      nextV[idx] = { ...nextV[idx], eligibility: val };
+                                      return { ...prev, vacancyBreakdown: nextV };
+                                    });
+                                  }}
+                                  titlePrefix="योग्यता पात्रता (Eligibility)"
+                                />
                               </td>
+                              {isDirectEditMode && (
+                                <td className="p-3 text-center align-top border-l border-slate-300">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteVacancyRow(idx)}
+                                    className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-1 rounded cursor-pointer"
+                                    title="यह पद हटाएं"
+                                  >
+                                    ✕ हटाएं
+                                  </button>
+                                </td>
+                              )}
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
+                    {isDirectEditMode && (
+                      <div className="p-3 bg-slate-50 border-t border-slate-300 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={handleAddVacancyRow}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-1.5 rounded flex items-center gap-1 shadow-2xs cursor-pointer"
+                        >
+                          <span>+ नया पद पंक्ति जोड़ें (Add Vacancy Row)</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1197,7 +1842,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 )}
 
                 {/* Mode of Selection (Renders ONLY IF post.selectionProcess data exists) */}
-                {post.selectionProcess && post.selectionProcess.length > 0 && (
+                {editablePost.selectionProcess && editablePost.selectionProcess.length > 0 && (
                   !hiddenSections['sec_selection_process'] ? (
                     <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
                       <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2.5">
@@ -1205,7 +1850,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           className="font-black text-[14pt] sm:text-[16pt] font-sans"
                           style={{ color: '#008000' }}
                         >
-                          {post.shortTitle} Selection Process / Mode of Selection
+                          {editablePost.shortTitle} Selection Process / Mode of Selection
                         </h4>
                         {renderSectionControls('sec_selection_process', 'Selection Process')}
                       </div>
@@ -1214,29 +1859,98 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           The recruitment board will select eligible candidates through the following sequential stages:
                         </p>
                         <ol className="space-y-2.5 text-slate-900 font-medium text-[11.5pt]">
-                          {post.selectionProcess.map((step, idx) => (
-                            <li key={idx} className="flex items-start gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
-                              <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage {idx + 1}</span>
-                              <span className="leading-relaxed text-slate-800">{step}</span>
+                          {editablePost.selectionProcess.map((step, idx) => (
+                            <li key={idx} className="flex items-start justify-between gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
+                              <div className="flex items-start gap-2.5 flex-1">
+                                <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage {idx + 1}</span>
+                                <div className="leading-relaxed text-slate-800 flex-1">
+                                  <EditableText
+                                    value={step}
+                                    onChange={(val) => {
+                                      setEditablePost(prev => {
+                                        const nextSteps = [...(prev.selectionProcess || [])];
+                                        nextSteps[idx] = val;
+                                        return { ...prev, selectionProcess: nextSteps };
+                                      });
+                                    }}
+                                    titlePrefix="चयन प्रक्रिया चरण (Selection Stage)"
+                                  />
+                                </div>
+                              </div>
+                              {isDirectEditMode && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteSelectionStage(idx)}
+                                  className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                                  title="यह स्टेज हटाएं"
+                                >
+                                  ✕
+                                </button>
+                              )}
                             </li>
                           ))}
                         </ol>
+                        {isDirectEditMode && (
+                          <button
+                            type="button"
+                            onClick={handleAddSelectionStage}
+                            className="mt-3 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>+ नया चयन स्टेज जोड़ें (Add Stage)</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   ) : renderHiddenBanner('sec_selection_process', 'Selection Process')
                 )}
 
                 {/* How to Fill Form Section */}
-                {post.howToApplySteps && post.howToApplySteps.length > 0 && (
+                {editablePost.howToApplySteps && editablePost.howToApplySteps.length > 0 && (
                   <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
                     <h4 className="font-black text-[14pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 font-sans">
                       <span style={{ color: '#008000' }}>How to Fill </span>
-                      <span style={{ color: '#ff00ff' }}>{post.shortTitle} Recruitment Online Form 2026</span>
+                      <span style={{ color: '#ff00ff' }}>{editablePost.shortTitle} Recruitment Online Form 2026</span>
                     </h4>
                     <ul className="space-y-2.5 text-slate-800 pt-1 leading-relaxed text-[11.5pt]">
-                      {post.howToApplySteps.map((step, idx) => (
-                        <li key={idx}>• {step}</li>
+                      {editablePost.howToApplySteps.map((step, idx) => (
+                        <li key={idx} className="flex items-start justify-between gap-2">
+                          <div className="flex-1">
+                            <span>• </span>
+                            <EditableText
+                              value={step}
+                              onChange={(val) => {
+                                setEditablePost(prev => {
+                                  const nextSteps = [...prev.howToApplySteps];
+                                  nextSteps[idx] = val;
+                                  return { ...prev, howToApplySteps: nextSteps };
+                                });
+                              }}
+                              titlePrefix="आवेदन निर्देश (Instruction Step)"
+                            />
+                          </div>
+                          {isDirectEditMode && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteApplyStep(idx)}
+                              className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                              title="यह निर्देश हटाएं"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </li>
                       ))}
+                      {isDirectEditMode && (
+                        <li>
+                          <button
+                            type="button"
+                            onClick={handleAddApplyStep}
+                            className="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>+ नया निर्देश पंक्ति जोड़ें (Add Step)</span>
+                          </button>
+                        </li>
+                      )}
                       <li className="font-bold pt-2 border-t border-slate-200 mt-2.5 text-center text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
                         Interested Candidates Can Read the Full Notification Before Apply Online
                       </li>
@@ -1248,113 +1962,165 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
             {/* Useful Important Links Table (Includes WhatsApp, Telegram, Instagram & X) */}
             <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-              <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                Some Useful Important Links
-              </div>
-              <div className="divide-y divide-slate-300 text-[11.5pt]">
-                {/* Apply Online Link */}
-                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
-                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
-                    • Apply Online
+              <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                <span>Some Useful Important Links</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs bg-yellow-400 text-slate-950 font-bold px-2 py-0.5 rounded shadow-2xs">
+                    {(editablePost.directLinks || []).length} लिंक्स
                   </span>
-                  <a
-                    href={post.directLinks.find(l => l.label.toLowerCase().includes('apply'))?.url || 'https://main.sci.gov.in/'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
-                  >
-                    <span>Click Here</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-                {/* Download Notification Link */}
-                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
-                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
-                    • Download Notification
-                  </span>
-                  <a
-                    href={post.directLinks.find(l => l.label.toLowerCase().includes('notification'))?.url || 'https://main.sci.gov.in/'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
-                  >
-                    <span>Click Here</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-                {/* Join Official WhatsApp Channel Link */}
-                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
-                  <span className="font-bold text-[11pt] sm:text-[12pt]" style={{ color: '#ff00ff' }}>
-                    • Join Official WhatsApp Channel
-                  </span>
-                  <a
-                    href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[10pt] sm:text-[11pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#25D366] hover:bg-emerald-600"
-                  >
-                    <span>Click Here</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-                {/* Join Official Telegram Channel Link */}
-                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
-                  <span className="font-bold text-[11pt] sm:text-[12pt]" style={{ color: '#ff00ff' }}>
-                    • Join Official Telegram Channel
-                  </span>
-                  <a
-                    href="https://t.me/newsarkariresultt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[10pt] sm:text-[11pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#229ED9] hover:bg-sky-600"
-                  >
-                    <span>Click Here</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-                {/* Official Website Link */}
-                <div className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
-                  <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
-                    • SCI Official Website
-                  </span>
-                  <a
-                    href="https://main.sci.gov.in/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
-                  >
-                    <span>Click Here</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-                {/* Any additional direct links */}
-                {allDirectLinks.filter(l => 
-                  !l.label.toLowerCase().includes('apply') && 
-                  !l.label.toLowerCase().includes('notification') && 
-                  !l.label.toLowerCase().includes('whatsapp') && 
-                  !l.label.toLowerCase().includes('telegram') && 
-                  !l.label.toLowerCase().includes('official website')
-                ).map((link, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-4">
-                    <span className="font-bold text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
-                      • {link.label}
-                    </span>
-                    <a
-                      href={link.url || 'https://main.sci.gov.in/'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-white font-bold rounded-xs text-[11.5pt] shadow-2xs cursor-pointer shrink-0 transition-colors bg-[#0000ff] hover:bg-blue-800"
+                  {isDirectEditMode && (
+                    <button
+                      type="button"
+                      onClick={handleAddDirectLink}
+                      className="text-xs bg-white text-emerald-900 hover:bg-emerald-100 font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1"
+                      title="नया महत्वपूर्ण लिंक जोड़ें"
                     >
-                      <span>{link.actionText || 'Click Here'}</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                ))}
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ नया लिंक जोड़ें</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* User Guide Banner for Moving Links */}
+              <div className="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex flex-col sm:flex-row sm:items-center justify-between text-xs font-bold text-amber-950 gap-1.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="text-base">💡</span>
+                  <span><strong>लिंक रीऑर्डर विकल्प:</strong> किसी भी लिंक को नीचे करने के लिए <strong>"⬇️ नीचे करें"</strong> बटन पर क्लिक करें।</span>
+                </span>
+                {isDirectEditMode && (
+                  <span className="text-emerald-700 font-extrabold text-[11px]">
+                    ✏️ वर्ड एडिटर चालू: लिंक नाम व URL पर क्लिक करके सीधे टाइप करें
+                  </span>
+                )}
+              </div>
+
+              <div className="divide-y divide-slate-300 text-[11.5pt]">
+                {(editablePost.directLinks || []).map((link, idx) => {
+                  const isWhatsapp = link.label.toLowerCase().includes('whatsapp') || (link.url && link.url.includes('whatsapp'));
+                  const isTelegram = link.label.toLowerCase().includes('telegram') || (link.url && link.url.includes('t.me'));
+                  const btnBg = isWhatsapp 
+                    ? 'bg-[#25D366] hover:bg-emerald-600' 
+                    : isTelegram 
+                      ? 'bg-[#229ED9] hover:bg-sky-600' 
+                      : 'bg-[#0000ff] hover:bg-blue-800';
+
+                  const isLastLink = idx === (editablePost.directLinks || []).length - 1;
+                  const isFirstLink = idx === 0;
+
+                  return (
+                    <div 
+                      key={idx} 
+                      className={`flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-2.5 sm:gap-4 transition-colors ${
+                        link.isPrimary ? 'bg-amber-50/50' : ''
+                      }`}
+                    >
+                      {/* Left: Link Label */}
+                      <div className="flex items-start sm:items-center gap-2 flex-1 min-w-0">
+                        <span className="font-black text-slate-700 text-lg leading-none shrink-0 mt-0.5 sm:mt-0">•</span>
+                        <div className="flex-1 min-w-0">
+                          <EditableText
+                            value={link.label}
+                            onChange={(newVal) => {
+                              setEditablePost(prev => {
+                                const list = [...(prev.directLinks || [])];
+                                list[idx] = { ...list[idx], label: newVal };
+                                return { ...prev, directLinks: list };
+                              });
+                              setHasUnsavedChanges(true);
+                            }}
+                            className="font-bold text-[12pt] sm:text-[13pt] break-words block leading-snug cursor-text"
+                            style={{ color: '#ff00ff' }}
+                            titlePrefix="लिंक का नाम"
+                          />
+                          {link.url && (
+                            <span className="text-[10px] text-slate-400 font-mono block truncate max-w-xs sm:max-w-md mt-0.5">
+                              {link.url}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Right: Reorder Controls (Move Down / Move Up) & Action Button */}
+                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 self-end sm:self-center flex-wrap">
+                        {/* Option to Move Link Down (नीचे करने का विकल्प) */}
+                        <button
+                          type="button"
+                          onClick={() => handleMoveDownDirectLink(idx)}
+                          disabled={isLastLink}
+                          className={`text-xs font-black px-2.5 py-1.5 rounded flex items-center gap-1 transition-all border ${
+                            isLastLink
+                              ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
+                              : 'bg-amber-100 hover:bg-amber-200 text-amber-950 border-amber-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
+                          }`}
+                          title="इस लिंक को एक स्थान नीचे करें (Move Link Down)"
+                        >
+                          <span className="text-sm">⬇️</span>
+                          <span>नीचे करें</span>
+                        </button>
+
+                        {/* Option to Move Link Up (ऊपर करने का विकल्प) */}
+                        <button
+                          type="button"
+                          onClick={() => handleMoveUpDirectLink(idx)}
+                          disabled={isFirstLink}
+                          className={`text-xs font-bold px-2 py-1.5 rounded flex items-center gap-1 transition-all border ${
+                            isFirstLink
+                              ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
+                          }`}
+                          title="इस लिंक को ऊपर करें (Move Link Up)"
+                        >
+                          <span className="text-sm">⬆️</span>
+                          <span className="hidden sm:inline">ऊपर</span>
+                        </button>
+
+                        {/* Click Here Action Button */}
+                        <a
+                          href={link.url || 'https://sarkariresult.com'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 text-white font-bold rounded-xs text-[11pt] sm:text-[11.5pt] shadow-2xs cursor-pointer transition-all hover:scale-102 ${btnBg}`}
+                        >
+                          <span>{link.actionText || 'Click Here'}</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+
+                        {/* Edit Mode Quick URL & Delete buttons */}
+                        {isDirectEditMode && (
+                          <div className="flex items-center gap-1 pl-1 border-l border-slate-200">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newUrl = prompt('लिंक का URL दर्ज करें (Enter URL):', link.url || 'https://');
+                                if (newUrl !== null) {
+                                  setEditablePost(prev => {
+                                    const list = [...(prev.directLinks || [])];
+                                    list[idx] = { ...list[idx], url: newUrl.trim() };
+                                    return { ...prev, directLinks: list };
+                                  });
+                                  setHasUnsavedChanges(true);
+                                }
+                              }}
+                              className="text-[11px] bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-2 py-1 rounded cursor-pointer"
+                              title="URL बदलें"
+                            >
+                              🔗 URL
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteDirectLink(idx)}
+                              className="text-red-500 hover:text-red-700 text-xs px-1.5 py-1 rounded hover:bg-red-50 cursor-pointer font-bold"
+                              title="यह लिंक हटाएं"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -1366,25 +2132,71 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               !hiddenSections['sec_faqs'] ? (
                 <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
                   <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
-                    <span>Frequently Asked Questions (FAQ) – {post.shortTitle}</span>
+                    <span>Frequently Asked Questions (FAQ) – {editablePost.shortTitle}</span>
                     {renderSectionControls('sec_faqs', 'FAQs')}
                   </div>
                   <div className="p-4 sm:p-7 divide-y divide-slate-200 space-y-4">
                     {faqs.map((faq, idx) => (
                       <div key={idx} className="pt-4 first:pt-0 space-y-1.5">
-                        <h5 
-                          className="font-bold text-[13pt] sm:text-[14pt] leading-snug flex items-start gap-1.5 font-sans"
-                          style={{ color: idx % 2 === 0 ? '#ff00ff' : '#008000' }}
-                        >
-                          <span>Q.{idx + 1} : </span>
-                          <span>{faq.question}</span>
-                        </h5>
+                        <div className="flex items-start justify-between gap-2">
+                          <h5 
+                            className="font-bold text-[13pt] sm:text-[14pt] leading-snug flex items-start gap-1.5 font-sans flex-1"
+                            style={{ color: idx % 2 === 0 ? '#ff00ff' : '#008000' }}
+                          >
+                            <span>Q.{idx + 1} : </span>
+                            <div className="flex-1">
+                              <EditableText
+                                value={faq.question}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextFaqs = [...(prev.customFaqs || faqs)];
+                                    nextFaqs[idx] = { ...nextFaqs[idx], question: val };
+                                    return { ...prev, customFaqs: nextFaqs };
+                                  });
+                                }}
+                                titlePrefix="FAQ प्रश्न (Question)"
+                              />
+                            </div>
+                          </h5>
+                          {isDirectEditMode && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteFAQ(idx)}
+                              className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                              title="यह FAQ हटाएं"
+                            >
+                              ✕ हटाएं
+                            </button>
+                          )}
+                        </div>
                         <div className="text-slate-800 text-[11.5pt] pl-4 sm:pl-6 leading-relaxed font-sans">
                           <span className="text-slate-900 font-bold text-[11.5pt] mr-1">Ans.</span> 
-                          <span>{faq.answer}</span>
+                          <EditableText
+                            as="span"
+                            value={faq.answer}
+                            onChange={(val) => {
+                              setEditablePost(prev => {
+                                const nextFaqs = [...(prev.customFaqs || faqs)];
+                                nextFaqs[idx] = { ...nextFaqs[idx], answer: val };
+                                return { ...prev, customFaqs: nextFaqs };
+                              });
+                            }}
+                            titlePrefix="FAQ उत्तर (Answer)"
+                          />
                         </div>
                       </div>
                     ))}
+                    {isDirectEditMode && (
+                      <div className="pt-4">
+                        <button
+                          type="button"
+                          onClick={handleAddFAQ}
+                          className="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>+ नया FAQ सवाल-जवाब जोड़ें (Add FAQ)</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : renderHiddenBanner('sec_faqs', 'FAQs')
@@ -1488,6 +2300,47 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           </div>
         </article>
       </div>
+
+      {/* Floating Save / Status Bar for Word-by-Word Editing */}
+      {(isDirectEditMode || hasUnsavedChanges) && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-slate-950/95 text-white border-2 border-amber-400 px-4 py-3 rounded-full shadow-2xl flex items-center gap-3 font-sans backdrop-blur-xs max-w-[95vw] overflow-x-auto">
+          <div className="flex items-center gap-2 shrink-0">
+            <span className={`w-3 h-3 rounded-full ${hasUnsavedChanges ? 'bg-amber-400 animate-ping' : 'bg-emerald-400'}`}></span>
+            <span className="text-xs sm:text-sm font-bold text-amber-300 whitespace-nowrap">
+              {hasUnsavedChanges ? '⚠️ बिना सेव किए गए बदलाव हैं!' : '✏️ डायरेक्ट एडिट मोड चालू है'}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleSaveAllChanges}
+            className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs sm:text-sm px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-md cursor-pointer transition-transform hover:scale-105 shrink-0"
+          >
+            <span>💾 सेव करें (Save Now)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setEditablePost(post);
+              setHasUnsavedChanges(false);
+              setAlertFeedback('परिवर्तन रद्द कर दिए गए हैं (Changes discarded).');
+              setTimeout(() => setAlertFeedback(null), 3000);
+            }}
+            className="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold text-xs px-3 py-1.5 rounded-full cursor-pointer shrink-0"
+          >
+            <span>रद्द करें (Cancel)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsDirectEditMode(false)}
+            className="text-xs text-neutral-400 hover:text-white px-2 py-1 font-semibold cursor-pointer shrink-0"
+          >
+            मोड बंद करें ✕
+          </button>
+        </div>
+      )}
 
       {/* Post Alert Popup Modal */}
       <PostAlertModal

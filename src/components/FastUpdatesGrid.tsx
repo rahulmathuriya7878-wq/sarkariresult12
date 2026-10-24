@@ -18,6 +18,10 @@ interface FastUpdatesGridProps {
   isHindi: boolean;
   onOpenAppInfo?: () => void;
   visitedPostIds?: Set<string>;
+  isGlobalWordEditActive?: boolean;
+  onUpdatePost?: (updatedPost: SarkariPost) => void;
+  onAddNewPost?: (category: string) => void;
+  onDeletePost?: (postId: string) => void;
 }
 
 export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
@@ -32,8 +36,12 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
   onSelectPost,
   onViewCategory,
   isHindi,
-  onOpenAppInfo,
-  visitedPostIds = new Set()
+  onOpenAppInfo: _onOpenAppInfo,
+  visitedPostIds = new Set(),
+  isGlobalWordEditActive = false,
+  onUpdatePost,
+  onAddNewPost,
+  onDeletePost
 }) => {
 
   const renderColumn = (
@@ -70,7 +78,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
       </ul>
 
-      <div className="p-2.5 sm:p-3 text-center bg-slate-50 border-t border-slate-200">
+      <div className="p-2.5 sm:p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
         <button
           onClick={() => onViewCategory(category)}
           className="text-xs sm:text-sm font-extrabold text-[#ab1616] hover:underline inline-flex items-center gap-1 cursor-pointer py-1"
@@ -78,6 +86,18 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
           <span>{viewMoreText}</span>
           <ChevronRight className="w-4 h-4" />
         </button>
+
+        {isGlobalWordEditActive && onAddNewPost && (
+          <button
+            type="button"
+            onClick={() => onAddNewPost(category)}
+            className="text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1"
+            title={category === 'important' ? "महत्वपूर्ण लिंक सेक्शन में नया अपडेट जोड़ें" : "इस सेक्शन में नया पोस्ट जोड़ें"}
+          >
+            <span>+</span>
+            <span>{category === 'important' ? 'नया महत्वपूर्ण लिंक जोड़ें' : 'नया पोस्ट जोड़ें'}</span>
+          </button>
+        )}
       </div>
     </div>
   );
@@ -94,20 +114,87 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
     const visited = isPostVisited(visitedPostIds, post);
     return (
       <li
-        onClick={() => onSelectPost(post)}
-        className="py-2.5 sm:py-3 px-2 sm:px-3 hover:bg-red-50/60 transition-colors cursor-pointer group flex items-start gap-2 sm:gap-2.5"
+        onClick={() => {
+          if (!isGlobalWordEditActive) {
+            onSelectPost(post);
+          }
+        }}
+        className="py-2.5 sm:py-3 px-2 sm:px-3 hover:bg-red-50/60 transition-colors cursor-pointer group flex items-start justify-between gap-2 sm:gap-2.5"
       >
-        <span className="text-slate-800 font-black text-base sm:text-lg leading-none shrink-0 mt-0.5">•</span>
-        <div className="flex-1 min-w-0">
-          <span className={`font-extrabold text-[13.5px] sm:text-[15px] md:text-[17px] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
-            {post.shortTitle}
-          </span>
-          {post.lastDate && (
-            <span className="text-xs text-red-600 block font-bold mt-1">
-              Last Date: {post.lastDate}
-            </span>
-          )}
+        <div className="flex items-start gap-2 sm:gap-2.5 flex-1 min-w-0">
+          <span className="text-slate-800 font-black text-base sm:text-lg leading-none shrink-0 mt-0.5">•</span>
+          <div className="flex-1 min-w-0">
+            {isGlobalWordEditActive ? (
+              <span
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => {
+                  const updated = e.currentTarget.innerText.trim();
+                  if (updated && updated !== (post.shortTitle || post.title) && onUpdatePost) {
+                    onUpdatePost({
+                      ...post,
+                      shortTitle: updated,
+                      title: updated
+                    });
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="font-extrabold text-[13.5px] sm:text-[15px] md:text-[17px] text-[#0000cc] underline leading-snug break-words block font-serif outline-none hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-1 border-b border-dashed border-amber-500 cursor-text"
+                title="क्लिक करके पोस्ट का नाम बदलें (Click to edit post title)"
+              >
+                {post.shortTitle || post.title}
+              </span>
+            ) : (
+              <span className={`font-extrabold text-[13.5px] sm:text-[15px] md:text-[17px] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
+                {post.shortTitle}
+              </span>
+            )}
+
+            {post.lastDate && (
+              <div className="text-xs text-red-600 font-bold mt-1">
+                <span>Last Date: </span>
+                {isGlobalWordEditActive ? (
+                  <span
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={(e) => {
+                      const updated = e.currentTarget.innerText.trim();
+                      if (updated && updated !== post.lastDate && onUpdatePost) {
+                        onUpdatePost({
+                          ...post,
+                          lastDate: updated
+                        });
+                      }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="outline-none hover:bg-amber-100 rounded px-1 border-b border-dashed border-amber-500 cursor-text"
+                    title="क्लिक करके अंतिम तिथि बदलें (Click to edit last date)"
+                  >
+                    {post.lastDate}
+                  </span>
+                ) : (
+                  <span>{post.lastDate}</span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
+
+        {isGlobalWordEditActive && onDeletePost && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (confirm(`क्या आप वाकई "${post.shortTitle || post.title}" को डिलीट करना चाहते हैं?`)) {
+                onDeletePost(post.id);
+              }
+            }}
+            className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold shrink-0 mt-0.5"
+            title="यह पोस्ट हटाएं"
+          >
+            ✕
+          </button>
+        )}
       </li>
     );
   });

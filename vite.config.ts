@@ -85,21 +85,20 @@ export default defineConfig(() => {
           ],
         },
         devOptions: {
-          enabled: true,
-          type: 'module',
+          enabled: false,
         },
       }),
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve('.'),
       },
     },
     build: {
       chunkSizeWarningLimit: 3000,
       target: 'esnext',
       sourcemap: false,
-      minify: 'esbuild',
+      minify: 'esbuild' as const,
     },
     server: {
       host: '0.0.0.0',

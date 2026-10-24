@@ -6,6 +6,8 @@ interface QuickHighlightsGridProps {
   posts?: SarkariPost[];
   visitedPostIds?: Set<string>;
   bookmarkedIds?: string[];
+  isGlobalWordEditActive?: boolean;
+  onUpdatePost?: (updatedPost: SarkariPost) => void;
 }
 
 const HIGHLIGHT_COLORS = [
@@ -23,7 +25,9 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
   onSelectHighlight,
   posts = [],
   visitedPostIds = new Set(),
-  bookmarkedIds = []
+  bookmarkedIds = [],
+  isGlobalWordEditActive = false,
+  onUpdatePost
 }) => {
   // Dynamically select top 8 posts, scoring by clicks (visited) and saves (bookmarked) for Trending / High Demand badge
   const highlightItems = React.useMemo(() => {
@@ -49,6 +53,7 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
       const badgeText = isBookmarked ? 'Saved' : isVisited ? 'Trending' : idx === 0 ? 'Hot' : null;
 
       return {
+        post,
         id: post.id,
         slug: post.slug,
         title: post.shortTitle || post.title,
@@ -66,9 +71,13 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
       {/* 2-column grid on mobile, 4-col on tablet, 8-col on desktop */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-1.5 sm:gap-2">
         {highlightItems.map((box) => (
-          <button
+          <div
             key={box.id}
-            onClick={() => onSelectHighlight(box.slug)}
+            onClick={() => {
+              if (!isGlobalWordEditActive) {
+                onSelectHighlight(box.slug);
+              }
+            }}
             className={`${box.bgColor} ${box.borderColor} hover:opacity-95 text-white px-2 py-2.5 sm:py-3 rounded-xs shadow-xs transition-transform active:scale-98 text-center flex flex-col items-center justify-center min-h-[58px] sm:min-h-[64px] border cursor-pointer select-none group relative overflow-hidden`}
           >
             {box.badgeText && (
@@ -76,10 +85,32 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
                 {box.badgeText}
               </span>
             )}
-            <span className="font-black text-xs sm:text-[13px] leading-tight text-white group-hover:underline">
-              {box.title}
-            </span>
-          </button>
+            {isGlobalWordEditActive ? (
+              <span
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={(e) => {
+                  const updated = e.currentTarget.innerText.trim();
+                  if (updated && updated !== box.title && onUpdatePost) {
+                    onUpdatePost({
+                      ...box.post,
+                      shortTitle: updated,
+                      title: updated
+                    });
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="font-black text-xs sm:text-[13px] leading-tight text-white outline-none hover:bg-black/40 focus:bg-black/60 px-1 rounded border-b border-dashed border-yellow-300 cursor-text"
+                title="क्लिक करके हेडलाइट शीर्षक बदलें (Click to edit headline)"
+              >
+                {box.title}
+              </span>
+            ) : (
+              <span className="font-black text-xs sm:text-[13px] leading-tight text-white group-hover:underline">
+                {box.title}
+              </span>
+            )}
+          </div>
         ))}
       </div>
     </div>
