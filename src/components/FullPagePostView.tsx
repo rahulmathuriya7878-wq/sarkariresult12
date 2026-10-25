@@ -3,10 +3,18 @@ import { SarkariPost, DirectLinkItem } from '../types/job';
 import { getProcessedImportantDates } from '../utils/dateUtils';
 
 export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => {
-  const existing: DirectLinkItem[] = post.directLinks && post.directLinks.length > 0 
+  let existing: DirectLinkItem[] = post.directLinks && post.directLinks.length > 0 
     ? post.directLinks.map(l => ({ ...l })) 
     : [];
   
+  // Filter out any WhatsApp or Telegram channel links
+  existing = existing.filter(l => 
+    !l.label?.toLowerCase().includes('whatsapp') && 
+    !l.label?.toLowerCase().includes('telegram') && 
+    !l.url?.toLowerCase().includes('whatsapp') && 
+    !l.url?.toLowerCase().includes('t.me')
+  );
+
   if (existing.length === 0) {
     if (post.category === 'result') {
       existing.push({ label: 'Download Result / Score Card', actionText: 'Click Here', type: 'result', url: 'https://sarkariresult.com' });
@@ -19,28 +27,6 @@ export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => 
     }
     existing.push({ label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult.com' });
     existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: 'https://sarkariresult.com' });
-  }
-
-  // Ensure WhatsApp & Telegram links are present
-  const hasWhatsapp = existing.some(l => l.label.toLowerCase().includes('whatsapp'));
-  const hasTelegram = existing.some(l => l.label.toLowerCase().includes('telegram'));
-
-  if (!hasWhatsapp) {
-    existing.push({
-      label: 'Join Official WhatsApp Channel',
-      actionText: 'Join WhatsApp',
-      type: 'official',
-      url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j'
-    });
-  }
-
-  if (!hasTelegram) {
-    existing.push({
-      label: 'Join Official Telegram Channel',
-      actionText: 'Join Telegram',
-      type: 'official',
-      url: 'https://t.me/newsarkariresultt'
-    });
   }
 
   return existing;
@@ -348,9 +334,35 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       console.error(e);
     }
     setHasUnsavedChanges(false);
-    setAlertFeedback('✅ पोस्ट और सभी सेक्शन के शब्द तुरंत सेव हो गए हैं! (Changes Saved Successfully)');
-    setTimeout(() => setAlertFeedback(null), 4000);
   };
+
+  // Real-time automatic persistence: whenever editablePost updates during edit mode, auto-save to localStorage
+  const hasLoadedRef = React.useRef(false);
+  useEffect(() => {
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      return;
+    }
+    if (isDirectEditMode) {
+      if (onUpdatePost) {
+        onUpdatePost(editablePost);
+      }
+      try {
+        const saved = localStorage.getItem('sarkari_admin_posts_v5');
+        let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
+        const idx = currentArr.findIndex(p => p.id === editablePost.id);
+        if (idx >= 0) {
+          currentArr[idx] = editablePost;
+        } else {
+          currentArr.push(editablePost);
+        }
+        localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
+        window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: currentArr }));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [editablePost, isDirectEditMode, onUpdatePost]);
 
   // Reusable Word-by-Word In-Place Editable Component
   const EditableText: React.FC<{
@@ -910,34 +922,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     );
   }, [rrbSearch]);
 
-  // Ensure WhatsApp & Telegram channel links are included in Useful Links for all posts
+  // Useful Links for all posts (excluding social channels)
   const allDirectLinks = useMemo(() => {
-    const existing = [...post.directLinks];
-    const hasWhatsapp = existing.some(l => l.label.toLowerCase().includes('whatsapp'));
-    const hasTelegram = existing.some(l => l.label.toLowerCase().includes('telegram'));
-
-    const result = [...existing];
-
-    if (!hasWhatsapp) {
-      result.push({
-        label: 'Join Official WhatsApp Channel for Fast Job Alerts',
-        actionText: 'Join WhatsApp',
-        type: 'official',
-        url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j',
-        isPrimary: true
-      });
-    }
-
-    if (!hasTelegram) {
-      result.push({
-        label: 'Join Official Telegram Channel',
-        actionText: 'Join Telegram',
-        type: 'official',
-        url: 'https://t.me/newsarkariresultt'
-      });
-    }
-
-    return result;
+    const existing = [...(post.directLinks || [])];
+    return existing.filter(l => 
+      !l.label?.toLowerCase().includes('whatsapp') && 
+      !l.label?.toLowerCase().includes('telegram') && 
+      !l.url?.toLowerCase().includes('whatsapp') && 
+      !l.url?.toLowerCase().includes('t.me')
+    );
   }, [post.directLinks]);
 
   // Category breadcrumb text (e.g. "Admit card updates", "Latest jobs updates", "Result updates")
@@ -1014,51 +1007,21 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           </ol>
         </nav>
 
-        {/* Direct In-Place Click-to-Edit Mode Control Bar */}
-        <div className="mb-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 px-3.5 py-2.5 rounded shadow-xs border border-amber-600 flex flex-wrap items-center justify-between gap-2 font-sans">
-          <div className="flex items-center gap-2">
-            <span className="bg-slate-950 text-amber-300 font-extrabold text-xs px-2.5 py-1 rounded flex items-center gap-1.5 shadow-2xs">
-              <span className={`w-2.5 h-2.5 rounded-full ${isDirectEditMode ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'}`}></span>
-              {isDirectEditMode ? 'वर्ड एडिट चालू है (LIVE)' : 'डायरेक्ट वर्ड एडिट'}
-            </span>
-            <span className="text-xs sm:text-sm font-black text-slate-950">
-              {isDirectEditMode 
-                ? '⚡ पोस्ट के किसी भी शब्द, हेडिंग, तारीख, फीस या पद पर क्लिक करके सीधे टाइप करें!' 
-                : 'पेज पर सीधे क्लिक करके हर एक शब्द व सेक्शन एडिट करने के लिए मोड ऑन करें:'}
-            </span>
-          </div>
+        {/* Direct In-Place Click-to-Edit Mode Control Bar (Hidden by default, only shown when active) */}
+        {isDirectEditMode && (
+          <div className="mb-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 px-3.5 py-2.5 rounded shadow-xs border border-amber-600 flex flex-wrap items-center justify-between gap-2 font-sans animate-in fade-in duration-200">
+            <div className="flex items-center gap-2">
+              <span className="bg-slate-950 text-amber-300 font-extrabold text-xs px-2.5 py-1 rounded flex items-center gap-1.5 shadow-2xs">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                वर्ड एडिट चालू है (LIVE)
+              </span>
+              <span className="text-xs sm:text-sm font-black text-slate-950">
+                ⚡ पोस्ट के किसी भी शब्द, हेडिंग, तारीख, फीस या पद पर क्लिक करके सीधे टाइप करें!
+              </span>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                const nextState = !isDirectEditMode;
-                setIsDirectEditMode(nextState);
-                if (onToggleGlobalWordEdit) {
-                  onToggleGlobalWordEdit();
-                }
-              }}
-              className={`font-black text-xs px-3.5 py-1.5 rounded flex items-center gap-1.5 shadow-xs transition-all cursor-pointer ${
-                isDirectEditMode 
-                  ? 'bg-slate-950 text-amber-300 border border-amber-400 ring-2 ring-amber-300' 
-                  : 'bg-white hover:bg-slate-100 text-slate-950 border border-slate-300'
-              }`}
-            >
-              <span>{isDirectEditMode ? '✓ वर्ड एडिट सक्रिय (ON)' : '✏️ वर्ड एडिट चालू करें (Click to Edit)'}</span>
-            </button>
-
-            {hasUnsavedChanges && (
-              <button
-                type="button"
-                onClick={handleSaveAllChanges}
-                className="bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs px-3.5 py-1.5 rounded flex items-center gap-1.5 shadow-md animate-bounce cursor-pointer"
-              >
-                <span>💾 बदलाव सेव करें</span>
-              </button>
-            )}
-
-            {/* Word Editor Delete Post Option */}
-            {isDirectEditMode && (
+            <div className="flex items-center gap-2">
+              {/* Word Editor Delete Post Option */}
               <button
                 type="button"
                 onClick={handleDeleteCurrentPost}
@@ -1068,9 +1031,25 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>🗑️ पोस्ट Delete करें</span>
               </button>
-            )}
+
+              {/* Hide Direct Word Edit bar */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDirectEditMode(false);
+                  if (onToggleGlobalWordEdit && isGlobalWordEditActive) {
+                    onToggleGlobalWordEdit();
+                  }
+                }}
+                className="bg-slate-950 hover:bg-neutral-800 text-white font-bold text-xs px-3 py-1.5 rounded cursor-pointer shadow-xs border border-slate-700 flex items-center gap-1"
+                title="डायरेक्ट वर्ड एडिट बार छिपाएं (Hide)"
+              >
+                <span>✕</span>
+                <span>छिपाएं</span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Admin Mode Active Controls Bar - Only visible when Admin is authenticated */}
         {isAdmin && (
@@ -1204,45 +1183,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </tr>
                 </tbody>
               </table>
-            </div>
-          </div>
-
-          {/* Social Channels 2-Box Grid directly below Short Info (Telegram & WhatsApp) */}
-          <div className="px-3 sm:px-5 py-3 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 bg-slate-50/70 border-b border-slate-200">
-            {/* Telegram */}
-            <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-blue-300 transition-colors">
-              <div className="flex items-center gap-2">
-                <div className="w-6.5 h-6.5 rounded-full bg-[#229ED9] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
-                  ✈
-                </div>
-                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">Telegram Channel</span>
-              </div>
-              <a
-                href="https://t.me/newsarkariresultt"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#229ED9] hover:bg-[#1a85ba] text-white text-[10pt] sm:text-[11pt] font-bold px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
-              >
-                Join Us
-              </a>
-            </div>
-
-            {/* WhatsApp */}
-            <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border border-slate-200 rounded-lg shadow-2xs hover:border-emerald-300 transition-colors">
-              <div className="flex items-center gap-2">
-                <div className="w-6.5 h-6.5 rounded-full bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-2xs text-xs font-bold">
-                  💬
-                </div>
-                <span className="font-bold text-[11pt] sm:text-[12pt] text-slate-900">WhatsApp Channel</span>
-              </div>
-              <a
-                href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#25D366] hover:bg-[#1fae53] text-white text-[10pt] sm:text-[11pt] font-bold px-3 py-1 rounded shadow-2xs cursor-pointer transition-colors"
-              >
-                Join Us
-              </a>
             </div>
           </div>
 
@@ -1982,18 +1922,18 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               </div>
 
-              {/* User Guide Banner for Moving Links */}
-              <div className="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex flex-col sm:flex-row sm:items-center justify-between text-xs font-bold text-amber-950 gap-1.5">
-                <span className="flex items-center gap-1.5">
-                  <span className="text-base">💡</span>
-                  <span><strong>लिंक रीऑर्डर विकल्प:</strong> किसी भी लिंक को नीचे करने के लिए <strong>"⬇️ नीचे करें"</strong> बटन पर क्लिक करें।</span>
-                </span>
-                {isDirectEditMode && (
+              {/* User Guide Banner for Moving Links (Only visible in Edit Mode) */}
+              {isDirectEditMode && (
+                <div className="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex flex-col sm:flex-row sm:items-center justify-between text-xs font-bold text-amber-950 gap-1.5">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-base">💡</span>
+                    <span><strong>लिंक रीऑर्डर विकल्प:</strong> किसी भी लिंक को नीचे करने के लिए <strong>"⬇️ नीचे करें"</strong> बटन पर क्लिक करें।</span>
+                  </span>
                   <span className="text-emerald-700 font-extrabold text-[11px]">
                     ✏️ वर्ड एडिटर चालू: लिंक नाम व URL पर क्लिक करके सीधे टाइप करें
                   </span>
-                )}
-              </div>
+                </div>
+              )}
 
               <div className="divide-y divide-slate-300 text-[11.5pt]">
                 {(editablePost.directLinks || []).map((link, idx) => {
@@ -2033,7 +1973,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                             style={{ color: '#ff00ff' }}
                             titlePrefix="लिंक का नाम"
                           />
-                          {link.url && (
+                          {link.url && isDirectEditMode && (
                             <span className="text-[10px] text-slate-400 font-mono block truncate max-w-xs sm:max-w-md mt-0.5">
                               {link.url}
                             </span>
@@ -2043,37 +1983,41 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                       {/* Right: Reorder Controls (Move Down / Move Up) & Action Button */}
                       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 self-end sm:self-center flex-wrap">
-                        {/* Option to Move Link Down (नीचे करने का विकल्प) */}
-                        <button
-                          type="button"
-                          onClick={() => handleMoveDownDirectLink(idx)}
-                          disabled={isLastLink}
-                          className={`text-xs font-black px-2.5 py-1.5 rounded flex items-center gap-1 transition-all border ${
-                            isLastLink
-                              ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
-                              : 'bg-amber-100 hover:bg-amber-200 text-amber-950 border-amber-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
-                          }`}
-                          title="इस लिंक को एक स्थान नीचे करें (Move Link Down)"
-                        >
-                          <span className="text-sm">⬇️</span>
-                          <span>नीचे करें</span>
-                        </button>
+                        {/* Option to Move Link Down (नीचे करने का विकल्प - Edit Mode only) */}
+                        {isDirectEditMode && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => handleMoveDownDirectLink(idx)}
+                              disabled={isLastLink}
+                              className={`text-xs font-black px-2.5 py-1.5 rounded flex items-center gap-1 transition-all border ${
+                                isLastLink
+                                  ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
+                                  : 'bg-amber-100 hover:bg-amber-200 text-amber-950 border-amber-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
+                              }`}
+                              title="इस लिंक को एक स्थान नीचे करें (Move Link Down)"
+                            >
+                              <span className="text-sm">⬇️</span>
+                              <span>नीचे करें</span>
+                            </button>
 
-                        {/* Option to Move Link Up (ऊपर करने का विकल्प) */}
-                        <button
-                          type="button"
-                          onClick={() => handleMoveUpDirectLink(idx)}
-                          disabled={isFirstLink}
-                          className={`text-xs font-bold px-2 py-1.5 rounded flex items-center gap-1 transition-all border ${
-                            isFirstLink
-                              ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
-                              : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
-                          }`}
-                          title="इस लिंक को ऊपर करें (Move Link Up)"
-                        >
-                          <span className="text-sm">⬆️</span>
-                          <span className="hidden sm:inline">ऊपर</span>
-                        </button>
+                            {/* Option to Move Link Up (ऊपर करने का विकल्प) */}
+                            <button
+                              type="button"
+                              onClick={() => handleMoveUpDirectLink(idx)}
+                              disabled={isFirstLink}
+                              className={`text-xs font-bold px-2 py-1.5 rounded flex items-center gap-1 transition-all border ${
+                                isFirstLink
+                                  ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
+                                  : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
+                              }`}
+                              title="इस लिंक को ऊपर करें (Move Link Up)"
+                            >
+                              <span className="text-sm">⬆️</span>
+                              <span className="hidden sm:inline">ऊपर</span>
+                            </button>
+                          </>
+                        )}
 
                         {/* Click Here Action Button */}
                         <a

@@ -56,6 +56,9 @@ interface AdminEditingPanelModalProps {
   onSelectPost?: (post: SarkariPost) => void;
   isHindi?: boolean;
   initialPostToEdit?: SarkariPost | null;
+  isGlobalWordEditActive?: boolean;
+  onToggleGlobalWordEdit?: () => void;
+  onStartDirectWordEdit?: (post?: SarkariPost) => void;
 }
 
 const CATEGORIES: { value: PostCategory; label: string }[] = [
@@ -153,7 +156,10 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   onDeletePost,
   onResetToDefault,
   onSelectPost,
-  initialPostToEdit
+  initialPostToEdit,
+  isGlobalWordEditActive,
+  onToggleGlobalWordEdit,
+  onStartDirectWordEdit
 }) => {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -422,7 +428,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         {/* Two Exclusive Admin Modules: 1. Direct Section & Post Editor, 2. AI Blog Writer */}
         {isAuthenticated && (
           <div className="bg-slate-900 text-white px-3 sm:px-4 py-2 border-b border-slate-950 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0 shadow-md">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={() => {
@@ -440,6 +446,21 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 <span>⚡</span>
                 <span>डायरेक्ट सेक्शन व पोस्ट अपडेट (Full Post Editor)</span>
               </button>
+
+              {/* डायरेक्ट वर्ड एडिट (Live Visual Edit) button */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onStartDirectWordEdit) {
+                    onStartDirectWordEdit(editingPost || undefined);
+                  }
+                }}
+                className="px-3.5 py-1.5 rounded text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all cursor-pointer bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 text-slate-950 shadow-md font-sans hover:scale-105 active:scale-95 border border-amber-600"
+                title="सीधे स्क्रीन पर किसी भी शब्द को क्लिक करके एडिट करें"
+              >
+                <span className="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
+                <span>⚡ डायरेक्ट वर्ड एडिट (Live Visual Edit)</span>
+              </button>
             </div>
 
             <div className="text-[11px] text-slate-400 font-bold hidden md:flex items-center gap-2">
@@ -450,43 +471,61 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           </div>
         )}
 
-        {/* Quick Action Bar (New Post, Save, Publish) */}
+        {/* Quick Action Bar (New Post, Save, Publish, Direct Word Edit) */}
         {isAuthenticated && adminMainTab === 'editor' && (
-          <div className="bg-white border-b border-slate-300 px-3 sm:px-4 py-2 flex items-center justify-end gap-2.5 shrink-0 shadow-2xs">
-            <button
-              type="button"
-              onClick={handleStartCreate}
-              className="bg-[#ab1616] hover:bg-red-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
-              title="नई पोस्ट बनाएं"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>+ नई पोस्ट</span>
-            </button>
+          <div className="bg-white border-b border-slate-300 px-3 sm:px-4 py-2 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs flex-wrap">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onStartDirectWordEdit) {
+                    onStartDirectWordEdit(editingPost || undefined);
+                  }
+                }}
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 text-xs font-black px-3.5 py-1.5 rounded shrink-0 cursor-pointer shadow-xs transition-transform hover:scale-102 flex items-center gap-1.5 border border-amber-600"
+                title="इस पोस्ट को सीधे वेबसाइट पर लाइव क्लिक करके एडिट करें"
+              >
+                <span>⚡</span>
+                <span>डायरेक्ट वर्ड एडिट (Live On-Page Edit)</span>
+              </button>
+            </div>
 
-            {editingPost && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => handleQuickSave(true)}
-                  className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
-                  title="Quick Save and stay in editor"
-                >
-                  <Save className="w-3.5 h-3.5" />
-                  <span>अपडेट करें</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleQuickSave(false);
-                    setTimeout(() => window.location.reload(), 400);
-                  }}
-                  className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
-                  title="Publish Live & Reload portal"
-                >
-                  <span>🚀 पब्लिश लाइव</span>
-                </button>
-              </>
-            )}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleStartCreate}
+                className="bg-[#ab1616] hover:bg-red-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
+                title="नई पोस्ट बनाएं"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ नई पोस्ट</span>
+              </button>
+
+              {editingPost && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickSave(true)}
+                    className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
+                    title="Quick Save and stay in editor"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>अपडेट करें</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleQuickSave(false);
+                      setTimeout(() => window.location.reload(), 400);
+                    }}
+                    className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1"
+                    title="Publish Live & Reload portal"
+                  >
+                    <span>🚀 पब्लिश लाइव</span>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         )}
 
@@ -539,6 +578,21 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
               <div className="text-xs font-black text-slate-900 uppercase tracking-tight truncate">
                 {isCreatingNew ? '+ New Post' : `Editing: ${editingPost.shortTitle || editingPost.title}`}
               </div>
+
+              {/* Direct Word Edit for this post */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onStartDirectWordEdit) {
+                    onStartDirectWordEdit(editingPost);
+                  }
+                }}
+                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black text-xs px-2.5 py-1.5 rounded shadow-xs flex items-center justify-center gap-1.5 cursor-pointer border border-amber-600 hover:scale-102 transition-transform"
+                title="इस पोस्ट को सीधे वेबसाइट पर लाइव क्लिक करके एडिट करें"
+              >
+                <span>⚡</span>
+                <span>डायरेक्ट वर्ड एडिट</span>
+              </button>
 
               {/* Horizontal Navigation on Mobile / Vertical on Desktop */}
               <div className="flex flex-row md:flex-col gap-1 overflow-x-auto no-scrollbar py-0.5 text-[11px]">

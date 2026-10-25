@@ -130,6 +130,14 @@ export default function App() {
     }
   });
 
+  const [isEditPillDismissed, setIsEditPillDismissed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('sarkari_hide_edit_pill') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
   const handleToggleGlobalWordEdit = () => {
     setIsGlobalWordEditActive((prev) => {
       const next = !prev;
@@ -140,6 +148,20 @@ export default function App() {
       }
       return next;
     });
+  };
+
+  const handleStartDirectWordEdit = (postToEdit?: SarkariPost) => {
+    setIsGlobalWordEditActive(true);
+    try {
+      localStorage.setItem('sarkari_global_word_edit', 'true');
+    } catch (e) {
+      console.error(e);
+    }
+    setIsAdminOpen(false);
+    if (postToEdit) {
+      setSelectedPost(postToEdit);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Post Mutation Handlers for Admin Panel
@@ -713,27 +735,47 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onSelectPost={handleOpenPostFullPage}
           initialPostToEdit={selectedPost}
           isHindi={isHindi}
+          isGlobalWordEditActive={isGlobalWordEditActive}
+          onToggleGlobalWordEdit={handleToggleGlobalWordEdit}
+          onStartDirectWordEdit={handleStartDirectWordEdit}
         />
       )}
 
       <FloatingShareButton currentPost={selectedPost} isHindi={isHindi} />
 
-      {/* Floating Live Word Edit Quick Toggle Pill (Accessible anywhere across the site) */}
-      <div className="fixed bottom-4 left-4 z-40">
-        <button
-          type="button"
-          onClick={handleToggleGlobalWordEdit}
-          className={`font-black text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-2xl flex items-center gap-2 cursor-pointer transition-all border ${
-            isGlobalWordEditActive
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-300 ring-4 ring-emerald-300/40 animate-pulse'
-              : 'bg-slate-950 hover:bg-neutral-800 text-amber-300 border-amber-400 hover:scale-105'
-          }`}
-          title="पूरी वेबसाइट पर वर्ड एडिट चालू/बंद करें"
-        >
-          <span className={`w-2.5 h-2.5 rounded-full ${isGlobalWordEditActive ? 'bg-white animate-ping' : 'bg-emerald-400'}`}></span>
-          <span>{isGlobalWordEditActive ? '🟢 वर्ड एडिट चालू है (LIVE)' : '✏️ वर्ड एडिट चालू करें (LIVE)'}</span>
-        </button>
-      </div>
+      {/* Floating Live Word Edit Quick Toggle Pill (Accessible anywhere across the site, dismissible) */}
+      {!isEditPillDismissed && (
+        <div className="fixed bottom-4 left-4 z-40 flex items-center gap-1 group">
+          <button
+            type="button"
+            onClick={handleToggleGlobalWordEdit}
+            className={`font-black text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-2xl flex items-center gap-2 cursor-pointer transition-all border ${
+              isGlobalWordEditActive
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-300 ring-4 ring-emerald-300/40 animate-pulse'
+                : 'bg-slate-950 hover:bg-neutral-800 text-amber-300 border-amber-400 hover:scale-105'
+            }`}
+            title="पूरी वेबसाइट पर वर्ड एडिट चालू/बंद करें"
+          >
+            <span className={`w-2.5 h-2.5 rounded-full ${isGlobalWordEditActive ? 'bg-white animate-ping' : 'bg-emerald-400'}`}></span>
+            <span>{isGlobalWordEditActive ? '🟢 वर्ड एडिट चालू है (LIVE)' : '✏️ वर्ड एडिट चालू करें (LIVE)'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsEditPillDismissed(true);
+              try {
+                localStorage.setItem('sarkari_hide_edit_pill', 'true');
+              } catch (e) {
+                console.error(e);
+              }
+            }}
+            className="w-6 h-6 rounded-full bg-slate-900/80 hover:bg-black text-slate-300 hover:text-white flex items-center justify-center text-xs font-bold shadow-md cursor-pointer border border-slate-700 transition-colors"
+            title="इस बटन को छिपाएं (Hide)"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
     </div>
   );
