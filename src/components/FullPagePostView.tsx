@@ -862,7 +862,28 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
+    const originalTitle = document.title;
     document.title = `${post.title} - Sarkari Result`;
+
+    // Dynamic Meta Description update
+    let metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    let createdDesc = false;
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
+      createdDesc = true;
+    }
+    const originalDesc = metaDesc.getAttribute('content') || '';
+    const postDesc = (post.shortInfo || `${post.title} check official recruitment notice, important dates, eligibility, total vacancies, online application fee, selection process, and direct download link.`).replace(/\n+/g, ' ').slice(0, 160);
+    metaDesc.setAttribute('content', postDesc);
+
+    // Dynamic OG Meta Tags
+    const ogTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
+    if (ogTitle) ogTitle.setAttribute('content', `${post.title} - Sarkari Result`);
+
+    const ogDesc = document.querySelector('meta[property="og:description"]') as HTMLMetaElement | null;
+    if (ogDesc) ogDesc.setAttribute('content', postDesc);
 
     // Dynamic FAQ Schema injection for each post
     const faqScriptId = 'post-faq-jsonld-schema';
@@ -896,8 +917,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       breadcrumbScriptTag.type = 'application/ld+json';
       document.head.appendChild(breadcrumbScriptTag);
     }
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    const currentUrl = typeof window !== 'undefined' ? window.location.href : `${baseUrl}/post/${post.slug}`;
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult12.vercel.app';
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : `${baseUrl}/#post/${post.slug}`;
     const categoryName = getCategoryLabel(post.category);
 
     const breadcrumbSchema = {
@@ -926,11 +947,59 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     };
     breadcrumbScriptTag.textContent = JSON.stringify(breadcrumbSchema);
 
+    // Dynamic JobPosting Schema injection for recruitment/job posts
+    const jobScriptId = 'post-job-jsonld-schema';
+    let jobScriptTag = document.getElementById(jobScriptId) as HTMLScriptElement | null;
+    if (['latest_jobs', 'result', 'admit_card', 'admission'].includes(post.category)) {
+      if (!jobScriptTag) {
+        jobScriptTag = document.createElement('script');
+        jobScriptTag.id = jobScriptId;
+        jobScriptTag.type = 'application/ld+json';
+        document.head.appendChild(jobScriptTag);
+      }
+      const jobPostingSchema = {
+        "@context": "https://schema.org/",
+        "@type": "JobPosting",
+        "title": post.title,
+        "description": post.shortInfo || post.title,
+        "identifier": {
+          "@type": "PropertyValue",
+          "name": post.department || "Government of India",
+          "value": post.id
+        },
+        "datePosted": post.postDate ? (post.postDate.split(' ')[0] || new Date().toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
+        "validThrough": post.lastDate || "2026-12-31",
+        "employmentType": "FULL_TIME",
+        "hiringOrganization": {
+          "@type": "Organization",
+          "name": post.department || "Government of India",
+          "sameAs": baseUrl
+        },
+        "jobLocation": {
+          "@type": "Place",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "IN"
+          }
+        }
+      };
+      jobScriptTag.textContent = JSON.stringify(jobPostingSchema);
+    } else if (jobScriptTag) {
+      jobScriptTag.remove();
+    }
+
     return () => {
+      document.title = originalTitle;
+      if (metaDesc) {
+        if (createdDesc) metaDesc.remove();
+        else metaDesc.setAttribute('content', originalDesc);
+      }
       const existingFaq = document.getElementById(faqScriptId);
       if (existingFaq) existingFaq.remove();
       const existingBc = document.getElementById(breadcrumbScriptId);
       if (existingBc) existingBc.remove();
+      const existingJob = document.getElementById(jobScriptId);
+      if (existingJob) existingJob.remove();
     };
   }, [post, faqs]);
 

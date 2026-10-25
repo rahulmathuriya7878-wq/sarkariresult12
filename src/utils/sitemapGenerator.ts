@@ -67,7 +67,7 @@ export function generateSitemapXml(
 ): string {
   const domain =
     baseUrl.replace(/\/$/, '') ||
-    'https://ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app';
+    'https://sarkariresult12.vercel.app';
   const currentDate = new Date().toISOString().split('T')[0];
 
   // 1. Core Section Portals
@@ -195,7 +195,7 @@ ${otherPostsXml}
 export function generateRobotsTxt(baseUrl: string = ''): string {
   const domain =
     baseUrl.replace(/\/$/, '') ||
-    'https://ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app';
+    'https://sarkariresult12.vercel.app';
   return `User-agent: *
 Allow: /
 

@@ -454,6 +454,462 @@ export const screenshotResultPosts: SarkariPost[] = [
 
 export const screenshotLatestJobPosts: SarkariPost[] = [
   {
+    id: 'job-uppsc-ro-aro-2026',
+    slug: 'uppsc-review-officer-ro-aro-online-form-2026',
+    title: 'UPPSC Review Officer (RO) & Assistant Review Officer (ARO) Samiksha Adhikari Exam 2026 Online Form',
+    shortTitle: 'UPPSC Review Officer RO ARO Online Form 2026',
+    hindiTitle: 'यूपीपीएससी समीक्षा अधिकारी (RO) एवं सहायक समीक्षा अधिकारी (ARO) परीक्षा 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'State PSC',
+    qualifications: ['Graduate'],
+    state: 'Uttar Pradesh',
+    postDate: '25 October 2026',
+    notificationNumber: 'A-1/E-1/2026',
+    totalVacancies: '411 Posts',
+    salary: 'Pay Level 8 (₹ 47,600 - ₹ 1,51,100/-) for RO | Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-) for ARO',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '24/11/2026',
+    admitCardDate: 'Before Exam',
+    examDate: 'As Per Schedule',
+    shortInfo: 'Uttar Pradesh Public Service Commission (UPPSC), Prayagraj has released the official notification for Review Officer (RO / Samiksha Adhikari) and Assistant Review Officer (ARO / Sahayak Samiksha Adhikari) Recruitment 2026. Eligible graduates with O Level / Typing speed can apply online from 25 October 2026 to 24 November 2026.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 125/-' },
+      { category: 'SC / ST', amount: '₹ 65/-' },
+      { category: 'PH (Divyang)', amount: '₹ 25/-' }
+    ],
+    feePaymentMode: 'Pay the Examination Fee Through Debit Card / Credit Card / Net Banking / SBI I-Collect Fee Mode.',
+    ageLimit: {
+      asOnDate: '01/07/2026',
+      minAge: 21,
+      maxAge: 40,
+      notes: 'Age Relaxation Extra as per UPPSC RO ARO Recruitment Rules 2026.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '25/10/2026' },
+      { label: 'Last Date for Apply Online', value: '24/11/2026', isHighlight: true },
+      { label: 'Pay Exam Fee Last Date', value: '24/11/2026' },
+      { label: 'Exam Date', value: 'As Per Schedule' },
+      { label: 'Admit Card Available', value: 'Before Exam' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Samiksha Adhikari (RO - Review Officer)',
+        totalPosts: '334',
+        eligibility: 'Bachelor Degree in Any Stream from Any Recognized University in India.'
+      },
+      {
+        postName: 'Sahayak Samiksha Adhikari (ARO - Assistant Review Officer)',
+        totalPosts: '77',
+        eligibility: 'Bachelor Degree with O Level Certificate from NIELIT & Hindi Typing 25 WPM on Computer.'
+      }
+    ],
+    howToApplySteps: [
+      'UPPSC Prayagraj Has Released RO / ARO Samiksha Adhikari Recruitment 2026. Candidate Can Apply Between 25/10/2026 to 24/11/2026.',
+      'Candidate Read the Notification Before Apply the Recruitment Application Form in UPPSC RO ARO 2026.',
+      'Kindly Check and Collect All Documents - Eligibility, ID Proof, Address Details, Basic Details.',
+      'Kindly Ready Scan Documents Related to Recruitment Form - Photo, Sign, ID Proof, Etc.',
+      'Before Submit the Application Form Must Check the Preview and All Columns Carefully.',
+      'Take A Print Out of Final Submitted Form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for UPPSC RO ARO', actionText: 'Apply Online', type: 'apply', url: 'https://uppsc.up.nic.in/', isPrimary: true },
+      { label: 'Download Official Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://uppsc.up.nic.in/' },
+      { label: 'UPPSC Official Website', actionText: 'uppsc.up.nic.in', type: 'official', url: 'https://uppsc.up.nic.in/' }
+    ]
+  },
+  {
+    id: 'job-upessc-tgt-2026',
+    slug: 'upessc-up-tgt-trained-graduate-teacher-online-form-2026',
+    title: 'UPESSC Uttar Pradesh Trained Graduate Teacher (TGT - Various Subjects) Online Form 2026',
+    shortTitle: 'UPESSC UP TGT Online Form 2026',
+    hindiTitle: 'यूपीईएसएससी यूपी टीजीटी शिक्षक भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Teaching',
+    qualifications: ['Graduate', 'B.Ed / CTET'],
+    state: 'Uttar Pradesh',
+    postDate: '25 October 2026',
+    notificationNumber: 'UPESSC/TGT-01/2026',
+    totalVacancies: '3,539 Posts',
+    salary: 'Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '28/11/2026',
+    admitCardDate: 'Before Exam',
+    examDate: 'As Per Schedule',
+    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC), Prayagraj invites online applications for trained graduate teachers (TGT) in various subjects for Government aided secondary schools in Uttar Pradesh.',
+    applicationFee: [
+      { category: 'General / OBC', amount: '₹ 750/-' },
+      { category: 'EWS / SC', amount: '₹ 450/-' },
+      { category: 'ST', amount: '₹ 250/-' }
+    ],
+    feePaymentMode: 'Pay fee through Online Net Banking / Debit Card / Credit Card / UPI.',
+    ageLimit: {
+      asOnDate: '01/07/2026',
+      minAge: 21,
+      notes: 'No upper age limit for TGT Teachers in UP.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '25/10/2026' },
+      { label: 'Last Date for Apply Online', value: '28/11/2026', isHighlight: true },
+      { label: 'Fee Payment Last Date', value: '28/11/2026' },
+      { label: 'Exam Date', value: 'As Per Schedule' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Trained Graduate Teacher (TGT) Various Subjects',
+        totalPosts: '3,539',
+        eligibility: 'Bachelor Degree in Concerned Subject with B.Ed Degree from Recognized University in India.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit UPESSC portal upessc.up.gov.in.',
+      'Fill in applicant personal credentials, academic marks, and select subject branch.',
+      'Upload photo, signature and required certificates.',
+      'Pay fee and print application confirmation slip.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for UP TGT', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
+      { label: 'Download Official Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
+      { label: 'UPESSC Official Website', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
+    ]
+  },
+  {
+    id: 'job-upessc-headmaster-2026',
+    slug: 'upessc-up-headmaster-junior-high-school-online-form-2026',
+    title: 'UPESSC Uttar Pradesh Aided Junior High School Headmaster Recruitment 2026 Online Form',
+    shortTitle: 'UPESSC UP Headmaster Online Form 2026',
+    hindiTitle: 'यूपीईएसएससी यूपी जूनियर हाई स्कूल हेडमास्टर भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Teaching',
+    qualifications: ['Graduate', 'B.Ed / CTET'],
+    state: 'Uttar Pradesh',
+    postDate: '25 October 2026',
+    notificationNumber: 'UPESSC/HM-03/2026',
+    totalVacancies: '390 Posts',
+    salary: 'Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '22/11/2026',
+    admitCardDate: 'Before Exam',
+    examDate: 'As Per Schedule',
+    shortInfo: 'UPESSC Prayagraj invites online applications for the post of Headmaster in Aided Junior High Schools across Uttar Pradesh. Eligible candidates with Graduation, B.Ed/BTC, and 5 years teaching experience can apply.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 900/-' },
+      { category: 'SC / ST', amount: '₹ 700/-' },
+      { category: 'PH (Divyang)', amount: '₹ 400/-' }
+    ],
+    feePaymentMode: 'Pay Examination Fee through Online Payment Gateway.',
+    ageLimit: {
+      asOnDate: '01/07/2026',
+      minAge: 21,
+      maxAge: 40,
+      notes: 'Age Relaxation applicable as per UP Government Rules.'
+    },
+    importantDates: [
+      { label: 'Online Application Begin', value: '25/10/2026' },
+      { label: 'Last Date to Apply Online', value: '22/11/2026', isHighlight: true },
+      { label: 'Fee Payment Last Date', value: '22/11/2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Headmaster (Junior High School)',
+        totalPosts: '390',
+        eligibility: 'Graduation with BTC / D.El.Ed / B.Ed with 5 Years Teaching Experience in Recognized School.'
+      }
+    ],
+    howToApplySteps: [
+      'Register on UPESSC recruitment portal.',
+      'Enter teaching experience details and educational qualification.',
+      'Pay application fee and submit form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for UP Headmaster', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
+      { label: 'Download Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
+      { label: 'UPESSC Official Website', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
+    ]
+  },
+  {
+    id: 'job-lic-hfl-apprentice-2026',
+    slug: 'lic-hfl-apprentice-recruitment-online-form-2026',
+    title: 'LIC Housing Finance Limited LIC HFL Apprentice Engagement 2026 Online Application Form',
+    shortTitle: 'LIC HFL Apprentice Online Online Form 2026',
+    hindiTitle: 'एलआईसी एचएफएल अप्रेंटिस भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Banking',
+    qualifications: ['Graduate'],
+    state: 'All India',
+    postDate: '25 October 2026',
+    notificationNumber: 'LIC-HFL/Apprentice/2026/01',
+    totalVacancies: '200 Posts',
+    salary: 'Monthly Stipend ₹ 15,000/- to ₹ 18,000/- per month',
+    salaryBand: 'Below 25K',
+    isHot: true,
+    isNew: true,
+    lastDate: '20/11/2026',
+    admitCardDate: 'December 2026',
+    examDate: 'December 2026',
+    shortInfo: 'LIC Housing Finance Limited (LIC HFL) invites online applications for engagement of Apprentices for a period of one year across various offices in India. Candidates with Graduation degree can apply online.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 800/-' },
+      { category: 'SC / ST / Female / PwD', amount: '₹ 600/-' }
+    ],
+    feePaymentMode: 'Pay Fee Online through Debit Card, Credit Card or Net Banking.',
+    ageLimit: {
+      asOnDate: '01/10/2026',
+      minAge: 20,
+      maxAge: 25,
+      notes: 'Age Relaxation as per LIC HFL Apprentice Rules.'
+    },
+    importantDates: [
+      { label: 'Online Registration Begin', value: '25/10/2026' },
+      { label: 'Last Date to Apply Online', value: '20/11/2026', isHighlight: true },
+      { label: 'Online Exam Date', value: 'December 2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'LIC HFL Apprentice',
+        totalPosts: '200',
+        eligibility: 'Graduation in Any Stream from Any Recognized University in India.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit LIC HFL Careers section on lichousing.com.',
+      'Click on Apprentice Recruitment 2026 Apply Online link.',
+      'Fill required details, upload photograph and signature.',
+      'Pay application fee and take printout.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for LIC HFL Apprentice', actionText: 'Apply Online', type: 'apply', url: 'https://www.lichousing.com/', isPrimary: true },
+      { label: 'Download Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://www.lichousing.com/' },
+      { label: 'LIC HFL Official Website', actionText: 'lichousing.com', type: 'official', url: 'https://www.lichousing.com/' }
+    ]
+  },
+  {
+    id: 'job-upessc-principal-inter-2026',
+    slug: 'upessc-up-principal-inter-level-online-form-2026',
+    title: 'UPESSC Uttar Pradesh Inter College Principal Recruitment 2026 Online Form',
+    shortTitle: 'UPESSC UP Principal Inter Level Online Form 2026',
+    hindiTitle: 'यूपीईएसएससी यूपी प्रधानाचार्य (इंटरमीडिएट स्तर) भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Teaching',
+    qualifications: ['Post Graduate', 'B.Ed / CTET'],
+    state: 'Uttar Pradesh',
+    postDate: '25 October 2026',
+    notificationNumber: 'UPESSC/Prin-Inter/2026',
+    totalVacancies: '1,453 Posts',
+    salary: 'Pay Level 12 (₹ 78,800 - ₹ 2,09,200/-)',
+    salaryBand: '50K - 1 Lakh',
+    isHot: true,
+    isNew: true,
+    lastDate: '30/11/2026',
+    admitCardDate: 'Before Exam',
+    examDate: 'As Per Schedule',
+    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) Prayagraj invites online applications for Principal posts in Government Aided Intermediate Colleges across Uttar Pradesh.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 1,000/-' },
+      { category: 'SC / ST', amount: '₹ 800/-' }
+    ],
+    feePaymentMode: 'Pay fee through online mode only.',
+    ageLimit: {
+      asOnDate: '01/07/2026',
+      minAge: 30,
+      maxAge: 55,
+      notes: 'Age Relaxation extra as per rules.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '25/10/2026' },
+      { label: 'Last Date for Online Apply', value: '30/11/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Principal (Intermediate Level College)',
+        totalPosts: '1,453',
+        eligibility: 'Post Graduate Degree with B.Ed and 10 Years Teaching / Administrative Experience in Recognized High School / Inter College.'
+      }
+    ],
+    howToApplySteps: [
+      'Fill online application form at upessc.up.gov.in.',
+      'Upload teaching experience certificates and academic marks sheets.',
+      'Pay fee online and submit final application.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for UP Inter Principal', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
+      { label: 'Download Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
+      { label: 'UPESSC Official Portal', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
+    ]
+  },
+  {
+    id: 'job-nwr-rrc-jaipur-apprentice-2026',
+    slug: 'nwr-rrc-jaipur-apprentices-online-form-2026',
+    title: 'North Western Railway NWR RRC Jaipur Trade Apprentice Recruitment 2026 Online Form for 1791 Post',
+    shortTitle: 'NWR RRC Jaipur Apprentices Online Form 2026',
+    hindiTitle: 'उत्तर पश्चिम रेलवे (NWR RRC जयपुर) ट्रेड अप्रेंटिस भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Railway',
+    qualifications: ['10th Pass', 'Diploma / ITI'],
+    state: 'Rajasthan',
+    postDate: '25 October 2026',
+    notificationNumber: 'Notice No. 05/2026 (NWR/Act Apprentice)',
+    totalVacancies: '1,791 Posts',
+    salary: 'Stipend as per Railway Act Apprentice Rules (₹ 8,050 - ₹ 9,700/- p.m.)',
+    salaryBand: 'Below 25K',
+    isHot: true,
+    isNew: true,
+    lastDate: '25/11/2026',
+    admitCardDate: 'December 2026',
+    examDate: 'Merit Based No Exam',
+    shortInfo: 'Railway Recruitment Cell (RRC), North Western Railway (NWR), Jaipur invites online applications for engagement of 1,791 Act Apprentices in various divisions (Jaipur, Ajmer, Bikaner, Jodhpur) for 10th pass candidates with ITI certificate.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 100/-' },
+      { category: 'SC / ST / PwD / Female', amount: '₹ 0/- (Nil)' }
+    ],
+    feePaymentMode: 'Pay Application Fee Online through Debit Card, Credit Card or Net Banking.',
+    ageLimit: {
+      asOnDate: '25/11/2026',
+      minAge: 15,
+      maxAge: 24,
+      notes: 'Age Relaxation 5 Years for SC/ST and 3 Years for OBC.'
+    },
+    importantDates: [
+      { label: 'Online Application Begin', value: '25/10/2026' },
+      { label: 'Last Date for Apply Online', value: '25/11/2026 (05:00 PM)', isHighlight: true },
+      { label: 'Merit List Release Date', value: 'December 2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Trade Apprentice (Fitter, Electrician, Welder, Machinist, Turner, Painter, Carpenter)',
+        totalPosts: '1,791',
+        eligibility: 'Class 10th High School Pass with Minimum 50% Marks & ITI Certificate in Relevant Trade (NCVT/SCVT).'
+      }
+    ],
+    howToApplySteps: [
+      'Visit RRC NWR official portal rrcjaipur.in.',
+      'Click on Online Application link for Act Apprentice CEN 05/2026.',
+      'Fill 10th marks and ITI trade details carefully.',
+      'Pay fee and download application form printout.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for NWR Apprentice', actionText: 'Apply Online', type: 'apply', url: 'https://rrcjaipur.in/', isPrimary: true },
+      { label: 'Download Detailed Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://rrcjaipur.in/' },
+      { label: 'RRC NWR Official Website', actionText: 'rrcjaipur.in', type: 'official', url: 'https://rrcjaipur.in/' }
+    ]
+  },
+  {
+    id: 'job-bhel-artisan-2026',
+    slug: 'bhel-artisan-various-trade-post-online-form-2026',
+    title: 'Bharat Heavy Electricals Limited BHEL Artisan (Various Trade Posts) Recruitment 2026 Online Form',
+    shortTitle: 'BHEL Artisan Various Trade Post Online Form 2026',
+    hindiTitle: 'भारत हैवी इलेक्ट्रिकल्स लिमिटेड (BHEL) आर्टिसन ट्रेड भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Other',
+    qualifications: ['10th Pass', 'Diploma / ITI'],
+    state: 'All India',
+    postDate: '25 October 2026',
+    notificationNumber: 'BHEL/Artisan-Trade/02/2026',
+    totalVacancies: '650 Posts',
+    salary: 'Basic Pay ₹ 28,000 - ₹ 85,000/- (Grade WG-IV) + Perks & IDA',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '21/11/2026',
+    admitCardDate: 'December 2026',
+    examDate: 'December 2026',
+    shortInfo: 'Bharat Heavy Electricals Limited (BHEL), a Maharatna Public Sector Enterprise, invites online applications for recruitment of Artisan in Fitter, Turner, Machinist, Welder, Electrician trades across its manufacturing units.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 500/- + Processing Fee' },
+      { category: 'SC / ST / PwD / Ex-SM', amount: '₹ 200/- Processing Fee Only' }
+    ],
+    feePaymentMode: 'Pay Fee Online through Net Banking, Debit Card, Credit Card or UPI.',
+    ageLimit: {
+      asOnDate: '01/10/2026',
+      minAge: 18,
+      maxAge: 27,
+      notes: 'Age Relaxation extra as per BHEL Rules.'
+    },
+    importantDates: [
+      { label: 'Application Begin', value: '25/10/2026' },
+      { label: 'Last Date to Apply Online', value: '21/11/2026', isHighlight: true },
+      { label: 'Computer Based Exam (CBT)', value: 'December 2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Artisan (Fitter, Turner, Electrician, Welder, Machinist)',
+        totalPosts: '650',
+        eligibility: 'Matriculation / 10th Pass + National Trade Certificate (NTC / ITI) in Concerned Trade + National Apprenticeship Certificate (NAC).'
+      }
+    ],
+    howToApplySteps: [
+      'Visit BHEL Careers portal careers.bhel.in.',
+      'Register with email ID and phone number.',
+      'Fill educational and NAC apprenticeship details.',
+      'Pay fee online and submit application.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for BHEL Artisan', actionText: 'Apply Online', type: 'apply', url: 'https://careers.bhel.in/', isPrimary: true },
+      { label: 'Download BHEL Advertisement', actionText: 'Download (PDF)', type: 'notification', url: 'https://careers.bhel.in/' },
+      { label: 'BHEL Official Careers Portal', actionText: 'careers.bhel.in', type: 'official', url: 'https://careers.bhel.in/' }
+    ]
+  },
+  {
+    id: 'job-upsssc-physical-instructor-2026',
+    slug: 'upsssc-physical-instructor-and-other-post-online-form-2026',
+    title: 'UPSSSC Vyayam Trainer, Physical Instructor & Various Posts Recruitment 2026 Online Form',
+    shortTitle: 'UPSSSC Physical Instructor & Other Post Online Form 2026',
+    hindiTitle: 'यूपीएसएसएससी शारीरिक प्रशिक्षक एवं व्यायाम प्रशिक्षक भर्ती 2026 ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'State PSC',
+    qualifications: ['Graduate', 'Diploma / ITI'],
+    state: 'Uttar Pradesh',
+    postDate: '25 October 2026',
+    notificationNumber: 'UPSSSC/11-Exam/2026',
+    totalVacancies: '748 Posts',
+    salary: 'Pay Level 5 & Level 6 (₹ 29,200 - ₹ 92,300/-)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '27/11/2026',
+    admitCardDate: 'Before Exam',
+    examDate: 'As Per Schedule',
+    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission (UPSSSC), Lucknow invites online applications for Physical Instructor (Vyayam Instructor) and Regional Youth Welfare Officer posts for PET qualified candidates.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 25/-' },
+      { category: 'SC / ST / PwD', amount: '₹ 25/-' }
+    ],
+    feePaymentMode: 'Pay processing fee online through SBI I-Collect or SBI e-Challan.',
+    ageLimit: {
+      asOnDate: '01/07/2026',
+      minAge: 21,
+      maxAge: 40,
+      notes: 'Age Relaxation extra as per UPSSSC Rules.'
+    },
+    importantDates: [
+      { label: 'Online Application Begin', value: '25/10/2026' },
+      { label: 'Last Date to Apply Online', value: '27/11/2026', isHighlight: true },
+      { label: 'Correction Window Closes', value: '04/12/2026' }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'Physical Instructor / Vyayam Instructor',
+        totalPosts: '748',
+        eligibility: 'Bachelor Degree in Physical Education (B.P.Ed) or Diploma in Physical Education (D.P.Ed) with valid UPSSSC PET Scorecard.'
+      }
+    ],
+    howToApplySteps: [
+      'Authenticate with UPSSSC PET Registration Number & OTP.',
+      'Fill academic details in Physical Instructor online form.',
+      'Pay fee of ₹ 25/- and print application confirmation.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for Physical Instructor', actionText: 'Apply Online', type: 'apply', url: 'https://upsssc.gov.in/', isPrimary: true },
+      { label: 'Download Detailed Advertisement', actionText: 'Download (PDF)', type: 'notification', url: 'https://upsssc.gov.in/' },
+      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official', url: 'https://upsssc.gov.in/' }
+    ]
+  },
+  {
     id: 'job-sci-junior-court-attendant-2026',
     slug: 'supreme-court-of-india-jca-oct26',
     title: 'Supreme Court of India SCI Junior Court Attendant JCA Recruitment 2026 Exam for 130 Post',
