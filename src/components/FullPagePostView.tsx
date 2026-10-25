@@ -287,6 +287,11 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   isGlobalWordEditActive = false,
   onToggleGlobalWordEdit
 }) => {
+  const isAdmin = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('sarkari_admin_auth') === 'true';
+  }, []);
+
   // Direct In-Place Word & Section Edit Mode State
   const [editablePost, setEditablePost] = useState<SarkariPost>(() => {
     const processedDates = getProcessedImportantDates(post);
@@ -298,14 +303,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       customFaqs: post.customFaqs && post.customFaqs.length > 0 ? post.customFaqs : getPostFAQs(post)
     };
   });
-  const [isDirectEditMode, setIsDirectEditMode] = useState<boolean>(() => isGlobalWordEditActive);
+  const [isDirectEditMode, setIsDirectEditMode] = useState<boolean>(() => isAdmin && isGlobalWordEditActive);
 
   // Sync edit mode when global edit mode changes
   useEffect(() => {
     if (isGlobalWordEditActive !== undefined) {
-      setIsDirectEditMode(isGlobalWordEditActive);
+      setIsDirectEditMode(isAdmin && isGlobalWordEditActive);
     }
-  }, [isGlobalWordEditActive]);
+  }, [isGlobalWordEditActive, isAdmin]);
 
   const currentPostIdRef = React.useRef(post.id);
   const lastSavedJsonRef = React.useRef<string>('');
@@ -345,14 +350,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   const [hiddenSections, setHiddenSections] = React.useState<Record<string, boolean>>({});
   const [isPdfModalOpen, setIsPdfModalOpen] = useState<boolean>(false);
   const [pdfUploadTargetIndex, setPdfUploadTargetIndex] = useState<number | null>(null);
-  const [_lastSavedTime, setLastSavedTime] = useState<string>('');
-  const [_hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const pdfFileInputRef = React.useRef<HTMLInputElement | null>(null);
-
-  const isAdmin = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-    return sessionStorage.getItem('sarkari_admin_auth') === 'true';
-  }, []);
 
   // Real-time automatic persistence: only persists when editablePost actually changes
   useEffect(() => {
@@ -379,8 +377,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         currentArr.push(editablePost);
       }
       localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
-      setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-      setHasUnsavedChanges(false);
     } catch (e) {
       console.error(e);
     }
@@ -1052,28 +1048,30 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </li>
           </ol>
 
-          {/* Toggle Word In-Place Edit Mode Button */}
-          <button
-            type="button"
-            onClick={() => {
-              const next = !isDirectEditMode;
-              setIsDirectEditMode(next);
-              if (onToggleGlobalWordEdit) {
-                if ((next && !isGlobalWordEditActive) || (!next && isGlobalWordEditActive)) {
-                  onToggleGlobalWordEdit();
+          {/* Toggle Word In-Place Edit Mode Button (Only for authenticated Admins) */}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => {
+                const next = !isDirectEditMode;
+                setIsDirectEditMode(next);
+                if (onToggleGlobalWordEdit) {
+                  if ((next && !isGlobalWordEditActive) || (!next && isGlobalWordEditActive)) {
+                    onToggleGlobalWordEdit();
+                  }
                 }
-              }
-            }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold text-xs transition cursor-pointer shadow-xs ${
-              isDirectEditMode
-                ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 ring-2 ring-amber-300'
-                : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-            }`}
-            title="वर्ड इन-प्लेस एडिट मोड ऑन/ऑफ करें (In-Place Word Edit Mode)"
-          >
-            <Edit3 className="w-3.5 h-3.5" />
-            <span>{isDirectEditMode ? '✓ वर्ड इन-प्लेस एडिट सक्रिय' : '✏️ वर्ड इन-प्लेस एडिट मोड'}</span>
-          </button>
+              }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold text-xs transition cursor-pointer shadow-xs ${
+                isDirectEditMode
+                  ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 ring-2 ring-amber-300'
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+              }`}
+              title="वर्ड इन-प्लेस एडिट मोड ऑन/ऑफ करें (In-Place Word Edit Mode)"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>{isDirectEditMode ? '✓ वर्ड इन-प्लेस एडिट सक्रिय' : '✏️ वर्ड इन-प्लेस एडिट मोड'}</span>
+            </button>
+          )}
         </nav>
 
         {/* Direct In-Place Click-to-Edit Mode Control Bar (Hidden by default, only shown when active) */}

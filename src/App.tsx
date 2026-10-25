@@ -117,6 +117,11 @@ export default function App() {
   // Admin Modal state
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
 
+  const isAdmin = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('sarkari_admin_auth') === 'true';
+  }, [isAdminOpen]);
+
   // Navigation & Category filter state
   const [activeCategory, setActiveCategory] = useState<PostCategory | 'all'>('all');
 
@@ -141,14 +146,6 @@ export default function App() {
   const [isGlobalWordEditActive, setIsGlobalWordEditActive] = useState<boolean>(() => {
     try {
       return localStorage.getItem('sarkari_global_word_edit') === 'true';
-    } catch {
-      return false;
-    }
-  });
-
-  const [isEditPillDismissed, setIsEditPillDismissed] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('sarkari_hide_edit_pill') === 'true';
     } catch {
       return false;
     }
@@ -214,8 +211,8 @@ export default function App() {
     try {
       localStorage.removeItem('sarkari_admin_posts_v2');
       localStorage.removeItem('sarkari_admin_posts_v3');
-      localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(mockSarkariPosts));
-      localStorage.setItem('sarkari_admin_posts_v2', JSON.stringify(mockSarkariPosts));
+      localStorage.removeItem('sarkari_admin_posts_v5');
+      localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(mockSarkariPosts));
     } catch (e) {
       console.error(e);
     }
@@ -548,7 +545,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
   return (
     <div className={`min-h-screen flex flex-col ${isClassicTheme ? 'bg-[#fffbf0]' : 'bg-slate-50'}`}>
       {/* Global Live Word Edit Status & Control Bar */}
-      {isGlobalWordEditActive && (
+      {isAdmin && isGlobalWordEditActive && (
         <div className="bg-slate-950 text-amber-300 border-b-2 border-amber-400 py-2 px-3 sm:px-6 sticky top-0 z-50 flex items-center justify-between flex-wrap gap-2 text-xs sm:text-sm font-sans shadow-lg">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
@@ -596,20 +593,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           setSelectedSalary('All');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
-        bookmarkCount={bookmarkedIds.length}
-        onOpenBookmarks={() => setIsBookmarksOpen(true)}
-        onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
-        onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
-        onOpenJobFinder={() => setIsJobFinderOpen(true)}
-        onOpenJobAlerts={() => setIsJobAlertsOpen(true)}
-        onOpenAdmin={() => setIsAdminOpen(true)}
-        isHindi={isHindi}
-        onToggleHindi={() => setIsHindi(!isHindi)}
-        isClassicTheme={isClassicTheme}
-        onToggleTheme={() => setIsClassicTheme(!isClassicTheme)}
-        onSearchFocus={() => {
-          document.querySelector('input')?.focus();
-        }}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onOpenPostBySlug={handleSelectSlug}
@@ -633,7 +616,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           isHindi={isHindi}
           onOpenAdmin={() => setIsAdminOpen(true)}
           onOpenDirectEditor={() => setIsAdminOpen(true)}
-          isGlobalWordEditActive={isGlobalWordEditActive}
+          isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
           onToggleGlobalWordEdit={handleToggleGlobalWordEdit}
         />
       ) : (
@@ -645,7 +628,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             onSelectHighlight={handleSelectSlug} 
             visitedPostIds={visitedPostIds}
             bookmarkedIds={bookmarkedIds}
-            isGlobalWordEditActive={isGlobalWordEditActive}
+            isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
             onUpdatePost={handleUpdatePost}
           />
 
@@ -685,7 +668,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
               }}
               isHindi={isHindi}
               visitedPostIds={visitedPostIds}
-              isGlobalWordEditActive={isGlobalWordEditActive}
+              isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
               onUpdatePost={handleUpdatePost}
               onDeletePost={handleDeletePost}
               onAddNewPost={() => setIsAdminOpen(true)}
@@ -716,7 +699,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 isHindi={isHindi}
                 onOpenAppInfo={() => setIsJobAlertsOpen(true)}
                 visitedPostIds={visitedPostIds}
-                isGlobalWordEditActive={isGlobalWordEditActive}
+                isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
                 onUpdatePost={handleUpdatePost}
                 onAddNewPost={() => setIsAdminOpen(true)}
                 onDeletePost={handleDeletePost}

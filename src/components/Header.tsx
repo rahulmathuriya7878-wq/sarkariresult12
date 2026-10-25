@@ -12,18 +12,6 @@ import { SarkariPost } from '../types/job';
 interface HeaderProps {
   activeCategory: PostCategory | 'all';
   onCategoryChange: (category: PostCategory | 'all') => void;
-  bookmarkCount?: number;
-  onOpenBookmarks?: () => void;
-  onOpenAgeCalculator?: () => void;
-  onOpenPhotoResizer?: () => void;
-  onOpenJobFinder?: () => void;
-  onOpenJobAlerts?: () => void;
-  onOpenAdmin?: () => void;
-  isHindi: boolean;
-  onToggleHindi?: () => void;
-  onSearchFocus?: () => void;
-  isClassicTheme?: boolean;
-  onToggleTheme?: () => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onOpenPostBySlug: (slug: string) => void;
@@ -33,7 +21,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   activeCategory,
   onCategoryChange,
-  isHindi: _isHindi,
   searchQuery,
   onSearchChange,
   onOpenPostBySlug,

@@ -2,7 +2,7 @@ import React from 'react';
 import { SarkariPost } from '../types/job';
 import { ChevronRight } from 'lucide-react';
 import { isPostVisited } from '../utils/visitedPosts';
-import { AdSection } from './AdSection';
+
 
 interface FastUpdatesGridProps {
   results: SarkariPost[];
@@ -220,9 +220,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
       </div>
 
-      {/* Conditionally injected responsive AdSection between grid sections */}
-      <AdSection slotId="8892103412" format="horizontal" label="Sponsored Ad / प्रायोजित विज्ञापन" />
-
       {/* Pair 2: Admit Card | Answer Key */}
       <div className="grid grid-cols-2 gap-3 sm:gap-5">
         {renderColumn(
@@ -241,9 +238,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
           'View More Answer Key'
         )}
       </div>
-
-      {/* Second AdSection between Syllabus and Admission */}
-      <AdSection slotId="9923841029" format="horizontal" label="Advertisement / विज्ञापन" />
 
       {/* Pair 3: Syllabus | Admission */}
       <div className="grid grid-cols-2 gap-3 sm:gap-5">
@@ -264,9 +258,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
       </div>
 
-      {/* Conditionally injected responsive AdSection between Admission and Certificate/Important */}
-      <AdSection slotId="9923841029" format="horizontal" label="Advertisement / विज्ञापन" />
-
       {/* Pair 4 (Web ke sabse niche): Certificate Verification | Important */}
       <div className="grid grid-cols-2 gap-3 sm:gap-5">
         {renderColumn(
@@ -285,8 +276,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
           'View More Important'
         )}
       </div>
-
-      <AdSection slotId="7738291040" format="horizontal" />
     </div>
   );
 };
