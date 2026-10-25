@@ -69,7 +69,7 @@ export default function App() {
     }
   }, [allPosts]);
 
-  // Real-time storage listener for cross-tab updates without endless cycles
+  // Real-time storage & custom event listener for instant updates across the app
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if ((e.key === 'sarkari_admin_posts_v5' || e.key === 'sarkari_admin_posts_v3') && e.newValue) {
@@ -87,9 +87,21 @@ export default function App() {
       }
     };
 
+    const handleCustomPostsUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && Array.isArray(customEvent.detail)) {
+        setAllPosts((prev) => {
+          if (JSON.stringify(prev) === JSON.stringify(customEvent.detail)) return prev;
+          return customEvent.detail;
+        });
+      }
+    };
+
     window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('sarkari_posts_updated', handleCustomPostsUpdate);
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('sarkari_posts_updated', handleCustomPostsUpdate);
     };
   }, []);
 

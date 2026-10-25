@@ -383,7 +383,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     if (onUpdatePostRef.current) {
       onUpdatePostRef.current(editablePost);
     }
-    // LocalStorage में तुरंत सुरक्षित
+    // LocalStorage में तुरंत सुरक्षित व कस्टम इवेंट डिस्पाच
     try {
       const saved = localStorage.getItem('sarkari_admin_posts_v5');
       let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
@@ -394,6 +394,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         currentArr.push(editablePost);
       }
       localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
+      window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: currentArr }));
     } catch (e) {
       console.error(e);
     }
