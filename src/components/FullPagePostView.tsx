@@ -1915,38 +1915,40 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   {editablePost.shortTitle || editablePost.title} Important Links
                 </h3>
                 
-                <div className="flex items-center gap-2 flex-wrap">
-                  {/* + PDF Upload Button */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPdfUploadTargetIndex(null);
-                      if (pdfFileInputRef.current) {
-                        pdfFileInputRef.current.value = '';
-                        pdfFileInputRef.current.click();
-                      }
-                    }}
-                    className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
-                    title="डिवाइस से नई PDF फ़ाइल अपलोड करें"
-                  >
-                    <span className="text-xs">+ 📄</span>
-                    <span>PDF</span>
-                  </button>
+                {isAdmin && (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {/* + PDF Upload Button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPdfUploadTargetIndex(null);
+                        if (pdfFileInputRef.current) {
+                          pdfFileInputRef.current.value = '';
+                          pdfFileInputRef.current.click();
+                        }
+                      }}
+                      className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
+                      title="डिवाइस से नई PDF फ़ाइल अपलोड करें"
+                    >
+                      <span className="text-xs">+ 📄</span>
+                      <span>PDF</span>
+                    </button>
 
-                  {/* + लिंक Button */}
-                  <button
-                    type="button"
-                    onClick={handleAddDirectLink}
-                    className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
-                    title="नया लिंक जोड़ें"
-                  >
-                    <span className="text-xs">+ 🔗</span>
-                    <span>लिंक</span>
-                  </button>
+                    {/* + लिंक Button */}
+                    <button
+                      type="button"
+                      onClick={handleAddDirectLink}
+                      className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
+                      title="नया लिंक जोड़ें"
+                    >
+                      <span className="text-xs">+ 🔗</span>
+                      <span>लिंक</span>
+                    </button>
 
-                  {/* Section Edit Controls */}
-                  {renderSectionControls('sec_important_links', 'Important Links')}
-                </div>
+                    {/* Section Edit Controls */}
+                    {renderSectionControls('sec_important_links', 'Important Links')}
+                  </div>
+                )}
               </div>
 
               {/* User Guide Banner for Word In-Place Editing */}
@@ -2016,16 +2018,18 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                     <span>{link.actionText || 'Click Here'}</span>
                                   </a>
 
-                                  {/* Compact 📄 PDF Button beside Click Here */}
-                                  <button
-                                    type="button"
-                                    onClick={() => handleAttachPdfToLink(idx)}
-                                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-[11px] px-2 py-0.5 rounded cursor-pointer inline-flex items-center gap-1 shadow-2xs transition-colors"
-                                    title="इस पंक्ति के लिए PDF फ़ाइल चुनें/अपलोड करें"
-                                  >
-                                    <FileText className="w-3 h-3 text-slate-500" />
-                                    <span>PDF</span>
-                                  </button>
+                                  {/* Compact 📄 PDF Button beside Click Here (Only for Admin) */}
+                                  {isAdmin && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleAttachPdfToLink(idx)}
+                                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-[11px] px-2 py-0.5 rounded cursor-pointer inline-flex items-center gap-1 shadow-2xs transition-colors"
+                                      title="इस पंक्ति के लिए PDF फ़ाइल चुनें/अपलोड करें"
+                                    >
+                                      <FileText className="w-3 h-3 text-slate-500" />
+                                      <span>PDF</span>
+                                    </button>
+                                  )}
                                 </div>
 
                                 {/* Reorder & Quick Action Controls in Edit Mode */}
