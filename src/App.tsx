@@ -93,12 +93,22 @@ export default function App() {
     };
   }, []);
 
-  // Ensure latest added jobs like Air Force Hindi Typist are at the very top of allPosts
+  // Ensure latest added jobs like Air Force Hindi Typist are at the very top of allPosts and have PDF attachments
   useEffect(() => {
     setAllPosts((prev) => {
       const idx = prev.findIndex((p) => p.id === iafHindiTypistPost.id);
       if (idx === -1) {
         return [iafHindiTypistPost, ...prev];
+      }
+      const existing = prev[idx];
+      const hasPdf = existing.directLinks?.some((l) => l.fileName && l.isPdf);
+      if (!hasPdf) {
+        const next = [...prev];
+        next[idx] = {
+          ...existing,
+          directLinks: iafHindiTypistPost.directLinks
+        };
+        return next;
       }
       return prev;
     });
@@ -299,9 +309,44 @@ export default function App() {
       const rawHash = window.location.hash.replace('#', '').replace('post/', '').replace('post-', '');
       const cleanSlug = rawHash.split('?')[0].split('&')[0];
       if (cleanSlug) {
-        const found = allPosts.find((p) => p.slug === cleanSlug);
+        const found = allPosts.find((p) => p.slug === cleanSlug || p.id === cleanSlug);
         if (found) {
           setSelectedPost(found);
+          return;
+        } else if (cleanSlug !== 'all' && !['latest_jobs', 'result', 'admit_card', 'answer_key', 'syllabus', 'admission', 'important', 'certificate_verification'].includes(cleanSlug)) {
+          const formattedTitle = cleanSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          setSelectedPost({
+            id: `gen-${cleanSlug}`,
+            slug: cleanSlug,
+            title: `${formattedTitle} Recruitment & Portal Updates 2026`,
+            shortTitle: formattedTitle,
+            hindiTitle: `${formattedTitle} संपूर्ण विवरण व डायरेक्ट फॉर्म 2026`,
+            category: 'latest_jobs',
+            department: 'Other',
+            qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+            state: 'All India',
+            postDate: '25 October 2026',
+            totalVacancies: 'As per notification',
+            shortInfo: `Complete information regarding ${formattedTitle}. Check official eligibility, age limit, application fee, important dates, and direct online form links below.`,
+            applicationFee: [
+              { category: 'General / OBC / EWS', amount: '₹ 0/-' },
+              { category: 'SC / ST / Female', amount: '₹ 0/-' }
+            ],
+            importantDates: [
+              { label: 'Application Begin', value: 'Active Now' },
+              { label: 'Last Date for Apply Online', value: '23/11/2026', isHighlight: true }
+            ],
+            vacancyBreakdown: [
+              { postName: formattedTitle, totalPosts: 'Check Notice', eligibility: '10th / 12th / Graduate from recognized board or university.' }
+            ],
+            ageLimit: { asOnDate: '23/11/2026', minAge: 18, maxAge: 25, notes: 'Age relaxation applicable as per rules' },
+            howToApplySteps: ['Read official notification thoroughly before applying.', 'Click on direct apply online link provided in links table below.'],
+            directLinks: [
+              { label: 'Apply Online / Check Official Portal', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult12.vercel.app/#', isPrimary: true },
+              { label: 'Download Detailed Notification (PDF)', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult12.vercel.app/#', isPdf: true },
+              { label: 'Official Website Portal', actionText: 'Click Here', type: 'official', url: 'https://sarkariresult12.vercel.app/#' }
+            ]
+          });
           return;
         }
       }
@@ -347,9 +392,44 @@ export default function App() {
   };
 
   const handleSelectSlug = (slug: string) => {
-    const post = allPosts.find((p) => p.slug === slug);
+    const post = allPosts.find((p) => p.slug === slug || p.id === slug);
     if (post) {
       handleOpenPostFullPage(post);
+    } else {
+      const formattedTitle = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      const generatedPost: SarkariPost = {
+        id: `gen-${slug}`,
+        slug: slug,
+        title: `${formattedTitle} Recruitment & Portal Updates 2026`,
+        shortTitle: formattedTitle,
+        hindiTitle: `${formattedTitle} संपूर्ण विवरण व डायरेक्ट फॉर्म 2026`,
+        category: 'latest_jobs',
+        department: 'Other',
+        qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+        state: 'All India',
+        postDate: '25 October 2026',
+        totalVacancies: 'As per notification',
+        shortInfo: `Complete information regarding ${formattedTitle}. Check official eligibility, age limit, application fee, important dates, and direct online form links below.`,
+        applicationFee: [
+          { category: 'General / OBC / EWS', amount: '₹ 0/-' },
+          { category: 'SC / ST / Female', amount: '₹ 0/-' }
+        ],
+        importantDates: [
+          { label: 'Application Begin', value: 'Active Now' },
+          { label: 'Last Date for Apply Online', value: '23/11/2026', isHighlight: true }
+        ],
+        vacancyBreakdown: [
+          { postName: formattedTitle, totalPosts: 'Check Notice', eligibility: '10th / 12th / Graduate from recognized board or university.' }
+        ],
+        ageLimit: { asOnDate: '23/11/2026', minAge: 18, maxAge: 25, notes: 'Age relaxation applicable as per rules' },
+        howToApplySteps: ['Read official notification thoroughly before applying.', 'Click on direct apply online link provided in links table below.'],
+        directLinks: [
+          { label: 'Apply Online / Check Official Portal', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult12.vercel.app/#', isPrimary: true },
+          { label: 'Download Detailed Notification (PDF)', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult12.vercel.app/#', isPdf: true },
+          { label: 'Official Website Portal', actionText: 'Click Here', type: 'official', url: 'https://sarkariresult12.vercel.app/#' }
+        ]
+      };
+      handleOpenPostFullPage(generatedPost);
     }
   };
 
@@ -757,39 +837,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
 
       <FloatingShareButton currentPost={selectedPost} isHindi={isHindi} />
 
-      {/* Floating Live Word Edit Quick Toggle Pill (Accessible anywhere across the site, dismissible) */}
-      {!isEditPillDismissed && (
-        <div className="fixed bottom-4 left-4 z-40 flex items-center gap-1 group">
-          <button
-            type="button"
-            onClick={handleToggleGlobalWordEdit}
-            className={`font-black text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-2xl flex items-center gap-2 cursor-pointer transition-all border ${
-              isGlobalWordEditActive
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-300 ring-4 ring-emerald-300/40 animate-pulse'
-                : 'bg-slate-950 hover:bg-neutral-800 text-amber-300 border-amber-400 hover:scale-105'
-            }`}
-            title="पूरी वेबसाइट पर वर्ड एडिट चालू/बंद करें"
-          >
-            <span className={`w-2.5 h-2.5 rounded-full ${isGlobalWordEditActive ? 'bg-white animate-ping' : 'bg-emerald-400'}`}></span>
-            <span>{isGlobalWordEditActive ? '🟢 वर्ड एडिट चालू है (LIVE)' : '✏️ वर्ड एडिट चालू करें (LIVE)'}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setIsEditPillDismissed(true);
-              try {
-                localStorage.setItem('sarkari_hide_edit_pill', 'true');
-              } catch (e) {
-                console.error(e);
-              }
-            }}
-            className="w-6 h-6 rounded-full bg-slate-900/80 hover:bg-black text-slate-300 hover:text-white flex items-center justify-center text-xs font-bold shadow-md cursor-pointer border border-slate-700 transition-colors"
-            title="इस बटन को छिपाएं (Hide)"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+
 
     </div>
   );

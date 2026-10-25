@@ -45,31 +45,6 @@ export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => 
     return l;
   });
 
-  // Ensure Join WhatsApp Channel & Join Telegram Channel exist in important links section
-  const hasWhatsapp = existing.some(l => 
-    l.label?.toLowerCase().includes('whatsapp') || l.url?.toLowerCase().includes('whatsapp')
-  );
-  if (!hasWhatsapp) {
-    existing.push({
-      label: 'Join WhatsApp Channel',
-      actionText: 'Click Here',
-      type: 'official',
-      url: 'https://whatsapp.com/channel/sarkariresult'
-    });
-  }
-
-  const hasTelegram = existing.some(l => 
-    l.label?.toLowerCase().includes('telegram') || l.url?.toLowerCase().includes('t.me')
-  );
-  if (!hasTelegram) {
-    existing.push({
-      label: 'Join Telegram Channel',
-      actionText: 'Click Here',
-      type: 'official',
-      url: 'https://t.me/sarkariresult'
-    });
-  }
-
   return existing;
 };
 import { 
@@ -85,7 +60,11 @@ import {
   BookOpen,
   FileText,
   Download,
-  Upload
+  Upload,
+  Share2,
+  Copy,
+  X,
+  Edit3
 } from 'lucide-react';
 import { isPostAlertActive, togglePostAlert, getPostStatus } from '../utils/alertManager';
 import { PostAlertModal } from './PostAlertModal';
@@ -366,6 +345,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   const [hiddenSections, setHiddenSections] = React.useState<Record<string, boolean>>({});
   const [isPdfModalOpen, setIsPdfModalOpen] = useState<boolean>(false);
   const [pdfUploadTargetIndex, setPdfUploadTargetIndex] = useState<number | null>(null);
+  const [_lastSavedTime, setLastSavedTime] = useState<string>('');
+  const [_hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const pdfFileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const isAdmin = useMemo(() => {
@@ -380,14 +361,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       lastSavedJsonRef.current = currentJson;
       return;
     }
-    if (currentJson === lastSavedJsonRef.current) {
-      return;
-    }
+    if (currentJson === lastSavedJsonRef.current) return;
     lastSavedJsonRef.current = currentJson;
 
+    // पैरेंट कंपोनेंट व Firestore में अपडेट
     if (onUpdatePostRef.current) {
       onUpdatePostRef.current(editablePost);
     }
+    // LocalStorage में तुरंत सुरक्षित
     try {
       const saved = localStorage.getItem('sarkari_admin_posts_v5');
       let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
@@ -398,6 +379,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         currentArr.push(editablePost);
       }
       localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
+      setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setHasUnsavedChanges(false);
     } catch (e) {
       console.error(e);
     }
@@ -405,8 +388,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
   // Reusable Word-by-Word In-Place Editable Component
   const EditableText: React.FC<{
-    value: string | number | undefined;
-    onChange: (newVal: string) => void;
+    value?: string | number;
+    onChange: (val: string) => void;
     className?: string;
     style?: React.CSSProperties;
     as?: 'span' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'div' | 'p' | 'td';
@@ -422,6 +405,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     titlePrefix = 'टेक्स्ट'
   }) => {
     const strVal = String(value ?? '');
+    
+    // यदि वर्ड एडिट मोड बंद है तो साधारण टेक्स्ट दिखाएं
     if (!isDirectEditMode) {
       return (
         <Tag className={className} style={style}>
@@ -430,11 +415,18 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       );
     }
 
+    // वर्ड एडिट मोड चालू होने पर सीधे क्लिक करके टाइप करें
     return (
       <Tag
         contentEditable
         suppressContentEditableWarning
         style={style}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && Tag !== 'p' && Tag !== 'div') {
+            e.preventDefault();
+            e.currentTarget.blur();
+          }
+        }}
         onBlur={(e) => {
           const updated = e.currentTarget.innerText.trim();
           if (updated !== strVal) {
@@ -619,27 +611,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   };
 
   const handleAttachPdfToLink = (index: number) => {
-    const choice = confirm('क्या आप इस लिंक के लिए अपने कंप्यूटर/फ़ोन से PDF फ़ाइल अपलोड करना चाहते हैं?\n\n- OK: डिवाइस से PDF फ़ाइल चुनें\n- Cancel: PDF URL / Drive लिंक दर्ज करें');
-    if (choice) {
-      setPdfUploadTargetIndex(index);
-      pdfFileInputRef.current?.click();
-    } else {
-      const currentUrl = (editablePost.directLinks || [])[index]?.url || 'https://';
-      const newUrl = prompt('PDF का वेब URL या Google Drive लिंक दर्ज करें (Enter PDF URL):', currentUrl);
-      if (newUrl !== null) {
-        setEditablePost(prev => {
-          const list = [...(prev.directLinks || [])];
-          list[index] = {
-            ...list[index],
-            url: newUrl.trim(),
-            isPdf: true,
-            actionText: list[index].actionText || 'Click Here'
-          };
-          return { ...prev, directLinks: list };
-        });
-        setAlertFeedback('✅ PDF लिंक अपडेट किया गया!');
-        setTimeout(() => setAlertFeedback(null), 3000);
-      }
+    setPdfUploadTargetIndex(index);
+    if (pdfFileInputRef.current) {
+      pdfFileInputRef.current.value = '';
+      pdfFileInputRef.current.click();
     }
   };
 
@@ -1076,6 +1051,29 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               {post.shortTitle || post.title}
             </li>
           </ol>
+
+          {/* Toggle Word In-Place Edit Mode Button */}
+          <button
+            type="button"
+            onClick={() => {
+              const next = !isDirectEditMode;
+              setIsDirectEditMode(next);
+              if (onToggleGlobalWordEdit) {
+                if ((next && !isGlobalWordEditActive) || (!next && isGlobalWordEditActive)) {
+                  onToggleGlobalWordEdit();
+                }
+              }
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold text-xs transition cursor-pointer shadow-xs ${
+              isDirectEditMode
+                ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 ring-2 ring-amber-300'
+                : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+            }`}
+            title="वर्ड इन-प्लेस एडिट मोड ऑन/ऑफ करें (In-Place Word Edit Mode)"
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>{isDirectEditMode ? '✓ वर्ड इन-प्लेस एडिट सक्रिय' : '✏️ वर्ड इन-प्लेस एडिट मोड'}</span>
+          </button>
         </nav>
 
         {/* Direct In-Place Click-to-Edit Mode Control Bar (Hidden by default, only shown when active) */}
@@ -1111,64 +1109,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           </div>
         )}
 
-        {/* Admin Mode Active Controls Bar - Only visible when Admin is authenticated */}
-        {isAdmin && (
-          <div className="mb-2.5 bg-slate-900 text-white px-3 py-2 rounded border-b-2 border-red-600 flex flex-wrap items-center justify-between gap-2 shadow-xs font-sans">
-            <div className="flex items-center gap-2">
-              <span className="bg-emerald-500 text-slate-950 font-black text-[11px] px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1.5 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
-                कंट्रोल्स (Admin Mode Active)
-              </span>
-              <span className="text-xs text-slate-300 font-semibold hidden md:inline truncate max-w-xs">
-                {post.shortTitle || post.title}
-              </span>
-            </div>
 
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {/* 1. Direct Post Editor */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenDirectEditor) onOpenDirectEditor();
-                  else if (onOpenAdmin) onOpenAdmin();
-                }}
-                className="bg-[#ab1616] hover:bg-red-700 text-white font-black text-xs px-2.5 py-1 rounded flex items-center gap-1 shadow-2xs cursor-pointer transition-colors"
-                title="डायरेक्ट पोस्ट एडिटर खोलें"
-              >
-                <span>⚡</span>
-                <span>डायरेक्ट पोस्ट एडिटर</span>
-              </button>
-
-              {/* 2. Add New Section */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenDirectEditor) onOpenDirectEditor();
-                  else if (onOpenAdmin) onOpenAdmin();
-                }}
-                className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs px-2.5 py-1 rounded flex items-center gap-1 shadow-2xs cursor-pointer transition-colors"
-                title="नया सेक्शन या लिंक जोड़ें"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>+ नया सेक्शन जोड़ें</span>
-              </button>
-
-              {/* 3. Delete Post - Only Admin */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenDirectEditor) onOpenDirectEditor();
-                  else if (onOpenAdmin) onOpenAdmin();
-                }}
-                className="bg-red-950 hover:bg-red-900 text-red-200 hover:text-white border border-red-700 font-bold text-xs px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer transition-colors"
-                title="डिलीट करें (केवल व्यवस्थापक / Admin Only)"
-              >
-                <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                <span>डिलीट (Only Admin)</span>
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Alert Toast Feedback */}
         {alertFeedback && (
@@ -1275,14 +1216,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
                   <div className="space-y-6">
                     {post.vacancyBreakdown.map((item, idx) => (
-                      <div key={idx} className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3 shadow-2xs">
+                      <div key={idx} className="border border-slate-300 bg-white p-4 sm:p-6 text-[10pt] space-y-2.5 shadow-2xs">
                         <h4 
-                          className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-2.5 font-sans"
+                          className="text-[#16a34a] font-black text-[11pt] border-b border-slate-200 pb-2 font-sans"
                           style={{ color: '#16a34a' }}
                         >
                           {item.postName}
                         </h4>
-                        <div className="text-slate-800 leading-relaxed whitespace-pre-line font-sans pt-1 text-[12pt]">
+                        <div className="text-slate-800 leading-relaxed whitespace-pre-line font-sans pt-1 text-[10pt]">
                           {item.eligibility}
                         </div>
                       </div>
@@ -1292,14 +1233,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Informational Guidelines / Instructions */}
                 {post.howToApplySteps && post.howToApplySteps.length > 0 && (
-                  <div className="border border-slate-300 bg-white p-5 sm:p-7 text-[12pt] space-y-3.5 shadow-2xs">
+                  <div className="border border-slate-300 bg-white p-4 sm:p-6 text-[10pt] space-y-2.5 shadow-2xs">
                     <h4 
-                      className="text-[#16a34a] font-black text-[16pt] border-b border-slate-200 pb-3 font-sans"
+                      className="text-[#16a34a] font-black text-[11pt] border-b border-slate-200 pb-2 font-sans"
                       style={{ color: '#16a34a' }}
                     >
                       {post.shortTitle} Guidelines & Important Information
                     </h4>
-                    <ul className="space-y-3 text-slate-800 pt-1 leading-relaxed text-[12pt]">
+                    <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[10pt]">
                       {post.howToApplySteps.map((step, idx) => (
                         <li key={idx}>• {step}</li>
                       ))}
@@ -1314,21 +1255,21 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               <>
                 {/* Horizontal Side-by-Side 2-Column Table for Important Dates & Application Fee */}
                 {!hiddenSections['sec_dates_fee'] ? (
-                  <div className="border border-slate-400 bg-white text-[11.5pt] shadow-2xs overflow-hidden">
+                  <div className="border border-slate-400 bg-white text-[10pt] shadow-2xs overflow-hidden">
                     <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-300 flex items-center justify-between flex-wrap gap-2 text-xs font-bold text-slate-800 font-sans">
                       <span>📍 Important Dates & Application Fee Section</span>
                       {renderSectionControls('sec_dates_fee', 'Important Dates & Fee')}
                     </div>
                     <div className="grid grid-cols-2 divide-x divide-slate-400">
                       {/* Left Column: Important Dates */}
-                      <div className="p-2.5 sm:p-6 space-y-3">
+                      <div className="p-2.5 sm:p-5 space-y-2.5">
                         <h3 
-                          className="font-black text-[13pt] sm:text-[16pt] border-b border-slate-200 pb-2 text-center font-sans tracking-tight"
+                          className="font-black text-[11pt] border-b border-slate-200 pb-1.5 text-center font-sans tracking-tight"
                           style={{ color: '#008000' }}
                         >
                           Important Dates
                         </h3>
-                        <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
+                        <ul className="space-y-2 text-[10pt] text-slate-800 pt-1 leading-relaxed">
                           {(editablePost.importantDates || []).map((d, idx) => (
                             <li key={idx} className="leading-snug flex items-center justify-between gap-2">
                               <div>
@@ -1384,14 +1325,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       </div>
 
                       {/* Right Column: Application Fee */}
-                      <div className="p-2.5 sm:p-6 space-y-3">
+                      <div className="p-2.5 sm:p-5 space-y-2.5">
                         <h3 
-                          className="font-black text-[13pt] sm:text-[16pt] border-b border-slate-200 pb-2 text-center font-sans tracking-tight"
+                          className="font-black text-[11pt] border-b border-slate-200 pb-1.5 text-center font-sans tracking-tight"
                           style={{ color: '#008000' }}
                         >
                           Application Fee
                         </h3>
-                        <ul className="space-y-2.5 text-[11.5pt] text-slate-800 pt-1 leading-relaxed">
+                        <ul className="space-y-2 text-[10pt] text-slate-800 pt-1 leading-relaxed">
                           {editablePost.applicationFee && editablePost.applicationFee.length > 0 ? (
                             editablePost.applicationFee.map((fee, idx) => (
                               <li key={idx} className="leading-snug flex items-center justify-between gap-2">
@@ -1459,9 +1400,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Age Limit Box */}
                 {!isServiceOrScheme && editablePost.ageLimit.asOnDate && (
                   !hiddenSections['sec_age_limit'] ? (
-                    <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs text-center">
-                      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2.5">
-                        <h3 className="font-black text-[14pt] sm:text-[16pt] font-sans">
+                    <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs text-center">
+                      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2">
+                        <h3 className="font-black text-[11pt] font-sans">
                           <span style={{ color: '#008000' }}>{editablePost.shortTitle} Notification 2026 : </span>
                           <span style={{ color: '#ff00ff' }}>
                             Age Limit as on{' '}
@@ -1474,7 +1415,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         </h3>
                         {renderSectionControls('sec_age_limit', 'Age Limit Box')}
                       </div>
-                      <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[11.5pt] text-left max-w-2xl mx-auto">
+                      <ul className="space-y-1.5 text-slate-800 pt-1 leading-relaxed text-[10pt] text-left max-w-2xl mx-auto">
                         <li>
                           • Minimum Age :{' '}
                           <strong className="font-bold text-slate-900">
@@ -1513,8 +1454,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Vacancy Details Table */}
                 {editablePost.vacancyBreakdown && editablePost.vacancyBreakdown.length > 0 && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                       <span className="text-white">{editablePost.shortTitle} Recruitment 2026 : Vacancy Details Total </span>
                       <span className="text-yellow-200">
                         <EditableText
@@ -1528,17 +1469,17 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse">
                         <thead>
-                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
-                            <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/4" style={{ color: '#ff00ff' }}>Post Name</th>
-                            <th className="p-3 sm:p-3.5 border-r border-slate-400 w-1/6 text-center" style={{ color: '#008000' }}>Total Post</th>
-                            <th className="p-3 sm:p-3.5" style={{ color: '#008000' }}>{editablePost.shortTitle} Eligibility Criteria</th>
-                            {isDirectEditMode && <th className="p-3 text-center text-red-600">Action</th>}
+                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400 w-1/4" style={{ color: '#ff00ff' }}>Post Name</th>
+                            <th className="p-2.5 sm:p-3 border-r border-slate-400 w-1/6 text-center" style={{ color: '#008000' }}>Total Post</th>
+                            <th className="p-2.5 sm:p-3" style={{ color: '#008000' }}>{editablePost.shortTitle} Eligibility Criteria</th>
+                            {isDirectEditMode && <th className="p-2.5 text-center text-red-600">Action</th>}
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-300 text-[11.5pt]">
+                        <tbody className="divide-y divide-slate-300 text-[10pt]">
                           {editablePost.vacancyBreakdown.map((v, idx) => (
                             <tr key={idx} className="hover:bg-slate-50/50">
-                              <td className="p-3 sm:p-3.5 align-top font-bold text-blue-900 border-r border-slate-400">
+                              <td className="p-2.5 sm:p-3 align-top font-bold text-blue-900 border-r border-slate-400">
                                 <EditableText
                                   value={v.postName}
                                   onChange={(val) => {
@@ -1551,7 +1492,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                   titlePrefix="पद का नाम (Post Name)"
                                 />
                               </td>
-                              <td className="p-3 sm:p-3.5 align-top text-center font-bold text-slate-900 border-r border-slate-400">
+                              <td className="p-2.5 sm:p-3 align-top text-center font-bold text-slate-900 border-r border-slate-400">
                                 <EditableText
                                   value={v.totalPosts}
                                   onChange={(val) => {
@@ -1564,7 +1505,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                   titlePrefix="पद संख्या (Posts Count)"
                                 />
                               </td>
-                              <td className="p-3 sm:p-3.5 align-top text-slate-800 leading-relaxed whitespace-pre-line font-sans">
+                              <td className="p-2.5 sm:p-3 align-top text-slate-800 leading-relaxed whitespace-pre-line font-sans">
                                 <EditableText
                                   as="div"
                                   value={v.eligibility}
@@ -1579,7 +1520,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                 />
                               </td>
                               {isDirectEditMode && (
-                                <td className="p-3 text-center align-top border-l border-slate-300">
+                                <td className="p-2.5 text-center align-top border-l border-slate-300">
                                   <button
                                     type="button"
                                     onClick={() => handleDeleteVacancyRow(idx)}
@@ -1651,36 +1592,36 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* State-Wise Vacancy Details Table (Renders ONLY IF stateBreakdown data exists) */}
                 {post.stateBreakdown && post.stateBreakdown.length > 0 && (
                   !hiddenSections['sec_state_vacancy'] ? (
-                    <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                      <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
                         <span>{post.shortTitle} State-Wise Vacancy Details</span>
                         {renderSectionControls('sec_state_vacancy', 'State-Wise Vacancy')}
                       </div>
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[11.5pt] sm:text-[12.5pt]">
-                              <th className="p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>State / UT Name</th>
-                              <th className="p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-red-800">SC</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
-                              <th className="p-3">Eligibility / Remarks</th>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>State / UT Name</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-red-800">SC</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
+                              <th className="p-2.5 sm:p-3">Eligibility / Remarks</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-300 text-[11pt]">
+                          <tbody className="divide-y divide-slate-300 text-[10pt]">
                             {post.stateBreakdown.map((s, idx) => (
                               <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-3 font-bold text-blue-900 border-r border-slate-400">• {s.stateName}</td>
-                                <td className="p-3 text-center font-bold text-slate-900 border-r border-slate-400">{s.totalPosts}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.genPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.obcPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.ewsPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.scPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{s.stPosts ?? '-'}</td>
-                                <td className="p-3 text-slate-700 font-sans">{s.eligibilityNote || '-'}</td>
+                                <td className="p-2.5 sm:p-3 font-bold text-blue-900 border-r border-slate-400">• {s.stateName}</td>
+                                <td className="p-2.5 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-400">{s.totalPosts}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.genPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.obcPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.ewsPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.scPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.stPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-slate-700 font-sans">{s.eligibilityNote || '-'}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -1693,44 +1634,44 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Zone-Wise / Regional Vacancy Details Table (Renders ONLY IF zoneBreakdown data exists) */}
                 {post.zoneBreakdown && post.zoneBreakdown.length > 0 && (
                   !hiddenSections['sec_zone_vacancy'] ? (
-                    <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                      <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
                         <span>{post.shortTitle} Zone-Wise / Regional Vacancy Details</span>
                         {renderSectionControls('sec_zone_vacancy', 'Zone-Wise Vacancy')}
                       </div>
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[11.5pt] sm:text-[12.5pt]">
-                              <th className="p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>Zone / Board Name</th>
-                              <th className="p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-red-800">SC</th>
-                              <th className="p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
-                              <th className="p-3 text-center">Action / Portal</th>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>Zone / Board Name</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-red-800">SC</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
+                              <th className="p-2.5 sm:p-3 text-center">Action / Portal</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-300 text-[11pt]">
+                          <tbody className="divide-y divide-slate-300 text-[10pt]">
                             {post.zoneBreakdown.map((z, idx) => (
                               <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-3 font-bold text-blue-900 border-r border-slate-400">
+                                <td className="p-2.5 sm:p-3 font-bold text-blue-900 border-r border-slate-400">
                                   <div>• {z.zoneName}</div>
                                   {z.hindiZoneName && <div className="text-[10pt] text-slate-500 font-normal">{z.hindiZoneName}</div>}
                                 </td>
-                                <td className="p-3 text-center font-bold text-slate-900 border-r border-slate-400">{z.totalPosts}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.genPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.obcPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.ewsPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.scPosts ?? '-'}</td>
-                                <td className="p-3 text-center text-slate-800 border-r border-slate-400">{z.stPosts ?? '-'}</td>
-                                <td className="p-3 text-center">
+                                <td className="p-2.5 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-400">{z.totalPosts}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.genPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.obcPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.ewsPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.scPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.stPosts ?? '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center">
                                   <a
                                     href={z.applyLink || '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold px-3 py-1 rounded text-xs inline-flex items-center gap-1 shadow-2xs transition-colors"
+                                    className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold px-2.5 py-1 rounded text-xs inline-flex items-center gap-1 shadow-2xs transition-colors"
                                   >
                                     <span>Apply</span>
                                     <ExternalLink className="w-3 h-3" />
@@ -1747,15 +1688,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Salary & Pay Scale Table (वेतन सारणी) */}
                 {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                    <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                       {post.shortTitle} Pay Scale & Salary Details (वेतन सारणी)
                     </div>
-                    <div className="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-300">
-                      <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[11.5pt]">
+                    <div className="p-2.5 sm:p-3.5 bg-slate-50 border-b border-slate-300">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[10pt]">
                         <span><strong>Pay Scale (वेतनमान): </strong>{post.salary || 'As per 7th Pay Commission (7th CPC)'}</span>
                         {post.salaryBand && (
-                          <span className="bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded text-[11pt] border border-emerald-300">
+                          <span className="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10pt] border border-emerald-300">
                             Band: {post.salaryBand}
                           </span>
                         )}
@@ -1765,22 +1706,22 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
-                              <th className="p-3 border-r border-slate-400">Post Name</th>
-                              <th className="p-3 border-r border-slate-400 text-center">Pay Level</th>
-                              <th className="p-3 border-r border-slate-400">Basic Pay</th>
-                              <th className="p-3 border-r border-slate-400">In-Hand Salary</th>
-                              <th className="p-3">Allowances / Grade Pay</th>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400">Post Name</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center">Pay Level</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400">Basic Pay</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400">In-Hand Salary</th>
+                              <th className="p-2.5 sm:p-3">Allowances / Grade Pay</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-300 text-[11.5pt]">
+                          <tbody className="divide-y divide-slate-300 text-[10pt]">
                             {post.salaryBreakdown.map((sal, idx) => (
                               <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-3 font-bold text-blue-900 border-r border-slate-400">{sal.postName}</td>
-                                <td className="p-3 text-center font-bold text-emerald-700 border-r border-slate-400">{sal.payLevel}</td>
-                                <td className="p-3 font-bold text-slate-900 border-r border-slate-400">{sal.basicPay}</td>
-                                <td className="p-3 font-bold text-purple-900 border-r border-slate-400">{sal.inHandSalary || '-'}</td>
-                                <td className="p-3 text-slate-700">{sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}</td>
+                                <td className="p-2.5 sm:p-3 font-bold text-blue-900 border-r border-slate-400">{sal.postName}</td>
+                                <td className="p-2.5 sm:p-3 text-center font-bold text-emerald-700 border-r border-slate-400">{sal.payLevel}</td>
+                                <td className="p-2.5 sm:p-3 font-bold text-slate-900 border-r border-slate-400">{sal.basicPay}</td>
+                                <td className="p-2.5 sm:p-3 font-bold text-purple-900 border-r border-slate-400">{sal.inHandSalary || '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-slate-700">{sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -1793,12 +1734,12 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Exam Scheme & Paper Pattern Table (Renders ONLY IF post.paperPattern.subjects exists) */}
                 {post.paperPattern && post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
                   !hiddenSections['sec_paper_pattern'] ? (
-                    <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                      <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[15pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
                         <span>{post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}</span>
                         {renderSectionControls('sec_paper_pattern', 'Paper Pattern')}
                       </div>
-                      <div className="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-300 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[11pt]">
+                      <div className="p-2.5 sm:p-3.5 bg-slate-50 border-b border-slate-300 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10pt]">
                         {post.paperPattern.examMode && (
                           <div className="bg-white p-2 rounded border border-slate-200">
                             <span className="text-slate-500 block text-[10pt]">Exam Mode</span>
@@ -1827,20 +1768,20 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[12pt] sm:text-[13pt]">
-                              <th className="p-3 border-r border-slate-400">Subject / Test Paper</th>
-                              <th className="p-3 border-r border-slate-400 text-center">Questions</th>
-                              <th className="p-3 border-r border-slate-400 text-center">Maximum Marks</th>
-                              <th className="p-3">Duration / Remarks</th>
+                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400">Subject / Test Paper</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center">Questions</th>
+                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center">Maximum Marks</th>
+                              <th className="p-2.5 sm:p-3">Duration / Remarks</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-300 text-[11.5pt]">
+                          <tbody className="divide-y divide-slate-300 text-[10pt]">
                             {post.paperPattern.subjects.map((sub, idx) => (
                               <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-3 font-bold text-slate-900 border-r border-slate-400">{sub.subjectName}</td>
-                                <td className="p-3 text-center font-bold text-blue-900 border-r border-slate-400">{sub.totalQuestions || '-'}</td>
-                                <td className="p-3 text-center font-bold text-emerald-800 border-r border-slate-400">{sub.totalMarks || '-'}</td>
-                                <td className="p-3 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
+                                <td className="p-2.5 sm:p-3 font-bold text-slate-900 border-r border-slate-400">{sub.subjectName}</td>
+                                <td className="p-2.5 sm:p-3 text-center font-bold text-blue-900 border-r border-slate-400">{sub.totalQuestions || '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-center font-bold text-emerald-800 border-r border-slate-400">{sub.totalMarks || '-'}</td>
+                                <td className="p-2.5 sm:p-3 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -1853,10 +1794,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Mode of Selection (Renders ONLY IF post.selectionProcess data exists) */}
                 {editablePost.selectionProcess && editablePost.selectionProcess.length > 0 && (
                   !hiddenSections['sec_selection_process'] ? (
-                    <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
-                      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2.5">
+                    <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs">
+                      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2">
                         <h4 
-                          className="font-black text-[14pt] sm:text-[16pt] font-sans"
+                          className="font-black text-[11pt] font-sans"
                           style={{ color: '#008000' }}
                         >
                           {editablePost.shortTitle} Selection Process / Mode of Selection
@@ -1864,14 +1805,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         {renderSectionControls('sec_selection_process', 'Selection Process')}
                       </div>
                       <div className="pt-1">
-                        <p className="text-slate-800 mb-3 leading-relaxed font-sans text-[11.5pt]">
+                        <p className="text-slate-800 mb-2 leading-relaxed font-sans text-[10pt]">
                           The recruitment board will select eligible candidates through the following sequential stages:
                         </p>
-                        <ol className="space-y-2.5 text-slate-900 font-medium text-[11.5pt]">
+                        <ol className="space-y-2 text-slate-900 font-medium text-[10pt]">
                           {editablePost.selectionProcess.map((step, idx) => (
-                            <li key={idx} className="flex items-start justify-between gap-2.5 bg-slate-50/80 p-3 rounded border border-slate-200">
+                            <li key={idx} className="flex items-start justify-between gap-2.5 bg-slate-50/80 p-2.5 rounded border border-slate-200">
                               <div className="flex items-start gap-2.5 flex-1">
-                                <span className="font-bold text-white text-[11pt] px-2.5 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage {idx + 1}</span>
+                                <span className="font-bold text-white text-[10pt] px-2 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage {idx + 1}</span>
                                 <div className="leading-relaxed text-slate-800 flex-1">
                                   <EditableText
                                     value={step}
@@ -1903,7 +1844,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           <button
                             type="button"
                             onClick={handleAddSelectionStage}
-                            className="mt-3 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                            className="mt-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
                           >
                             <span>+ नया चयन स्टेज जोड़ें (Add Stage)</span>
                           </button>
@@ -1915,12 +1856,12 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* How to Fill Form Section */}
                 {editablePost.howToApplySteps && editablePost.howToApplySteps.length > 0 && (
-                  <div className="border border-slate-400 bg-white p-4 sm:p-6 text-[11.5pt] space-y-3 shadow-2xs">
-                    <h4 className="font-black text-[14pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 font-sans">
+                  <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs">
+                    <h4 className="font-black text-[11pt] border-b border-slate-200 pb-2 font-sans">
                       <span style={{ color: '#008000' }}>How to Fill </span>
                       <span style={{ color: '#ff00ff' }}>{editablePost.shortTitle} Recruitment Online Form 2026</span>
                     </h4>
-                    <ul className="space-y-2.5 text-slate-800 pt-1 leading-relaxed text-[11.5pt]">
+                    <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[10pt]">
                       {editablePost.howToApplySteps.map((step, idx) => (
                         <li key={idx} className="flex items-start justify-between gap-2">
                           <div className="flex-1">
@@ -1960,7 +1901,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           </button>
                         </li>
                       )}
-                      <li className="font-bold pt-2 border-t border-slate-200 mt-2.5 text-center text-[12pt] sm:text-[13pt]" style={{ color: '#ff00ff' }}>
+                      <li className="font-bold pt-2 border-t border-slate-200 mt-2 text-center text-[10.5pt]" style={{ color: '#ff00ff' }}>
                         Interested Candidates Can Read the Full Notification Before Apply Online
                       </li>
                     </ul>
@@ -1969,254 +1910,243 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </>
             )}
 
-            {/* Useful Important Links Table (Includes WhatsApp, Telegram, Instagram & X) */}
-            <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-              <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
-                <span>Some Useful Important Links</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs bg-yellow-400 text-slate-950 font-bold px-2 py-0.5 rounded shadow-2xs">
-                    {(editablePost.directLinks || []).length} लिंक्स
-                  </span>
-                  {isDirectEditMode && (
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setPdfUploadTargetIndex(null);
-                          setIsPdfModalOpen(true);
-                        }}
-                        className="text-xs bg-rose-600 hover:bg-rose-700 text-white font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1 transition-all active:scale-95"
-                        title="PDF फाइल या PDF लिंक जोड़ें"
-                      >
-                        <FileText className="w-3.5 h-3.5" />
-                        <span>+ 📄 PDF जोड़ें</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleAddDirectLink}
-                        className="text-xs bg-white text-emerald-900 hover:bg-emerald-100 font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1"
-                        title="नया सामान्य लिंक जोड़ें"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>+ नया लिंक</span>
-                      </button>
-                    </div>
-                  )}
+            {/* Useful Important Links Table (Matches Screenshot Layout) */}
+            <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
+              <div className="bg-white text-slate-900 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
+                <h3 className="font-extrabold text-[12pt] sm:text-[13pt] text-slate-900 font-sans">
+                  {editablePost.shortTitle || editablePost.title} Important Links
+                </h3>
+                
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* + PDF Upload Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPdfUploadTargetIndex(null);
+                      if (pdfFileInputRef.current) {
+                        pdfFileInputRef.current.value = '';
+                        pdfFileInputRef.current.click();
+                      }
+                    }}
+                    className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
+                    title="डिवाइस से नई PDF फ़ाइल अपलोड करें"
+                  >
+                    <span className="text-xs">+ 📄</span>
+                    <span>PDF</span>
+                  </button>
+
+                  {/* + लिंक Button */}
+                  <button
+                    type="button"
+                    onClick={handleAddDirectLink}
+                    className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
+                    title="नया लिंक जोड़ें"
+                  >
+                    <span className="text-xs">+ 🔗</span>
+                    <span>लिंक</span>
+                  </button>
+
+                  {/* Section Edit Controls */}
+                  {renderSectionControls('sec_important_links', 'Important Links')}
                 </div>
               </div>
 
-              {/* User Guide Banner for Moving Links (Only visible in Edit Mode) */}
+              {/* User Guide Banner for Word In-Place Editing */}
               {isDirectEditMode && (
                 <div className="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex flex-row items-center justify-between text-xs font-bold text-amber-950 gap-1.5 flex-wrap">
                   <span className="flex items-center gap-1.5">
                     <span className="text-base">💡</span>
-                    <span><strong>लिंक रीऑर्डर विकल्प:</strong> किसी भी लिंक को नीचे करने के लिए <strong>"⬇️ नीचे करें"</strong> बटन पर क्लिक करें।</span>
-                  </span>
-                  <span className="text-emerald-700 font-extrabold text-[11px]">
-                    ✏️ वर्ड एडिटर चालू: लिंक नाम व URL पर क्लिक करके सीधे टाइप करें | 📄 PDF बटन से फाइल अपलोड करें
+                    <span><strong>इन-प्लेस एडिट चालू:</strong> किसी भी नाम या URL पर क्लिक करके सीधे टाइप करें या 📄 PDF बटन दबाकर फाइल अपलोड करें।</span>
                   </span>
                 </div>
               )}
 
-              <div className="divide-y divide-slate-300 text-[11.5pt]">
-                {(editablePost.directLinks || []).map((link, idx) => {
-                  const isPdf = Boolean(
-                    link.isPdf ||
-                    link.type === 'notification' ||
-                    link.type === 'syllabus' ||
-                    link.label.toLowerCase().includes('pdf') ||
-                    link.actionText?.toLowerCase().includes('pdf') ||
-                    (link.url && (
-                      link.url.toLowerCase().endsWith('.pdf') ||
-                      link.url.toLowerCase().includes('.pdf?') ||
-                      link.url.startsWith('data:application/pdf')
-                    ))
-                  );
+              {/* 2-Column Table Matching Screenshot */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse font-sans text-[10pt]">
+                  <tbody>
+                    {(editablePost.directLinks || [])
+                      .filter(l => 
+                        !l.label?.toLowerCase().includes('whatsapp') && 
+                        !l.label?.toLowerCase().includes('telegram') && 
+                        !l.url?.toLowerCase().includes('whatsapp') && 
+                        !l.url?.toLowerCase().includes('t.me')
+                      )
+                      .map((link, idx) => {
+                        const isPdf = Boolean(
+                          link.isPdf ||
+                          link.type === 'notification' ||
+                          link.type === 'syllabus' ||
+                          link.label.toLowerCase().includes('pdf') ||
+                          link.actionText?.toLowerCase().includes('pdf') ||
+                          (link.url && (
+                            link.url.toLowerCase().endsWith('.pdf') ||
+                            link.url.toLowerCase().includes('.pdf?') ||
+                            link.url.startsWith('data:application/pdf')
+                          ))
+                        );
 
-                  const isWhatsapp = !isPdf && (link.label.toLowerCase().includes('whatsapp') || (link.url && link.url.includes('whatsapp')));
-                  const isTelegram = !isPdf && (link.label.toLowerCase().includes('telegram') || (link.url && link.url.includes('t.me')));
-                  const btnBg = isPdf
-                    ? 'bg-rose-700 hover:bg-rose-800'
-                    : isWhatsapp 
-                      ? 'bg-[#25D366] hover:bg-emerald-600' 
-                      : isTelegram 
-                        ? 'bg-[#229ED9] hover:bg-sky-600' 
-                        : 'bg-[#0000ff] hover:bg-blue-800';
-
-                  const isLastLink = idx === (editablePost.directLinks || []).length - 1;
-                  const isFirstLink = idx === 0;
-
-                  return (
-                    <div 
-                      key={idx} 
-                      className={`flex flex-row items-center justify-between p-2.5 sm:p-4 hover:bg-slate-50 gap-2 sm:gap-4 transition-colors ${
-                        link.isPrimary ? 'bg-amber-50/50' : ''
-                      } ${isPdf ? 'border-l-4 border-l-rose-600' : ''}`}
-                    >
-                      {/* Left: Link Label */}
-                      <div className="flex items-center gap-2 flex-1 min-w-0">
-                        {isPdf ? (
-                          <span className="font-bold text-rose-600 text-base shrink-0" title="PDF Document">📄</span>
-                        ) : (
-                          <span className="font-black text-slate-700 text-lg leading-none shrink-0">•</span>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <EditableText
-                              value={link.label}
-                              onChange={(newVal) => {
-                                setEditablePost(prev => {
-                                  const list = [...(prev.directLinks || [])];
-                                  list[idx] = { ...list[idx], label: newVal };
-                                  return { ...prev, directLinks: list };
-                                });
-                              }}
-                              className="font-bold text-[11.5pt] sm:text-[13pt] break-words block leading-snug cursor-text"
-                              style={{ color: '#ff00ff' }}
-                              titlePrefix="लिंक का नाम"
-                            />
-                            {isPdf && (
-                              <span className="inline-flex items-center gap-1 text-[10px] font-black bg-rose-600 text-white px-1.5 py-0.5 rounded shadow-2xs uppercase tracking-wider shrink-0">
-                                <FileText className="w-3 h-3" />
-                                <span>PDF</span>
-                                {link.fileSize && <span className="opacity-80">({link.fileSize})</span>}
-                              </span>
-                            )}
-                          </div>
-                          {link.url && isDirectEditMode && (
-                            <span className="text-[10px] text-slate-400 font-mono block truncate max-w-xs sm:max-w-md mt-0.5">
-                              {link.url.startsWith('data:application/pdf') ? `[Attached PDF: ${link.fileName || 'document.pdf'}]` : link.url}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Right: Reorder Controls (Move Down / Move Up) & Action Button */}
-                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 self-center flex-wrap">
-                        {/* Option to Move Link Down (नीचे करने का विकल्प - Edit Mode only) */}
-                        {isDirectEditMode && (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => handleMoveDownDirectLink(idx)}
-                              disabled={isLastLink}
-                              className={`text-xs font-black px-2.5 py-1.5 rounded flex items-center gap-1 transition-all border ${
-                                isLastLink
-                                  ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
-                                  : 'bg-amber-100 hover:bg-amber-200 text-amber-950 border-amber-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
-                              }`}
-                              title="इस लिंक को एक स्थान नीचे करें (Move Link Down)"
-                            >
-                              <span className="text-sm">⬇️</span>
-                              <span>नीचे करें</span>
-                            </button>
-
-                            {/* Option to Move Link Up (ऊपर करने का विकल्प) */}
-                            <button
-                              type="button"
-                              onClick={() => handleMoveUpDirectLink(idx)}
-                              disabled={isFirstLink}
-                              className={`text-xs font-bold px-2 py-1.5 rounded flex items-center gap-1 transition-all border ${
-                                isFirstLink
-                                  ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400 border-slate-200'
-                                  : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300 hover:scale-105 active:scale-95 shadow-2xs cursor-pointer'
-                              }`}
-                              title="इस लिंक को ऊपर करें (Move Link Up)"
-                            >
-                              <span className="text-sm">⬆️</span>
-                              <span className="hidden sm:inline">ऊपर</span>
-                            </button>
-                          </>
-                        )}
-
-                        {/* Action Button: Click Here or Download PDF */}
-                        <a
-                          href={link.url || 'https://sarkariresult12.vercel.app/#'}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          download={isPdf ? (link.fileName || `${link.label.replace(/\s+/g, '_')}.pdf`) : undefined}
-                          className={`inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 text-white font-bold rounded-xs text-[11pt] sm:text-[11.5pt] shadow-2xs cursor-pointer transition-all hover:scale-102 ${btnBg}`}
-                          title={isPdf ? 'Download PDF Document' : 'Open Link'}
-                        >
-                          {isPdf ? (
-                            <>
-                              <FileText className="w-3.5 h-3.5 shrink-0" />
-                              <span>{link.actionText || 'Click Here'}</span>
-                              <ExternalLink className="w-3.5 h-3.5 shrink-0 ml-0.5 opacity-90" />
-                            </>
-                          ) : (
-                            <>
-                              <span>{link.actionText || 'Click Here'}</span>
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </>
-                          )}
-                        </a>
-
-                        {/* Edit Mode Quick PDF, URL & Delete buttons */}
-                        {isDirectEditMode && (
-                          <div className="flex items-center gap-1 pl-1 border-l border-slate-200">
-                            <button
-                              type="button"
-                              onClick={() => handleAttachPdfToLink(idx)}
-                              className="text-[11px] bg-rose-100 hover:bg-rose-200 text-rose-900 border border-rose-300 font-bold px-2 py-1 rounded cursor-pointer flex items-center gap-0.5"
-                              title="इस लिंक में PDF फाइल या PDF URL जोड़ें"
-                            >
-                              <FileText className="w-3 h-3 text-rose-700" />
-                              <span>PDF</span>
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const newUrl = prompt('लिंक का URL दर्ज करें (Enter URL):', link.url || 'https://');
-                                if (newUrl !== null) {
+                        return (
+                          <tr key={idx} className="border-b border-slate-200 hover:bg-slate-50/70 transition-colors">
+                            {/* Column 1: Link Title / Name */}
+                            <td className="p-3 sm:p-3.5 font-bold text-slate-900 border-r border-slate-200 w-1/2 align-middle">
+                              <EditableText
+                                value={link.label}
+                                onChange={(newVal) => {
                                   setEditablePost(prev => {
                                     const list = [...(prev.directLinks || [])];
-                                    list[idx] = { ...list[idx], url: newUrl.trim() };
+                                    list[idx] = { ...list[idx], label: newVal };
                                     return { ...prev, directLinks: list };
                                   });
-                                }
-                              }}
-                              className="text-[11px] bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-2 py-1 rounded cursor-pointer"
-                              title="URL बदलें"
-                            >
-                              🔗 URL
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteDirectLink(idx)}
-                              className="text-red-500 hover:text-red-700 text-xs px-1.5 py-1 rounded hover:bg-red-50 cursor-pointer font-bold"
-                              title="यह लिंक हटाएं"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                                }}
+                                className="font-bold text-[10.5pt] text-slate-900 break-words block"
+                                titlePrefix="लिंक का नाम"
+                              />
+                            </td>
+
+                            {/* Column 2: Link Action / Click Here & PDF Button */}
+                            <td className="p-3 sm:p-3.5 w-1/2 align-middle">
+                              <div className="flex items-center justify-between gap-2 flex-wrap">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <a
+                                    href={link.url || '#'}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    download={isPdf ? (link.fileName || `${(link.label || 'file').replace(/\s+/g, '_')}.pdf`) : undefined}
+                                    className="text-blue-600 hover:text-blue-800 underline font-bold text-[11pt]"
+                                  >
+                                    <span>{link.actionText || 'Click Here'}</span>
+                                  </a>
+
+                                  {/* Compact 📄 PDF Button beside Click Here */}
+                                  <button
+                                    type="button"
+                                    onClick={() => handleAttachPdfToLink(idx)}
+                                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-[11px] px-2 py-0.5 rounded cursor-pointer inline-flex items-center gap-1 shadow-2xs transition-colors"
+                                    title="इस पंक्ति के लिए PDF फ़ाइल चुनें/अपलोड करें"
+                                  >
+                                    <FileText className="w-3 h-3 text-slate-500" />
+                                    <span>PDF</span>
+                                  </button>
+                                </div>
+
+                                {/* Reorder & Quick Action Controls in Edit Mode */}
+                                {isDirectEditMode && (
+                                  <div className="flex items-center gap-1">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleMoveUpDirectLink(idx)}
+                                      disabled={idx === 0}
+                                      className="text-xs text-slate-600 hover:bg-slate-200 p-1 rounded cursor-pointer disabled:opacity-30"
+                                      title="ऊपर करें"
+                                    >
+                                      ⬆️
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleMoveDownDirectLink(idx)}
+                                      disabled={idx === (editablePost.directLinks || []).length - 1}
+                                      className="text-xs text-slate-600 hover:bg-slate-200 p-1 rounded cursor-pointer disabled:opacity-30"
+                                      title="नीचे करें"
+                                    >
+                                      ⬇️
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const newUrl = prompt('लिंक का URL दर्ज करें (Enter URL):', link.url || 'https://');
+                                        if (newUrl !== null) {
+                                          setEditablePost(prev => {
+                                            const list = [...(prev.directLinks || [])];
+                                            list[idx] = { ...list[idx], url: newUrl.trim() };
+                                            return { ...prev, directLinks: list };
+                                          });
+                                        }
+                                      }}
+                                      className="text-[10px] bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-1.5 py-0.5 rounded cursor-pointer"
+                                      title="URL बदलें"
+                                    >
+                                      🔗
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDeleteDirectLink(idx)}
+                                      className="text-red-500 hover:text-red-700 text-xs px-1 hover:bg-red-50 rounded cursor-pointer font-bold"
+                                      title="हटाएं"
+                                    >
+                                      ✕
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
               </div>
             </div>
 
+            {/* Join WhatsApp & Telegram Channel Section */}
+            <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
+              <div className="bg-slate-800 text-white px-4 py-2 text-[11pt] font-extrabold uppercase tracking-wide">
+                <span>Join Official Channels</span>
+              </div>
+              <div className="divide-y divide-slate-200 text-[10pt]">
+                {/* Join WhatsApp Channel */}
+                <div className="flex flex-row items-center justify-between p-3 sm:p-3.5 hover:bg-slate-50 gap-2 sm:gap-4 transition-colors">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="font-bold text-slate-800 text-[10.5pt]">
+                      Join WhatsApp Channel
+                    </span>
+                  </div>
+                  <a
+                    href="https://whatsapp.com/channel/sarkariresult"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1 px-3 py-1 text-white font-bold text-[10pt] bg-[#25D366] hover:bg-emerald-600 rounded-md shadow-2xs cursor-pointer transition-colors"
+                  >
+                    <span>Click Here</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
 
-
+                {/* Join Telegram Channel */}
+                <div className="flex flex-row items-center justify-between p-3 sm:p-3.5 hover:bg-slate-50 gap-2 sm:gap-4 transition-colors">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="font-bold text-slate-800 text-[10.5pt]">
+                      Join Telegram Channel
+                    </span>
+                  </div>
+                  <a
+                    href="https://t.me/sarkariresult"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1 px-3 py-1 text-white font-bold text-[10pt] bg-[#229ED9] hover:bg-sky-600 rounded-md shadow-2xs cursor-pointer transition-colors"
+                  >
+                    <span>Click Here</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+            </div>
 
             {/* Frequently Asked Questions (FAQ) Section - Placed JUST BELOW Important Links */}
             {faqs.length > 0 && (
               !hiddenSections['sec_faqs'] ? (
-                <div className="border border-slate-400 bg-white overflow-hidden text-[11.5pt] shadow-2xs">
-                  <div className="text-white px-4 py-2.5 text-[14pt] sm:text-[16pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
-                    <span>Frequently Asked Questions (FAQ) – {editablePost.shortTitle}</span>
+                <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
+                  <div className="bg-white text-slate-900 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
+                    <h3 className="font-extrabold text-[12pt] sm:text-[13pt] text-slate-900 font-sans">
+                      {editablePost.shortTitle || editablePost.title} FAQs
+                    </h3>
                     {renderSectionControls('sec_faqs', 'FAQs')}
                   </div>
-                  <div className="p-4 sm:p-7 divide-y divide-slate-200 space-y-4">
+                  <div className="p-3.5 sm:p-5 divide-y divide-slate-200 space-y-3">
                     {faqs.map((faq, idx) => (
-                      <div key={idx} className="pt-4 first:pt-0 space-y-1.5">
+                      <div key={idx} className="pt-3 first:pt-0 space-y-1">
                         <div className="flex items-start justify-between gap-2">
-                          <h5 
-                            className="font-bold text-[13pt] sm:text-[14pt] leading-snug flex items-start gap-1.5 font-sans flex-1"
-                            style={{ color: idx % 2 === 0 ? '#ff00ff' : '#008000' }}
-                          >
+                          <h5 className="font-bold text-[10.5pt] leading-snug flex items-start gap-1.5 font-sans flex-1 text-slate-900">
                             <span>Q.{idx + 1} : </span>
                             <div className="flex-1">
                               <EditableText
@@ -2237,14 +2167,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                               type="button"
                               onClick={() => handleDeleteFAQ(idx)}
                               className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
-                              title="यह FAQ हटाएं"
+                              title="यह FAQ बताएं"
                             >
                               ✕ हटाएं
                             </button>
                           )}
                         </div>
-                        <div className="text-slate-800 text-[11.5pt] pl-4 sm:pl-6 leading-relaxed font-sans">
-                          <span className="text-slate-900 font-bold text-[11.5pt] mr-1">Ans.</span> 
+                        <div className="text-slate-800 text-[10pt] pl-4 sm:pl-6 leading-relaxed font-sans">
+                          <span className="text-slate-900 font-bold text-[10pt] mr-1">Ans.</span> 
                           <EditableText
                             as="span"
                             value={faq.answer}
@@ -2265,7 +2195,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         <button
                           type="button"
                           onClick={handleAddFAQ}
-                          className="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer"
+                          className="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer"
                         >
                           <span>+ नया FAQ सवाल-जवाब जोड़ें (Add FAQ)</span>
                         </button>
@@ -2387,125 +2317,51 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
       {/* Add / Attach PDF Dialog Modal */}
       {isPdfModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-lg shadow-2xl max-w-lg w-full overflow-hidden border-2 border-rose-600 animate-in fade-in zoom-in-95 duration-150">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-rose-700 to-red-800 text-white px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FileText className="w-5 h-5 text-rose-200" />
-                <h3 className="font-black text-base sm:text-lg">महत्वपूर्ण लिंक में PDF जोड़ें (Add PDF)</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full border border-slate-300 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 bg-rose-700 text-white">
+              <div className="flex items-center gap-2 font-black text-sm">
+                <FileText className="w-4 h-4" />
+                <span>
+                  {pdfUploadTargetIndex !== null ? 'मौजूदा लिंक के लिए PDF अपलोड करें' : 'नया PDF डॉक्यूमेंट जोड़ें'}
+                </span>
               </div>
               <button
                 type="button"
-                onClick={() => {
-                  setIsPdfModalOpen(false);
-                  setPdfUploadTargetIndex(null);
-                }}
-                className="text-white hover:text-rose-200 text-xl font-bold p-1 cursor-pointer leading-none"
-                title="बंद करें (Close)"
+                onClick={() => setIsPdfModalOpen(false)}
+                className="text-white hover:bg-rose-800 p-1 rounded cursor-pointer"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Body */}
-            <div className="p-4 sm:p-5 space-y-4 max-h-[80vh] overflow-y-auto text-slate-800">
-              {/* Option 1: Direct File Upload */}
-              <div className="bg-rose-50 border-2 border-dashed border-rose-300 rounded-lg p-4 text-center hover:bg-rose-100/70 transition-colors">
-                <div className="w-12 h-12 bg-rose-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
-                  <Upload className="w-6 h-6" />
-                </div>
-                <h4 className="font-extrabold text-sm sm:text-base text-rose-950">
-                  डिवाइस / फोन से PDF फाइल अपलोड करें
-                </h4>
-                <p className="text-xs text-rose-700 mt-1 mb-3">
-                  अपने कंप्यूटर या मोबाइल से नोटिफिकेशन या सिलेबस की PDF फ़ाइल चुनें
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    pdfFileInputRef.current?.click();
-                  }}
-                  className="bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded shadow-xs cursor-pointer inline-flex items-center gap-2 active:scale-95 transition-all"
-                >
-                  <FileText className="w-4 h-4" />
-                  <span>PDF फ़ाइल चुनें (.pdf)</span>
-                </button>
+            <div className="p-4 space-y-4">
+              <div className="p-3 bg-rose-50 border border-rose-200 rounded text-xs text-rose-900 space-y-1">
+                <p className="font-bold">📄 PDF फाइल अपलोड निर्देश:</p>
+                <p>कंप्यूटर या मोबाइल से कोई भी आधिकारिक PDF (नोटिफिकेशन, सिलेबस, रिजल्ट, फॉर्म) चुनें। यह तुरंत लिंक के साथ अटैच होकर डाउनलोड करने योग्य बन जाएगी।</p>
               </div>
 
-              {/* Option 2: Quick Standard PDF Presets */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase text-slate-600 tracking-wider block">
-                  या तैयार सरकारी भर्ती PDF लिंक चुनें (Presets):
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  PDF फ़ाइल चुनें (.pdf)
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => handleAddPresetPdfLink('Download Detailed Notification (PDF)', 'Click Here', 'notification')}
-                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
-                  >
-                    <span className="text-rose-600 font-black text-sm">📋</span>
-                    <span>Download Detailed Notification (PDF)</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleAddPresetPdfLink('Download Syllabus & Exam Pattern (PDF)', 'Click Here', 'syllabus')}
-                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
-                  >
-                    <span className="text-rose-600 font-black text-sm">📚</span>
-                    <span>Download Syllabus (PDF)</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleAddPresetPdfLink('Download Result & Merit List (PDF)', 'Click Here', 'result')}
-                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
-                  >
-                    <span className="text-rose-600 font-black text-sm">🏆</span>
-                    <span>Download Result (PDF)</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleAddPresetPdfLink('Download Answer Key (PDF)', 'Click Here', 'answer_key')}
-                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
-                  >
-                    <span className="text-rose-600 font-black text-sm">🔑</span>
-                    <span>Download Answer Key (PDF)</span>
-                  </button>
-                </div>
+                <input
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  onChange={handlePdfFileChange}
+                  className="block w-full text-xs text-slate-700 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-700 cursor-pointer border border-slate-300 rounded p-1 bg-slate-50"
+                />
               </div>
 
-              {/* Option 3: Custom Online PDF URL / Google Drive */}
-              <div className="pt-2 border-t border-slate-200">
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
                 <button
                   type="button"
-                  onClick={() => {
-                    const customLabel = prompt('PDF लिंक का नाम दर्ज करें (Link Name):', 'Download Official Notice (PDF)');
-                    if (customLabel) {
-                      handleAddPresetPdfLink(customLabel, 'Download PDF', 'notification');
-                    }
-                  }}
-                  className="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded border border-slate-300 cursor-pointer flex items-center justify-center gap-1.5 transition-colors"
+                  onClick={() => setIsPdfModalOpen(false)}
+                  className="px-3 py-1.5 rounded text-xs font-bold text-slate-600 hover:bg-slate-100 border border-slate-300 cursor-pointer"
                 >
-                  <span>🔗 अन्य कस्टम PDF वेब लिंक / Google Drive लिंक जोड़ें</span>
+                  रद्द करें
                 </button>
               </div>
-            </div>
-
-            {/* Footer */}
-            <div className="bg-slate-100 px-4 py-2.5 border-t border-slate-200 flex justify-end">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsPdfModalOpen(false);
-                  setPdfUploadTargetIndex(null);
-                }}
-                className="px-4 py-1.5 bg-slate-600 hover:bg-slate-700 text-white font-bold text-xs rounded cursor-pointer"
-              >
-                रद्द करें (Cancel)
-              </button>
             </div>
           </div>
         </div>

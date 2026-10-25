@@ -133,3 +133,58 @@ export const getHowToApplyHindiSteps = (post: SarkariPost): HowToApplyStep[] => 
     }
   ];
 };
+
+/**
+ * Checks if a post's application last date has expired.
+ * Compares post.lastDate (or lastDate in importantDates) with today's reference date.
+ */
+export const isPostExpired = (post: SarkariPost, referenceDate: Date = new Date()): boolean => {
+  if (post.isArchived) return true;
+  if (post.status === 'closed') return true;
+
+  // Non-recruitment or continuous categories like results/admit_cards/answer_keys are not application forms
+  if (post.category === 'result' || post.category === 'admit_card' || post.category === 'answer_key') {
+    return false;
+  }
+
+  const { lastDate } = getApplyDates(post);
+  if (!lastDate || lastDate.toLowerCase().includes('soon') || lastDate.toLowerCase().includes('schedule')) {
+    return false;
+  }
+
+  const cleanDateStr = lastDate.replace(/extended|till.*|by.*|\(.*\)/gi, '').trim();
+
+  // 1. Try parsing DD/MM/YYYY or DD-MM-YYYY
+  const ddmmyyyyMatch = cleanDateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if (ddmmyyyyMatch) {
+    const day = parseInt(ddmmyyyyMatch[1], 10);
+    const month = parseInt(ddmmyyyyMatch[2], 10) - 1;
+    const year = parseInt(ddmmyyyyMatch[3], 10);
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+      const expiryDate = new Date(year, month, day, 23, 59, 59);
+      return referenceDate.getTime() > expiryDate.getTime();
+    }
+  }
+
+  // 2. Try parsing YYYY-MM-DD
+  const yyyymmddMatch = cleanDateStr.match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if (yyyymmddMatch) {
+    const year = parseInt(yyyymmddMatch[1], 10);
+    const month = parseInt(yyyymmddMatch[2], 10) - 1;
+    const day = parseInt(yyyymmddMatch[3], 10);
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+      const expiryDate = new Date(year, month, day, 23, 59, 59);
+      return referenceDate.getTime() > expiryDate.getTime();
+    }
+  }
+
+  // 3. Try parsing text date like "23 Nov 2026"
+  const parsed = Date.parse(cleanDateStr);
+  if (!isNaN(parsed)) {
+    const expiryDate = new Date(parsed);
+    expiryDate.setHours(23, 59, 59);
+    return referenceDate.getTime() > expiryDate.getTime();
+  }
+
+  return false;
+};

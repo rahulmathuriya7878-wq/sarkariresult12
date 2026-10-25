@@ -150,6 +150,7 @@ export interface SarkariPost {
   isNew?: boolean;
   status?: 'upcoming' | 'active' | 'closed';
   isUpcoming?: boolean;
+  isArchived?: boolean;
   lastDate?: string;
   examDate?: string;
   admitCardDate?: string;
@@ -176,4 +177,10 @@ export interface SarkariPost {
   directLinks: DirectLinkItem[];
   notificationNumber?: string;
   customFaqs?: PostFAQItem[];
+  pdfAttachment?: {
+    fileName: string;
+    fileSize?: string;
+    url: string;
+    uploadedAt?: string;
+  };
 }

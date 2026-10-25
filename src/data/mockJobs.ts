@@ -1,5 +1,6 @@
 import { SarkariPost } from '../types/job';
 import { screenshotResultPosts, screenshotLatestJobPosts } from './screenshotPosts';
+import { generateRecruitmentNotificationPdf } from '../utils/pdfGenerator';
 
 export const upscCdsResultPost: SarkariPost = {
   id: 'res-upsc-cds-ii-2026',
@@ -174,7 +175,18 @@ export const iafHindiTypistPost: SarkariPost = {
       label: 'Download Detailed Notification (PDF)', 
       actionText: 'Click Here', 
       type: 'notification', 
-      url: 'https://rajasthanvacancy.com/indian-air-force-hindi-typist-recruitment-2026/', 
+      url: generateRecruitmentNotificationPdf({
+        title: 'Indian Air Force IAF Hindi Typist Recruitment 2026',
+        department: 'Headquarters Southern Air Command (SAC), Akkulam, Trivandrum',
+        shortTitle: 'IAF Hindi Typist 2026 Offline Form',
+        postDate: '25 October 2026',
+        lastDate: '23/11/2026',
+        totalVacancies: 1,
+        salary: 'Pay Level-2 (Rs 19,900 - 63,200)',
+        notificationNumber: 'Advt No. 04/2026 / HQ SAC'
+      }), 
+      fileName: 'Indian_Air_Force_Hindi_Typist_Notification_2026.pdf',
+      fileSize: '482 KB',
       isPdf: true,
       isPrimary: true 
     },
@@ -182,9 +194,26 @@ export const iafHindiTypistPost: SarkariPost = {
       label: 'Download Offline Application Form (PDF)', 
       actionText: 'Click Here', 
       type: 'notification', 
-      url: 'https://rajasthanvacancy.com/indian-air-force-hindi-typist-recruitment-2026/', 
+      url: generateRecruitmentNotificationPdf({
+        title: 'Indian Air Force IAF Hindi Typist Application Form 2026',
+        department: 'Headquarters Southern Air Command (SAC), Akkulam, Trivandrum',
+        shortTitle: 'IAF Hindi Typist Offline Application Format',
+        postDate: '25 October 2026',
+        lastDate: '23/11/2026',
+        totalVacancies: 1,
+        salary: 'Pay Level-2 (Rs 19,900 - 63,200)',
+        notificationNumber: 'Advt No. 04/2026 / HQ SAC'
+      }), 
+      fileName: 'IAF_Hindi_Typist_Offline_Application_Form_2026.pdf',
+      fileSize: '320 KB',
       isPdf: true,
       isPrimary: true 
+    },
+    { 
+      label: 'Official Recruitment Information Page', 
+      actionText: 'Click Here', 
+      type: 'official', 
+      url: 'https://rajasthanvacancy.com/indian-air-force-hindi-typist-recruitment-2026/' 
     },
     { 
       label: 'Indian Air Force Official Portal', 

@@ -44,6 +44,7 @@ import {
 } from 'lucide-react';
 import { getPostFAQs } from '../FullPagePostView';
 import { AIBlogWriter } from './AIBlogWriter';
+import { readPdfFileAsDataUrl } from '../../utils/pdfGenerator';
 
 interface AdminEditingPanelModalProps {
   isOpen: boolean;
@@ -199,6 +200,73 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const adminPdfInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleAdminPdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editingPost) return;
+    try {
+      const { dataUrl, fileName, fileSize } = await readPdfFileAsDataUrl(file);
+      const cleanName = fileName.replace(/\.pdf$/i, '');
+      const existingPdfIndex = editingPost.directLinks.findIndex(l => l.isPdf || l.type === 'notification');
+      
+      let updatedLinks = [...editingPost.directLinks];
+      if (existingPdfIndex >= 0) {
+        updatedLinks[existingPdfIndex] = {
+          ...updatedLinks[existingPdfIndex],
+          url: dataUrl,
+          fileName,
+          fileSize,
+          isPdf: true,
+          actionText: updatedLinks[existingPdfIndex].actionText || 'Download PDF'
+        };
+      } else {
+        updatedLinks.push({
+          label: `Download Official Notification (${cleanName}) PDF`,
+          actionText: 'Click Here',
+          type: 'notification',
+          url: dataUrl,
+          fileName,
+          fileSize,
+          isPdf: true,
+          isPrimary: true
+        });
+      }
+      setEditingPost({ 
+        ...editingPost, 
+        directLinks: updatedLinks,
+        pdfAttachment: {
+          fileName,
+          fileSize,
+          url: dataUrl,
+          uploadedAt: new Date().toISOString()
+        }
+      });
+      showToast(`✅ PDF फ़ाइल "${fileName}" (${fileSize}) पोस्ट के साथ अपलोड हो गई!`);
+      if (adminPdfInputRef.current) adminPdfInputRef.current.value = '';
+    } catch (err: any) {
+      alert(err.message || 'PDF अपलोड करने में विफल');
+    }
+  };
+
+  const handleRemovePdf = (targetUrlOrIndex?: string | number) => {
+    if (!editingPost) return;
+    let updatedLinks = [...editingPost.directLinks];
+    if (typeof targetUrlOrIndex === 'number') {
+      updatedLinks = updatedLinks.filter((_, i) => i !== targetUrlOrIndex);
+    } else if (typeof targetUrlOrIndex === 'string') {
+      updatedLinks = updatedLinks.filter(l => l.url !== targetUrlOrIndex);
+    } else {
+      updatedLinks = updatedLinks.filter(l => !l.isPdf && l.type !== 'notification');
+    }
+    setEditingPost({
+      ...editingPost,
+      directLinks: updatedLinks,
+      pdfAttachment: undefined
+    });
+    showToast('🗑️ PDF दस्तावेज हटा दिया गया (PDF attachment removed)!');
   };
 
   const ADMIN_PASSWORD = '78787739277877139203';
@@ -380,6 +448,15 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-0 sm:p-4 overflow-y-auto">
       <div className="bg-slate-50 w-full max-w-6xl h-full sm:h-[94vh] max-h-full sm:max-h-[94vh] rounded-none sm:rounded-md shadow-2xl border-0 sm:border-2 border-slate-700 flex flex-col overflow-hidden relative text-slate-800">
         
+        {/* Top-level Hidden PDF File Input */}
+        <input 
+          type="file" 
+          ref={adminPdfInputRef} 
+          accept="application/pdf,.pdf" 
+          onChange={handleAdminPdfUpload} 
+          className="hidden" 
+        />
+
         {/* Toast Alert */}
         {toastMessage && (
           <div className="absolute top-16 right-6 z-50 bg-emerald-700 text-white px-4 py-2 rounded shadow-lg text-sm font-bold flex items-center gap-2 animate-bounce">
@@ -394,14 +471,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
             <div className="w-8 h-8 rounded bg-amber-400 text-slate-900 font-black flex items-center justify-center text-sm shadow-xs">
               ⚡
             </div>
-            <div>
-              <h2 className="font-black text-lg sm:text-xl tracking-tight leading-none uppercase">
-                Sarkari Result · Admin Management Panel
-              </h2>
-              <p className="text-[11px] text-red-100 font-medium">
-                Live Post Editor, Create, Modify, Reorder & Manage All 100+ Portal Posts
-              </p>
-            </div>
+
           </div>
 
           <div className="flex items-center gap-2">
@@ -429,38 +499,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         {isAuthenticated && (
           <div className="bg-slate-900 text-white px-3 sm:px-4 py-2 border-b border-slate-950 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0 shadow-md">
             <div className="flex items-center gap-2 flex-wrap">
-              <button
-                type="button"
-                onClick={() => {
-                  setAdminMainTab('editor');
-                  if (!editingPost && posts.length > 0) {
-                    handleStartEdit(posts[0]);
-                  }
-                }}
-                className={`px-3.5 py-1.5 rounded text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all cursor-pointer ${
-                  adminMainTab === 'editor'
-                    ? 'bg-[#ab1616] text-white shadow-md ring-2 ring-red-400'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                }`}
-              >
-                <span>⚡</span>
-                <span>डायरेक्ट सेक्शन व पोस्ट अपडेट (Full Post Editor)</span>
-              </button>
 
-              {/* डायरेक्ट वर्ड एडिट (Live Visual Edit) button */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (onStartDirectWordEdit) {
-                    onStartDirectWordEdit(editingPost || undefined);
-                  }
-                }}
-                className="px-3.5 py-1.5 rounded text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all cursor-pointer bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 text-slate-950 shadow-md font-sans hover:scale-105 active:scale-95 border border-amber-600"
-                title="सीधे स्क्रीन पर किसी भी शब्द को क्लिक करके एडिट करें"
-              >
-                <span className="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
-                <span>⚡ डायरेक्ट वर्ड एडिट (Live Visual Edit)</span>
-              </button>
             </div>
 
             <div className="text-[11px] text-slate-400 font-bold hidden md:flex items-center gap-2">
@@ -474,23 +513,11 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         {/* Quick Action Bar (New Post, Save, Publish, Direct Word Edit) */}
         {isAuthenticated && adminMainTab === 'editor' && (
           <div className="bg-white border-b border-slate-300 px-3 sm:px-4 py-2 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs flex-wrap">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (onStartDirectWordEdit) {
-                    onStartDirectWordEdit(editingPost || undefined);
-                  }
-                }}
-                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 text-xs font-black px-3.5 py-1.5 rounded shrink-0 cursor-pointer shadow-xs transition-transform hover:scale-102 flex items-center gap-1.5 border border-amber-600"
-                title="इस पोस्ट को सीधे वेबसाइट पर लाइव क्लिक करके एडिट करें"
-              >
-                <span>⚡</span>
-                <span>डायरेक्ट वर्ड एडिट (Live On-Page Edit)</span>
-              </button>
-            </div>
+
 
             <div className="flex items-center gap-2">
+
+
               <button
                 type="button"
                 onClick={handleStartCreate}
@@ -579,20 +606,6 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 {isCreatingNew ? '+ New Post' : `Editing: ${editingPost.shortTitle || editingPost.title}`}
               </div>
 
-              {/* Direct Word Edit for this post */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (onStartDirectWordEdit) {
-                    onStartDirectWordEdit(editingPost);
-                  }
-                }}
-                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black text-xs px-2.5 py-1.5 rounded shadow-xs flex items-center justify-center gap-1.5 cursor-pointer border border-amber-600 hover:scale-102 transition-transform"
-                title="इस पोस्ट को सीधे वेबसाइट पर लाइव क्लिक करके एडिट करें"
-              >
-                <span>⚡</span>
-                <span>डायरेक्ट वर्ड एडिट</span>
-              </button>
 
               {/* Horizontal Navigation on Mobile / Vertical on Desktop */}
               <div className="flex flex-row md:flex-col gap-1 overflow-x-auto no-scrollbar py-0.5 text-[11px]">
@@ -831,6 +844,8 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                       })}
                     </div>
                   </div>
+
+
 
                   {/* Short Information */}
                   <div>
@@ -1867,6 +1882,80 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 </div>
 
                 <div className="space-y-4 max-w-4xl mx-auto">
+                  {/* Dedicated PDF File Attachment Card */}
+                  <div className="bg-gradient-to-r from-rose-50 via-red-50 to-amber-50 border-2 border-dashed border-red-300 rounded-lg p-3.5 sm:p-4 shadow-2xs space-y-3">
+                    <input 
+                      type="file" 
+                      ref={adminPdfInputRef} 
+                      accept="application/pdf,.pdf" 
+                      onChange={handleAdminPdfUpload} 
+                      className="hidden" 
+                    />
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="p-2 bg-red-600 text-white rounded-md shadow-2xs font-bold text-lg">📄</span>
+                        <div>
+                          <h4 className="font-extrabold text-xs sm:text-sm text-slate-900">
+                            अपलोड करें ऑफिशियल PDF नोटिफिकेशन / सिलेबस (Upload Official PDF)
+                          </h4>
+                          <p className="text-[11px] text-slate-600 font-medium">
+                            कंप्यूटर या फोन से PDF अपलोड करें (अधिकतम 15MB)। अभ्यर्थी सीधे डाउनलोड कर सकेंगे।
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => adminPdfInputRef.current?.click()}
+                        className="bg-red-700 hover:bg-red-800 text-white font-extrabold text-xs px-3.5 py-2 rounded-md shadow-2xs cursor-pointer flex items-center gap-1.5 transition-all hover:scale-102 active:scale-98"
+                      >
+                        <Upload className="w-4 h-4" />
+                        <span>📁 PDF फ़ाइल चुनें</span>
+                      </button>
+                    </div>
+
+                    {/* Show attached PDFs list */}
+                    {editingPost.directLinks.some(l => l.isPdf || l.fileName || (l.url && l.url.startsWith('data:application/pdf'))) && (
+                      <div className="bg-white p-2.5 rounded border border-red-200 space-y-1.5">
+                        <span className="text-[11px] font-black text-slate-700 uppercase tracking-wider block">
+                          📎 वर्तमान में संलग्न (Attached PDFs):
+                        </span>
+                        <div className="space-y-1">
+                          {editingPost.directLinks.filter(l => l.isPdf || l.fileName || (l.url && l.url.startsWith('data:application/pdf'))).map((pdfLink, pdfIdx) => (
+                            <div key={pdfIdx} className="flex items-center justify-between bg-red-50 p-2 rounded text-xs border border-red-200">
+                              <div className="flex items-center gap-2 truncate">
+                                <span className="font-bold text-rose-700">📄</span>
+                                <span className="font-bold text-slate-900 truncate">{pdfLink.fileName || pdfLink.label}</span>
+                                {pdfLink.fileSize && <span className="text-[10px] bg-red-200 text-red-900 px-1.5 py-0.5 rounded font-bold">{pdfLink.fileSize}</span>}
+                              </div>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {pdfLink.url && (
+                                  <a
+                                    href={pdfLink.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    download={pdfLink.fileName || 'notification.pdf'}
+                                    className="text-[10px] bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-0.5 rounded font-bold cursor-pointer inline-flex items-center gap-1"
+                                  >
+                                    <Eye className="w-3 h-3" />
+                                    <span>देखें / डाउनलोड</span>
+                                  </a>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemovePdf(pdfLink.url)}
+                                  className="text-[10px] bg-red-100 hover:bg-red-200 text-red-800 p-1 rounded font-bold cursor-pointer border border-red-300"
+                                  title="इस PDF फ़ाइल को पोस्ट से हटाएं"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5 text-red-700" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Quick Template Link Buttons */}
                   <div className="bg-white p-3 rounded border border-slate-300 space-y-2">
                     <span className="text-[11px] font-black text-slate-700 uppercase tracking-wider block">

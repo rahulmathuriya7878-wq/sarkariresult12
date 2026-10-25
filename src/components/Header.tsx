@@ -81,40 +81,39 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="w-full bg-white shadow-xs">
-      {/* 1. Authentic Sarkari Result Crimson Masthead (Exact Website Design) */}
-      <div className="bg-[#ab1616] text-white py-2.5 sm:py-3.5 px-3 sm:px-6 border-b border-red-950">
-        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-2">
+      {/* 1. Compact Minimum Sarkari Result Crimson Masthead */}
+      <div className="bg-[#ab1616] text-white py-1 sm:py-1.5 px-3 sm:px-6 border-b border-red-950">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           {/* Brand Logo & Title with Seal */}
           <div 
             onClick={() => handleNavClick('all')}
-            className="cursor-pointer group flex items-center justify-center gap-3 select-none"
+            className="cursor-pointer group flex items-center gap-2 select-none"
           >
-            {/* Official Logo Image */}
-            <div className="w-14 h-14 sm:w-18 sm:h-18 rounded-full overflow-hidden border-2 border-amber-400 shadow-md shrink-0 bg-white flex items-center justify-center p-0.5">
+            {/* Compact Logo Image */}
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-amber-400 shadow-xs shrink-0 bg-white flex items-center justify-center p-0.5">
               <img 
                 src="/sarkari-result-logo.jpg" 
-                alt="Sarkari Result Official Emblem Logo" 
+                alt="Sarkari Result Emblem Logo" 
                 className="w-full h-full object-contain rounded-full"
               />
             </div>
 
-            <div className="flex flex-col items-center">
-              <div className="flex items-center justify-center gap-1.5 sm:gap-2">
-                <span className="text-[#facc15] font-serif text-2xl sm:text-3xl leading-none">★</span>
-                <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase text-white font-serif drop-shadow-sm leading-none">
-                  SARKARI RESULT
-                </h1>
-                <span className="text-[#facc15] font-serif text-2xl sm:text-3xl leading-none">★</span>
-              </div>
-              <a 
-                href="https://sarkariresult12.vercel.app/#" 
-                className="text-amber-300 hover:text-yellow-200 font-bold text-xs sm:text-sm tracking-wider font-sans underline mt-0.5"
-                title="Sarkari Result Official Portal"
-              >
-                https://sarkariresult12.vercel.app/#
-              </a>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-[#facc15] font-serif text-sm sm:text-base leading-none">★</span>
+              <h1 className="text-base sm:text-xl md:text-2xl font-black tracking-wide uppercase text-white font-serif leading-none">
+                SARKARI RESULT
+              </h1>
+              <span className="text-[#facc15] font-serif text-sm sm:text-base leading-none">★</span>
             </div>
           </div>
+
+          <a 
+            href="https://sarkariresult12.vercel.app/#" 
+            className="text-amber-300 hover:text-yellow-200 font-bold text-[11px] sm:text-xs tracking-wider font-sans underline truncate max-w-[150px] sm:max-w-none"
+            title="Sarkari Result Official Portal"
+          >
+            sarkariresult12.vercel.app
+          </a>
         </div>
       </div>
 

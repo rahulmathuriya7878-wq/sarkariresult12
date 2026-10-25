@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Share2, Check } from 'lucide-react';
 import { SarkariPost } from '../types/job';
-import { getCategoryShareText } from './FullPagePostView';
 
 interface FloatingShareButtonProps {
   currentPost?: SarkariPost | null;
@@ -11,52 +10,45 @@ interface FloatingShareButtonProps {
 export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ currentPost, isHindi }) => {
   const [copied, setCopied] = useState(false);
 
-  // Get current page URL & title
-  const shareTitle = currentPost 
-    ? `${currentPost.title} - Sarkari Result` 
-    : 'Sarkari Result - Latest Govt Jobs, Admit Card & Exam Results';
-
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  // Get current page URL (Share ONLY the direct post link)
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult12.vercel.app';
   const shareUrl = currentPost 
-    ? `${baseUrl}/#post/${currentPost.slug}?ref=share`
+    ? `${baseUrl}/#post/${currentPost.slug || currentPost.id}?ref=share`
     : `${baseUrl}/?ref=share`;
 
-  const shareText = currentPost
-    ? getCategoryShareText(currentPost, shareUrl)
-    : `Sarkari Result 2026 - Check Official Govt Jobs, Admit Cards, Answer Keys & Results:\n${shareUrl}`;
+  const shareTitle = currentPost 
+    ? (currentPost.shortTitle || currentPost.title) 
+    : 'Sarkari Result';
 
   const handleDirectShare = async () => {
-    // 1. First priority: Direct Native System Share Dialog
+    // 1. First priority: Direct Native System Share Dialog (Sharing ONLY the link)
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
           title: shareTitle,
-          text: shareText,
           url: shareUrl,
         });
         return;
       } catch (err) {
-        if ((err as Error).name !== 'AbortError') {
-          console.log('Native share error, falling back to direct link action', err);
-        } else {
+        if ((err as Error).name === 'AbortError') {
           return;
         }
       }
     }
 
-    // 2. Second priority: Open WhatsApp directly
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`;
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    // 2. Second priority: Open WhatsApp directly with ONLY the post link
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareUrl)}`;
+    const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
     if (isMobile) {
       window.open(whatsappUrl, '_blank');
     } else {
       try {
         if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+          await navigator.clipboard.writeText(shareUrl);
         } else {
           const textArea = document.createElement('textarea');
-          textArea.value = `${shareText}\n${shareUrl}`;
+          textArea.value = shareUrl;
           document.body.appendChild(textArea);
           textArea.select();
           document.execCommand('copy');
@@ -74,7 +66,8 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
     <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2">
       <button
         onClick={handleDirectShare}
-        aria-label="Share"
+        aria-label="Share Post Link"
+        type="button"
         className={`group relative inline-flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-200 cursor-pointer transform hover:scale-105 active:scale-95 border border-emerald-400/30 ${
           copied 
             ? 'bg-emerald-700 hover:bg-emerald-800 ring-2 ring-emerald-300' 
