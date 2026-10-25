@@ -23,6 +23,7 @@ import { PhotoResizerTool } from './components/tools/PhotoResizerTool';
 import { EligibilityMatcherModal } from './components/tools/EligibilityMatcherModal';
 import { BookmarkedJobsModal } from './components/BookmarkedJobsModal';
 import { JobAlertsModal } from './components/JobAlertsModal';
+import { PushNotificationBanner } from './components/PushNotificationBanner';
 
 const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
   if (post.salaryBand) return post.salaryBand;
@@ -39,25 +40,28 @@ const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
 };
 
 export default function App() {
-  // Master Posts State (Prioritizes code updates and mock posts over stale storage cache)
+  // Master Posts State (Preserves in-place edits and custom posts across refreshes)
   const [allPosts, setAllPosts] = useState<SarkariPost[]>(() => {
     try {
       const saved = localStorage.getItem('sarkari_admin_posts_v5');
-      let customAdminPosts: SarkariPost[] = [];
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const savedMap = new Map(parsed.map((p: SarkariPost) => [p.id, p]));
+          const merged = mockSarkariPosts.map(mock => savedMap.get(mock.id) || mock);
           const mockIds = new Set(mockSarkariPosts.map(p => p.id));
-          customAdminPosts = parsed.filter((p: SarkariPost) => !mockIds.has(p.id));
+          const extraCustom = parsed.filter((p: SarkariPost) => !mockIds.has(p.id));
+          const combined = [...extraCustom, ...merged];
+          const hasIaf = combined.some(p => p.id === iafHindiTypistPost.id);
+          return hasIaf ? combined : [iafHindiTypistPost, ...combined];
         }
       }
-      const combined = [...mockSarkariPosts, ...customAdminPosts];
-      const hasIaf = combined.some(p => p.id === iafHindiTypistPost.id);
-      return hasIaf ? combined : [iafHindiTypistPost, ...combined];
     } catch (e) {
       console.error('Failed to load posts from storage', e);
     }
-    return mockSarkariPosts;
+    const combined = [...mockSarkariPosts];
+    const hasIaf = combined.some(p => p.id === iafHindiTypistPost.id);
+    return hasIaf ? combined : [iafHindiTypistPost, ...combined];
   });
 
   // Save posts to localStorage whenever allPosts updates
@@ -830,6 +834,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         />
       )}
 
+      <PushNotificationBanner />
       <FloatingShareButton currentPost={selectedPost} isHindi={isHindi} />
 
 
