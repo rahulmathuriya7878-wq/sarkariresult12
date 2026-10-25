@@ -172,34 +172,51 @@ export const getPostFAQs = (post: SarkariPost): PostFAQ[] => {
 };
 
 export const getCategoryShareText = (post: SarkariPost, postUrl: string): string => {
-  const postName = post.title || post.shortTitle;
+  const postName = post.shortTitle || post.title;
   const qual = post.qualifications && post.qualifications.length > 0 ? post.qualifications.join(', ') : 'अधिसूचना अनुसार';
-  const age = post.ageLimit?.minAge && post.ageLimit?.maxAge ? `${post.ageLimit.minAge} से ${post.ageLimit.maxAge} वर्ष` : 'नियमानुसार';
-  const fee = post.applicationFee && post.applicationFee.length > 0 ? post.applicationFee[0].amount : 'नियमानुसार';
+  
+  let age = 'नियमानुसार';
+  if (post.ageLimit?.minAge && post.ageLimit?.maxAge) {
+    age = `${post.ageLimit.minAge} से ${post.ageLimit.maxAge} वर्ष`;
+  } else if (post.ageLimit?.minAge) {
+    age = `न्यूनतम ${post.ageLimit.minAge} वर्ष`;
+  } else if (post.ageLimit?.maxAge) {
+    age = `अधिकतम ${post.ageLimit.maxAge} वर्ष`;
+  }
+
+  // Extract start date from importantDates
+  const startDateItem = post.importantDates?.find(d => 
+    d.label.toLowerCase().includes('begin') || 
+    d.label.toLowerCase().includes('start') || 
+    d.label.toLowerCase().includes('opening') ||
+    d.label.toLowerCase().includes('released')
+  );
+  const startDate = startDateItem ? startDateItem.value : (post.postDate ? post.postDate.split('|')[0].trim() : 'जारी है');
+  const lastDate = post.lastDate || 'अधिसूचना देखें';
 
   switch (post.category) {
     case 'result':
-      return `🔴 *सरकारी रिजल्ट बड़ा अपडेट* 🔴\n\n📜 *परीक्षा/परिणाम:* ${postName}\n🗓️ *परिणाम तिथि:* ${post.resultDate || post.postDate || 'घोषित'}\n✅ *स्थिति:* रिजल्ट व मेरिट लिस्ट उपलब्ध\n\n👇 *अपना रिजल्ट व स्कोरकार्ड देखने हेतु क्लिक करें:*\n${postUrl}`;
+      return `🔴 *सरकारी रिजल्ट बड़ा अपडेट* 🔴\n\n📋 *परिणाम/भर्ती का नाम:* ${postName}\n\n🔢 *कुल पद:* ${post.totalVacancies || 'अधिसूचना अनुसार'}\n🗓️ *परिणाम तिथि:* ${post.resultDate || post.postDate || 'घोषित'}\n✅ *स्थिति:* रिजल्ट व मेरिट लिस्ट उपलब्ध\n\n👇 *अपना रिजल्ट व स्कोरकार्ड देखने हेतु क्लिक करें:*\n${postUrl}`;
 
     case 'admit_card':
-      return `🎫 *सरकारी एडमिट कार्ड अपडेट* 🎫\n\n📝 *परीक्षा का नाम:* ${postName}\n🗓️ *परीक्षा / हॉल टिकट तिथि:* ${post.admitCardDate || post.examDate || 'जारी हुआ'}\n🎓 *योग्य उम्मीदवार:* ${qual}\n\n👇 *अपना एडमिट कार्ड डाउनलोड करने हेतु क्लिक करें:*\n${postUrl}`;
+      return `🎫 *सरकारी एडमिट कार्ड अपडेट* 🎫\n\n📋 *परीक्षा/भर्ती का नाम:* ${postName}\n\n🗓️ *परीक्षा / हॉल टिकट तिथि:* ${post.admitCardDate || post.examDate || 'जारी हुआ'}\n🎓 *योग्यता:* ${qual}\n\n👇 *अपना एडमिट कार्ड डाउनलोड करने हेतु क्लिक करें:*\n${postUrl}`;
 
     case 'answer_key':
-      return `🔑 *सरकारी उत्तर कुंजी (Answer Key) अपडेट* 🔑\n\n📝 *परीक्षा का नाम:* ${postName}\n🗓️ *उत्तर कुंजी तिथि:* ${post.postDate || 'जारी हुई'}\n\n👇 *आंसर की डाउनलोड करें व आपत्ति दर्ज करें:*\n${postUrl}`;
+      return `🔑 *सरकारी उत्तर कुंजी (Answer Key) अपडेट* 🔑\n\n📋 *परीक्षा का नाम:* ${postName}\n\n🗓️ *उत्तर कुंजी तिथि:* ${post.postDate || 'जारी हुई'}\n\n👇 *आंसर की डाउनलोड करें व आपत्ति दर्ज करें:*\n${postUrl}`;
 
     case 'syllabus':
-      return `📚 *सरकारी परीक्षा सिलेबस व पैटर्न* 📚\n\n📝 *परीक्षा का नाम:* ${postName}\n🎓 *योग्यता:* ${qual}\n\n👇 *नया सिलेबस व परीक्षा पैटर्न PDF डाउनलोड करें:*\n${postUrl}`;
+      return `📚 *सरकारी परीक्षा सिलेबस व पैटर्न* 📚\n\n📋 *परीक्षा का नाम:* ${postName}\n\n🎓 *योग्यता:* ${qual}\n\n👇 *नया सिलेबस व परीक्षा पैटर्न PDF डाउनलोड करें:*\n${postUrl}`;
 
     case 'admission':
-      return `🎓 *सरकारी एडमिशन फॉर्म अपडेट* 🎓\n\n📝 *कोर्स/प्रवेश का नाम:* ${postName}\n🎓 *योग्यता:* ${qual}\n⏳ *आवेदन की अंतिम तिथि:* ${post.lastDate || 'अधिसूचना देखें'}\n\n👇 *ऑनलाइन एडमिशन फॉर्म भरने हेतु क्लिक करें:*\n${postUrl}`;
+      return `🎓 *सरकारी एडमिशन फॉर्म अपडेट* 🎓\n\n📋 *कोर्स/प्रवेश का नाम:* ${postName}\n\n🎓 *योग्यता:* ${qual}\n💳 *आवेदन की प्रारंभ तिथि:* ${startDate}\n⏳ *आवेदन की अंतिम तिथि:* ${lastDate}\n\n👇 *ऑनलाइन एडमिशन फॉर्म भरने हेतु क्लिक करें:*\n${postUrl}`;
 
     case 'certificate_verification':
     case 'important':
-      return `🌐 *सरकारी डिजिटल सेवा व सत्यापन पोर्टल* 🌐\n\n📜 *सेवा/प्रमाणपत्र:* ${postName}\n\n👇 *डिजिटल सत्यापन व ऑनलाइन आवेदन हेतु क्लिक करें:*\n${postUrl}`;
+      return `🌐 *सरकारी डिजिटल सेवा व सत्यापन पोर्टल* 🌐\n\n📋 *सेवा/प्रमाणपत्र:* ${postName}\n\n👇 *डिजिटल सत्यापन व ऑनलाइन आवेदन हेतु क्लिक करें:*\n${postUrl}`;
 
     case 'latest_jobs':
     default:
-      return `🚨 *सरकारी नौकरी बड़ा अपडेट* 🚨\n\n📋 *भर्ती का नाम:* ${postName}\n🔢 *कुल पद:* ${post.totalVacancies || 'अधिसूचना देखें'}\n🎓 *योग्यता:* ${qual}\n🎂 *आयु सीमा:* ${age}\n💳 *आवेदन शुल्क:* ${fee}\n⏳ *आवेदन की अंतिम तिथि:* ${post.lastDate || 'अधिसूचना देखें'}\n\n👇 *संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:*\n${postUrl}`;
+      return `🚨 *सरकारी नौकरी बड़ा अपडेट* 🚨\n\n📋 *भर्ती का नाम:* ${postName}\n\n🔢 *कुल पद:* ${post.totalVacancies || 'अधिसूचना अनुसार'}\n🎓 *योग्यता:* ${qual}\n🎂 *आयु सीमा:* ${age}\n💳 *आवेदन की प्रारंभ तिथि:* ${startDate}\n⏳ *आवेदन की अंतिम तिथि:* ${lastDate}\n\n👇 *संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:*\n${postUrl}`;
   }
 };
 

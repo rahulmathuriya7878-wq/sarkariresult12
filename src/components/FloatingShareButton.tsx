@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Share2, Check } from 'lucide-react';
 import { SarkariPost } from '../types/job';
+import { getCategoryShareText } from './FullPagePostView';
 
 interface FloatingShareButtonProps {
   currentPost?: SarkariPost | null;
@@ -10,7 +11,7 @@ interface FloatingShareButtonProps {
 export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ currentPost, isHindi }) => {
   const [copied, setCopied] = useState(false);
 
-  // Get current page URL (Share ONLY the direct post link)
+  // Get current page URL
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult12.vercel.app';
   const shareUrl = currentPost 
     ? `${baseUrl}/#post/${currentPost.slug || currentPost.id}?ref=share`
@@ -20,13 +21,18 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
     ? (currentPost.shortTitle || currentPost.title) 
     : 'Sarkari Result';
 
+  // Construct full formatted Hindi share message
+  const shareMessage = currentPost
+    ? getCategoryShareText(currentPost, shareUrl)
+    : `🚨 *Sarkari Result 2026 - Official Portal* 🚨\n\n📋 *सभी सरकारी भर्ती, रिजल्ट, एडमिट कार्ड व आंसर की अपडेट्स*\n\n👇 *आधिकारिक पोर्टल देखें व आवेदन करें:*\n${shareUrl}`;
+
   const handleDirectShare = async () => {
-    // 1. First priority: Direct Native System Share Dialog (Sharing ONLY the link)
+    // 1. First priority: Direct Native System Share Dialog (Sharing full formatted message)
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
           title: shareTitle,
-          url: shareUrl,
+          text: shareMessage,
         });
         return;
       } catch (err) {
@@ -36,8 +42,8 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
       }
     }
 
-    // 2. Second priority: Open WhatsApp directly with ONLY the post link
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareUrl)}`;
+    // 2. Second priority: Open WhatsApp directly with full formatted message
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`;
     const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
     if (isMobile) {
@@ -45,10 +51,10 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
     } else {
       try {
         if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(shareUrl);
+          await navigator.clipboard.writeText(shareMessage);
         } else {
           const textArea = document.createElement('textarea');
-          textArea.value = shareUrl;
+          textArea.value = shareMessage;
           document.body.appendChild(textArea);
           textArea.select();
           document.execCommand('copy');
