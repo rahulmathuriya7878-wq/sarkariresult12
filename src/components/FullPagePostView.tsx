@@ -17,9 +17,33 @@ export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => 
     } else {
       existing.push({ label: 'Apply Online', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult12.vercel.app/#', isPrimary: true });
     }
-    existing.push({ label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult12.vercel.app/#' });
+    existing.push({ label: 'Download Detailed Notification (PDF)', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult12.vercel.app/#', isPdf: true });
     existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: 'https://sarkariresult12.vercel.app/#' });
   }
+
+  // Normalize notification links to Download Detailed Notification (PDF) and Click Here
+  existing = existing.map(l => {
+    if (l.type === 'notification' || (l.label && l.label.toLowerCase().includes('notification'))) {
+      const isDetailed = l.label.toLowerCase().includes('detailed');
+      const hasPdf = l.label.includes('(PDF)') || l.label.includes('PDF');
+      let finalLabel = l.label;
+      if (!isDetailed && !hasPdf) {
+        finalLabel = 'Download Detailed Notification (PDF)';
+      } else if (!hasPdf) {
+        finalLabel = `${l.label} (PDF)`;
+      } else if (!isDetailed) {
+        finalLabel = l.label.replace(/notification/i, 'Detailed Notification');
+      }
+      return {
+        ...l,
+        label: finalLabel,
+        actionText: 'Click Here',
+        isPdf: true,
+        type: 'notification'
+      };
+    }
+    return l;
+  });
 
   // Ensure Join WhatsApp Channel & Join Telegram Channel exist in important links section
   const hasWhatsapp = existing.some(l => 
@@ -58,7 +82,10 @@ import {
   Plus,
   ShieldCheck,
   Settings,
-  BookOpen
+  BookOpen,
+  FileText,
+  Download,
+  Upload
 } from 'lucide-react';
 import { isPostAlertActive, togglePostAlert, getPostStatus } from '../utils/alertManager';
 import { PostAlertModal } from './PostAlertModal';
@@ -337,6 +364,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   const [isAlertModalOpen, setIsAlertModalOpen] = React.useState<boolean>(false);
   const [alertFeedback, setAlertFeedback] = React.useState<string | null>(null);
   const [hiddenSections, setHiddenSections] = React.useState<Record<string, boolean>>({});
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState<boolean>(false);
+  const [pdfUploadTargetIndex, setPdfUploadTargetIndex] = useState<number | null>(null);
+  const pdfFileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const isAdmin = useMemo(() => {
     if (typeof window === 'undefined') return false;
@@ -510,6 +540,107 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         }
       ]
     }));
+  };
+
+  const handlePdfFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      alert('कृपया केवल PDF (.pdf) फ़ाइल चुनें (Please select only PDF files).');
+      return;
+    }
+
+    const fileSizeKb = Math.round(file.size / 1024);
+    const fileSizeStr = fileSizeKb > 1024 ? `${(fileSizeKb / 1024).toFixed(2)} MB` : `${fileSizeKb} KB`;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      const cleanFileName = file.name.replace(/\.pdf$/i, '');
+
+      setEditablePost(prev => {
+        const list = [...(prev.directLinks || [])];
+        if (pdfUploadTargetIndex !== null && pdfUploadTargetIndex >= 0 && pdfUploadTargetIndex < list.length) {
+          list[pdfUploadTargetIndex] = {
+            ...list[pdfUploadTargetIndex],
+            url: dataUrl,
+            fileName: file.name,
+            fileSize: fileSizeStr,
+            isPdf: true,
+            actionText: list[pdfUploadTargetIndex].actionText || 'Download PDF'
+          };
+        } else {
+          list.push({
+            label: `Download ${cleanFileName} (PDF)`,
+            actionText: 'Download PDF',
+            type: 'notification',
+            url: dataUrl,
+            fileName: file.name,
+            fileSize: fileSizeStr,
+            isPdf: true,
+            isPrimary: true
+          });
+        }
+        return { ...prev, directLinks: list };
+      });
+
+      setAlertFeedback(`✅ PDF फ़ाइल "${file.name}" (${fileSizeStr}) सफलतापूर्वक जोड़ी गई!`);
+      setTimeout(() => setAlertFeedback(null), 3500);
+      setIsPdfModalOpen(false);
+      setPdfUploadTargetIndex(null);
+      if (pdfFileInputRef.current) pdfFileInputRef.current.value = '';
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleAddPresetPdfLink = (label: string, defaultActionText: string = 'Click Here', type: any = 'notification') => {
+    const customUrl = prompt(`"${label}" के लिए PDF URL या Google Drive लिंक दर्ज करें (Enter PDF Link / Drive Link):`, 'https://');
+    if (customUrl === null) return;
+    
+    setEditablePost(prev => ({
+      ...prev,
+      directLinks: [
+        ...(prev.directLinks || []),
+        {
+          label: label,
+          actionText: defaultActionText,
+          type: type,
+          url: customUrl.trim() || 'https://sarkariresult12.vercel.app/#',
+          isPdf: true,
+          isPrimary: true
+        }
+      ]
+    }));
+    setAlertFeedback(`✅ PDF लिंक "${label}" जोड़ा गया!`);
+    setTimeout(() => setAlertFeedback(null), 3000);
+    setIsPdfModalOpen(false);
+  };
+
+  const handleAttachPdfToLink = (index: number) => {
+    const choice = confirm('क्या आप इस लिंक के लिए अपने कंप्यूटर/फ़ोन से PDF फ़ाइल अपलोड करना चाहते हैं?\n\n- OK: डिवाइस से PDF फ़ाइल चुनें\n- Cancel: PDF URL / Drive लिंक दर्ज करें');
+    if (choice) {
+      setPdfUploadTargetIndex(index);
+      pdfFileInputRef.current?.click();
+    } else {
+      const currentUrl = (editablePost.directLinks || [])[index]?.url || 'https://';
+      const newUrl = prompt('PDF का वेब URL या Google Drive लिंक दर्ज करें (Enter PDF URL):', currentUrl);
+      if (newUrl !== null) {
+        setEditablePost(prev => {
+          const list = [...(prev.directLinks || [])];
+          list[index] = {
+            ...list[index],
+            url: newUrl.trim(),
+            isPdf: true,
+            actionText: list[index].actionText || 'Click Here'
+          };
+          return { ...prev, directLinks: list };
+        });
+        setAlertFeedback('✅ PDF लिंक अपडेट किया गया!');
+        setTimeout(() => setAlertFeedback(null), 3000);
+      }
+    }
   };
 
   const handleDeleteDirectLink = (index: number) => {
@@ -1847,15 +1978,29 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     {(editablePost.directLinks || []).length} लिंक्स
                   </span>
                   {isDirectEditMode && (
-                    <button
-                      type="button"
-                      onClick={handleAddDirectLink}
-                      className="text-xs bg-white text-emerald-900 hover:bg-emerald-100 font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1"
-                      title="नया महत्वपूर्ण लिंक जोड़ें"
-                    >
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>+ नया लिंक जोड़ें</span>
-                    </button>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPdfUploadTargetIndex(null);
+                          setIsPdfModalOpen(true);
+                        }}
+                        className="text-xs bg-rose-600 hover:bg-rose-700 text-white font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1 transition-all active:scale-95"
+                        title="PDF फाइल या PDF लिंक जोड़ें"
+                      >
+                        <FileText className="w-3.5 h-3.5" />
+                        <span>+ 📄 PDF जोड़ें</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleAddDirectLink}
+                        className="text-xs bg-white text-emerald-900 hover:bg-emerald-100 font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1"
+                        title="नया सामान्य लिंक जोड़ें"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ नया लिंक</span>
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -1868,20 +2013,35 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     <span><strong>लिंक रीऑर्डर विकल्प:</strong> किसी भी लिंक को नीचे करने के लिए <strong>"⬇️ नीचे करें"</strong> बटन पर क्लिक करें।</span>
                   </span>
                   <span className="text-emerald-700 font-extrabold text-[11px]">
-                    ✏️ वर्ड एडिटर चालू: लिंक नाम व URL पर क्लिक करके सीधे टाइप करें
+                    ✏️ वर्ड एडिटर चालू: लिंक नाम व URL पर क्लिक करके सीधे टाइप करें | 📄 PDF बटन से फाइल अपलोड करें
                   </span>
                 </div>
               )}
 
               <div className="divide-y divide-slate-300 text-[11.5pt]">
                 {(editablePost.directLinks || []).map((link, idx) => {
-                  const isWhatsapp = link.label.toLowerCase().includes('whatsapp') || (link.url && link.url.includes('whatsapp'));
-                  const isTelegram = link.label.toLowerCase().includes('telegram') || (link.url && link.url.includes('t.me'));
-                  const btnBg = isWhatsapp 
-                    ? 'bg-[#25D366] hover:bg-emerald-600' 
-                    : isTelegram 
-                      ? 'bg-[#229ED9] hover:bg-sky-600' 
-                      : 'bg-[#0000ff] hover:bg-blue-800';
+                  const isPdf = Boolean(
+                    link.isPdf ||
+                    link.type === 'notification' ||
+                    link.type === 'syllabus' ||
+                    link.label.toLowerCase().includes('pdf') ||
+                    link.actionText?.toLowerCase().includes('pdf') ||
+                    (link.url && (
+                      link.url.toLowerCase().endsWith('.pdf') ||
+                      link.url.toLowerCase().includes('.pdf?') ||
+                      link.url.startsWith('data:application/pdf')
+                    ))
+                  );
+
+                  const isWhatsapp = !isPdf && (link.label.toLowerCase().includes('whatsapp') || (link.url && link.url.includes('whatsapp')));
+                  const isTelegram = !isPdf && (link.label.toLowerCase().includes('telegram') || (link.url && link.url.includes('t.me')));
+                  const btnBg = isPdf
+                    ? 'bg-rose-700 hover:bg-rose-800'
+                    : isWhatsapp 
+                      ? 'bg-[#25D366] hover:bg-emerald-600' 
+                      : isTelegram 
+                        ? 'bg-[#229ED9] hover:bg-sky-600' 
+                        : 'bg-[#0000ff] hover:bg-blue-800';
 
                   const isLastLink = idx === (editablePost.directLinks || []).length - 1;
                   const isFirstLink = idx === 0;
@@ -1891,28 +2051,41 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       key={idx} 
                       className={`flex flex-row items-center justify-between p-2.5 sm:p-4 hover:bg-slate-50 gap-2 sm:gap-4 transition-colors ${
                         link.isPrimary ? 'bg-amber-50/50' : ''
-                      }`}
+                      } ${isPdf ? 'border-l-4 border-l-rose-600' : ''}`}
                     >
                       {/* Left: Link Label */}
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <span className="font-black text-slate-700 text-lg leading-none shrink-0">•</span>
+                        {isPdf ? (
+                          <span className="font-bold text-rose-600 text-base shrink-0" title="PDF Document">📄</span>
+                        ) : (
+                          <span className="font-black text-slate-700 text-lg leading-none shrink-0">•</span>
+                        )}
                         <div className="flex-1 min-w-0">
-                          <EditableText
-                            value={link.label}
-                            onChange={(newVal) => {
-                              setEditablePost(prev => {
-                                const list = [...(prev.directLinks || [])];
-                                list[idx] = { ...list[idx], label: newVal };
-                                return { ...prev, directLinks: list };
-                              });
-                            }}
-                            className="font-bold text-[11.5pt] sm:text-[13pt] break-words block leading-snug cursor-text"
-                            style={{ color: '#ff00ff' }}
-                            titlePrefix="लिंक का नाम"
-                          />
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <EditableText
+                              value={link.label}
+                              onChange={(newVal) => {
+                                setEditablePost(prev => {
+                                  const list = [...(prev.directLinks || [])];
+                                  list[idx] = { ...list[idx], label: newVal };
+                                  return { ...prev, directLinks: list };
+                                });
+                              }}
+                              className="font-bold text-[11.5pt] sm:text-[13pt] break-words block leading-snug cursor-text"
+                              style={{ color: '#ff00ff' }}
+                              titlePrefix="लिंक का नाम"
+                            />
+                            {isPdf && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-black bg-rose-600 text-white px-1.5 py-0.5 rounded shadow-2xs uppercase tracking-wider shrink-0">
+                                <FileText className="w-3 h-3" />
+                                <span>PDF</span>
+                                {link.fileSize && <span className="opacity-80">({link.fileSize})</span>}
+                              </span>
+                            )}
+                          </div>
                           {link.url && isDirectEditMode && (
                             <span className="text-[10px] text-slate-400 font-mono block truncate max-w-xs sm:max-w-md mt-0.5">
-                              {link.url}
+                              {link.url.startsWith('data:application/pdf') ? `[Attached PDF: ${link.fileName || 'document.pdf'}]` : link.url}
                             </span>
                           )}
                         </div>
@@ -1956,20 +2129,41 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           </>
                         )}
 
-                        {/* Click Here Action Button */}
+                        {/* Action Button: Click Here or Download PDF */}
                         <a
                           href={link.url || 'https://sarkariresult12.vercel.app/#'}
                           target="_blank"
                           rel="noopener noreferrer"
+                          download={isPdf ? (link.fileName || `${link.label.replace(/\s+/g, '_')}.pdf`) : undefined}
                           className={`inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 text-white font-bold rounded-xs text-[11pt] sm:text-[11.5pt] shadow-2xs cursor-pointer transition-all hover:scale-102 ${btnBg}`}
+                          title={isPdf ? 'Download PDF Document' : 'Open Link'}
                         >
-                          <span>{link.actionText || 'Click Here'}</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
+                          {isPdf ? (
+                            <>
+                              <FileText className="w-3.5 h-3.5 shrink-0" />
+                              <span>{link.actionText || 'Click Here'}</span>
+                              <ExternalLink className="w-3.5 h-3.5 shrink-0 ml-0.5 opacity-90" />
+                            </>
+                          ) : (
+                            <>
+                              <span>{link.actionText || 'Click Here'}</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </>
+                          )}
                         </a>
 
-                        {/* Edit Mode Quick URL & Delete buttons */}
+                        {/* Edit Mode Quick PDF, URL & Delete buttons */}
                         {isDirectEditMode && (
                           <div className="flex items-center gap-1 pl-1 border-l border-slate-200">
+                            <button
+                              type="button"
+                              onClick={() => handleAttachPdfToLink(idx)}
+                              className="text-[11px] bg-rose-100 hover:bg-rose-200 text-rose-900 border border-rose-300 font-bold px-2 py-1 rounded cursor-pointer flex items-center gap-0.5"
+                              title="इस लिंक में PDF फाइल या PDF URL जोड़ें"
+                            >
+                              <FileText className="w-3 h-3 text-rose-700" />
+                              <span>PDF</span>
+                            </button>
                             <button
                               type="button"
                               onClick={() => {
@@ -2181,6 +2375,141 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         </article>
       </div>
 
+
+      {/* Hidden PDF File Input */}
+      <input
+        type="file"
+        ref={pdfFileInputRef}
+        accept="application/pdf,.pdf"
+        className="hidden"
+        onChange={handlePdfFileChange}
+      />
+
+      {/* Add / Attach PDF Dialog Modal */}
+      {isPdfModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-white rounded-lg shadow-2xl max-w-lg w-full overflow-hidden border-2 border-rose-600 animate-in fade-in zoom-in-95 duration-150">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-rose-700 to-red-800 text-white px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FileText className="w-5 h-5 text-rose-200" />
+                <h3 className="font-black text-base sm:text-lg">महत्वपूर्ण लिंक में PDF जोड़ें (Add PDF)</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPdfModalOpen(false);
+                  setPdfUploadTargetIndex(null);
+                }}
+                className="text-white hover:text-rose-200 text-xl font-bold p-1 cursor-pointer leading-none"
+                title="बंद करें (Close)"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-4 sm:p-5 space-y-4 max-h-[80vh] overflow-y-auto text-slate-800">
+              {/* Option 1: Direct File Upload */}
+              <div className="bg-rose-50 border-2 border-dashed border-rose-300 rounded-lg p-4 text-center hover:bg-rose-100/70 transition-colors">
+                <div className="w-12 h-12 bg-rose-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
+                  <Upload className="w-6 h-6" />
+                </div>
+                <h4 className="font-extrabold text-sm sm:text-base text-rose-950">
+                  डिवाइस / फोन से PDF फाइल अपलोड करें
+                </h4>
+                <p className="text-xs text-rose-700 mt-1 mb-3">
+                  अपने कंप्यूटर या मोबाइल से नोटिफिकेशन या सिलेबस की PDF फ़ाइल चुनें
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    pdfFileInputRef.current?.click();
+                  }}
+                  className="bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded shadow-xs cursor-pointer inline-flex items-center gap-2 active:scale-95 transition-all"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>PDF फ़ाइल चुनें (.pdf)</span>
+                </button>
+              </div>
+
+              {/* Option 2: Quick Standard PDF Presets */}
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-slate-600 tracking-wider block">
+                  या तैयार सरकारी भर्ती PDF लिंक चुनें (Presets):
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => handleAddPresetPdfLink('Download Detailed Notification (PDF)', 'Click Here', 'notification')}
+                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
+                  >
+                    <span className="text-rose-600 font-black text-sm">📋</span>
+                    <span>Download Detailed Notification (PDF)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleAddPresetPdfLink('Download Syllabus & Exam Pattern (PDF)', 'Click Here', 'syllabus')}
+                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
+                  >
+                    <span className="text-rose-600 font-black text-sm">📚</span>
+                    <span>Download Syllabus (PDF)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleAddPresetPdfLink('Download Result & Merit List (PDF)', 'Click Here', 'result')}
+                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
+                  >
+                    <span className="text-rose-600 font-black text-sm">🏆</span>
+                    <span>Download Result (PDF)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleAddPresetPdfLink('Download Answer Key (PDF)', 'Click Here', 'answer_key')}
+                    className="flex items-center gap-2 p-2.5 bg-slate-50 hover:bg-red-50 hover:border-red-400 border border-slate-200 rounded text-left font-bold cursor-pointer transition-colors"
+                  >
+                    <span className="text-rose-600 font-black text-sm">🔑</span>
+                    <span>Download Answer Key (PDF)</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Option 3: Custom Online PDF URL / Google Drive */}
+              <div className="pt-2 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const customLabel = prompt('PDF लिंक का नाम दर्ज करें (Link Name):', 'Download Official Notice (PDF)');
+                    if (customLabel) {
+                      handleAddPresetPdfLink(customLabel, 'Download PDF', 'notification');
+                    }
+                  }}
+                  className="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded border border-slate-300 cursor-pointer flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <span>🔗 अन्य कस्टम PDF वेब लिंक / Google Drive लिंक जोड़ें</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-slate-100 px-4 py-2.5 border-t border-slate-200 flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPdfModalOpen(false);
+                  setPdfUploadTargetIndex(null);
+                }}
+                className="px-4 py-1.5 bg-slate-600 hover:bg-slate-700 text-white font-bold text-xs rounded cursor-pointer"
+              >
+                रद्द करें (Cancel)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Post Alert Popup Modal */}
       <PostAlertModal

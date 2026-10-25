@@ -71,6 +71,9 @@ export interface DirectLinkItem {
   type: 'apply' | 'admit_card' | 'result' | 'answer_key' | 'notification' | 'official' | 'syllabus' | 'other' | 'exam_city';
   url?: string;
   isPrimary?: boolean;
+  isPdf?: boolean;
+  fileName?: string;
+  fileSize?: string;
 }
 
 export interface ExamSubjectItem {

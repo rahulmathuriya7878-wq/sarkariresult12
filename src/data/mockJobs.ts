@@ -80,7 +80,157 @@ export const upscCdsResultPost: SarkariPost = {
   ]
 };
 
+export const iafHindiTypistPost: SarkariPost = {
+  id: 'job-iaf-hindi-typist-2026',
+  slug: 'indian-air-force-hindi-typist-recruitment-2026',
+  title: 'Indian Air Force IAF Hindi Typist Recruitment 2026 Offline Application Form',
+  shortTitle: 'Air Force Hindi Typist 2026',
+  hindiTitle: 'भारतीय वायु सेना (IAF) हिंदी टाइपिस्ट भर्ती 2026 ऑफलाइन फॉर्म',
+  category: 'latest_jobs',
+  department: 'Defence',
+  qualifications: ['12th Pass'],
+  state: 'All India',
+  postDate: '25 October 2026 | 01:45 PM',
+  notificationNumber: 'Advt No. 04/2026 / HQ SAC',
+  totalVacancies: 1,
+  salary: '₹ 19,900 - ₹ 63,200/- (Pay Level 2 as per 7th CPC)',
+  salaryBand: 'Below 25K',
+  isHot: true,
+  isNew: true,
+  lastDate: '23/11/2026',
+  examDate: 'To be notified',
+  shortInfo: 'Indian Air Force (IAF), Headquarters Southern Air Command (SAC), Akkulam, Trivandrum (Kerala) has released official recruitment notification Advt No. 04/2026 for the post of Hindi Typist Group "C" Civilian (Reserved for OBC). All eligible 12th passed candidates with Hindi/English typing speed can apply through prescribed offline application format up to 23 November 2026.',
+  applicationFee: [
+    { category: 'General / OBC / EWS', amount: '₹ 0/- (Nil)' },
+    { category: 'SC / ST / PwD / Female', amount: '₹ 0/- (Nil)' }
+  ],
+  feePaymentMode: 'No Application Fee is required for any category candidates. Application is 100% free.',
+  ageLimit: {
+    asOnDate: '23/11/2026',
+    minAge: 18,
+    maxAge: 25,
+    notes: 'Age relaxation 3 years for OBC candidates as per Government of India rules (18 to 28 Years).'
+  },
+  importantDates: [
+    { label: 'Notification Released Date', value: '24/10/2026' },
+    { label: 'Offline Application Begin Date', value: '24/10/2026' },
+    { label: 'Last Date for Receive Application Form', value: '23/11/2026 (05:00 PM)', isHighlight: true },
+    { label: 'Written Examination Date', value: 'Notify Soon', isHighlight: true },
+    { label: 'Typing Skill Test Date', value: 'As per Schedule' }
+  ],
+  vacancyBreakdown: [
+    {
+      postName: 'Hindi Typist (Group "C" Civilian) - HQ SAC',
+      totalPosts: '01',
+      eligibility: `• शैक्षणिक योग्यता: Class 12th (Intermediate / Senior Secondary) Passed from Any Recognized Board in India.
+• टाइपिंग स्पीड (Typing Speed):
+  - कंप्यूटर पर 30 शब्द प्रति मिनट (WPM) हिंदी टाइपिंग OR
+  - कंप्यूटर पर 35 शब्द प्रति मिनट (WPM) अंग्रेजी टाइपिंग।
+• आयु सीमा: 18 से 25 वर्ष (आयु गणना तिथि: 23 नवंबर 2026)।
+• आरक्षित श्रेणी: OBC (ओबीसी वर्ग हेतु आरक्षित)।
+• वेतनमान: Pay Level-2 (₹ 19,900 – ₹ 63,200/-) + अन्य सरकारी भत्ते।`,
+      modeOfSelection: 'Written Test (General Intelligence, Reasoning, English, Numerical Aptitude, General Awareness) -> Skill / Typing Test on Computer -> Document Verification -> Medical Examination.',
+      categoryBreakdown: { gen: 0, obc: 1, ews: 0, sc: 0, st: 0 }
+    }
+  ],
+  paperPattern: {
+    examName: 'IAF Group C Civilian Hindi Typist Written Exam 2026',
+    examMode: 'Offline OMR Based Written Examination',
+    totalQuestions: 100,
+    totalMarks: 100,
+    totalDuration: '2 Hours (120 Minutes)',
+    negativeMarking: '0.25 Marks per Wrong Answer',
+    mediumOfExam: 'Bilingual (Hindi & English)',
+    subjects: [
+      { subjectName: 'General Intelligence & Reasoning', totalQuestions: 25, totalMarks: 25, remarks: 'Objective MCQ' },
+      { subjectName: 'Numerical Aptitude (Mathematics)', totalQuestions: 25, totalMarks: 25, remarks: '10th Standard' },
+      { subjectName: 'General English / General Hindi', totalQuestions: 25, totalMarks: 25, remarks: 'Language Proficiency' },
+      { subjectName: 'General Awareness & Current Affairs', totalQuestions: 25, totalMarks: 25, remarks: 'Objective MCQ' }
+    ],
+    notes: [
+      'The question paper will be bilingual (English & Hindi) except General English portion.',
+      'Candidates shortlisted in the written examination will be called for the Skill / Typing Test.',
+      'Typing test will be qualifying in nature.'
+    ]
+  },
+  howToApplySteps: [
+    'Download the official notification and offline application form from the important links below.',
+    'Take a printout of the application form on A4 size white paper.',
+    'Fill out all the details in the form carefully in Hindi or English (in Block Letters) without any overwriting or cutting.',
+    'Paste a recent passport-size photograph on the top right corner and self-attest it.',
+    'Attach self-attested photocopies of all necessary documents:',
+    '  - Class 10th Certificate / Marksheet (for Date of Birth proof)',
+    '  - Class 12th (Intermediate) Marksheet and Passing Certificate',
+    '  - Valid OBC Caste Certificate (in Central Government format)',
+    '  - Computer Typing Speed Certificate (if available)',
+    '  - Aadhar Card / Valid ID Proof',
+    'Enclose one self-addressed envelope with required postal stamp affixed.',
+    'On top of the envelope write in bold letters: "APPLICATION FOR THE POST OF HINDI TYPIST (OBC CATEGORY) AGAINST ADVT. NO. 04/2026".',
+    'Send the completed application form via Ordinary / Registered / Speed Post to the address below before 23 November 2026 (05:00 PM):',
+    'Postal Address: The Commanding Officer, Head Quarter Southern Air Command (Unit), Akkulam, Trivandrum – 695011, Kerala.'
+  ],
+  directLinks: [
+    { 
+      label: 'Download Detailed Notification (PDF)', 
+      actionText: 'Click Here', 
+      type: 'notification', 
+      url: 'https://rajasthanvacancy.com/indian-air-force-hindi-typist-recruitment-2026/', 
+      isPdf: true,
+      isPrimary: true 
+    },
+    { 
+      label: 'Download Offline Application Form (PDF)', 
+      actionText: 'Click Here', 
+      type: 'notification', 
+      url: 'https://rajasthanvacancy.com/indian-air-force-hindi-typist-recruitment-2026/', 
+      isPdf: true,
+      isPrimary: true 
+    },
+    { 
+      label: 'Indian Air Force Official Portal', 
+      actionText: 'Click Here', 
+      type: 'official', 
+      url: 'https://indianairforce.nic.in/' 
+    },
+    { 
+      label: 'Join WhatsApp Channel', 
+      actionText: 'Click Here', 
+      type: 'official', 
+      url: 'https://whatsapp.com/channel/sarkariresult' 
+    },
+    { 
+      label: 'Join Telegram Channel', 
+      actionText: 'Click Here', 
+      type: 'official', 
+      url: 'https://t.me/sarkariresult' 
+    }
+  ],
+  customFaqs: [
+    {
+      question: 'What is the last date to apply for Indian Air Force Hindi Typist Recruitment 2026?',
+      answer: 'The last date to receive offline application form for IAF Hindi Typist Recruitment 2026 is 23 November 2026 (up to 05:00 PM).'
+    },
+    {
+      question: 'What is the educational qualification required for IAF Hindi Typist?',
+      answer: 'Candidate must have passed Class 12th (Intermediate) from any recognized Board in India and possess typing speed of 30 wpm in Hindi or 35 wpm in English on computer.'
+    },
+    {
+      question: 'What is the age limit for Air Force Hindi Typist 2026?',
+      answer: 'Minimum age is 18 years and maximum age is 25 years as on 23/11/2026. Age relaxation of 3 years is applicable for OBC category candidates.'
+    },
+    {
+      question: 'What is the application fee for IAF Hindi Typist Recruitment 2026?',
+      answer: 'There is No Application Fee (₹0/-) for any category. Offline application is completely free.'
+    },
+    {
+      question: 'Where should the offline application form be sent?',
+      answer: 'The application form must be sent to: The Commanding Officer, Head Quarter Southern Air Command (Unit), Akkulam, Trivandrum – 695011, Kerala.'
+    }
+  ]
+};
+
 export const mockSarkariPosts: SarkariPost[] = [
+  iafHindiTypistPost,
   upscCdsResultPost,
   ...screenshotResultPosts,
   ...screenshotLatestJobPosts,
@@ -3349,6 +3499,7 @@ export const mockSarkariPosts: SarkariPost[] = [
 ];
 
 export const trendingAlerts = [
+  { id: 't-iaf', title: '✈️ Indian Air Force IAF Hindi Typist 2026 Offline Form', slug: 'indian-air-force-hindi-typist-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't-ugc', title: '🎓 NTA UGC NET 2026 Online Form (Assistant Professor & JRF)', slug: 'nta-ugc-net-2026-online-form', category: 'latest_jobs', badge: 'New Job' },
   { id: 't-ssp', title: '🏛️ Rajasthan Samajik Suraksha Pension 2026 (RAJSSP) Online Form & Varshik Satypan', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', category: 'important', badge: 'Hot' },
   { id: 't-sci', title: '⚖️ Supreme Court Attendant (130 Posts) Online Form 2026', slug: 'supreme-court-attendant-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
@@ -3365,6 +3516,7 @@ export const trendingAlerts = [
 ];
 
 export const highlightBoxes = [
+  { id: 'h-iaf', title: 'Air Force Hindi Typist 2026', sub: 'Offline Form (12th Pass)', slug: 'indian-air-force-hindi-typist-recruitment-2026', color: 'from-[#0000ff] to-blue-900' },
   { id: 'h-ugc', title: 'NTA UGC NET 2026', sub: 'Apply Online (JRF & Asst Prof)', slug: 'nta-ugc-net-2026-online-form', color: 'from-emerald-700 to-teal-800' },
   { id: 'h-ssp', title: 'Raj Samajik Suraksha Pension', sub: 'Online Form & Verification', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', color: 'from-red-700 to-indigo-800' },
   { id: 'h-sci', title: 'Supreme Court Attendant', sub: 'Apply Online (130 Posts)', slug: 'supreme-court-attendant-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
