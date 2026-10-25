@@ -6,14 +6,6 @@ export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => 
   let existing: DirectLinkItem[] = post.directLinks && post.directLinks.length > 0 
     ? post.directLinks.map(l => ({ ...l })) 
     : [];
-  
-  // Filter out any WhatsApp or Telegram channel links
-  existing = existing.filter(l => 
-    !l.label?.toLowerCase().includes('whatsapp') && 
-    !l.label?.toLowerCase().includes('telegram') && 
-    !l.url?.toLowerCase().includes('whatsapp') && 
-    !l.url?.toLowerCase().includes('t.me')
-  );
 
   if (existing.length === 0) {
     if (post.category === 'result') {
@@ -27,6 +19,31 @@ export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => 
     }
     existing.push({ label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult.com' });
     existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: 'https://sarkariresult.com' });
+  }
+
+  // Ensure Join WhatsApp Channel & Join Telegram Channel exist in important links section
+  const hasWhatsapp = existing.some(l => 
+    l.label?.toLowerCase().includes('whatsapp') || l.url?.toLowerCase().includes('whatsapp')
+  );
+  if (!hasWhatsapp) {
+    existing.push({
+      label: 'Join WhatsApp Channel',
+      actionText: 'Click Here',
+      type: 'official',
+      url: 'https://whatsapp.com/channel/sarkariresult'
+    });
+  }
+
+  const hasTelegram = existing.some(l => 
+    l.label?.toLowerCase().includes('telegram') || l.url?.toLowerCase().includes('t.me')
+  );
+  if (!hasTelegram) {
+    existing.push({
+      label: 'Join Telegram Channel',
+      actionText: 'Click Here',
+      type: 'official',
+      url: 'https://t.me/sarkariresult'
+    });
   }
 
   return existing;
@@ -285,17 +302,31 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     }
   }, [isGlobalWordEditActive]);
 
+  const currentPostIdRef = React.useRef(post.id);
+  const lastSavedJsonRef = React.useRef<string>('');
+  const onUpdatePostRef = React.useRef(onUpdatePost);
+
   useEffect(() => {
-    const processedDates = getProcessedImportantDates(post);
-    const processedLinks = getProcessedDirectLinks(post);
-    setEditablePost({
-      ...post,
-      importantDates: post.importantDates && post.importantDates.length > 0 ? post.importantDates : processedDates,
-      directLinks: processedLinks,
-      customFaqs: post.customFaqs && post.customFaqs.length > 0 ? post.customFaqs : getPostFAQs(post)
-    });
-    setHasUnsavedChanges(false);
-  }, [post]);
+    onUpdatePostRef.current = onUpdatePost;
+  }, [onUpdatePost]);
+
+  // Synchronize initial state when user switches to a different post
+  useEffect(() => {
+    if (post.id !== currentPostIdRef.current) {
+      currentPostIdRef.current = post.id;
+      const processedDates = getProcessedImportantDates(post);
+      const processedLinks = getProcessedDirectLinks(post);
+      const initial: SarkariPost = {
+        ...post,
+        importantDates: post.importantDates && post.importantDates.length > 0 ? post.importantDates : processedDates,
+        directLinks: processedLinks,
+        customFaqs: post.customFaqs && post.customFaqs.length > 0 ? post.customFaqs : getPostFAQs(post)
+      };
+      lastSavedJsonRef.current = JSON.stringify(initial);
+      setEditablePost(initial);
+      setHasUnsavedChanges(false);
+    }
+  }, [post.id]);
 
   const faqs = useMemo(() => {
     if (editablePost.customFaqs && editablePost.customFaqs.length > 0) {
@@ -316,8 +347,40 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
   // Save all in-place word & section updates
   const handleSaveAllChanges = () => {
-    if (onUpdatePost) {
-      onUpdatePost(editablePost);
+    if (onUpdatePostRef.current) {
+      onUpdatePostRef.current(editablePost);
+    }
+    lastSavedJsonRef.current = JSON.stringify(editablePost);
+    try {
+      const saved = localStorage.getItem('sarkari_admin_posts_v5');
+      let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
+      const idx = currentArr.findIndex(p => p.id === editablePost.id);
+      if (idx >= 0) {
+        currentArr[idx] = editablePost;
+      } else {
+        currentArr.push(editablePost);
+      }
+      localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
+    } catch (e) {
+      console.error(e);
+    }
+    setHasUnsavedChanges(false);
+  };
+
+  // Real-time automatic persistence: only persists when editablePost actually changes
+  useEffect(() => {
+    const currentJson = JSON.stringify(editablePost);
+    if (!lastSavedJsonRef.current) {
+      lastSavedJsonRef.current = currentJson;
+      return;
+    }
+    if (currentJson === lastSavedJsonRef.current) {
+      return;
+    }
+    lastSavedJsonRef.current = currentJson;
+
+    if (onUpdatePostRef.current) {
+      onUpdatePostRef.current(editablePost);
     }
     try {
       const saved = localStorage.getItem('sarkari_admin_posts_v5');
@@ -329,40 +392,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         currentArr.push(editablePost);
       }
       localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
-      window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: currentArr }));
     } catch (e) {
       console.error(e);
     }
-    setHasUnsavedChanges(false);
-  };
-
-  // Real-time automatic persistence: whenever editablePost updates during edit mode, auto-save to localStorage
-  const hasLoadedRef = React.useRef(false);
-  useEffect(() => {
-    if (!hasLoadedRef.current) {
-      hasLoadedRef.current = true;
-      return;
-    }
-    if (isDirectEditMode) {
-      if (onUpdatePost) {
-        onUpdatePost(editablePost);
-      }
-      try {
-        const saved = localStorage.getItem('sarkari_admin_posts_v5');
-        let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
-        const idx = currentArr.findIndex(p => p.id === editablePost.id);
-        if (idx >= 0) {
-          currentArr[idx] = editablePost;
-        } else {
-          currentArr.push(editablePost);
-        }
-        localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
-        window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: currentArr }));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, [editablePost, isDirectEditMode, onUpdatePost]);
+  }, [editablePost]);
 
   // Reusable Word-by-Word In-Place Editable Component
   const EditableText: React.FC<{
@@ -591,27 +624,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     setTimeout(() => setAlertFeedback(null), 3000);
   };
 
-  // Delete Entire Post Handler for Word Editor
-  const handleDeleteCurrentPost = () => {
-    const postTitle = post.title || post.shortTitle;
-    if (confirm(`⚠️ क्या आप वाकई पूरी पोस्ट "${postTitle}" को डिलीट (Delete) करना चाहते हैं?\n\nयह पोस्ट वेबसाइट से पूरी तरह हट जाएगी।`)) {
-      if (onDeletePost) {
-        onDeletePost(post.id);
-      }
-      try {
-        const saved = localStorage.getItem('sarkari_admin_posts_v5');
-        if (saved) {
-          const parsed: SarkariPost[] = JSON.parse(saved);
-          const filtered = parsed.filter(p => p.id !== post.id);
-          localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(filtered));
-          window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: filtered }));
-        }
-      } catch (e) {
-        console.error(e);
-      }
-      onBack();
-    }
-  };
 
   const handleAddFAQ = () => {
     setEditablePost(prev => {
@@ -704,39 +716,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     setIsAlertActive(isPostAlertActive(post.id));
   }, [post.id]);
 
-  // Auto-open Alert modal ONLY if user opens via share link for the first time ("User pahli baar open kare tabhi vo bhi share link se open kare")
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
 
-    const isSharedLink = 
-      window.location.search.toLowerCase().includes('share') || 
-      window.location.hash.toLowerCase().includes('share') ||
-      sessionStorage.getItem('sarkari_opened_via_share_link') === 'true' ||
-      (document.referrer && (
-        document.referrer.toLowerCase().includes('whatsapp') ||
-        document.referrer.toLowerCase().includes('telegram') ||
-        document.referrer.toLowerCase().includes('facebook') ||
-        document.referrer.toLowerCase().includes('t.co')
-      ));
 
-    const hasSeenAlert = localStorage.getItem(`sarkari_alert_seen_${post.id}`);
-
-    /*
-    if (isSharedLink && !hasSeenAlert) {
-      // Mark as seen so it will NOT auto-open again on subsequent visits
-      try {
-        localStorage.setItem(`sarkari_alert_seen_${post.id}`, 'true');
-      } catch (e) {
-        console.error(e);
-      }
-
-      const timer = setTimeout(() => {
-        setIsAlertModalOpen(true);
-      }, 400);
-      return () => clearTimeout(timer);
-    }
-    */
-  }, [post.id]);
 
   const handleAlertToggle = async () => {
     const res = await togglePostAlert(post);
@@ -1021,17 +1002,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </div>
 
             <div className="flex items-center gap-2">
-              {/* Word Editor Delete Post Option */}
-              <button
-                type="button"
-                onClick={handleDeleteCurrentPost}
-                className="bg-red-700 hover:bg-red-800 text-white font-black text-xs px-3 py-1.5 rounded flex items-center gap-1.5 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer border border-red-900"
-                title="इस पूरी पोस्ट को हटाएं (Delete Post)"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>🗑️ पोस्ट Delete करें</span>
-              </button>
-
               {/* Hide Direct Word Edit bar */}
               <button
                 type="button"

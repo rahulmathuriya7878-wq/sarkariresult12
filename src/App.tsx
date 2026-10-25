@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { mockSarkariPosts } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
@@ -58,24 +58,26 @@ export default function App() {
     return mockSarkariPosts;
   });
 
-  // Save posts to localStorage and broadcast real-time update whenever updated
+  // Save posts to localStorage whenever allPosts updates
   useEffect(() => {
     try {
       localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(allPosts));
-      window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: allPosts }));
     } catch (e) {
       console.error('Failed to save posts', e);
     }
   }, [allPosts]);
 
-  // Real-time event listener for synchronization across components without page refresh
+  // Real-time storage listener for cross-tab updates without endless cycles
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'sarkari_admin_posts_v3' && e.newValue) {
+      if ((e.key === 'sarkari_admin_posts_v5' || e.key === 'sarkari_admin_posts_v3') && e.newValue) {
         try {
           const parsed = JSON.parse(e.newValue);
           if (Array.isArray(parsed)) {
-            setAllPosts(parsed);
+            setAllPosts((prev) => {
+              if (JSON.stringify(prev) === e.newValue) return prev;
+              return parsed;
+            });
           }
         } catch (err) {
           console.error(err);
@@ -83,18 +85,9 @@ export default function App() {
       }
     };
 
-    const handleCustomPostUpdate = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      if (customEvent.detail && Array.isArray(customEvent.detail)) {
-        setAllPosts(customEvent.detail);
-      }
-    };
-
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('sarkari_posts_updated', handleCustomPostUpdate);
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('sarkari_posts_updated', handleCustomPostUpdate);
     };
   }, []);
 
@@ -164,24 +157,34 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Post Mutation Handlers for Admin Panel
-  const handleAddPost = (newPost: SarkariPost) => {
+  // Post Mutation Handlers for Admin Panel & Word Editor
+  const handleAddPost = useCallback((newPost: SarkariPost) => {
     setAllPosts((prev) => [newPost, ...prev]);
-  };
+  }, []);
 
-  const handleUpdatePost = (updatedPost: SarkariPost) => {
-    setAllPosts((prev) => prev.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
-    if (selectedPost && selectedPost.id === updatedPost.id) {
-      setSelectedPost(updatedPost);
-    }
-  };
+  const handleUpdatePost = useCallback((updatedPost: SarkariPost) => {
+    setAllPosts((prev) => {
+      const idx = prev.findIndex((p) => p.id === updatedPost.id);
+      if (idx === -1) return [updatedPost, ...prev];
+      if (JSON.stringify(prev[idx]) === JSON.stringify(updatedPost)) {
+        return prev;
+      }
+      const next = [...prev];
+      next[idx] = updatedPost;
+      return next;
+    });
 
-  const handleDeletePost = (postId: string) => {
+    setSelectedPost((prev) => {
+      if (!prev || prev.id !== updatedPost.id) return prev;
+      if (JSON.stringify(prev) === JSON.stringify(updatedPost)) return prev;
+      return updatedPost;
+    });
+  }, []);
+
+  const handleDeletePost = useCallback((postId: string) => {
     setAllPosts((prev) => prev.filter((p) => p.id !== postId));
-    if (selectedPost && selectedPost.id === postId) {
-      setSelectedPost(null);
-    }
-  };
+    setSelectedPost((prev) => (prev && prev.id === postId ? null : prev));
+  }, []);
 
   const handleResetToDefault = () => {
     setAllPosts(mockSarkariPosts);
