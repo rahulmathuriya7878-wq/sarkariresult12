@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { mockSarkariPosts } from './data/mockJobs';
+import { mockSarkariPosts, iafHindiTypistPost } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
 import { QuickHighlightsGrid } from './components/QuickHighlightsGrid';
@@ -51,7 +51,9 @@ export default function App() {
           customAdminPosts = parsed.filter((p: SarkariPost) => !mockIds.has(p.id));
         }
       }
-      return [...mockSarkariPosts, ...customAdminPosts];
+      const combined = [...mockSarkariPosts, ...customAdminPosts];
+      const hasIaf = combined.some(p => p.id === iafHindiTypistPost.id);
+      return hasIaf ? combined : [iafHindiTypistPost, ...combined];
     } catch (e) {
       console.error('Failed to load posts from storage', e);
     }
@@ -89,6 +91,17 @@ export default function App() {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
+  }, []);
+
+  // Ensure latest added jobs like Air Force Hindi Typist are at the very top of allPosts
+  useEffect(() => {
+    setAllPosts((prev) => {
+      const idx = prev.findIndex((p) => p.id === iafHindiTypistPost.id);
+      if (idx === -1) {
+        return [iafHindiTypistPost, ...prev];
+      }
+      return prev;
+    });
   }, []);
 
   // Admin Modal state
@@ -395,10 +408,11 @@ export default function App() {
 
 const parsePostDate = (dateStr?: string): number => {
   if (!dateStr) return 0;
-  const parsed = Date.parse(dateStr);
+  const cleanStr = dateStr.split('|')[0].trim();
+  const parsed = Date.parse(cleanStr);
   if (!isNaN(parsed)) return parsed;
 
-  const parts = dateStr.split(/[\/\-\.]/);
+  const parts = cleanStr.split(/[\/\-\.]/);
   if (parts.length === 3) {
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
@@ -412,6 +426,10 @@ const parsePostDate = (dateStr?: string): number => {
 
 const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
   return [...posts].sort((a, b) => {
+    // IAF Hindi Typist recruitment always guaranteed at the top
+    if (a.id === iafHindiTypistPost.id) return -1;
+    if (b.id === iafHindiTypistPost.id) return 1;
+
     // 1. Explicit newest badge prioritization (sabse uper)
     if (a.isNew && !b.isNew) return -1;
     if (!a.isNew && b.isNew) return 1;
