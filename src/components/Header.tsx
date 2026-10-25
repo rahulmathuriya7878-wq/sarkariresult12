@@ -106,6 +106,13 @@ export const Header: React.FC<HeaderProps> = ({
                 </h1>
                 <span className="text-[#facc15] font-serif text-2xl sm:text-3xl leading-none">★</span>
               </div>
+              <a 
+                href="https://sarkariresult12.vercel.app/#" 
+                className="text-amber-300 hover:text-yellow-200 font-bold text-xs sm:text-sm tracking-wider font-sans underline mt-0.5"
+                title="Sarkari Result Official Portal"
+              >
+                https://sarkariresult12.vercel.app/#
+              </a>
             </div>
           </div>
         </div>

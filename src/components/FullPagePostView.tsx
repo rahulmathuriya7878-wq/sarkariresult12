@@ -9,16 +9,16 @@ export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => 
 
   if (existing.length === 0) {
     if (post.category === 'result') {
-      existing.push({ label: 'Download Result / Score Card', actionText: 'Click Here', type: 'result', url: 'https://sarkariresult.com' });
+      existing.push({ label: 'Download Result / Score Card', actionText: 'Click Here', type: 'result', url: 'https://sarkariresult12.vercel.app/#' });
     } else if (post.category === 'admit_card') {
-      existing.push({ label: 'Download Admit Card / Hall Ticket', actionText: 'Click Here', type: 'admit_card', url: 'https://sarkariresult.com' });
+      existing.push({ label: 'Download Admit Card / Hall Ticket', actionText: 'Click Here', type: 'admit_card', url: 'https://sarkariresult12.vercel.app/#' });
     } else if (post.category === 'answer_key') {
-      existing.push({ label: 'Download Answer Key & Solution Paper', actionText: 'Click Here', type: 'answer_key', url: 'https://sarkariresult.com' });
+      existing.push({ label: 'Download Answer Key & Solution Paper', actionText: 'Click Here', type: 'answer_key', url: 'https://sarkariresult12.vercel.app/#' });
     } else {
-      existing.push({ label: 'Apply Online', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult.com', isPrimary: true });
+      existing.push({ label: 'Apply Online', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult12.vercel.app/#', isPrimary: true });
     }
-    existing.push({ label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult.com' });
-    existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: 'https://sarkariresult.com' });
+    existing.push({ label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult12.vercel.app/#' });
+    existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: 'https://sarkariresult12.vercel.app/#' });
   }
 
   // Ensure Join WhatsApp Channel & Join Telegram Channel exist in important links section
@@ -293,7 +293,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     };
   });
   const [isDirectEditMode, setIsDirectEditMode] = useState<boolean>(() => isGlobalWordEditActive);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
 
   // Sync edit mode when global edit mode changes
   useEffect(() => {
@@ -324,7 +323,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       };
       lastSavedJsonRef.current = JSON.stringify(initial);
       setEditablePost(initial);
-      setHasUnsavedChanges(false);
     }
   }, [post.id]);
 
@@ -344,28 +342,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     if (typeof window === 'undefined') return false;
     return sessionStorage.getItem('sarkari_admin_auth') === 'true';
   }, []);
-
-  // Save all in-place word & section updates
-  const handleSaveAllChanges = () => {
-    if (onUpdatePostRef.current) {
-      onUpdatePostRef.current(editablePost);
-    }
-    lastSavedJsonRef.current = JSON.stringify(editablePost);
-    try {
-      const saved = localStorage.getItem('sarkari_admin_posts_v5');
-      let currentArr: SarkariPost[] = saved ? JSON.parse(saved) : [];
-      const idx = currentArr.findIndex(p => p.id === editablePost.id);
-      if (idx >= 0) {
-        currentArr[idx] = editablePost;
-      } else {
-        currentArr.push(editablePost);
-      }
-      localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(currentArr));
-    } catch (e) {
-      console.error(e);
-    }
-    setHasUnsavedChanges(false);
-  };
 
   // Real-time automatic persistence: only persists when editablePost actually changes
   useEffect(() => {
@@ -433,7 +409,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           const updated = e.currentTarget.innerText.trim();
           if (updated !== strVal) {
             onChange(updated);
-            setHasUnsavedChanges(true);
           }
         }}
         className={`${className} outline-none cursor-text transition-all hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-0.5 border-b border-dashed border-amber-500 min-w-[20px] inline-block`}
@@ -450,7 +425,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       importantDates: [...(prev.importantDates || []), { label: 'New Date Label', value: 'DD/MM/2026' }]
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleDeleteDateItem = (index: number) => {
@@ -458,7 +432,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       importantDates: prev.importantDates.filter((_, i) => i !== index)
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleAddFeeItem = () => {
@@ -466,7 +439,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       applicationFee: [...(prev.applicationFee || []), { category: 'General / OBC / EWS', amount: '₹ 100/-' }]
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleDeleteFeeItem = (index: number) => {
@@ -474,7 +446,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       applicationFee: prev.applicationFee.filter((_, i) => i !== index)
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleAddVacancyRow = () => {
@@ -489,7 +460,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         }
       ]
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleDeleteVacancyRow = (index: number) => {
@@ -497,7 +467,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       vacancyBreakdown: prev.vacancyBreakdown.filter((_, i) => i !== index)
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleAddSelectionStage = () => {
@@ -505,7 +474,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       selectionProcess: [...(prev.selectionProcess || []), 'Computer Based Examination / Interview Stage']
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleDeleteSelectionStage = (index: number) => {
@@ -513,7 +481,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       selectionProcess: (prev.selectionProcess || []).filter((_, i) => i !== index)
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleAddApplyStep = () => {
@@ -521,7 +488,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       howToApplySteps: [...(prev.howToApplySteps || []), 'Candidate must read notification thoroughly before applying.']
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleDeleteApplyStep = (index: number) => {
@@ -529,7 +495,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       howToApplySteps: prev.howToApplySteps.filter((_, i) => i !== index)
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleAddDirectLink = () => {
@@ -541,11 +506,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           label: 'Direct Download Official Link',
           actionText: 'Click Here',
           type: 'official',
-          url: 'https://sarkariresult.com'
+          url: 'https://sarkariresult12.vercel.app/#'
         }
       ]
     }));
-    setHasUnsavedChanges(true);
   };
 
   const handleDeleteDirectLink = (index: number) => {
@@ -553,7 +517,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       directLinks: prev.directLinks.filter((_, i) => i !== index)
     }));
-    setHasUnsavedChanges(true);
   };
 
   // Move Important Link Down (नीचे करें)
@@ -567,7 +530,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     
     const updatedPost = { ...editablePost, directLinks: nextList };
     setEditablePost(updatedPost);
-    setHasUnsavedChanges(true);
     
     if (onUpdatePost) {
       onUpdatePost(updatedPost);
@@ -601,7 +563,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     
     const updatedPost = { ...editablePost, directLinks: nextList };
     setEditablePost(updatedPost);
-    setHasUnsavedChanges(true);
     
     if (onUpdatePost) {
       onUpdatePost(updatedPost);
@@ -639,7 +600,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         ]
       };
     });
-    setHasUnsavedChanges(true);
   };
 
   const handleDeleteFAQ = (index: number) => {
@@ -650,7 +610,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         customFaqs: currentList.filter((_, i) => i !== index)
       };
     });
-    setHasUnsavedChanges(true);
   };
 
   const renderSectionControls = (sectionId: string, sectionTitle: string) => {
@@ -1100,7 +1059,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 <tbody>
                   {/* Row 1: Name Of Post */}
                   <tr className="border-b border-slate-200">
-                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[16pt] align-top border-r border-slate-200 w-28 sm:w-56 shrink-0 leading-tight">
+                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[14pt] sm:text-[16pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
                       Name Of Post :
                     </td>
                     <td className="p-3 sm:p-4 align-top">
@@ -1108,7 +1067,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         as="h1"
                         value={editablePost.title}
                         onChange={(val) => setEditablePost(prev => ({ ...prev, title: val }))}
-                        className="text-[#ff0000] font-black text-[16pt] leading-snug tracking-tight font-serif"
+                        className="text-[#ff0000] font-black text-[14pt] sm:text-[16pt] leading-snug tracking-tight font-serif"
                         titlePrefix="पोस्ट का शीर्षक (Title)"
                       />
                     </td>
@@ -1116,14 +1075,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                   {/* Row 2: Post Date / Update */}
                   <tr className="border-b border-slate-200">
-                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[14pt] align-top border-r border-slate-200 w-28 sm:w-56 shrink-0 leading-tight">
+                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[13pt] sm:text-[14pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
                       Post Date / Update :
                     </td>
-                    <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[12pt] align-top">
+                    <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[11pt] sm:text-[12pt] align-top">
                       <EditableText
                         value={editablePost.postDate}
                         onChange={(val) => setEditablePost(prev => ({ ...prev, postDate: val }))}
-                        className="text-slate-900 font-semibold text-[12pt]"
+                        className="text-slate-900 font-semibold text-[11pt] sm:text-[12pt]"
                         titlePrefix="पोस्ट की तिथि (Post Date)"
                       />
                       <span className="ml-1 text-slate-600 font-normal">| 08:40 PM</span>
@@ -1132,7 +1091,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                   {/* Row 3: Short Information */}
                   <tr>
-                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[14pt] align-top border-r border-slate-200 w-28 sm:w-56 shrink-0 leading-tight">
+                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[13pt] sm:text-[14pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
                       Short Information :
                     </td>
                     <td className="p-3 sm:p-4 text-slate-800 text-[12pt] leading-relaxed align-top">
@@ -1167,6 +1126,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               <h2 className="text-[#008000] font-black text-[11pt] font-sans leading-snug" style={{ color: '#008000' }}>
                 {post.shortTitle || post.title}
               </h2>
+              <div className="text-center pt-0.5">
+                <a 
+                  href="https://sarkariresult12.vercel.app/#" 
+                  className="text-blue-700 hover:text-red-700 font-bold text-xs sm:text-sm font-sans underline"
+                  title="Official Website"
+                >
+                  https://sarkariresult12.vercel.app/#
+                </a>
+              </div>
             </div>
 
             {/* IF INFORMATIONAL POST (Disclaimer, Rules, Contact Us): Render Normal Article Layout */}
@@ -1220,11 +1188,11 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       <span>📍 Important Dates & Application Fee Section</span>
                       {renderSectionControls('sec_dates_fee', 'Important Dates & Fee')}
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-400">
+                    <div className="grid grid-cols-2 divide-x divide-slate-400">
                       {/* Left Column: Important Dates */}
-                      <div className="p-4 sm:p-6 space-y-3">
+                      <div className="p-2.5 sm:p-6 space-y-3">
                         <h3 
-                          className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
+                          className="font-black text-[13pt] sm:text-[16pt] border-b border-slate-200 pb-2 text-center font-sans tracking-tight"
                           style={{ color: '#008000' }}
                         >
                           Important Dates
@@ -1285,9 +1253,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       </div>
 
                       {/* Right Column: Application Fee */}
-                      <div className="p-4 sm:p-6 space-y-3">
+                      <div className="p-2.5 sm:p-6 space-y-3">
                         <h3 
-                          className="font-black text-[15pt] sm:text-[16pt] border-b border-slate-200 pb-2.5 text-center font-sans tracking-tight"
+                          className="font-black text-[13pt] sm:text-[16pt] border-b border-slate-200 pb-2 text-center font-sans tracking-tight"
                           style={{ color: '#008000' }}
                         >
                           Application Fee
@@ -1894,7 +1862,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
               {/* User Guide Banner for Moving Links (Only visible in Edit Mode) */}
               {isDirectEditMode && (
-                <div className="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex flex-col sm:flex-row sm:items-center justify-between text-xs font-bold text-amber-950 gap-1.5">
+                <div className="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex flex-row items-center justify-between text-xs font-bold text-amber-950 gap-1.5 flex-wrap">
                   <span className="flex items-center gap-1.5">
                     <span className="text-base">💡</span>
                     <span><strong>लिंक रीऑर्डर विकल्प:</strong> किसी भी लिंक को नीचे करने के लिए <strong>"⬇️ नीचे करें"</strong> बटन पर क्लिक करें।</span>
@@ -1921,13 +1889,13 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   return (
                     <div 
                       key={idx} 
-                      className={`flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 hover:bg-slate-50 gap-2.5 sm:gap-4 transition-colors ${
+                      className={`flex flex-row items-center justify-between p-2.5 sm:p-4 hover:bg-slate-50 gap-2 sm:gap-4 transition-colors ${
                         link.isPrimary ? 'bg-amber-50/50' : ''
                       }`}
                     >
                       {/* Left: Link Label */}
-                      <div className="flex items-start sm:items-center gap-2 flex-1 min-w-0">
-                        <span className="font-black text-slate-700 text-lg leading-none shrink-0 mt-0.5 sm:mt-0">•</span>
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <span className="font-black text-slate-700 text-lg leading-none shrink-0">•</span>
                         <div className="flex-1 min-w-0">
                           <EditableText
                             value={link.label}
@@ -1937,9 +1905,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                 list[idx] = { ...list[idx], label: newVal };
                                 return { ...prev, directLinks: list };
                               });
-                              setHasUnsavedChanges(true);
                             }}
-                            className="font-bold text-[12pt] sm:text-[13pt] break-words block leading-snug cursor-text"
+                            className="font-bold text-[11.5pt] sm:text-[13pt] break-words block leading-snug cursor-text"
                             style={{ color: '#ff00ff' }}
                             titlePrefix="लिंक का नाम"
                           />
@@ -1952,7 +1919,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       </div>
 
                       {/* Right: Reorder Controls (Move Down / Move Up) & Action Button */}
-                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 self-end sm:self-center flex-wrap">
+                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 self-center flex-wrap">
                         {/* Option to Move Link Down (नीचे करने का विकल्प - Edit Mode only) */}
                         {isDirectEditMode && (
                           <>
@@ -1991,7 +1958,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                         {/* Click Here Action Button */}
                         <a
-                          href={link.url || 'https://sarkariresult.com'}
+                          href={link.url || 'https://sarkariresult12.vercel.app/#'}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-1.5 text-white font-bold rounded-xs text-[11pt] sm:text-[11.5pt] shadow-2xs cursor-pointer transition-all hover:scale-102 ${btnBg}`}
@@ -2013,7 +1980,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                     list[idx] = { ...list[idx], url: newUrl.trim() };
                                     return { ...prev, directLinks: list };
                                   });
-                                  setHasUnsavedChanges(true);
                                 }
                               }}
                               className="text-[11px] bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-2 py-1 rounded cursor-pointer"
@@ -2215,46 +2181,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         </article>
       </div>
 
-      {/* Floating Save / Status Bar for Word-by-Word Editing */}
-      {(isDirectEditMode || hasUnsavedChanges) && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-slate-950/95 text-white border-2 border-amber-400 px-4 py-3 rounded-full shadow-2xl flex items-center gap-3 font-sans backdrop-blur-xs max-w-[95vw] overflow-x-auto">
-          <div className="flex items-center gap-2 shrink-0">
-            <span className={`w-3 h-3 rounded-full ${hasUnsavedChanges ? 'bg-amber-400 animate-ping' : 'bg-emerald-400'}`}></span>
-            <span className="text-xs sm:text-sm font-bold text-amber-300 whitespace-nowrap">
-              {hasUnsavedChanges ? '⚠️ बिना सेव किए गए बदलाव हैं!' : '✏️ डायरेक्ट एडिट मोड चालू है'}
-            </span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleSaveAllChanges}
-            className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs sm:text-sm px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-md cursor-pointer transition-transform hover:scale-105 shrink-0"
-          >
-            <span>💾 सेव करें (Save Now)</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setEditablePost(post);
-              setHasUnsavedChanges(false);
-              setAlertFeedback('परिवर्तन रद्द कर दिए गए हैं (Changes discarded).');
-              setTimeout(() => setAlertFeedback(null), 3000);
-            }}
-            className="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold text-xs px-3 py-1.5 rounded-full cursor-pointer shrink-0"
-          >
-            <span>रद्द करें (Cancel)</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsDirectEditMode(false)}
-            className="text-xs text-neutral-400 hover:text-white px-2 py-1 font-semibold cursor-pointer shrink-0"
-          >
-            मोड बंद करें ✕
-          </button>
-        </div>
-      )}
 
       {/* Post Alert Popup Modal */}
       <PostAlertModal

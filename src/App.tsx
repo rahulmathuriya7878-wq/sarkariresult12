@@ -447,13 +447,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
     return sortSectionPostsByLatest(filteredPosts.filter((p) => p.category === activeCategory));
   }, [activeCategory, filteredPosts]);
 
-  const handleResetFilters = () => {
-    setSearchQuery('');
-    setSelectedDept('All');
-    setSelectedQual('All');
-    setSelectedState('All States');
-  };
-
   return (
     <div className={`min-h-screen flex flex-col ${isClassicTheme ? 'bg-[#fffbf0]' : 'bg-slate-50'}`}>
       {/* Global Live Word Edit Status & Control Bar */}
