@@ -194,30 +194,7 @@ export const getCategoryShareText = (post: SarkariPost, postUrl: string): string
   const startDate = startDateItem ? startDateItem.value : (post.postDate ? post.postDate.split('|')[0].trim() : 'जारी है');
   const lastDate = post.lastDate || 'अधिसूचना देखें';
 
-  switch (post.category) {
-    case 'result':
-      return `सरकारी रिजल्ट बड़ा अपडेट\n\nपरिणाम/भर्ती का नाम: ${postName}\n\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nपरिणाम तिथि: ${post.resultDate || post.postDate || 'घोषित'}\nस्थिति: रिजल्ट व मेरिट लिस्ट उपलब्ध\n\nअपना रिजल्ट व स्कोरकार्ड देखने हेतु क्लिक करें:\n${postUrl}`;
-
-    case 'admit_card':
-      return `सरकारी एडमिट कार्ड अपडेट\n\nपरीक्षा/भर्ती का नाम: ${postName}\n\nपरीक्षा / हॉल टिकट तिथि: ${post.admitCardDate || post.examDate || 'जारी हुआ'}\nयोग्यता: ${qual}\n\nअपना एडमिट कार्ड डाउनलोड करने हेतु क्लिक करें:\n${postUrl}`;
-
-    case 'answer_key':
-      return `सरकारी उत्तर कुंजी (Answer Key) अपडेट\n\nपरीक्षा का नाम: ${postName}\n\nउत्तर कुंजी तिथि: ${post.postDate || 'जारी हुई'}\n\nआंसर की डाउनलोड करें व आपत्ति दर्ज करें:\n${postUrl}`;
-
-    case 'syllabus':
-      return `सरकारी परीक्षा सिलेबस व पैटर्न\n\nपरीक्षा का नाम: ${postName}\n\nयोग्यता: ${qual}\n\nनया सिलेबस व परीक्षा पैटर्न PDF डाउनलोड करें:\n${postUrl}`;
-
-    case 'admission':
-      return `सरकारी एडमिशन फॉर्म अपडेट\n\nकोर्स/प्रवेश का नाम: ${postName}\n\nयोग्यता: ${qual}\nआवेदन की प्रारंभ तिथि: ${startDate}\nआवेदन की अंतिम तिथि: ${lastDate}\n\nऑनलाइन एडमिशन फॉर्म भरने हेतु क्लिक करें:\n${postUrl}`;
-
-    case 'certificate_verification':
-    case 'important':
-      return `सरकारी डिजिटल सेवा व सत्यापन पोर्टल\n\nसेवा/प्रमाणपत्र: ${postName}\n\nडिजिटल सत्यापन व ऑनलाइन आवेदन हेतु क्लिक करें:\n${postUrl}`;
-
-    case 'latest_jobs':
-    default:
-      return `सरकारी नौकरी बड़ा अपडेट\n\nभर्ती का नाम: ${postName}\n\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\nआवेदन की प्रारंभ तिथि: ${startDate}\nआवेदन की अंतिम तिथि: ${lastDate}\n\nसंपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:\n${postUrl}`;
-  }
+  return `🥳🥳 सरकारी नौकरी बड़ा अपडेट 🥳🥳\n\n🎯🎯 भर्ती का नाम: ${postName} 🎯🎯\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\nआवेदन की प्रारंभ तिथि: 👉👉 ${startDate}\nआवेदन की अंतिम तिथि: 👉👉 ${lastDate}\n\n🔥🔥 संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें: 🔥🔥\n\n${postUrl}`;
 };
 
 // Helper to bold application date ranges and keywords in shortInfo
@@ -1773,15 +1750,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Salary & Pay Scale Table (वेतन सारणी) */}
                 {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
-                  <div className={`border ${isIaf ? 'border-emerald-400 bg-emerald-50/90' : 'border-slate-400 bg-white'} overflow-hidden text-[10pt] shadow-2xs`}>
-                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: isIaf ? '#008000' : '#1d4ed8' }}>
+                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#1d4ed8' }}>
                       {post.shortTitle} Pay Scale & Salary Details (वेतन सारणी)
                     </div>
                     <div className="p-2.5 sm:p-3.5 bg-slate-50 border-b border-slate-300">
                       <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[10pt]">
                         <span><strong>Pay Scale (वेतनमान): </strong>{post.salary || 'As per 7th Pay Commission (7th CPC)'}</span>
                         {post.salaryBand && (
-                          <span className={`${isIaf ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-blue-100 text-blue-800 border-blue-300'} font-bold px-2 py-0.5 rounded text-[10pt] border`}>
+                          <span className="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10pt] border border-blue-300">
                             Band: {post.salaryBand}
                           </span>
                         )}
@@ -1819,8 +1796,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Exam Scheme & Paper Pattern Table (Renders ONLY IF post.paperPattern.subjects exists) */}
                 {post.paperPattern && post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
                   !hiddenSections['sec_paper_pattern'] ? (
-                    <div className={`border ${isIaf ? 'border-emerald-400 bg-emerald-50/90' : 'border-slate-400 bg-white'} overflow-hidden text-[10pt] shadow-2xs`}>
-                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: isIaf ? '#008000' : '#1d4ed8' }}>
+                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
+                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#1d4ed8' }}>
                         <span>{post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}</span>
                         {renderSectionControls('sec_paper_pattern', 'Paper Pattern')}
                       </div>
@@ -2312,7 +2289,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
             {/* 1. Latest Jobs Section (Vertical Stack) */}
             <div className="border border-slate-300 bg-white rounded-xs overflow-hidden shadow-2xs font-sans">
-              <div className="bg-[#1e3a8a] text-white px-4 sm:px-5 py-3 text-[14px] sm:text-[16px] font-black uppercase tracking-wide flex items-center justify-between">
+              <div className="text-white px-4 sm:px-5 py-3 text-[14px] sm:text-[16px] font-black uppercase tracking-wide flex items-center justify-between" style={{ backgroundColor: '#008000' }}>
                 <span>🔥 LATEST JOBS & NOTIFICATIONS</span>
                 <span className="text-xs bg-amber-400 text-slate-900 font-extrabold px-2 py-0.5 rounded uppercase">Latest Updates</span>
               </div>
@@ -2359,7 +2336,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
             {/* 2. Recent Posts Section (Vertical Stack) */}
             <div className="border border-slate-300 bg-white rounded-xs overflow-hidden shadow-2xs font-sans">
-              <div className="bg-[#ab1616] text-white px-4 sm:px-5 py-3 text-[14px] sm:text-[16px] font-black uppercase tracking-wide flex items-center justify-between">
+              <div className="text-white px-4 sm:px-5 py-3 text-[14px] sm:text-[16px] font-black uppercase tracking-wide flex items-center justify-between" style={{ backgroundColor: '#008000' }}>
                 <span>RELATED & RECENT POSTS</span>
                 <span className="text-xs bg-white/20 text-white font-bold px-2 py-0.5 rounded capitalize font-sans">
                   {getCategoryLabel(post.category)}
