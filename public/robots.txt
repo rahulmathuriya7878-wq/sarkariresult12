@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app/sitemap.xml
+Sitemap: https://sarkariresult12.vercel.app/sitemap.xml
