@@ -6,50 +6,43 @@ import { SarkariPost, ImportantDateItem } from '../types/job';
  * - If admit card available date data exists in post.admitCardDate or importantDates, display it; otherwise "Before Exam".
  */
 export const getProcessedImportantDates = (post: SarkariPost): ImportantDateItem[] => {
-  if (!post.importantDates || post.importantDates.length === 0) {
-    const defaultDates: ImportantDateItem[] = [];
-    if (post.postDate) {
-      defaultDates.push({ label: 'Notification Released', value: post.postDate });
-    }
-    if (post.lastDate) {
-      defaultDates.push({ label: 'Last Date for Apply Online', value: post.lastDate, isHighlight: true });
-    }
-    if (post.examDate) {
-      defaultDates.push({ label: 'Exam Date', value: post.examDate, isHighlight: true });
-    }
-    if (post.admitCardDate) {
-      defaultDates.push({ label: 'Admit Card Available', value: post.admitCardDate });
-    }
-    if (post.resultDate) {
-      defaultDates.push({ label: 'Result Declared Date', value: post.resultDate, isHighlight: true });
-    }
-    return defaultDates;
+  const dates: ImportantDateItem[] = post.importantDates ? [...post.importantDates] : [];
+  const hasLabel = (regex: RegExp) => dates.some(d => regex.test(d.label));
+
+  if (!hasLabel(/application begin|begin date|notification released/i)) {
+    dates.unshift({ label: 'Application Begin', value: post.postDate ? post.postDate.split('|')[0].trim() : 'As Per Notification' });
   }
 
-  const dates: ImportantDateItem[] = [...post.importantDates];
-
-  // If examDate field exists and is not present in importantDates, append it
-  if (post.examDate && post.examDate.trim() !== '') {
-    const hasExam = dates.some(d => /exam|cbt|test date/i.test(d.label));
-    if (!hasExam) {
-      dates.push({ label: 'Exam Date', value: post.examDate, isHighlight: true });
-    }
+  if (!hasLabel(/last date.*registration|last date.*apply/i)) {
+    dates.push({ label: 'Last Date for Registration', value: post.lastDate || 'As Per Schedule', isHighlight: true });
   }
 
-  // If admitCardDate field exists and is not present in importantDates, append it
-  if (post.admitCardDate && post.admitCardDate.trim() !== '') {
-    const hasAdmit = dates.some(d => /admit card|hall ticket/i.test(d.label));
-    if (!hasAdmit) {
-      dates.push({ label: 'Admit Card Available', value: post.admitCardDate });
-    }
+  if (!hasLabel(/pay.*fee.*last date|fee payment/i)) {
+    dates.push({ label: 'Pay Exam Fee Last Date', value: post.lastDate || 'As Per Schedule' });
   }
 
-  // If resultDate field exists and is not present in importantDates, append it
-  if (post.resultDate && post.resultDate.trim() !== '') {
-    const hasResult = dates.some(d => /result|written result/i.test(d.label));
-    if (!hasResult) {
-      dates.push({ label: 'Result Declared Date', value: post.resultDate, isHighlight: true });
-    }
+  if (!hasLabel(/correction/i)) {
+    dates.push({ label: 'Last Date Correction', value: 'As Per Schedule' });
+  }
+
+  if (!hasLabel(/exam date|cbt|test date/i)) {
+    dates.push({ label: 'UPESSC TGT 2026 Exam Date', value: post.examDate || 'As Per Schedule', isHighlight: true });
+  }
+
+  if (!hasLabel(/exam city/i)) {
+    dates.push({ label: 'Exam City Available', value: 'Before Exam' });
+  }
+
+  if (!hasLabel(/admit card/i)) {
+    dates.push({ label: 'Admit Card Available', value: post.admitCardDate || 'Before Exam' });
+  }
+
+  if (!hasLabel(/answer key/i)) {
+    dates.push({ label: 'Answer Key Available', value: 'As Per Schedule' });
+  }
+
+  if (!hasLabel(/result declared|result date/i)) {
+    dates.push({ label: 'Result Declared', value: post.resultDate || 'As Per Schedule' });
   }
 
   return dates;

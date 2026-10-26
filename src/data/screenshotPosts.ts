@@ -521,58 +521,63 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
   },
   {
     id: 'job-upessc-tgt-2026',
-    slug: 'upessc-up-tgt-trained-graduate-teacher-online-form-2026',
-    title: 'UPESSC Uttar Pradesh Trained Graduate Teacher (TGT - Various Subjects) Online Form 2026',
-    shortTitle: 'UPESSC UP TGT Online Form 2026',
-    hindiTitle: 'यूपीईएसएससी यूपी टीजीटी शिक्षक भर्ती 2026 ऑनलाइन फॉर्म',
+    slug: 'up-madhyamic-tgt-teacher-recruitment-2026',
+    title: 'UP Madhyamic TGT Teacher Recruitment 2026 | UPESSC TGT Advt No 07/2026 Short Details Notification',
+    shortTitle: 'UP Madhyamic TGT Teacher Recruitment 2026',
+    hindiTitle: 'यूपी माध्यमिक टीजीटी शिक्षक भर्ती 2026 विज्ञापन संख्या 07/2026',
     category: 'latest_jobs',
     department: 'Teaching',
     qualifications: ['Graduate', 'B.Ed / CTET'],
     state: 'Uttar Pradesh',
-    postDate: '25 October 2026',
-    notificationNumber: 'UPESSC/TGT-01/2026',
+    postDate: '24 October 2026',
+    notificationNumber: 'Advt No 07/2026',
     totalVacancies: '3,539 Posts',
     salary: 'Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-)',
     salaryBand: '25K - 50K',
     isHot: true,
     isNew: true,
-    lastDate: '28/11/2026',
+    lastDate: '23/11/2026',
     admitCardDate: 'Before Exam',
-    examDate: 'As Per Schedule',
-    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC), Prayagraj invites online applications for trained graduate teachers (TGT) in various subjects for Government aided secondary schools in Uttar Pradesh.',
+    examDate: '23-24 December 2026',
+    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) has released the notification for UP Madhyamic TGT Teacher Recruitment 2026 (Advt No 07/2026). Interested candidates can apply online from 24/10/2026 to 23/11/2026.',
     applicationFee: [
-      { category: 'General / OBC', amount: '₹ 750/-' },
-      { category: 'EWS / SC', amount: '₹ 450/-' },
-      { category: 'ST', amount: '₹ 250/-' }
+      { category: 'General / OBC / EWS', amount: '₹ 1000/-' },
+      { category: 'SC / ST', amount: '₹ 500/-' },
+      { category: 'PH (Divyang)', amount: '₹ 300/-' }
     ],
-    feePaymentMode: 'Pay fee through Online Net Banking / Debit Card / Credit Card / UPI.',
+    feePaymentMode: 'Pay the Examination Fee Through Debit Card, Credit Card, Net Banking, UPI Fee Mode Only.',
     ageLimit: {
       asOnDate: '01/07/2026',
       minAge: 21,
-      notes: 'No upper age limit for TGT Teachers in UP.'
+      notes: 'Age relaxation as per UPESSC TGT rules.'
     },
     importantDates: [
-      { label: 'Application Begin', value: '25/10/2026' },
-      { label: 'Last Date for Apply Online', value: '28/11/2026', isHighlight: true },
-      { label: 'Fee Payment Last Date', value: '28/11/2026' },
-      { label: 'Exam Date', value: 'As Per Schedule' }
+      { label: 'Application Begin', value: '24/10/2026' },
+      { label: 'Last Date for Registration', value: '23/11/2026', isHighlight: true },
+      { label: 'Pay Exam Fee Last Date', value: '23/11/2026' },
+      { label: 'Last Date Correction', value: '26/11/2026' },
+      { label: 'UPESSC TGT 2026 Exam Date', value: '23-24 December 2026', isHighlight: true },
+      { label: 'Exam City Available', value: 'Before Exam' },
+      { label: 'Admit Card Available', value: 'Before Exam' },
+      { label: 'Answer Key Available', value: 'As Per Schedule' },
+      { label: 'Result Declared', value: 'As Per Schedule' }
     ],
     vacancyBreakdown: [
       {
-        postName: 'Trained Graduate Teacher (TGT) Various Subjects',
+        postName: 'UP Madhyamic TGT Teacher (Various Subjects)',
         totalPosts: '3,539',
-        eligibility: 'Bachelor Degree in Concerned Subject with B.Ed Degree from Recognized University in India.'
+        eligibility: 'Bachelor Degree in Related Subject with B.Ed / LT / BT Degree from Recognized University in India.'
       }
     ],
     howToApplySteps: [
-      'Visit UPESSC portal upessc.up.gov.in.',
-      'Fill in applicant personal credentials, academic marks, and select subject branch.',
-      'Upload photo, signature and required certificates.',
-      'Pay fee and print application confirmation slip.'
+      'Visit official UPESSC portal.',
+      'Check notification Advt No 07/2026 details carefully.',
+      'Fill registration and pay examination fee (Gen/OBC/EWS: 1000/-, SC/ST: 500/-, PH: 300/-).',
+      'Submit final application form and take printout.'
     ],
     directLinks: [
-      { label: 'Apply Online for UP TGT', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
-      { label: 'Download Official Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
+      { label: 'Apply Online for TGT Teacher', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
+      { label: 'Download Notification PDF', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
       { label: 'UPESSC Official Website', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
     ]
   },

@@ -195,18 +195,39 @@ export default function App() {
 
   // Post Mutation Handlers for Admin Panel & Word Editor
   const handleAddPost = useCallback((newPost: SarkariPost) => {
-    setAllPosts((prev) => [newPost, ...prev]);
+    setAllPosts((prev) => {
+      const next = [newPost, ...prev];
+      try {
+        localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(next));
+        localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(next));
+        window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: next }));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
   }, []);
 
   const handleUpdatePost = useCallback((updatedPost: SarkariPost) => {
     setAllPosts((prev) => {
       const idx = prev.findIndex((p) => p.id === updatedPost.id);
-      if (idx === -1) return [updatedPost, ...prev];
-      if (JSON.stringify(prev[idx]) === JSON.stringify(updatedPost)) {
-        return prev;
+      let next: SarkariPost[];
+      if (idx === -1) {
+        next = [updatedPost, ...prev];
+      } else {
+        if (JSON.stringify(prev[idx]) === JSON.stringify(updatedPost)) {
+          return prev;
+        }
+        next = [...prev];
+        next[idx] = updatedPost;
       }
-      const next = [...prev];
-      next[idx] = updatedPost;
+      try {
+        localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(next));
+        localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(next));
+        window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: next }));
+      } catch (e) {
+        console.error(e);
+      }
       return next;
     });
 
@@ -218,7 +239,17 @@ export default function App() {
   }, []);
 
   const handleDeletePost = useCallback((postId: string) => {
-    setAllPosts((prev) => prev.filter((p) => p.id !== postId));
+    setAllPosts((prev) => {
+      const next = prev.filter((p) => p.id !== postId);
+      try {
+        localStorage.setItem('sarkari_admin_posts_v5', JSON.stringify(next));
+        localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(next));
+        window.dispatchEvent(new CustomEvent('sarkari_posts_updated', { detail: next }));
+      } catch (e) {
+        console.error(e);
+      }
+      return next;
+    });
     setSelectedPost((prev) => (prev && prev.id === postId ? null : prev));
   }, []);
 
