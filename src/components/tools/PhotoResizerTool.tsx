@@ -337,7 +337,7 @@ export const PhotoResizerTool: React.FC<PhotoResizerToolProps> = ({ isOpen, onCl
                 type="button"
                 onClick={downloadProcessedImage}
                 disabled={!outputBlobUrl}
-                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-md font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-md font-bold text-xs shadow-xs transition-colors cursor-pointer"
               >
                 <Download className="w-4 h-4" />
                 Download Formatted JPG ({outputFileSizeKb} KB)

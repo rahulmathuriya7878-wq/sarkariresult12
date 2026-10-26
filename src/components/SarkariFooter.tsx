@@ -137,56 +137,56 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
 
               {/* Column 2: Top Recruitment (भर्ती बोर्ड) */}
               <div className="space-y-3">
-                <div className="bg-[#008000] text-white font-black text-sm uppercase px-3 py-2 rounded-xs tracking-wide text-center">
+                <div className="bg-[#003366] text-white font-black text-sm uppercase px-3 py-2 rounded-xs tracking-wide text-center">
                   Top Recruitment (भर्ती बोर्ड)
                 </div>
                 <ul className="space-y-2 text-xs sm:text-sm font-bold text-slate-800">
                   <li>
                     <button 
                       onClick={() => { if (onSearchQuery) onSearchQuery('Supreme Court'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                      className="hover:text-[#003366] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
                     >
-                      <span className="text-[#008000]">•</span> Supreme Court of India (SCI)
+                      <span className="text-[#003366]">•</span> Supreme Court of India (SCI)
                     </button>
                   </li>
                   <li>
                     <button 
                       onClick={() => { if (onSelectDept) onSelectDept('SSC'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                      className="hover:text-[#003366] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
                     >
-                      <span className="text-[#008000]">•</span> Staff Selection Commission (SSC)
+                      <span className="text-[#003366]">•</span> Staff Selection Commission (SSC)
                     </button>
                   </li>
                   <li>
                     <button 
                       onClick={() => { if (onSelectDept) onSelectDept('UPSC'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                      className="hover:text-[#003366] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
                     >
-                      <span className="text-[#008000]">•</span> Union Public Service Commission (UPSC)
+                      <span className="text-[#003366]">•</span> Union Public Service Commission (UPSC)
                     </button>
                   </li>
                   <li>
                     <button 
                       onClick={() => { if (onSelectDept) onSelectDept('Railway'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                      className="hover:text-[#003366] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
                     >
-                      <span className="text-[#008000]">•</span> Railway Recruitment Board (RRB)
+                      <span className="text-[#003366]">•</span> Railway Recruitment Board (RRB)
                     </button>
                   </li>
                   <li>
                     <button 
                       onClick={() => { if (onSelectDept) onSelectDept('Police'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                      className="hover:text-[#003366] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
                     >
-                      <span className="text-[#008000]">•</span> State Police Constable & SI
+                      <span className="text-[#003366]">•</span> State Police Constable & SI
                     </button>
                   </li>
                   <li>
                     <button 
                       onClick={() => { if (onSelectDept) onSelectDept('Teaching'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                      className="hover:text-[#008000] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                      className="hover:text-[#003366] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
                     >
-                      <span className="text-[#008000]">•</span> Teaching (CTET / REET / TET)
+                      <span className="text-[#003366]">•</span> Teaching (CTET / REET / TET)
                     </button>
                   </li>
                 </ul>

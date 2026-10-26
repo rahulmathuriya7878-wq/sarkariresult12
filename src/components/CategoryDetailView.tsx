@@ -93,10 +93,10 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
     <div className="space-y-3 mb-8">
       {/* Live Word Edit Indicator Banner inside Section */}
       {isGlobalWordEditActive && (
-        <div className="bg-emerald-900 text-emerald-100 border-2 border-emerald-400 p-2.5 rounded-xs flex items-center justify-between gap-2 text-xs sm:text-sm font-bold shadow-md animate-pulse">
+        <div className="bg-blue-900 text-blue-100 border-2 border-blue-400 p-2.5 rounded-xs flex items-center justify-between gap-2 text-xs sm:text-sm font-bold shadow-md animate-pulse">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-            <span>🟢 वर्ड एडिट चालू है (LIVE) — इस सेक्शन में किसी भी शीर्षक पर क्लिक करके सीधा एडिट करें</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-ping"></span>
+            <span>🔵 वर्ड एडिट चालू है (LIVE) — इस सेक्शन में किसी भी शीर्षक पर क्लिक करके सीधा एडिट करें</span>
           </div>
           {onAddNewPost && (
             <button
@@ -126,12 +126,12 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
         </div>
       </div>
 
-      {/* Red Section Banner Header */}
-      <div className="bg-[#ab1616] text-white p-3 sm:p-4 rounded-xs border-2 border-red-950 shadow-xs text-center">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-black font-serif uppercase tracking-wide">
+      {/* Light Green Section Banner Header */}
+      <div className="bg-emerald-100 border-2 border-emerald-300 text-emerald-950 p-3 sm:p-4 rounded-xs shadow-xs text-center">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-black font-serif uppercase tracking-wide text-emerald-950">
           Sarkari Result : {isHindi ? categoryMeta.hi : categoryMeta.en}
         </h1>
-        <p className="text-xs sm:text-sm text-yellow-200 font-bold mt-1">
+        <p className="text-xs sm:text-sm text-emerald-800 font-bold mt-1">
           {categoryMeta.subtitle}
         </p>
       </div>
@@ -167,14 +167,14 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
       </div>
 
       {/* Clean Bulleted Posts Listing Matching Screenshot */}
-      <div className="bg-white border-2 border-[#ab1616] rounded-xs overflow-hidden shadow-xs">
-        <div className="bg-[#ab1616] text-white py-2.5 px-4 font-black text-center font-serif uppercase text-lg sm:text-xl border-b border-red-950 flex items-center justify-between">
-          <span className="flex-1 text-center">All {categoryMeta.en} – Sarkari Result</span>
+      <div className="bg-white border-2 border-emerald-300 rounded-xs overflow-hidden shadow-xs">
+        <div className="bg-emerald-100 border-b border-emerald-300 text-emerald-950 py-2.5 px-4 font-black text-center font-serif uppercase text-lg sm:text-xl flex items-center justify-between">
+          <span className="flex-1 text-center text-emerald-950">All {categoryMeta.en} – Sarkari Result</span>
           {isGlobalWordEditActive && onAddNewPost && (
             <button
               type="button"
               onClick={() => onAddNewPost(category)}
-              className="text-xs bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer shrink-0 flex items-center gap-1"
+              className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer shrink-0 flex items-center gap-1"
               title={category === 'important' ? "नया महत्वपूर्ण लिंक जोड़ें" : "इस सेक्शन में नया पोस्ट जोड़ें"}
             >
               <span>+</span>

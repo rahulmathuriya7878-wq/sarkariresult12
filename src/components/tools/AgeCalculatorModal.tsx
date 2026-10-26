@@ -222,8 +222,8 @@ export const AgeCalculatorModal: React.FC<AgeCalculatorModalProps> = ({ isOpen, 
                         </div>
                         <div className="flex items-center gap-1.5 shrink-0">
                           {isEligible ? (
-                            <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span className="inline-flex items-center gap-1 text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full font-medium">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                               Eligible (योग्य)
                             </span>
                           ) : (

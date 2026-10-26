@@ -145,7 +145,6 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedDept, setSelectedDept] = useState<Department | 'All'>('All');
   const [selectedQual, setSelectedQual] = useState<Qualification | 'All'>('All');
-  const [selectedState, setSelectedState] = useState<string>('All States');
   const [selectedSalary, setSelectedSalary] = useState<SalaryBand>('All');
 
   // Full-page active post state
@@ -496,9 +495,6 @@ export default function App() {
     let result = allPosts.filter((post) => {
       if (selectedDept !== 'All' && post.department !== selectedDept) return false;
       if (selectedQual !== 'All' && !post.qualifications.includes(selectedQual)) return false;
-      if (selectedState !== 'All States') {
-        if (post.state !== 'All India' && post.state !== selectedState) return false;
-      }
       if (selectedSalary !== 'All') {
         const postBand = getPostSalaryBand(post);
         if (postBand !== selectedSalary) return false;
@@ -528,7 +524,7 @@ export default function App() {
     }
     
     return result;
-  }, [allPosts, searchQuery, selectedDept, selectedQual, selectedState, selectedSalary]);
+  }, [allPosts, searchQuery, selectedDept, selectedQual, selectedSalary]);
 
 const parsePostDate = (dateStr?: string): number => {
   if (!dateStr) return 0;
@@ -636,7 +632,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           setSearchQuery('');
           setSelectedDept('All');
           setSelectedQual('All');
-          setSelectedState('All States');
           setSelectedSalary('All');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
@@ -709,7 +704,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                 setSearchQuery('');
                 setSelectedDept('All');
                 setSelectedQual('All');
-                setSelectedState('All States');
                 setSelectedSalary('All');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
@@ -739,7 +733,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
                   setSearchQuery('');
                   setSelectedDept('All');
                   setSelectedQual('All');
-                  setSelectedState('All States');
                   setSelectedSalary('All');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
@@ -772,7 +765,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           setSearchQuery('');
           setSelectedDept('All');
           setSelectedQual('All');
-          setSelectedState('All States');
           setSelectedSalary('All');
         }}
         onSelectDept={(dept) => {
@@ -781,14 +773,12 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           setSelectedDept(dept);
           setSearchQuery('');
           setSelectedQual('All');
-          setSelectedState('All States');
           setSelectedSalary('All');
         }}
         onSelectState={(state) => {
           setSelectedPost(null);
           setActiveCategory('all');
-          setSelectedState(state);
-          setSearchQuery('');
+          setSearchQuery(state === 'All States' ? '' : state);
           setSelectedDept('All');
           setSelectedQual('All');
           setSelectedSalary('All');
@@ -799,7 +789,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           setSearchQuery(q);
           setSelectedDept('All');
           setSelectedQual('All');
-          setSelectedState('All States');
           setSelectedSalary('All');
         }}
       />

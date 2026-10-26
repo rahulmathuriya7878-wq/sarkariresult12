@@ -120,7 +120,7 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
         <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs sm:text-sm text-slate-700">
           {isSubscribed ? (
             <div className="text-center py-6 space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <CheckCircle className="w-8 h-8" />
               </div>
               <div>
@@ -167,7 +167,7 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
                   <button
                     type="button"
                     onClick={() => simulatePushNotification('result', 'Result Declared', 'UP Police Constable 2026 Final Result Out!')}
-                    className="px-2 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold rounded text-[11px] transition-colors cursor-pointer border border-emerald-200"
+                    className="px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold rounded text-[11px] transition-colors cursor-pointer border border-blue-200"
                   >
                     🏆 Result
                   </button>
@@ -297,16 +297,16 @@ export const JobAlertsModal: React.FC<JobAlertsModalProps> = ({ isOpen, onClose 
               </div>
 
               {/* WhatsApp channel fast join option */}
-              <div className="bg-emerald-50 border border-emerald-300 rounded p-2.5 text-xs text-emerald-950 flex items-center justify-between gap-2 shadow-2xs">
+              <div className="bg-blue-50 border border-blue-300 rounded p-2.5 text-xs text-blue-950 flex items-center justify-between gap-2 shadow-2xs">
                 <span className="flex items-center gap-1.5 font-bold">
-                  <MessageCircle className="w-4 h-4 text-emerald-700 shrink-0" />
+                  <MessageCircle className="w-4 h-4 text-blue-700 shrink-0" />
                   <span>Join Official WhatsApp Channel for Instant Alerts</span>
                 </span>
                 <a
                   href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 px-3 py-1 rounded text-[11px] font-black shrink-0 cursor-pointer shadow-xs inline-flex items-center gap-1"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-[11px] font-black shrink-0 cursor-pointer shadow-xs inline-flex items-center gap-1"
                 >
                   <span>Join Now</span>
                 </a>

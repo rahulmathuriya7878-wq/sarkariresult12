@@ -449,6 +449,40 @@ export const screenshotResultPosts: SarkariPost[] = [
       { label: 'Check UPSSSC Moharir Eligibility Result & Cutoff', actionText: 'Click Here', type: 'result', isPrimary: true },
       { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official' }
     ]
+  },
+  {
+    id: 'res-up-police-home-guard-02-2025',
+    slug: 'up-police-home-guard-02-2025',
+    title: 'UP Police Home Guard Recruitment 2025 (Advt No 02/2025) Result, PET / Written Exam Status & Merit List',
+    shortTitle: 'UP Police Home Guard 02/2025 Result',
+    hindiTitle: 'यूपी पुलिस होम गार्ड भर्ती 02/2025 परिणाम व मेरिट लिस्ट',
+    category: 'result',
+    department: 'Police',
+    qualifications: ['10th Pass', '12th Pass'],
+    state: 'Uttar Pradesh',
+    postDate: '25 October 2026',
+    isHot: true,
+    isNew: true,
+    resultDate: '25 October 2026',
+    shortInfo: 'Uttar Pradesh Police Recruitment & Promotion Board (UPPRPB) has announced the examination result, status and district-wise merit list for UP Police Home Guard Recruitment Advt No 02/2025. Candidates can check their status online.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2025', minAge: 18, maxAge: 45 },
+    importantDates: [
+      { label: 'Result Declared Date', value: '25/10/2026', isHighlight: true },
+      { label: 'Physical / Document Verification', value: 'As Per Schedule' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'UP Police Home Guard Volunteer / Constable', totalPosts: '32,000+ Posts', eligibility: '10th / 12th Pass from recognized board with physical standards.' }
+    ],
+    howToApplySteps: [
+      'Click on Check UP Police Home Guard Result link below.',
+      'Enter Registration Number / Roll Number and Date of Birth.',
+      'Check district-wise merit and PET / Written examination status.'
+    ],
+    directLinks: [
+      { label: 'Check UP Police Home Guard Result & Status', actionText: 'Click Here', type: 'result', isPrimary: true },
+      { label: 'UPPRPB Official Website', actionText: 'uppbpb.gov.in', type: 'official' }
+    ]
   }
 ];
 

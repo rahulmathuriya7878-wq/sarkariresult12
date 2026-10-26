@@ -96,6 +96,15 @@ export const iafHindiTypistPost: SarkariPost = {
   totalVacancies: 1,
   salary: '₹ 19,900 - ₹ 63,200/- (Pay Level 2 as per 7th CPC)',
   salaryBand: 'Below 25K',
+  salaryBreakdown: [
+    {
+      postName: 'Hindi Typist (Group "C" Civilian)',
+      payLevel: 'Pay Level 2',
+      basicPay: '₹ 19,900 - ₹ 63,200/-',
+      inHandSalary: '₹ 32,000 - ₹ 35,000/- (Approx)',
+      allowances: 'DA, HRA, Transport Allowance as per Central Govt Rules'
+    }
+  ],
   isHot: true,
   isNew: true,
   lastDate: '23/11/2026',

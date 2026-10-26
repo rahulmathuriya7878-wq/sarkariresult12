@@ -196,27 +196,27 @@ export const getCategoryShareText = (post: SarkariPost, postUrl: string): string
 
   switch (post.category) {
     case 'result':
-      return `🔴 *सरकारी रिजल्ट बड़ा अपडेट* 🔴\n\n📋 *परिणाम/भर्ती का नाम:* ${postName}\n\n🔢 *कुल पद:* ${post.totalVacancies || 'अधिसूचना अनुसार'}\n🗓️ *परिणाम तिथि:* ${post.resultDate || post.postDate || 'घोषित'}\n✅ *स्थिति:* रिजल्ट व मेरिट लिस्ट उपलब्ध\n\n👇 *अपना रिजल्ट व स्कोरकार्ड देखने हेतु क्लिक करें:*\n${postUrl}`;
+      return `सरकारी रिजल्ट बड़ा अपडेट\n\nपरिणाम/भर्ती का नाम: ${postName}\n\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nपरिणाम तिथि: ${post.resultDate || post.postDate || 'घोषित'}\nस्थिति: रिजल्ट व मेरिट लिस्ट उपलब्ध\n\nअपना रिजल्ट व स्कोरकार्ड देखने हेतु क्लिक करें:\n${postUrl}`;
 
     case 'admit_card':
-      return `🎫 *सरकारी एडमिट कार्ड अपडेट* 🎫\n\n📋 *परीक्षा/भर्ती का नाम:* ${postName}\n\n🗓️ *परीक्षा / हॉल टिकट तिथि:* ${post.admitCardDate || post.examDate || 'जारी हुआ'}\n🎓 *योग्यता:* ${qual}\n\n👇 *अपना एडमिट कार्ड डाउनलोड करने हेतु क्लिक करें:*\n${postUrl}`;
+      return `सरकारी एडमिट कार्ड अपडेट\n\nपरीक्षा/भर्ती का नाम: ${postName}\n\nपरीक्षा / हॉल टिकट तिथि: ${post.admitCardDate || post.examDate || 'जारी हुआ'}\nयोग्यता: ${qual}\n\nअपना एडमिट कार्ड डाउनलोड करने हेतु क्लिक करें:\n${postUrl}`;
 
     case 'answer_key':
-      return `🔑 *सरकारी उत्तर कुंजी (Answer Key) अपडेट* 🔑\n\n📋 *परीक्षा का नाम:* ${postName}\n\n🗓️ *उत्तर कुंजी तिथि:* ${post.postDate || 'जारी हुई'}\n\n👇 *आंसर की डाउनलोड करें व आपत्ति दर्ज करें:*\n${postUrl}`;
+      return `सरकारी उत्तर कुंजी (Answer Key) अपडेट\n\nपरीक्षा का नाम: ${postName}\n\nउत्तर कुंजी तिथि: ${post.postDate || 'जारी हुई'}\n\nआंसर की डाउनलोड करें व आपत्ति दर्ज करें:\n${postUrl}`;
 
     case 'syllabus':
-      return `📚 *सरकारी परीक्षा सिलेबस व पैटर्न* 📚\n\n📋 *परीक्षा का नाम:* ${postName}\n\n🎓 *योग्यता:* ${qual}\n\n👇 *नया सिलेबस व परीक्षा पैटर्न PDF डाउनलोड करें:*\n${postUrl}`;
+      return `सरकारी परीक्षा सिलेबस व पैटर्न\n\nपरीक्षा का नाम: ${postName}\n\nयोग्यता: ${qual}\n\nनया सिलेबस व परीक्षा पैटर्न PDF डाउनलोड करें:\n${postUrl}`;
 
     case 'admission':
-      return `🎓 *सरकारी एडमिशन फॉर्म अपडेट* 🎓\n\n📋 *कोर्स/प्रवेश का नाम:* ${postName}\n\n🎓 *योग्यता:* ${qual}\n💳 *आवेदन की प्रारंभ तिथि:* ${startDate}\n⏳ *आवेदन की अंतिम तिथि:* ${lastDate}\n\n👇 *ऑनलाइन एडमिशन फॉर्म भरने हेतु क्लिक करें:*\n${postUrl}`;
+      return `सरकारी एडमिशन फॉर्म अपडेट\n\nकोर्स/प्रवेश का नाम: ${postName}\n\nयोग्यता: ${qual}\nआवेदन की प्रारंभ तिथि: ${startDate}\nआवेदन की अंतिम तिथि: ${lastDate}\n\nऑनलाइन एडमिशन फॉर्म भरने हेतु क्लिक करें:\n${postUrl}`;
 
     case 'certificate_verification':
     case 'important':
-      return `🌐 *सरकारी डिजिटल सेवा व सत्यापन पोर्टल* 🌐\n\n📋 *सेवा/प्रमाणपत्र:* ${postName}\n\n👇 *डिजिटल सत्यापन व ऑनलाइन आवेदन हेतु क्लिक करें:*\n${postUrl}`;
+      return `सरकारी डिजिटल सेवा व सत्यापन पोर्टल\n\nसेवा/प्रमाणपत्र: ${postName}\n\nडिजिटल सत्यापन व ऑनलाइन आवेदन हेतु क्लिक करें:\n${postUrl}`;
 
     case 'latest_jobs':
     default:
-      return `🚨 *सरकारी नौकरी बड़ा अपडेट* 🚨\n\n📋 *भर्ती का नाम:* ${postName}\n\n🔢 *कुल पद:* ${post.totalVacancies || 'अधिसूचना अनुसार'}\n🎓 *योग्यता:* ${qual}\n🎂 *आयु सीमा:* ${age}\n💳 *आवेदन की प्रारंभ तिथि:* ${startDate}\n⏳ *आवेदन की अंतिम तिथि:* ${lastDate}\n\n👇 *संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:*\n${postUrl}`;
+      return `सरकारी नौकरी बड़ा अपडेट\n\nभर्ती का नाम: ${postName}\n\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\nआवेदन की प्रारंभ तिथि: ${startDate}\nआवेदन की अंतिम तिथि: ${lastDate}\n\nसंपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:\n${postUrl}`;
   }
 };
 
@@ -309,6 +309,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     return sessionStorage.getItem('sarkari_admin_auth') === 'true';
   }, []);
 
+  const isIaf = useMemo(() => {
+    return post.id === 'job-iaf-hindi-typist-2026' || (post.title + ' ' + (post.shortTitle || '')).toLowerCase().includes('hindi typist');
+  }, [post]);
+
   // Direct In-Place Word & Section Edit Mode State
   const [editablePost, setEditablePost] = useState<SarkariPost>(() => {
     const processedDates = getProcessedImportantDates(post);
@@ -355,10 +359,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   }, [post.id]);
 
   const faqs = useMemo(() => {
-    if (editablePost.customFaqs && editablePost.customFaqs.length > 0) {
-      return editablePost.customFaqs;
-    }
-    return getPostFAQs(editablePost);
+    const list = editablePost.customFaqs && editablePost.customFaqs.length > 0 
+      ? editablePost.customFaqs 
+      : getPostFAQs(editablePost);
+    return list.slice(0, 4);
   }, [editablePost]);
 
   const [isAlertActive, setIsAlertActive] = React.useState<boolean>(() => isPostAlertActive(post.id));
@@ -1166,7 +1170,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           <div className="mb-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 px-3.5 py-2.5 rounded shadow-xs border border-amber-600 flex flex-wrap items-center justify-between gap-2 font-sans animate-in fade-in duration-200">
             <div className="flex items-center gap-2">
               <span className="bg-slate-950 text-amber-300 font-extrabold text-xs px-2.5 py-1 rounded flex items-center gap-1.5 shadow-2xs">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-ping"></span>
                 वर्ड एडिट चालू है (LIVE)
               </span>
               <span className="text-xs sm:text-sm font-black text-slate-950">
@@ -1340,11 +1344,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               <>
                 {/* Horizontal Side-by-Side 2-Column Table for Important Dates & Application Fee */}
                 {!hiddenSections['sec_dates_fee'] ? (
-                  <div className="border border-slate-400 bg-white text-[10pt] shadow-2xs overflow-hidden">
-                    <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-300 flex items-center justify-between flex-wrap gap-2 text-xs font-bold text-slate-800 font-sans">
-                      <span>📍 Important Dates & Application Fee Section</span>
-                      {renderSectionControls('sec_dates_fee', 'Important Dates & Fee')}
-                    </div>
+                  <div className="border border-slate-300 bg-white text-[10pt] shadow-2xs overflow-hidden rounded-xs my-4 relative">
                     <div className="grid grid-cols-2 divide-x divide-slate-400">
                       {/* Left Column: Important Dates */}
                       <div className="p-2.5 sm:p-5 space-y-2.5">
@@ -1402,7 +1402,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           <button
                             type="button"
                             onClick={handleAddDateItem}
-                            className="mt-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                            className="mt-2.5 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
                           >
                             <span>+ नई तारीख जोड़ें (Add Date)</span>
                           </button>
@@ -1472,7 +1472,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           <button
                             type="button"
                             onClick={handleAddFeeItem}
-                            className="mt-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                            className="mt-2.5 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
                           >
                             <span>+ नई फीस श्रेणी जोड़ें (Add Fee)</span>
                           </button>
@@ -1485,7 +1485,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Age Limit Box */}
                 {!isServiceOrScheme && editablePost.ageLimit.asOnDate && (
                   !hiddenSections['sec_age_limit'] ? (
-                    <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs text-center">
+                    <div className="border border-slate-300 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs text-center rounded-xs my-4">
                       <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2">
                         <h3 className="font-black text-[11pt] font-sans">
                           <span style={{ color: '#008000' }}>{editablePost.shortTitle} Notification 2026 : </span>
@@ -1563,7 +1563,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         </thead>
                         <tbody className="divide-y divide-slate-300 text-[10pt]">
                           {editablePost.vacancyBreakdown.map((v, idx) => (
-                            <tr key={idx} className={idx % 2 === 0 ? 'bg-white hover:bg-emerald-50/40 transition-colors' : 'bg-slate-50/90 hover:bg-emerald-50/40 transition-colors'}>
+                            <tr key={idx} className={idx % 2 === 0 ? 'bg-white hover:bg-blue-50/50 transition-colors' : 'bg-slate-50/90 hover:bg-blue-50/50 transition-colors'}>
                               <td className="p-2.5 sm:p-3 align-top font-bold text-blue-900 border-r border-slate-400">
                                 <EditableText
                                   value={v.postName}
@@ -1626,7 +1626,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         <button
                           type="button"
                           onClick={handleAddVacancyRow}
-                          className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-1.5 rounded flex items-center gap-1 shadow-2xs cursor-pointer"
+                          className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded flex items-center gap-1 shadow-2xs cursor-pointer"
                         >
                           <span>+ नया पद पंक्ति जोड़ें (Add Vacancy Row)</span>
                         </button>
@@ -1773,15 +1773,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Salary & Pay Scale Table (वेतन सारणी) */}
                 {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
+                  <div className={`border ${isIaf ? 'border-emerald-400 bg-emerald-50/90' : 'border-slate-400 bg-white'} overflow-hidden text-[10pt] shadow-2xs`}>
+                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: isIaf ? '#008000' : '#1d4ed8' }}>
                       {post.shortTitle} Pay Scale & Salary Details (वेतन सारणी)
                     </div>
                     <div className="p-2.5 sm:p-3.5 bg-slate-50 border-b border-slate-300">
                       <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[10pt]">
                         <span><strong>Pay Scale (वेतनमान): </strong>{post.salary || 'As per 7th Pay Commission (7th CPC)'}</span>
                         {post.salaryBand && (
-                          <span className="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10pt] border border-emerald-300">
+                          <span className={`${isIaf ? 'bg-emerald-100 text-emerald-900 border-emerald-300' : 'bg-blue-100 text-blue-800 border-blue-300'} font-bold px-2 py-0.5 rounded text-[10pt] border`}>
                             Band: {post.salaryBand}
                           </span>
                         )}
@@ -1819,8 +1819,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Exam Scheme & Paper Pattern Table (Renders ONLY IF post.paperPattern.subjects exists) */}
                 {post.paperPattern && post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
                   !hiddenSections['sec_paper_pattern'] ? (
-                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
+                    <div className={`border ${isIaf ? 'border-emerald-400 bg-emerald-50/90' : 'border-slate-400 bg-white'} overflow-hidden text-[10pt] shadow-2xs`}>
+                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: isIaf ? '#008000' : '#1d4ed8' }}>
                         <span>{post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}</span>
                         {renderSectionControls('sec_paper_pattern', 'Paper Pattern')}
                       </div>
@@ -1865,10 +1865,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                               <tr key={idx} className="hover:bg-slate-50">
                                 <td className="p-2.5 sm:p-3 font-bold text-slate-900 border-r border-slate-400">{sub.subjectName}</td>
                                 <td className="p-2.5 sm:p-3 text-center font-bold text-blue-900 border-r border-slate-400">{sub.totalQuestions || '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center font-bold text-emerald-800 border-r border-slate-400">{sub.totalMarks || '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
-                              </tr>
-                            ))}
+                                 <td className="p-2.5 sm:p-3 text-center font-bold text-blue-800 border-r border-slate-400">{sub.totalMarks || '-'}</td>
+                                 <td className="p-2.5 sm:p-3 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
+                               </tr>
+                             ))}
                           </tbody>
                         </table>
                       </div>
@@ -1882,8 +1882,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs">
                       <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2">
                         <h4 
-                          className="font-black text-[11pt] font-sans"
-                          style={{ color: '#008000' }}
+                          className="font-black text-[11pt] font-sans text-blue-700"
                         >
                           {editablePost.shortTitle} Selection Process / Mode of Selection
                         </h4>
@@ -1897,7 +1896,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           {editablePost.selectionProcess.map((step, idx) => (
                             <li key={idx} className="flex items-start justify-between gap-2.5 bg-slate-50/80 p-2.5 rounded border border-slate-200">
                               <div className="flex items-start gap-2.5 flex-1">
-                                <span className="font-bold text-white text-[10pt] px-2 py-0.5 rounded shrink-0 mt-0.5" style={{ backgroundColor: '#008000' }}>Stage {idx + 1}</span>
+                                <span className="font-bold text-white text-[10pt] px-2 py-0.5 rounded shrink-0 mt-0.5 bg-blue-700">Stage {idx + 1}</span>
                                 <div className="leading-relaxed text-slate-800 flex-1">
                                   <EditableText
                                     value={step}
@@ -1929,7 +1928,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           <button
                             type="button"
                             onClick={handleAddSelectionStage}
-                            className="mt-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                            className="mt-2.5 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
                           >
                             <span>+ नया चयन स्टेज जोड़ें (Add Stage)</span>
                           </button>
@@ -1940,47 +1939,60 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 )}
 
                 {/* How to Fill Form Section */}
-                {editablePost.howToApplySteps && editablePost.howToApplySteps.length > 0 && (
-                  <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs">
-                    <h4 className="font-black text-[11pt] border-b border-slate-200 pb-2 font-sans">
-                      <span style={{ color: '#008000' }}>How to Fill </span>
-                      <span style={{ color: '#ff00ff' }}>{editablePost.shortTitle} Recruitment Online Form 2026</span>
-                    </h4>
-                    <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[10pt]">
-                      {editablePost.howToApplySteps.map((step, idx) => (
-                        <li key={idx} className="flex items-start justify-between gap-2">
-                          <div className="flex-1">
-                            <span>• </span>
-                            <EditableText
-                              value={step}
-                              onChange={(val) => {
-                                setEditablePost(prev => {
-                                  const nextSteps = [...prev.howToApplySteps];
-                                  nextSteps[idx] = val;
-                                  return { ...prev, howToApplySteps: nextSteps };
-                                });
-                              }}
-                              titlePrefix="आवेदन निर्देश (Instruction Step)"
-                            />
-                          </div>
-                          {isDirectEditMode && (
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteApplyStep(idx)}
-                              className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
-                              title="यह निर्देश हटाएं"
-                            >
-                              ✕
-                            </button>
-                          )}
-                        </li>
-                      ))}
+                {(() => {
+                  const steps = (editablePost.howToApplySteps && editablePost.howToApplySteps.length >= 5) 
+                    ? editablePost.howToApplySteps 
+                    : [
+                        `${editablePost.shortTitle || editablePost.title} Recruitment 2026 के लिए ऑनलाइन आवेदन करने से पहले सभी अभ्यर्थी आधिकारिक अधिसूचना (Official Notification) को ध्यानपूर्वक पढ़ें।`,
+                        `सरकारी रिजल्ट (Sarkari Result) पोर्टल पर उपलब्ध डायरेक्ट 'Apply Online' लिंक पर क्लिक करें और संबंधित विभाग की आधिकारिक वेबसाइट पर जाएं।`,
+                        `अपने सभी आवश्यक दस्तावेज जैसे 10वीं/12वीं/स्नातक अंकतालिका, पासपोर्ट साइज़ फोटो, हस्ताक्षर (Signature), आईडी प्रूफ (Aadhaar Card) और जाति/निवास प्रमाण पत्र को अपने पास तैयार रखें।`,
+                        `ऑनलाइन आवेदन फॉर्म में अपना नाम, माता-पिता का नाम, जन्मतिथि, शैक्षणिक योग्यता और अन्य सभी व्यक्तिगत विवरण बिल्कुल सही-सही भरें।`,
+                        `फॉर्म सबमिट करने से पहले एक बार 'Preview' विकल्प की सहायता से अपने द्वारा भरी गई सभी प्रविष्टियों की अच्छी तरह जांच कर लें ताकि भविष्य में किसी त्रुटि की संभावना न रहे।`,
+                        `अपनी श्रेणी (General/OBC/SC/ST/EWS) के अनुसार निर्धारित परीक्षा शुल्क (Examination Fee) का भुगतान ऑनलाइन नेट बैंकिंग, डेबिट कार्ड, क्रेडिट कार्ड या UPI के माध्यम से सुरक्षित रूप से करें।`,
+                        `अंतिम रूप से फॉर्म सबमिट होने के बाद अपने आवेदन पत्र का फाइनल प्रिंटआउट (Confirmation Page) अवश्य डाउनलोड कर लें और सुरक्षित रख लें।`
+                      ];
+
+                  return (
+                    <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs my-4">
+                      <h4 className="font-black text-[11pt] border-b border-slate-200 pb-2 font-sans">
+                        <span style={{ color: '#008000' }}>How to Fill </span>
+                        <span style={{ color: '#ff00ff' }}>{editablePost.shortTitle} Recruitment Online Form 2026</span>
+                      </h4>
+                      <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[10pt]">
+                        {steps.map((step, idx) => (
+                          <li key={idx} className="flex items-start justify-between gap-2">
+                            <div className="flex-1">
+                              <span>• </span>
+                              <EditableText
+                                value={step}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextSteps = [...(prev.howToApplySteps && prev.howToApplySteps.length >= 5 ? prev.howToApplySteps : steps)];
+                                    nextSteps[idx] = val;
+                                    return { ...prev, howToApplySteps: nextSteps };
+                                  });
+                                }}
+                                titlePrefix="आवेदन निर्देश (Instruction Step)"
+                              />
+                            </div>
+                            {isDirectEditMode && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteApplyStep(idx)}
+                                className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                                title="यह निर्देश हटाएं"
+                              >
+                                ✕
+                              </button>
+                            )}
+                          </li>
+                        ))}
                       {isDirectEditMode && (
                         <li>
                           <button
                             type="button"
                             onClick={handleAddApplyStep}
-                            className="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                            className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
                           >
                             <span>+ नया निर्देश पंक्ति जोड़ें (Add Step)</span>
                           </button>
@@ -1991,14 +2003,15 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       </li>
                     </ul>
                   </div>
-                )}
+                );
+              })()}
               </>
             )}
 
             {/* Useful Important Links Table (Matches Screenshot Layout) */}
             <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
               <div className="bg-white text-slate-900 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
-                <h3 className="font-extrabold text-[12pt] sm:text-[13pt] text-slate-900 font-sans">
+                <h3 className="font-extrabold text-[12pt] sm:text-[13pt] text-red-600 font-sans" style={{ color: '#dc2626' }}>
                   {editablePost.shortTitle || editablePost.title} Important Links
                 </h3>
                 
@@ -2178,8 +2191,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </div>
 
             {/* Join WhatsApp & Telegram Channel Section */}
-            <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
-              <div className="bg-slate-800 text-white px-4 py-2 text-[11pt] font-extrabold uppercase tracking-wide">
+            {/* Join WhatsApp & Telegram Channel Section */}
+            <div className="border border-slate-300 bg-white rounded-xs overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
+              <div className="text-white px-4 py-2.5 text-[11pt] font-extrabold uppercase tracking-wide" style={{ backgroundColor: '#008000' }}>
                 <span>Join Official Channels</span>
               </div>
               <div className="divide-y divide-slate-200 text-[10pt]">
@@ -2194,7 +2208,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     href="https://whatsapp.com/channel/sarkariresult"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1 px-3 py-1 text-white font-bold text-[10pt] bg-[#25D366] hover:bg-emerald-600 rounded-md shadow-2xs cursor-pointer transition-colors"
+                    className="inline-flex items-center justify-center gap-1 px-3 py-1 text-white font-bold text-[10pt] bg-blue-600 hover:bg-blue-700 rounded-md shadow-2xs cursor-pointer transition-colors"
                   >
                     <span>Click Here</span>
                     <ExternalLink className="w-3 h-3" />
@@ -2226,8 +2240,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               !hiddenSections['sec_faqs'] ? (
                 <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
                   <div className="bg-white text-slate-900 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
-                    <h3 className="font-extrabold text-[12pt] sm:text-[13pt] text-slate-900 font-sans">
-                      {editablePost.shortTitle || editablePost.title} FAQs
+                    <h3 className="font-black text-[11pt] sm:text-[12pt] font-sans">
+                      <span style={{ color: '#008000' }}>{editablePost.shortTitle || editablePost.title} </span>
+                      <span style={{ color: '#ff00ff' }}>Frequently Asked Questions (FAQs)</span>
                     </h3>
                     {renderSectionControls('sec_faqs', 'FAQs')}
                   </div>
