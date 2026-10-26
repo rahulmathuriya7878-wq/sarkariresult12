@@ -320,7 +320,7 @@ export default function App() {
     };
   }, []);
 
-  // Handle URL hash routing to open full page for specific post or back to home
+  // Handle URL pathname and hash routing
   useEffect(() => {
     // Dynamic title management
     if (selectedPost) {
@@ -329,11 +329,12 @@ export default function App() {
       document.title = 'Sarkari Result 2026 - Official Job Alerts & Notifications';
     }
 
-    const handleHash = () => {
+    const handleRoute = () => {
       // Check if user landed via shared link
       const isShare = 
         window.location.search.toLowerCase().includes('share') || 
         window.location.hash.toLowerCase().includes('share') ||
+        window.location.pathname.toLowerCase().includes('share') ||
         (document.referrer && (
           document.referrer.toLowerCase().includes('whatsapp') ||
           document.referrer.toLowerCase().includes('telegram') ||
@@ -348,14 +349,138 @@ export default function App() {
         }
       }
 
-      const rawHash = window.location.hash.replace('#', '').replace('post/', '').replace('post-', '');
+      const pathname = window.location.pathname;
+      const hash = window.location.hash;
+
+      // 1. Check clean pathname routing
+      if (pathname.startsWith('/post/')) {
+        const cleanSlug = pathname.replace('/post/', '').split('/')[0].split('?')[0];
+        if (cleanSlug) {
+          const found = allPosts.find((p) => p.slug === cleanSlug || p.id === cleanSlug);
+          if (found) {
+            setSelectedPost(found);
+            return;
+          } else if (cleanSlug !== 'all') {
+            const formattedTitle = cleanSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            setSelectedPost({
+              id: `gen-${cleanSlug}`,
+              slug: cleanSlug,
+              title: `${formattedTitle} Recruitment & Portal Updates 2026`,
+              shortTitle: formattedTitle,
+              hindiTitle: `${formattedTitle} संपूर्ण विवरण व डायरेक्ट फॉर्म 2026`,
+              category: 'latest_jobs',
+              department: 'Other',
+              qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+              state: 'All India',
+              postDate: '25 October 2026',
+              totalVacancies: 'As per notification',
+              shortInfo: `Complete information regarding ${formattedTitle}. Check official eligibility, age limit, application fee, important dates, and direct online form links below.`,
+              applicationFee: [
+                { category: 'General / OBC / EWS', amount: '₹ 0/-' },
+                { category: 'SC / ST / Female', amount: '₹ 0/-' }
+              ],
+              importantDates: [
+                { label: 'Application Begin', value: 'Active Now' },
+                { label: 'Last Date for Apply Online', value: '23/11/2026', isHighlight: true }
+              ],
+              vacancyBreakdown: [
+                { postName: formattedTitle, totalPosts: 'Check Notice', eligibility: '10th / 12th / Graduate from recognized board or university.' }
+              ],
+              ageLimit: { asOnDate: '23/11/2026', minAge: 18, maxAge: 25, notes: 'Age relaxation applicable as per rules' },
+              howToApplySteps: ['Read official notification thoroughly before applying.', 'Click on direct apply online link provided in links table below.'],
+              directLinks: [
+                { label: 'Apply Online / Check Official Portal', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult12.vercel.app/#', isPrimary: true },
+                { label: 'Download Detailed Notification (PDF)', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult12.vercel.app/#', isPdf: true },
+                { label: 'Official Website Portal', actionText: 'Click Here', type: 'official', url: 'https://sarkariresult12.vercel.app/#' }
+              ]
+            });
+            return;
+          }
+        }
+      } else if (pathname === '/latest-jobs' || pathname === '/latest_jobs') {
+        setActiveCategory('latest_jobs');
+        setSelectedPost(null);
+        return;
+      } else if (pathname === '/result' || pathname === '/results') {
+        setActiveCategory('result');
+        setSelectedPost(null);
+        return;
+      } else if (pathname === '/admission') {
+        setActiveCategory('admission');
+        setSelectedPost(null);
+        return;
+      } else if (pathname === '/admit-card' || pathname === '/admit_card') {
+        setActiveCategory('admit_card');
+        setSelectedPost(null);
+        return;
+      } else if (pathname === '/answer-key' || pathname === '/answer_key') {
+        setActiveCategory('answer_key');
+        setSelectedPost(null);
+        return;
+      } else if (pathname === '/syllabus') {
+        setActiveCategory('syllabus');
+        setSelectedPost(null);
+        return;
+      } else if (pathname === '/certificate-verification' || pathname === '/certificate_verification') {
+        setActiveCategory('certificate_verification');
+        setSelectedPost(null);
+        return;
+      } else if (pathname === '/important-services' || pathname === '/important') {
+        setActiveCategory('important');
+        setSelectedPost(null);
+        return;
+      }
+
+      // 2. Fallback to hash routing for legacy links
+      const rawHash = hash.replace('#', '').replace('post/', '').replace('post-', '');
       const cleanSlug = rawHash.split('?')[0].split('&')[0];
       if (cleanSlug) {
+        if (cleanSlug === 'latest_jobs' || cleanSlug === 'latest-jobs') {
+          setActiveCategory('latest_jobs');
+          setSelectedPost(null);
+          return;
+        }
+        if (cleanSlug === 'result' || cleanSlug === 'results') {
+          setActiveCategory('result');
+          setSelectedPost(null);
+          return;
+        }
+        if (cleanSlug === 'admission') {
+          setActiveCategory('admission');
+          setSelectedPost(null);
+          return;
+        }
+        if (cleanSlug === 'admit_card' || cleanSlug === 'admit-card') {
+          setActiveCategory('admit_card');
+          setSelectedPost(null);
+          return;
+        }
+        if (cleanSlug === 'answer_key' || cleanSlug === 'answer-key') {
+          setActiveCategory('answer_key');
+          setSelectedPost(null);
+          return;
+        }
+        if (cleanSlug === 'syllabus') {
+          setActiveCategory('syllabus');
+          setSelectedPost(null);
+          return;
+        }
+        if (cleanSlug === 'certificate_verification' || cleanSlug === 'certificate-verification') {
+          setActiveCategory('certificate_verification');
+          setSelectedPost(null);
+          return;
+        }
+        if (cleanSlug === 'important') {
+          setActiveCategory('important');
+          setSelectedPost(null);
+          return;
+        }
+
         const found = allPosts.find((p) => p.slug === cleanSlug || p.id === cleanSlug);
         if (found) {
           setSelectedPost(found);
           return;
-        } else if (cleanSlug !== 'all' && !['latest_jobs', 'result', 'admit_card', 'answer_key', 'syllabus', 'admission', 'important', 'certificate_verification'].includes(cleanSlug)) {
+        } else if (cleanSlug !== 'all') {
           const formattedTitle = cleanSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
           setSelectedPost({
             id: `gen-${cleanSlug}`,
@@ -392,15 +517,19 @@ export default function App() {
           return;
         }
       }
-      // If empty hash or unrecognized, if we are not explicitly setting, leave as is
-      if (!window.location.hash) {
+
+      if (pathname === '/' && !hash) {
         setSelectedPost(null);
       }
     };
 
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    handleRoute();
+    window.addEventListener('popstate', handleRoute);
+    window.addEventListener('hashchange', handleRoute);
+    return () => {
+      window.removeEventListener('popstate', handleRoute);
+      window.removeEventListener('hashchange', handleRoute);
+    };
   }, [allPosts]);
 
   // Monitor status changes for saved post alerts ('Upcoming' -> 'Active')
@@ -423,13 +552,22 @@ export default function App() {
       if (post.slug) markPostVisited(post.slug);
       return next;
     });
-    window.location.hash = `post/${post.slug}`;
+    try {
+      window.history.pushState({}, '', `/post/${post.slug}`);
+    } catch {
+      window.location.hash = `post/${post.slug}`;
+    }
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const handleBackToHome = () => {
     setSelectedPost(null);
-    window.location.hash = '';
+    setActiveCategory('all');
+    try {
+      window.history.pushState({}, '', '/');
+    } catch {
+      window.location.hash = '';
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

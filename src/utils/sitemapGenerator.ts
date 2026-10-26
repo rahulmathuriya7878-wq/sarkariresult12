@@ -73,21 +73,21 @@ export function generateSitemapXml(
   // 1. Core Section Portals
   const coreSections = [
     { path: '', priority: '1.0', changefreq: 'always', title: 'GovResults Builder Home' },
-    { path: '#latest_jobs', priority: '0.95', changefreq: 'hourly', title: 'Active Latest Jobs Portal' },
-    { path: '#result', priority: '0.95', changefreq: 'hourly', title: 'Government Exam Results Portal' },
-    { path: '#admission', priority: '0.90', changefreq: 'daily', title: 'University & National Admissions Portal' },
-    { path: '#admit_card', priority: '0.90', changefreq: 'daily', title: 'Admit Card Hall Tickets' },
-    { path: '#answer_key', priority: '0.85', changefreq: 'daily', title: 'Official Answer Keys & Objections' },
-    { path: '#syllabus', priority: '0.80', changefreq: 'weekly', title: 'Exam Pattern & Syllabus Directory' },
-    { path: '#certificate_verification', priority: '0.75', changefreq: 'weekly', title: 'Certificate Verification' },
-    { path: '#important', priority: '0.75', changefreq: 'weekly', title: 'Important Official Services' }
+    { path: 'latest-jobs', priority: '0.95', changefreq: 'hourly', title: 'Active Latest Jobs Portal' },
+    { path: 'result', priority: '0.95', changefreq: 'hourly', title: 'Government Exam Results Portal' },
+    { path: 'admission', priority: '0.90', changefreq: 'daily', title: 'University & National Admissions Portal' },
+    { path: 'admit-card', priority: '0.90', changefreq: 'daily', title: 'Admit Card Hall Tickets' },
+    { path: 'answer-key', priority: '0.85', changefreq: 'daily', title: 'Official Answer Keys & Objections' },
+    { path: 'syllabus', priority: '0.80', changefreq: 'weekly', title: 'Exam Pattern & Syllabus Directory' },
+    { path: 'certificate-verification', priority: '0.75', changefreq: 'weekly', title: 'Certificate Verification' },
+    { path: 'important-services', priority: '0.75', changefreq: 'weekly', title: 'Important Official Services' }
   ];
 
   const sectionUrlsXml = coreSections
     .map(
       (sec) => `  <!-- Section: ${sec.title} -->
   <url>
-    <loc>${escapeXml(`${domain}/${sec.path}`)}</loc>
+    <loc>${escapeXml(sec.path ? `${domain}/${sec.path}` : `${domain}/`)}</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>${sec.changefreq}</changefreq>
     <priority>${sec.priority}</priority>
@@ -103,7 +103,7 @@ export function generateSitemapXml(
       const priority = post.isHot ? '0.95' : '0.90';
       const cleanSlug = post.slug || `job-${post.id}`;
       return `  <url>
-    <loc>${escapeXml(`${domain}/#post/${cleanSlug}`)}</loc>
+    <loc>${escapeXml(`${domain}/post/${cleanSlug}`)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>daily</changefreq>
     <priority>${priority}</priority>
@@ -119,7 +119,7 @@ export function generateSitemapXml(
       const priority = post.isHot ? '0.95' : '0.90';
       const cleanSlug = post.slug || `result-${post.id}`;
       return `  <url>
-    <loc>${escapeXml(`${domain}/#post/${cleanSlug}`)}</loc>
+    <loc>${escapeXml(`${domain}/post/${cleanSlug}`)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>daily</changefreq>
     <priority>${priority}</priority>
@@ -135,7 +135,7 @@ export function generateSitemapXml(
       const priority = post.isHot ? '0.90' : '0.85';
       const cleanSlug = post.slug || `admission-${post.id}`;
       return `  <url>
-    <loc>${escapeXml(`${domain}/#post/${cleanSlug}`)}</loc>
+    <loc>${escapeXml(`${domain}/post/${cleanSlug}`)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>${priority}</priority>
@@ -153,7 +153,7 @@ export function generateSitemapXml(
       const priority = post.category === 'admit_card' ? '0.85' : '0.75';
       const cleanSlug = post.slug || `post-${post.id}`;
       return `  <url>
-    <loc>${escapeXml(`${domain}/#post/${cleanSlug}`)}</loc>
+    <loc>${escapeXml(`${domain}/post/${cleanSlug}`)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>${priority}</priority>
