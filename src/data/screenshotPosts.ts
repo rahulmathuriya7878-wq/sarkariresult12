@@ -531,7 +531,7 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
     state: 'Uttar Pradesh',
     postDate: '24 October 2026',
     notificationNumber: 'Advt No 07/2026',
-    totalVacancies: '3,539 Posts',
+    totalVacancies: '17,735 Posts',
     salary: 'Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-)',
     salaryBand: '25K - 50K',
     isHot: true,
@@ -539,7 +539,7 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
     lastDate: '23/11/2026',
     admitCardDate: 'Before Exam',
     examDate: '23-24 December 2026',
-    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) has released the notification for UP Madhyamic TGT Teacher Recruitment 2026 (Advt No 07/2026). Interested candidates can apply online from 24/10/2026 to 23/11/2026.',
+    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) has released the notification for UP Madhyamic TGT Teacher Recruitment 2026 (Advt No 07/2026) with a total of 17,735 Posts. Interested candidates can apply online from 24/10/2026 to 23/11/2026.',
     applicationFee: [
       { category: 'General / OBC / EWS', amount: '₹ 1000/-' },
       { category: 'SC / ST', amount: '₹ 500/-' },
@@ -549,7 +549,8 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
     ageLimit: {
       asOnDate: '01/07/2026',
       minAge: 21,
-      notes: 'Age relaxation as per UPESSC TGT rules.'
+      maxAge: 62,
+      notes: 'Age relaxation as per Uttar Pradesh UPESSC TGT Teacher Examination Rules Advt No 07/2026.'
     },
     importantDates: [
       { label: 'Application Begin', value: '24/10/2026' },
@@ -564,9 +565,16 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
     ],
     vacancyBreakdown: [
       {
-        postName: 'UP Madhyamic TGT Teacher (Various Subjects)',
-        totalPosts: '3,539',
-        eligibility: 'Bachelor Degree in Related Subject with B.Ed / LT / BT Degree from Recognized University in India.'
+        postName: 'Trained Graduate Teacher TGT (Balak)',
+        totalPosts: '16193',
+        categoryBreakdown: { gen: 6057, ews: 2660, obc: 4069, sc: 3394, st: 13 },
+        eligibility: '• Bachelor / Master Degree with Related Subject.\n• B.Ed Exam Passed\n• Class 6-8 Upper Primary Level TET certificate by 30 June 2027'
+      },
+      {
+        postName: 'Trained Graduate Teacher TGT (Balika)',
+        totalPosts: '1542',
+        categoryBreakdown: { gen: 647, ews: 222, obc: 369, sc: 304, st: 0 },
+        eligibility: '• Bachelor / Master Degree with Related Subject.\n• B.Ed Exam Passed\n• Class 6-8 Upper Primary Level TET certificate by 30 June 2027'
       }
     ],
     howToApplySteps: [
