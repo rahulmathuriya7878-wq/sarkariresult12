@@ -51,7 +51,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
     category: 'result' | 'admit_card' | 'latest_jobs' | 'answer_key' | 'syllabus' | 'important' | 'admission' | 'certificate_verification',
     viewMoreText: string
   ) => (
-    <div className="border-2 border-[#ab1616] bg-white rounded-xs flex flex-col shadow-xs overflow-hidden">
+    <div className="border border-[#ab1616] bg-white rounded-xs flex flex-col shadow-xs overflow-hidden">
       <div className="bg-[#ab1616] border-b border-red-900 text-white py-2.5 sm:py-3.5 px-3.5 sm:px-5 text-center select-none">
         <h2 className="font-black text-lg sm:text-xl md:text-2xl tracking-wide uppercase leading-tight font-serif text-white">
           {title}
@@ -139,13 +139,13 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
                   }
                 }}
                 onClick={(e) => e.stopPropagation()}
-                className="font-extrabold text-[13.5px] sm:text-[15px] md:text-[17px] text-[#0000cc] underline leading-snug break-words block font-serif outline-none hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-1 border-b border-dashed border-amber-500 cursor-text"
+                className="font-extrabold text-[11pt] text-[#0000cc] underline leading-snug break-words block font-serif outline-none hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-1 border-b border-dashed border-amber-500 cursor-text"
                 title="क्लिक करके पोस्ट का नाम बदलें (Click to edit post title)"
               >
                 {post.shortTitle || post.title}
               </span>
             ) : (
-              <span className={`font-extrabold text-[13.5px] sm:text-[15px] md:text-[17px] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
+              <span className={`font-extrabold text-[11pt] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
                 {post.shortTitle}
               </span>
             )}
@@ -200,9 +200,9 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
   });
 
   return (
-    <div className="my-5 sm:my-7 space-y-6 sm:space-y-8">
+    <div className="my-2 sm:my-3 space-y-2 sm:space-y-3">
       {/* Pair 1: Result | Latest Jobs */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-5">
+      <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
           isHindi ? 'परिणाम (Result)' : 'Result',
           '✍️ सम्पादक द्वारा सत्यापित परीक्षा परिणाम',
@@ -221,7 +221,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
       </div>
 
       {/* Pair 2: Admit Card | Answer Key */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-5">
+      <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
           isHindi ? 'प्रवेश पत्र (Admit Card)' : 'Admit Card',
           '✍️ हॉल टिकट एवं परीक्षा तिथि विवरण',
@@ -240,7 +240,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
       </div>
 
       {/* Pair 3: Syllabus | Admission */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-5">
+      <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
           isHindi ? 'पाठ्यक्रम (Syllabus)' : 'Syllabus',
           '✍️ विषयवार परीक्षा पैटर्न एवं विस्तृत सिलेबस',
@@ -259,7 +259,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
       </div>
 
       {/* Pair 4 (Web ke sabse niche): Certificate Verification | Important */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-5">
+      <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
           isHindi ? 'प्रमाण पत्र सत्यापन (Certificate Verification)' : 'Certificate Verification',
           '✍️ आधार, पैन, वोटर, जाति व आय सत्यापन',

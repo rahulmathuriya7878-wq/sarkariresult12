@@ -69,8 +69,8 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="w-full bg-white shadow-sm">
       {/* 1. Standard Sarkari Result Crimson Masthead */}
-      <div className="bg-[#ab1616] text-white py-2 px-4 sm:px-6 border-b border-red-950">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+      <div className="bg-[#ab1616] text-white py-2 px-2 sm:px-3 border-b border-red-950">
+        <div className="max-w-full mx-auto flex items-center justify-between gap-3">
           {/* Brand Logo & Title with Seal */}
           <div 
             onClick={() => handleNavClick('all')}
@@ -105,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Running Live Alert Ribbon (Header Ribbon) */}
-      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-bold py-1.5 px-3 overflow-hidden whitespace-nowrap shadow-inner border-y border-amber-600 text-xs sm:text-sm font-sans flex items-center gap-2">
+      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-bold py-1.5 px-2 overflow-hidden whitespace-nowrap shadow-inner border-y border-amber-600 text-xs sm:text-sm font-sans flex items-center gap-2">
         <span className="bg-slate-950 text-amber-400 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full shrink-0 uppercase tracking-wider flex items-center gap-1 shadow-2xs">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
           LIVE UPDATES
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* 2. Responsive Navigation Bar */}
       <div className="bg-black text-white border-b-2 border-red-900 sticky top-0 z-50 shadow-md">
         {/* Mobile Header Bar (md:hidden) */}
-        <div className="md:hidden flex items-center justify-between px-3 py-2">
+        <div className="md:hidden flex items-center justify-between px-2 py-2">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="flex items-center gap-2 text-white font-extrabold text-sm sm:text-base cursor-pointer py-1 px-2 hover:bg-neutral-800 rounded-xs select-none transition-colors"
@@ -293,7 +293,7 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         {/* Desktop Navigation Bar (hidden md:flex) with Segoe UI 12pt */}
-        <div className="hidden md:flex max-w-7xl mx-auto items-center justify-between font-headlight">
+        <div className="hidden md:flex max-w-full mx-auto items-center justify-between font-headlight">
           <nav className="flex items-stretch flex-1 overflow-x-auto no-scrollbar divide-x divide-neutral-700 font-headlight font-black tracking-wide uppercase">
             <button
               onClick={() => handleNavClick('all')}

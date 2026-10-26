@@ -194,7 +194,7 @@ export const getCategoryShareText = (post: SarkariPost, postUrl: string): string
   const startDate = startDateItem ? startDateItem.value : (post.postDate ? post.postDate.split('|')[0].trim() : 'जारी है');
   const lastDate = post.lastDate || 'अधिसूचना देखें';
 
-  return `🥳🥳 सरकारी नौकरी बड़ा अपडेट 🥳🥳\n\n🎯🎯 भर्ती का नाम: ${postName} 🎯🎯\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\nआवेदन की प्रारंभ तिथि: 👉👉 ${startDate}\nआवेदन की अंतिम तिथि: 👉👉 ${lastDate}\n\n🔥🔥 संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें: 🔥🔥\n\n${postUrl}`;
+  return `🥳🥳 सरकारी नौकरी बड़ा अपडेट 🥳🥳\n\n🎯🎯 भर्ती का नाम: ${postName} \nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\n👉आवेदन की प्रारंभ तिथि:  ${startDate}\n👉आवेदन की अंतिम तिथि:  ${lastDate}\n\n🔥🔥 संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें: \n\n${postUrl}`;
 };
 
 // Helper to bold application date ranges and keywords in shortInfo
@@ -1116,30 +1116,57 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             </li>
           </ol>
 
-          {/* Toggle Word In-Place Edit Mode Button (Only for authenticated Admins) */}
-          {isAdmin && (
+          <div className="flex items-center gap-2">
+            {/* Share Button with requested format */}
             <button
               type="button"
               onClick={() => {
-                const next = !isDirectEditMode;
-                setIsDirectEditMode(next);
-                if (onToggleGlobalWordEdit) {
-                  if ((next && !isGlobalWordEditActive) || (!next && isGlobalWordEditActive)) {
-                    onToggleGlobalWordEdit();
-                  }
+                const url = window.location.href;
+                const shareText = getCategoryShareText(post, url);
+                if (navigator.share) {
+                  navigator.share({
+                    title: post.title,
+                    text: shareText,
+                    url: url
+                  }).catch(() => {});
+                } else {
+                  navigator.clipboard.writeText(shareText);
+                  setAlertFeedback('✅ शेयर फॉर्मेट कॉपी हो गया है! (Share format copied)');
+                  setTimeout(() => setAlertFeedback(null), 3500);
                 }
               }}
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold text-xs transition cursor-pointer shadow-xs ${
-                isDirectEditMode
-                  ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 ring-2 ring-amber-300'
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-              }`}
-              title="वर्ड इन-प्लेस एडिट मोड ऑन/ऑफ करें (In-Place Word Edit Mode)"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold text-xs bg-emerald-600 hover:bg-emerald-700 text-white transition cursor-pointer shadow-xs font-sans"
+              title="शेयर फॉर्मेट कॉपी करें"
             >
-              <Edit3 className="w-3.5 h-3.5" />
-              <span>{isDirectEditMode ? '✓ वर्ड इन-प्लेस एडिट सक्रिय' : '✏️ वर्ड इन-प्लेस एडिट मोड'}</span>
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Share / शेयर</span>
             </button>
-          )}
+
+            {/* Toggle Word In-Place Edit Mode Button (Only for authenticated Admins) */}
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !isDirectEditMode;
+                  setIsDirectEditMode(next);
+                  if (onToggleGlobalWordEdit) {
+                    if ((next && !isGlobalWordEditActive) || (!next && isGlobalWordEditActive)) {
+                      onToggleGlobalWordEdit();
+                    }
+                  }
+                }}
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold text-xs transition cursor-pointer shadow-xs ${
+                  isDirectEditMode
+                    ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 ring-2 ring-amber-300'
+                    : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                }`}
+                title="वर्ड इन-प्लेस एडिट मोड ऑन/ऑफ करें (In-Place Word Edit Mode)"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>{isDirectEditMode ? '✓ वर्ड इन-प्लेस एडिट सक्रिय' : '✏️ वर्ड इन-प्लेस एडिट मोड'}</span>
+              </button>
+            )}
+          </div>
         </nav>
 
         {/* Direct In-Place Click-to-Edit Mode Control Bar (Hidden by default, only shown when active) */}
@@ -1984,6 +2011,43 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               })()}
               </>
             )}
+
+            {/* Share Post Banner with exact requested format */}
+            <div className="bg-gradient-to-r from-emerald-50 via-green-50 to-emerald-100 border border-emerald-300 rounded-xl p-3.5 sm:p-4 my-4 shadow-2xs font-sans">
+              <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🥳🥳</span>
+                  <h4 className="font-black text-emerald-900 text-sm sm:text-base">
+                    सरकारी नौकरी बड़ा अपडेट शेयर करें (Share Post Format)
+                  </h4>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const url = window.location.href;
+                    const shareText = getCategoryShareText(editablePost, url);
+                    if (navigator.share) {
+                      navigator.share({
+                        title: editablePost.title,
+                        text: shareText,
+                        url: url
+                      }).catch(() => {});
+                    } else {
+                      navigator.clipboard.writeText(shareText);
+                      setAlertFeedback('✅ शेयर फॉर्मेट (Share Format) सफलतापूर्वक कॉपी हो गया है!');
+                      setTimeout(() => setAlertFeedback(null), 3500);
+                    }
+                  }}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs px-3 py-1.5 rounded-lg shadow-xs flex items-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span>Copy Share Text / शेयर करें</span>
+                </button>
+              </div>
+              <div className="bg-white border border-emerald-200 rounded p-3 text-xs sm:text-sm text-slate-800 whitespace-pre-line font-mono select-all">
+                {getCategoryShareText(editablePost, typeof window !== 'undefined' ? window.location.href : `https://sarkariresult12.vercel.app/#post/${editablePost.slug}`)}
+              </div>
+            </div>
 
             {/* Useful Important Links Table (Matches Screenshot Layout) */}
             <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">

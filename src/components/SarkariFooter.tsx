@@ -31,8 +31,8 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
   return (
     <footer className="w-full bg-white text-slate-800 mt-10 border-t-4 border-[#ab1616] shadow-sm font-serif">
       {/* 1. Official Social Alert Ribbon */}
-      <div className="bg-[#ab1616] text-white py-2.5 px-4 text-center border-b border-red-950">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="bg-[#ab1616] text-white py-2.5 px-2 text-center border-b border-red-950">
+        <div className="max-w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-xs sm:text-sm font-bold flex items-center gap-2">
             <span className="text-amber-300 font-black text-base">★</span>
             <span>Join Sarkari Result Official Channels for Fastest Job Alerts & Exam Updates</span>
@@ -66,7 +66,7 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
 
 
       {/* 3. Main Directory Grid (Page) & Legal Sections */}
-      <div className="max-w-7xl mx-auto px-4 py-7">
+      <div className="max-w-full mx-auto px-2 py-7">
         <div className="max-w-xl mx-auto pb-6 border-b border-slate-300">
           
         </div>

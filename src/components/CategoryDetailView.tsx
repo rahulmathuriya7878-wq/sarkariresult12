@@ -167,7 +167,7 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
       </div>
 
       {/* Clean Bulleted Posts Listing Matching Screenshot */}
-      <div className="bg-white border-2 border-[#ab1616] rounded-xs overflow-hidden shadow-xs">
+      <div className="bg-white border border-[#ab1616] rounded-xs overflow-hidden shadow-xs">
         <div className="bg-[#ab1616] border-b border-red-900 text-white py-2.5 px-4 font-black text-center font-serif uppercase text-lg sm:text-xl flex items-center justify-between">
           <span className="flex-1 text-center text-white">All {categoryMeta.en} – Sarkari Result</span>
           {isGlobalWordEditActive && onAddNewPost && (
@@ -214,13 +214,13 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
                           }
                         }}
                         onClick={(e) => e.stopPropagation()}
-                        className="font-extrabold text-[15px] sm:text-[17px] md:text-[18px] text-[#0000cc] underline leading-snug break-words block font-serif outline-none hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-1 border-b border-dashed border-amber-500 cursor-text"
+                        className="font-extrabold text-[11pt] text-[#0000cc] underline leading-snug break-words block font-serif outline-none hover:bg-amber-100/90 focus:bg-amber-50 focus:ring-2 focus:ring-amber-500 rounded px-1 -mx-1 border-b border-dashed border-amber-500 cursor-text"
                         title="क्लिक करके पोस्ट का शीर्षक बदलें (Click to edit title)"
                       >
                         {post.title}
                       </span>
                     ) : (
-                      <span className={`font-extrabold text-[15px] sm:text-[17px] md:text-[18px] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
+                      <span className={`font-extrabold text-[11pt] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
                         {post.title}
                       </span>
                     )}

@@ -663,7 +663,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         />
       ) : (
         /* Home Main View */
-        <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-3">
+        <main className="flex-1 max-w-full w-full mx-auto px-1 sm:px-2 py-2">
           {/* Quick Highlights 8-box Grid (Headlight: Dynamic Top 8 Latest Posts) */}
           <QuickHighlightsGrid 
             posts={allPosts} 
