@@ -1327,7 +1327,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       <div className="p-2.5 sm:p-5 space-y-2.5">
                         <h3 
                           className="font-black text-[11pt] border-b border-slate-200 pb-1.5 text-center font-sans tracking-tight"
-                          style={{ color: '#008000' }}
+                          style={{ color: '#ff0000' }}
                         >
                           Important Dates
                         </h3>
@@ -1390,7 +1390,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       <div className="p-2.5 sm:p-5 space-y-2.5">
                         <h3 
                           className="font-black text-[11pt] border-b border-slate-200 pb-1.5 text-center font-sans tracking-tight"
-                          style={{ color: '#008000' }}
+                          style={{ color: '#ff0000' }}
                         >
                           Application Fee
                         </h3>
@@ -1751,14 +1751,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {/* Salary & Pay Scale Table (वेतन सारणी) */}
                 {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
                   <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#1d4ed8' }}>
+                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
                       {post.shortTitle} Pay Scale & Salary Details (वेतन सारणी)
                     </div>
                     <div className="p-2.5 sm:p-3.5 bg-slate-50 border-b border-slate-300">
                       <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[10pt]">
                         <span><strong>Pay Scale (वेतनमान): </strong>{post.salary || 'As per 7th Pay Commission (7th CPC)'}</span>
                         {post.salaryBand && (
-                          <span className="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-[10pt] border border-blue-300">
+                          <span className="bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded text-[10pt] border border-emerald-300">
                             Band: {post.salaryBand}
                           </span>
                         )}
@@ -1797,7 +1797,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 {post.paperPattern && post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
                   !hiddenSections['sec_paper_pattern'] ? (
                     <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#1d4ed8' }}>
+                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
                         <span>{post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}</span>
                         {renderSectionControls('sec_paper_pattern', 'Paper Pattern')}
                       </div>
