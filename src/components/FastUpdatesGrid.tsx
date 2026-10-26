@@ -51,12 +51,12 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
     category: 'result' | 'admit_card' | 'latest_jobs' | 'answer_key' | 'syllabus' | 'important' | 'admission' | 'certificate_verification',
     viewMoreText: string
   ) => (
-    <div className="border-2 border-emerald-300 bg-white rounded-xs flex flex-col shadow-xs overflow-hidden">
-      <div className="bg-emerald-100 border-b border-emerald-300 text-emerald-950 py-2.5 sm:py-3.5 px-3.5 sm:px-5 text-center select-none">
-        <h2 className="font-black text-lg sm:text-xl md:text-2xl tracking-wide uppercase leading-tight font-serif text-emerald-950">
+    <div className="border-2 border-[#ab1616] bg-white rounded-xs flex flex-col shadow-xs overflow-hidden">
+      <div className="bg-[#ab1616] border-b border-red-900 text-white py-2.5 sm:py-3.5 px-3.5 sm:px-5 text-center select-none">
+        <h2 className="font-black text-lg sm:text-xl md:text-2xl tracking-wide uppercase leading-tight font-serif text-white">
           {title}
         </h2>
-        <span className="block text-[11px] sm:text-xs font-handwriting text-emerald-800 font-bold tracking-normal normal-case mt-0.5">
+        <span className="block text-[11px] sm:text-xs font-handwriting text-amber-200 font-bold tracking-normal normal-case mt-0.5">
           {hindiSub}
         </span>
       </div>

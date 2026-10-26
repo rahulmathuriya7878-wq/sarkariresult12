@@ -126,12 +126,12 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
         </div>
       </div>
 
-      {/* Light Green Section Banner Header */}
-      <div className="bg-emerald-100 border-2 border-emerald-300 text-emerald-950 p-3 sm:p-4 rounded-xs shadow-xs text-center">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-black font-serif uppercase tracking-wide text-emerald-950">
+      {/* Red Section Banner Header */}
+      <div className="bg-[#ab1616] border-2 border-red-900 text-white p-3 sm:p-4 rounded-xs shadow-xs text-center">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-black font-serif uppercase tracking-wide text-white">
           Sarkari Result : {isHindi ? categoryMeta.hi : categoryMeta.en}
         </h1>
-        <p className="text-xs sm:text-sm text-emerald-800 font-bold mt-1">
+        <p className="text-xs sm:text-sm text-amber-200 font-bold mt-1">
           {categoryMeta.subtitle}
         </p>
       </div>
@@ -167,14 +167,14 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({
       </div>
 
       {/* Clean Bulleted Posts Listing Matching Screenshot */}
-      <div className="bg-white border-2 border-emerald-300 rounded-xs overflow-hidden shadow-xs">
-        <div className="bg-emerald-100 border-b border-emerald-300 text-emerald-950 py-2.5 px-4 font-black text-center font-serif uppercase text-lg sm:text-xl flex items-center justify-between">
-          <span className="flex-1 text-center text-emerald-950">All {categoryMeta.en} – Sarkari Result</span>
+      <div className="bg-white border-2 border-[#ab1616] rounded-xs overflow-hidden shadow-xs">
+        <div className="bg-[#ab1616] border-b border-red-900 text-white py-2.5 px-4 font-black text-center font-serif uppercase text-lg sm:text-xl flex items-center justify-between">
+          <span className="flex-1 text-center text-white">All {categoryMeta.en} – Sarkari Result</span>
           {isGlobalWordEditActive && onAddNewPost && (
             <button
               type="button"
               onClick={() => onAddNewPost(category)}
-              className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer shrink-0 flex items-center gap-1"
+              className="text-xs bg-red-800 hover:bg-red-900 text-white font-black px-2.5 py-1 rounded shadow-2xs cursor-pointer shrink-0 flex items-center gap-1"
               title={category === 'important' ? "नया महत्वपूर्ण लिंक जोड़ें" : "इस सेक्शन में नया पोस्ट जोड़ें"}
             >
               <span>+</span>
