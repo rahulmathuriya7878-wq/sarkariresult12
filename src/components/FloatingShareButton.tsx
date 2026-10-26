@@ -27,7 +27,6 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
           await navigator.share({
             title: currentPost ? (currentPost.shortTitle || currentPost.title) : 'Sarkari Result',
             text: shareMessage,
-            url: shareUrl,
           });
           return;
         } catch (err) {

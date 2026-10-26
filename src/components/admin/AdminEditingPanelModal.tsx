@@ -45,6 +45,7 @@ import {
 import { getPostFAQs } from '../FullPagePostView';
 import { AIBlogWriter } from './AIBlogWriter';
 import { readPdfFileAsDataUrl } from '../../utils/pdfGenerator';
+import { validateIso8601 } from '../../utils/dateUtils';
 
 interface AdminEditingPanelModalProps {
   isOpen: boolean;
@@ -351,6 +352,11 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   const handleQuickSave = (stayInEditor: boolean = false, e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!editingPost) return;
+
+    const dateValidation = validateIso8601(editingPost.postDate);
+    if (!dateValidation.isValid) {
+      showToast(`⚠️ Warning: datePosted is not in ISO 8601 format.`);
+    }
 
     if (!editingPost.title.trim() || !editingPost.shortTitle.trim()) {
       showToast('⚠️ Please provide both Title and Short Title.');
@@ -732,15 +738,25 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
 
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Post Date / Timestamp
+                        Post Date / Timestamp (ISO 8601 Recommended)
                       </label>
                       <input
                         type="text"
                         value={editingPost.postDate}
                         onChange={(e) => setEditingPost({ ...editingPost, postDate: e.target.value })}
-                        placeholder="e.g. 19 October 2026"
-                        className="w-full px-3 py-2 border border-slate-300 rounded text-sm text-slate-900 focus:outline-none focus:border-red-700"
+                        placeholder="e.g. 2026-10-26T00:00:00Z or 19 October 2026"
+                        className={`w-full px-3 py-2 border rounded text-sm text-slate-900 focus:outline-none ${
+                          !validateIso8601(editingPost.postDate).isValid
+                            ? 'border-amber-500 bg-amber-50/50 focus:border-amber-600'
+                            : 'border-slate-300 focus:border-red-700'
+                        }`}
                       />
+                      {!validateIso8601(editingPost.postDate).isValid && (
+                        <p className="text-[11px] text-amber-800 font-semibold mt-1 flex items-center gap-1">
+                          <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                          <span>Warning: Date is not in ISO 8601 format (e.g., YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ). Required for Google JobPosting schema.</span>
+                        </p>
+                      )}
                     </div>
 
                     <div>

@@ -43,6 +43,23 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
   onAddNewPost,
   onDeletePost
 }) => {
+  const [visibleCounts, setVisibleCounts] = React.useState<Record<string, number>>({
+    result: 15,
+    admit_card: 15,
+    latest_jobs: 15,
+    answer_key: 15,
+    syllabus: 15,
+    admission: 15,
+    certificate_verification: 15,
+    important: 15,
+  });
+
+  const handleLoadMore = (category: string) => {
+    setVisibleCounts(prev => ({
+      ...prev,
+      [category]: (prev[category] || 15) + 15
+    }));
+  };
 
   const renderColumn = (
     title: string,
@@ -50,57 +67,75 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
     posts: SarkariPost[],
     category: 'result' | 'admit_card' | 'latest_jobs' | 'answer_key' | 'syllabus' | 'important' | 'admission' | 'certificate_verification',
     viewMoreText: string
-  ) => (
-    <div className="border border-[#ab1616] bg-white rounded-xs flex flex-col shadow-xs overflow-hidden">
-      <div className="bg-[#ab1616] border-b border-red-900 text-white py-2.5 sm:py-3.5 px-3.5 sm:px-5 text-center select-none">
-        <h2 className="font-black text-lg sm:text-xl md:text-2xl tracking-wide uppercase leading-tight font-serif text-white">
-          {title}
-        </h2>
-        <span className="block text-[11px] sm:text-xs font-handwriting text-amber-200 font-bold tracking-normal normal-case mt-0.5">
-          {hindiSub}
-        </span>
-      </div>
+  ) => {
+    const currentLimit = visibleCounts[category] || 15;
+    const displayedPosts = posts.slice(0, currentLimit);
+    const hasMore = posts.length > currentLimit;
 
-      <ul className="divide-y divide-slate-100 flex-1 p-2 sm:p-3 bg-white space-y-0.5">
-        {posts.slice(0, 100).map((post) => (
-          <PostListItem 
-            key={post.id} 
-            post={post} 
-            onSelectPost={onSelectPost} 
-            visitedPostIds={visitedPostIds} 
-          />
-        ))}
+    return (
+      <div className="border border-[#ab1616] bg-white rounded-xs flex flex-col shadow-xs overflow-hidden">
+        <div className="bg-[#ab1616] border-b border-red-900 text-white py-2.5 sm:py-3.5 px-3.5 sm:px-5 text-center select-none">
+          <h2 className="font-black text-lg sm:text-xl md:text-2xl tracking-wide uppercase leading-tight font-serif text-white">
+            {title}
+          </h2>
+          <span className="block text-[11px] sm:text-xs font-handwriting text-amber-200 font-bold tracking-normal normal-case mt-0.5">
+            {hindiSub}
+          </span>
+        </div>
 
-        {posts.length === 0 && (
-          <li className="p-5 text-center text-xs sm:text-sm text-slate-500 font-medium">
-            No updates available in this section.
-          </li>
-        )}
-      </ul>
+        <ul className="divide-y divide-slate-100 flex-1 p-2 sm:p-3 bg-white space-y-0.5">
+          {displayedPosts.map((post) => (
+            <PostListItem 
+              key={post.id} 
+              post={post} 
+              onSelectPost={onSelectPost} 
+              visitedPostIds={visitedPostIds} 
+            />
+          ))}
 
-      <div className="p-2.5 sm:p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
-        <button
-          onClick={() => onViewCategory(category)}
-          className="text-xs sm:text-sm font-extrabold text-[#ab1616] hover:underline inline-flex items-center gap-1 cursor-pointer py-1"
-        >
-          <span>{viewMoreText}</span>
-          <ChevronRight className="w-4 h-4" />
-        </button>
+          {hasMore && (
+            <li className="p-2 text-center">
+              <button
+                type="button"
+                onClick={() => handleLoadMore(category)}
+                className="text-xs bg-red-50 hover:bg-red-100 text-[#ab1616] font-extrabold px-3 py-1.5 rounded border border-red-200 cursor-pointer w-full transition-colors shadow-2xs"
+              >
+                ⬇️ और लोड करें (Load More)
+              </button>
+            </li>
+          )}
 
-        {isGlobalWordEditActive && onAddNewPost && (
+          {posts.length === 0 && (
+            <li className="p-5 text-center text-xs sm:text-sm text-slate-500 font-medium">
+              No updates available in this section.
+            </li>
+          )}
+        </ul>
+
+        <div className="p-2.5 sm:p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
           <button
-            type="button"
-            onClick={() => onAddNewPost(category)}
-            className="text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1"
-            title={category === 'important' ? "महत्वपूर्ण लिंक सेक्शन में नया अपडेट जोड़ें" : "इस सेक्शन में नया पोस्ट जोड़ें"}
+            onClick={() => onViewCategory(category)}
+            className="text-xs sm:text-sm font-extrabold text-[#ab1616] hover:underline inline-flex items-center gap-1 cursor-pointer py-1"
           >
-            <span>+</span>
-            <span>{category === 'important' ? 'नया महत्वपूर्ण लिंक जोड़ें' : 'नया पोस्ट जोड़ें'}</span>
+            <span>{viewMoreText}</span>
+            <ChevronRight className="w-4 h-4" />
           </button>
-        )}
+
+          {isGlobalWordEditActive && onAddNewPost && (
+            <button
+              type="button"
+              onClick={() => onAddNewPost(category)}
+              className="text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded shadow-2xs cursor-pointer flex items-center gap-1"
+              title={category === 'important' ? "महत्वपूर्ण लिंक सेक्शन में नया अपडेट जोड़ें" : "इस सेक्शन में नया पोस्ट जोड़ें"}
+            >
+              <span>+</span>
+              <span>{category === 'important' ? 'नया महत्वपूर्ण लिंक जोड़ें' : 'नया पोस्ट जोड़ें'}</span>
+            </button>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const PostListItem = React.memo(({ 
     post, 

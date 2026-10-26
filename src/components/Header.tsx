@@ -82,6 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
                 src="/sarkari-result-logo.jpg" 
                 alt="Sarkari Result Emblem Logo" 
                 className="w-full h-full object-contain rounded-full"
+                loading="lazy"
               />
             </div>
 

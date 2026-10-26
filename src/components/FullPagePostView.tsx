@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { SarkariPost, DirectLinkItem } from '../types/job';
-import { getProcessedImportantDates } from '../utils/dateUtils';
+import { getProcessedImportantDates, toIso8601Date, formatDisplayDate } from '../utils/dateUtils';
 
 export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => {
   let existing: DirectLinkItem[] = post.directLinks && post.directLinks.length > 0 
@@ -194,7 +194,7 @@ export const getCategoryShareText = (post: SarkariPost, postUrl: string): string
   const startDate = startDateItem ? startDateItem.value : (post.postDate ? post.postDate.split('|')[0].trim() : 'जारी है');
   const lastDate = post.lastDate || 'अधिसूचना देखें';
 
-  return `🥳🥳 सरकारी नौकरी बड़ा अपडेट 🥳🥳\n\n🎯🎯 भर्ती का नाम: ${postName} \nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\n👉आवेदन की प्रारंभ तिथि:  ${startDate}\n👉आवेदन की अंतिम तिथि:  ${lastDate}\n\n🔥🔥 संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें: \n\n${postUrl}`;
+  return `🥳🥳 सरकारी नौकरी बड़ा अपडेट 🥳🥳\n🎯🎯 भर्ती का नाम: ${postName}\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\n👉आवेदन की प्रारंभ तिथि: ${startDate}\n👉आवेदन की अंतिम तिथि: ${lastDate}\n🔥🔥 संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:\n${postUrl}`;
 };
 
 // Helper to bold application date ranges and keywords in shortInfo
@@ -847,6 +847,20 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     const originalTitle = document.title;
     document.title = `${post.title} - Sarkari Result`;
 
+    // Dynamic Canonical URL injection for SEO & Google Search Indexing
+    let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    let createdCanonical = false;
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.rel = 'canonical';
+      document.head.appendChild(canonicalLink);
+      createdCanonical = true;
+    }
+    const originalCanonical = canonicalLink.href || '';
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult12.vercel.app';
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : `${baseUrl}/#post/${post.slug}`;
+    canonicalLink.href = currentUrl;
+
     // Dynamic Meta Description update
     let metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
     let createdDesc = false;
@@ -866,6 +880,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
     const ogDesc = document.querySelector('meta[property="og:description"]') as HTMLMetaElement | null;
     if (ogDesc) ogDesc.setAttribute('content', postDesc);
+
+    const ogUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement | null;
+    if (ogUrl) ogUrl.setAttribute('content', currentUrl);
 
     // Dynamic FAQ Schema injection for each post
     const faqScriptId = 'post-faq-jsonld-schema';
@@ -899,8 +916,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       breadcrumbScriptTag.type = 'application/ld+json';
       document.head.appendChild(breadcrumbScriptTag);
     }
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult12.vercel.app';
-    const currentUrl = typeof window !== 'undefined' ? window.location.href : `${baseUrl}/#post/${post.slug}`;
     const categoryName = getCategoryLabel(post.category);
 
     const breadcrumbSchema = {
@@ -949,8 +964,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           "name": post.department || "Government of India",
           "value": post.id
         },
-        "datePosted": post.postDate ? (post.postDate.split(' ')[0] || new Date().toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
-        "validThrough": post.lastDate || "2026-12-31",
+        "datePosted": toIso8601Date(post.postDate),
+        "validThrough": toIso8601Date(post.lastDate || "2026-12-31"),
         "employmentType": "FULL_TIME",
         "hiringOrganization": {
           "@type": "Organization",
@@ -972,6 +987,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
     return () => {
       document.title = originalTitle;
+      if (canonicalLink) {
+        if (createdCanonical) canonicalLink.remove();
+        else canonicalLink.href = originalCanonical;
+      }
       if (metaDesc) {
         if (createdDesc) metaDesc.remove();
         else metaDesc.setAttribute('content', originalDesc);
@@ -1244,13 +1263,16 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       Post Date / Update :
                     </td>
                     <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[11pt] sm:text-[12pt] align-top">
-                      <EditableText
-                        value={editablePost.postDate}
-                        onChange={(val) => setEditablePost(prev => ({ ...prev, postDate: val }))}
-                        className="text-slate-900 font-semibold text-[11pt] sm:text-[12pt]"
-                        titlePrefix="पोस्ट की तिथि (Post Date)"
-                      />
-                      <span className="ml-1 text-slate-600 font-normal">| 08:40 PM</span>
+                      {isDirectEditMode ? (
+                        <EditableText
+                          value={editablePost.postDate}
+                          onChange={(val) => setEditablePost(prev => ({ ...prev, postDate: val }))}
+                          className="text-slate-900 font-semibold text-[11pt] sm:text-[12pt]"
+                          titlePrefix="पोस्ट की तिथि (Post Date)"
+                        />
+                      ) : (
+                        <span>{formatDisplayDate(editablePost.postDate)}</span>
+                      )}
                     </td>
                   </tr>
 
@@ -2029,8 +2051,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     if (navigator.share) {
                       navigator.share({
                         title: editablePost.title,
-                        text: shareText,
-                        url: url
+                        text: shareText
                       }).catch(() => {});
                     } else {
                       navigator.clipboard.writeText(shareText);

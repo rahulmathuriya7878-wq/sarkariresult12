@@ -12,7 +12,6 @@ import { FastUpdatesGrid } from './components/FastUpdatesGrid';
 import { SarkariFooter } from './components/SarkariFooter';
 import { CategoryDetailView } from './components/CategoryDetailView';
 import { FullPagePostView } from './components/FullPagePostView';
-import { FloatingShareButton } from './components/FloatingShareButton';
 
 import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
@@ -855,7 +854,8 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
       )}
 
       <PushNotificationBanner />
-      <FloatingShareButton currentPost={selectedPost} isHindi={isHindi} />
+
+
 
 
 
