@@ -1563,7 +1563,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         </thead>
                         <tbody className="divide-y divide-slate-300 text-[10pt]">
                           {editablePost.vacancyBreakdown.map((v, idx) => (
-                            <tr key={idx} className="hover:bg-slate-50/50">
+                            <tr key={idx} className={idx % 2 === 0 ? 'bg-white hover:bg-emerald-50/40 transition-colors' : 'bg-slate-50/90 hover:bg-emerald-50/40 transition-colors'}>
                               <td className="p-2.5 sm:p-3 align-top font-bold text-blue-900 border-r border-slate-400">
                                 <EditableText
                                   value={v.postName}

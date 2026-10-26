@@ -583,31 +583,31 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
   },
   {
     id: 'job-upessc-headmaster-2026',
-    slug: 'upessc-up-headmaster-junior-high-school-online-form-2026',
-    title: 'UPESSC Uttar Pradesh Aided Junior High School Headmaster Recruitment 2026 Online Form',
-    shortTitle: 'UPESSC UP Headmaster Online Form 2026',
-    hindiTitle: 'यूपीईएसएससी यूपी जूनियर हाई स्कूल हेडमास्टर भर्ती 2026 ऑनलाइन फॉर्म',
+    slug: 'upessc-up-headmaster-recruitment-2026',
+    title: 'UPESSC Uttar Pradesh Headmaster Recruitment 2026 Online Form | Total 1,172 Posts',
+    shortTitle: 'UPESSC UP Headmaster Recruitment 2026',
+    hindiTitle: 'यूपीईएसएससी यूपी हेडमास्टर भर्ती 2026 ऑनलाइन फॉर्म (1,172 पद)',
     category: 'latest_jobs',
     department: 'Teaching',
-    qualifications: ['Graduate', 'B.Ed / CTET'],
+    qualifications: ['Graduate', 'Post Graduate', 'B.Ed / CTET'],
     state: 'Uttar Pradesh',
     postDate: '25 October 2026',
     notificationNumber: 'UPESSC/HM-03/2026',
-    totalVacancies: '390 Posts',
-    salary: 'Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-)',
+    totalVacancies: '1,172 Posts',
+    salary: 'Pay Level 7/10 (₹ 44,900 - ₹ 1,42,400/-)',
     salaryBand: '25K - 50K',
     isHot: true,
     isNew: true,
-    lastDate: '22/11/2026',
+    lastDate: '23/11/2026',
     admitCardDate: 'Before Exam',
     examDate: 'As Per Schedule',
-    shortInfo: 'UPESSC Prayagraj invites online applications for the post of Headmaster in Aided Junior High Schools across Uttar Pradesh. Eligible candidates with Graduation, B.Ed/BTC, and 5 years teaching experience can apply.',
+    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) invites online applications for Headmaster Recruitment 2026 with a total of 1,172 Posts. Eligible candidates with Graduation/Post Graduation and teaching experience can apply online.',
     applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 900/-' },
-      { category: 'SC / ST', amount: '₹ 700/-' },
-      { category: 'PH (Divyang)', amount: '₹ 400/-' }
+      { category: 'General / OBC / EWS', amount: '₹ 1000/-' },
+      { category: 'SC / ST', amount: '₹ 500/-' },
+      { category: 'PH (Divyang)', amount: '₹ 300/-' }
     ],
-    feePaymentMode: 'Pay Examination Fee through Online Payment Gateway.',
+    feePaymentMode: 'Pay the Examination Fee Through Debit Card, Credit Card, Net Banking, UPI Fee Mode Only.',
     ageLimit: {
       asOnDate: '01/07/2026',
       minAge: 21,
@@ -615,25 +615,32 @@ export const screenshotLatestJobPosts: SarkariPost[] = [
       notes: 'Age Relaxation applicable as per UP Government Rules.'
     },
     importantDates: [
-      { label: 'Online Application Begin', value: '25/10/2026' },
-      { label: 'Last Date to Apply Online', value: '22/11/2026', isHighlight: true },
-      { label: 'Fee Payment Last Date', value: '22/11/2026' }
+      { label: 'Application Begin', value: '25/10/2026' },
+      { label: 'Last Date for Registration', value: '23/11/2026', isHighlight: true },
+      { label: 'Pay Exam Fee Last Date', value: '23/11/2026' },
+      { label: 'Last Date Correction', value: '26/11/2026' },
+      { label: 'Exam Date', value: 'As Per Schedule', isHighlight: true },
+      { label: 'Exam City Available', value: 'Before Exam' },
+      { label: 'Admit Card Available', value: 'Before Exam' },
+      { label: 'Answer Key Available', value: 'As Per Schedule' },
+      { label: 'Result Declared', value: 'As Per Schedule' }
     ],
     vacancyBreakdown: [
       {
-        postName: 'Headmaster (Junior High School)',
-        totalPosts: '390',
-        eligibility: 'Graduation with BTC / D.El.Ed / B.Ed with 5 Years Teaching Experience in Recognized School.'
+        postName: 'Headmaster / Principal (Junior High School & Aided Schools)',
+        totalPosts: '1,172',
+        eligibility: 'Graduation / Post Graduation Degree with BTC / D.El.Ed / B.Ed and Minimum 5 Years Teaching Experience in Recognized Educational Institution.'
       }
     ],
     howToApplySteps: [
-      'Register on UPESSC recruitment portal.',
+      'Register on UPESSC recruitment portal upessc.up.gov.in.',
       'Enter teaching experience details and educational qualification.',
-      'Pay application fee and submit form.'
+      'Pay application fee and submit form.',
+      'Take final printout of submitted application.'
     ],
     directLinks: [
       { label: 'Apply Online for UP Headmaster', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
-      { label: 'Download Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
+      { label: 'Download Notification PDF', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
       { label: 'UPESSC Official Website', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
     ]
   },
