@@ -2034,41 +2034,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </>
             )}
 
-            {/* Share Post Banner with exact requested format */}
-            <div className="bg-gradient-to-r from-emerald-50 via-green-50 to-emerald-100 border border-emerald-300 rounded-xl p-3.5 sm:p-4 my-4 shadow-2xs font-sans">
-              <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">🥳🥳</span>
-                  <h4 className="font-black text-emerald-900 text-sm sm:text-base">
-                    सरकारी नौकरी बड़ा अपडेट शेयर करें (Share Post Format)
-                  </h4>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const url = window.location.href;
-                    const shareText = getCategoryShareText(editablePost, url);
-                    if (navigator.share) {
-                      navigator.share({
-                        title: editablePost.title,
-                        text: shareText
-                      }).catch(() => {});
-                    } else {
-                      navigator.clipboard.writeText(shareText);
-                      setAlertFeedback('✅ शेयर फॉर्मेट (Share Format) सफलतापूर्वक कॉपी हो गया है!');
-                      setTimeout(() => setAlertFeedback(null), 3500);
-                    }
-                  }}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs px-3 py-1.5 rounded-lg shadow-xs flex items-center gap-1.5 cursor-pointer transition-colors"
-                >
-                  <Share2 className="w-4 h-4" />
-                  <span>Copy Share Text / शेयर करें</span>
-                </button>
-              </div>
-              <div className="bg-white border border-emerald-200 rounded p-3 text-xs sm:text-sm text-slate-800 whitespace-pre-line font-mono select-all">
-                {getCategoryShareText(editablePost, typeof window !== 'undefined' ? window.location.href : `https://sarkariresult12.vercel.app/#post/${editablePost.slug}`)}
-              </div>
-            </div>
+
 
             {/* Useful Important Links Table (Matches Screenshot Layout) */}
             <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
