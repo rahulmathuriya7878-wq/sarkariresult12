@@ -147,7 +147,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
               </span>
             ) : (
               <span className={`font-extrabold text-[11pt] ${visited ? 'text-[#551a8b]' : 'text-[#0000cc]'} group-hover:text-[#ab1616] underline leading-snug break-words block font-serif`}>
-                {post.shortTitle}
+                {post.shortTitle || post.title}
               </span>
             )}
 

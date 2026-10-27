@@ -38,8 +38,8 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
       const isBookmarked = bookmarkedIds.includes(post.id);
       const isVisited = visitedPostIds.has(post.id) || (post.slug && visitedPostIds.has(post.slug));
       
-      if (post.isNew) score += 50; // Highest priority for recently added / new posts
-      if (post.isHot) score += 30; // Priority for hot updates
+      if (post.isNew) score += 200; // Highest priority to ensure new posts in any section land in Quick Highlights
+      if (post.isHot) score += 50; // Priority for hot updates
       if (isBookmarked) score += 15;
       if (isVisited) score += 5;
       score += (posts.length - idx) * 0.1; // Recency weighting
