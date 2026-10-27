@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Share2, Check } from 'lucide-react';
 import { SarkariPost } from '../types/job';
 import { getCategoryShareText } from './FullPagePostView';
+import { getCleanShareUrl } from '../utils/urlUtils';
 
 interface FloatingShareButtonProps {
   currentPost?: SarkariPost | null;
@@ -12,9 +13,7 @@ export const FloatingShareButton: React.FC<FloatingShareButtonProps> = ({ curren
   const [copied, setCopied] = useState(false);
 
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult12.vercel.app';
-  const shareUrl = currentPost 
-    ? `${baseUrl}/#post/${currentPost.slug || currentPost.id}?ref=share`
-    : `${baseUrl}/?ref=share`;
+  const shareUrl = getCleanShareUrl(currentPost ? (currentPost.slug || currentPost.id) : undefined, baseUrl);
 
   const shareMessage = currentPost
     ? getCategoryShareText(currentPost, shareUrl)

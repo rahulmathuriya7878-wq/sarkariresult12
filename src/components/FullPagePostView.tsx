@@ -1,28 +1,31 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { SarkariPost, DirectLinkItem } from '../types/job';
 import { getProcessedImportantDates, toIso8601Date, formatDisplayDate } from '../utils/dateUtils';
+import { sanitizeUrl, deduplicateLinks } from '../utils/urlUtils';
 
 export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => {
+  const pAny = post as any;
   let existing: DirectLinkItem[] = post.directLinks && post.directLinks.length > 0 
-    ? post.directLinks.map(l => ({ ...l })) 
+    ? post.directLinks.map(l => ({ ...l, url: sanitizeUrl(l.url) })) 
     : [];
 
   if (existing.length === 0) {
     if (post.category === 'result') {
-      existing.push({ label: 'Download Result / Score Card', actionText: 'Click Here', type: 'result', url: 'https://sarkariresult12.vercel.app/#' });
+      existing.push({ label: 'Download Result / Score Card', actionText: 'Click Here', type: 'result', url: sanitizeUrl(pAny.resultUrl || 'https://sarkariresult12.vercel.app/#') });
     } else if (post.category === 'admit_card') {
-      existing.push({ label: 'Download Admit Card / Hall Ticket', actionText: 'Click Here', type: 'admit_card', url: 'https://sarkariresult12.vercel.app/#' });
+      existing.push({ label: 'Download Admit Card / Hall Ticket', actionText: 'Click Here', type: 'admit_card', url: sanitizeUrl(pAny.admitCardUrl || 'https://sarkariresult12.vercel.app/#') });
     } else if (post.category === 'answer_key') {
-      existing.push({ label: 'Download Answer Key & Solution Paper', actionText: 'Click Here', type: 'answer_key', url: 'https://sarkariresult12.vercel.app/#' });
+      existing.push({ label: 'Download Answer Key & Solution Paper', actionText: 'Click Here', type: 'answer_key', url: sanitizeUrl(pAny.answerKeyUrl || 'https://sarkariresult12.vercel.app/#') });
     } else {
-      existing.push({ label: 'Apply Online', actionText: 'Click Here', type: 'apply', url: 'https://sarkariresult12.vercel.app/#', isPrimary: true });
+      existing.push({ label: 'Apply Online', actionText: 'Click Here', type: 'apply', url: sanitizeUrl(pAny.applyUrl || 'https://sarkariresult12.vercel.app/#'), isPrimary: true });
     }
-    existing.push({ label: 'Download Detailed Notification (PDF)', actionText: 'Click Here', type: 'notification', url: 'https://sarkariresult12.vercel.app/#', isPdf: true });
-    existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: 'https://sarkariresult12.vercel.app/#' });
+    existing.push({ label: 'Download Detailed Notification (PDF)', actionText: 'Click Here', type: 'notification', url: sanitizeUrl(pAny.notificationUrl || 'https://sarkariresult12.vercel.app/#'), isPdf: true });
+    existing.push({ label: `${post.department || 'Official'} Website`, actionText: 'Click Here', type: 'official', url: sanitizeUrl(pAny.officialWebsite || 'https://sarkariresult12.vercel.app/#') });
   }
 
   // Normalize notification links to Download Detailed Notification (PDF) and Click Here
   existing = existing.map(l => {
+    const cleanUrl = sanitizeUrl(l.url);
     if (l.type === 'notification' || (l.label && l.label.toLowerCase().includes('notification'))) {
       const isDetailed = l.label.toLowerCase().includes('detailed');
       const hasPdf = l.label.includes('(PDF)') || l.label.includes('PDF');
@@ -39,13 +42,15 @@ export const getProcessedDirectLinks = (post: SarkariPost): DirectLinkItem[] => 
         label: finalLabel,
         actionText: 'Click Here',
         isPdf: true,
-        type: 'notification'
+        type: 'notification',
+        url: cleanUrl
       };
     }
-    return l;
+    return { ...l, url: cleanUrl };
   });
 
-  return existing;
+  // Deduplicate direct links by label and URL to solve double link issue
+  return deduplicateLinks(existing);
 };
 import { 
   ExternalLink, 
