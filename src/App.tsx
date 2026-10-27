@@ -683,7 +683,19 @@ const parsePostDate = (dateStr?: string): number => {
 };
 
 const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
-  return [...posts].sort((a, b) => {
+  // Deduplicate posts strictly by normalized title, slug, and id
+  const seen = new Set<string>();
+  const uniquePosts = posts.filter(p => {
+    const normTitle = (p.shortTitle || p.title || '').trim().toLowerCase();
+    const normSlug = (p.slug || '').trim().toLowerCase();
+    const key = `${p.id}::${normSlug}::${normTitle}`;
+    if (seen.has(key) || seen.has(normTitle)) return false;
+    seen.add(key);
+    seen.add(normTitle);
+    return true;
+  });
+
+  return uniquePosts.sort((a, b) => {
     // IAF Hindi Typist recruitment always guaranteed at the top
     if (a.id === iafHindiTypistPost.id) return -1;
     if (b.id === iafHindiTypistPost.id) return 1;

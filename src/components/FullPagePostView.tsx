@@ -199,7 +199,9 @@ export const getCategoryShareText = (post: SarkariPost, postUrl: string): string
   const startDate = startDateItem ? startDateItem.value : (post.postDate ? post.postDate.split('|')[0].trim() : 'जारी है');
   const lastDate = post.lastDate || 'अधिसूचना देखें';
 
-  return `🥳🥳 सरकारी नौकरी बड़ा अपडेट 🥳🥳\n🎯🎯 भर्ती का नाम: ${postName}\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\n👉आवेदन की प्रारंभ तिथि: ${startDate}\n👉आवेदन की अंतिम तिथि: ${lastDate}\n🔥🔥 संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:\n${postUrl}`;
+  const cleanUrl = sanitizeUrl(postUrl);
+
+  return `🥳🥳 सरकारी नौकरी बड़ा अपडेट 🥳🥳\n🎯🎯 भर्ती का नाम: ${postName}\nकुल पद: ${post.totalVacancies || 'अधिसूचना अनुसार'}\nयोग्यता: ${qual}\nआयु सीमा: ${age}\n👉आवेदन की प्रारंभ तिथि: ${startDate}\n👉आवेदन की अंतिम तिथि: ${lastDate}\n🔥🔥 संपूर्ण विवरण पढ़ें व ऑनलाइन फॉर्म भरें:\n${cleanUrl}`;
 };
 
 // Helper to bold application date ranges and keywords in shortInfo
@@ -1148,13 +1150,12 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
             <button
               type="button"
               onClick={() => {
-                const url = window.location.href;
-                const shareText = getCategoryShareText(post, url);
+                const url = getCleanShareUrl(editablePost.slug || editablePost.id);
+                const shareText = getCategoryShareText(editablePost, url);
                 if (navigator.share) {
                   navigator.share({
-                    title: post.title,
-                    text: shareText,
-                    url: url
+                    title: editablePost.title,
+                    text: shareText
                   }).catch(() => {});
                 } else {
                   navigator.clipboard.writeText(shareText);
@@ -1309,18 +1310,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </table>
             </div>
 
-            {/* One-Click Share Box with Exact Format requested by user */}
+            {/* One-Click Share Box */}
             <div className="mt-4 bg-emerald-50/90 border-2 border-emerald-500 rounded-xs p-3.5 sm:p-4 text-slate-900 shadow-xs font-sans">
-              <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
-                <div className="flex items-center gap-2 font-black text-emerald-950 text-sm sm:text-base">
-                  <Share2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-                  <span>इस भर्ती का डायरेक्ट व्हाट्सएप/टेलीग्राम शेयर मैसेज (Share Post Update)</span>
-                </div>
-                <span className="text-xs bg-emerald-200 text-emerald-900 font-extrabold px-2 py-0.5 rounded-xs">
-                  1-Click Share
-                </span>
-              </div>
-
               <div className="bg-white border border-emerald-300 rounded p-3 text-xs sm:text-sm font-sans text-slate-900 whitespace-pre-wrap leading-relaxed shadow-2xs mb-3 select-all">
                 {getCategoryShareText(editablePost, getCleanShareUrl(editablePost.slug || editablePost.id))}
               </div>
@@ -1340,7 +1331,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
                 {/* Telegram Share Button */}
                 <a
-                  href={`https://t.me/share/url?url=${encodeURIComponent(getCleanShareUrl(editablePost.slug || editablePost.id))}&text=${encodeURIComponent(getCategoryShareText(editablePost, getCleanShareUrl(editablePost.slug || editablePost.id)))}`}
+                  href={`https://t.me/share/url?text=${encodeURIComponent(getCategoryShareText(editablePost, getCleanShareUrl(editablePost.slug || editablePost.id)))}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 bg-[#0088cc] hover:bg-[#0077b3] text-white font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xs shadow-2xs transition-colors cursor-pointer"

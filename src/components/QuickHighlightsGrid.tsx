@@ -29,30 +29,50 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
   isGlobalWordEditActive = false,
   onUpdatePost
 }) => {
-  // Dynamically select top 8 posts, scoring by clicks (visited) and saves (bookmarked) for Trending / High Demand badge
+  // Dynamically select top 8 latest, newly added, or updated posts (with duplicate prevention)
   const highlightItems = React.useMemo(() => {
     if (!posts || posts.length === 0) return [];
 
-    const scoredPosts = posts.map((post, idx) => {
-      let score = 0;
-      const isBookmarked = bookmarkedIds.includes(post.id);
-      const isVisited = visitedPostIds.has(post.id) || (post.slug && visitedPostIds.has(post.slug));
-      
-      if (post.isNew) score += 200; // Highest priority to ensure new posts in any section land in Quick Highlights
-      if (post.isHot) score += 50; // Priority for hot updates
-      if (isBookmarked) score += 15;
-      if (isVisited) score += 5;
-      score += (posts.length - idx) * 0.1; // Recency weighting
+    // 1. Deduplicate posts strictly by normalized title, slug and ID to prevent duplicate boxes
+    const seen = new Set<string>();
+    const uniquePosts: SarkariPost[] = [];
 
-      return { post, score, isBookmarked, isVisited };
+    for (const p of posts) {
+      const normTitle = (p.shortTitle || p.title || '').trim().toLowerCase();
+      const normSlug = (p.slug || '').trim().toLowerCase();
+      const key = `${p.id}::${normSlug}::${normTitle}`;
+      if (!seen.has(key) && !seen.has(normTitle)) {
+        seen.add(key);
+        seen.add(normTitle);
+        uniquePosts.push(p);
+      }
+    }
+
+    // 2. Score posts based strictly on Newness, Update status, Hotness, and Recency
+    const scoredPosts = uniquePosts.map((post, idx) => {
+      let score = (uniquePosts.length - idx) * 10; // Recency weighting (newest added posts in array get higher base score)
+
+      if (post.isNew) score += 500; // Highest priority for new posts
+      if ((post as any).isUpdated) score += 400; // Priority for updated posts
+      if (post.isHot) score += 200; // Priority for hot updates
+
+      return { post, score };
     });
 
-    // Sort by engagement score descending
+    // 3. Sort by newness / recency score descending
     scoredPosts.sort((a, b) => b.score - a.score);
 
-    return scoredPosts.slice(0, 8).map(({ post, isBookmarked, isVisited }, idx) => {
+    return scoredPosts.slice(0, 8).map(({ post }, idx) => {
       const colorScheme = HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length];
-      const badgeText = isBookmarked ? 'Saved' : isVisited ? 'Trending' : idx === 0 ? 'Hot' : null;
+      const isBookmarked = bookmarkedIds.includes(post.id);
+      const isVisited = visitedPostIds.has(post.id) || (post.slug && visitedPostIds.has(post.slug));
+
+      let badgeText: string | null = null;
+      if (post.isNew) badgeText = 'NEW';
+      else if ((post as any).isUpdated) badgeText = 'UPDATED';
+      else if (post.isHot) badgeText = 'HOT';
+      else if (isVisited) badgeText = 'TRENDING';
+      else if (isBookmarked) badgeText = 'SAVED';
 
       return {
         post,
