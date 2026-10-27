@@ -17,9 +17,16 @@ async function startServer() {
 
   // Dynamic Sitemap XML Endpoint (serves real-time indexed active jobs, results, admissions)
   app.get(['/sitemap.xml', '/sitemap', '/api/sitemap', '/api/sitemap.xml'], (req, res) => {
-    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-    const host = req.headers.host || 'ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app';
-    const baseUrl = `${protocol}://${host}`;
+    const hostHeader = (req.headers.host || '').toLowerCase();
+    const isInternalPreview = hostHeader.includes('run.app') || 
+                              hostHeader.includes('localhost') || 
+                              hostHeader.includes('127.0.0.1') || 
+                              !hostHeader;
+
+    // Use canonical production domain by default so search engines never encounter preview URLs
+    const baseUrl = isInternalPreview 
+      ? 'https://sarkariresult12.vercel.app' 
+      : `${req.headers['x-forwarded-proto'] || req.protocol || 'https'}://${req.headers.host}`;
 
     const xml = generateSitemapXml(baseUrl);
     res.header('Content-Type', 'application/xml; charset=utf-8');
@@ -29,9 +36,15 @@ async function startServer() {
 
   // Dynamic Robots.txt Endpoint
   app.get('/robots.txt', (req, res) => {
-    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
-    const host = req.headers.host || 'ais-pre-whrtzakdpynxkkxdqr2cbs-313809848943.asia-east1.run.app';
-    const baseUrl = `${protocol}://${host}`;
+    const hostHeader = (req.headers.host || '').toLowerCase();
+    const isInternalPreview = hostHeader.includes('run.app') || 
+                              hostHeader.includes('localhost') || 
+                              hostHeader.includes('127.0.0.1') || 
+                              !hostHeader;
+
+    const baseUrl = isInternalPreview 
+      ? 'https://sarkariresult12.vercel.app' 
+      : `${req.headers['x-forwarded-proto'] || req.protocol || 'https'}://${req.headers.host}`;
 
     const txt = generateRobotsTxt(baseUrl);
     res.header('Content-Type', 'text/plain; charset=utf-8');

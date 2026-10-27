@@ -43,24 +43,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
   onAddNewPost,
   onDeletePost
 }) => {
-  const [visibleCounts, setVisibleCounts] = React.useState<Record<string, number>>({
-    result: 15,
-    admit_card: 15,
-    latest_jobs: 15,
-    answer_key: 15,
-    syllabus: 15,
-    admission: 15,
-    certificate_verification: 15,
-    important: 15,
-  });
-
-  const handleLoadMore = (category: string) => {
-    setVisibleCounts(prev => ({
-      ...prev,
-      [category]: (prev[category] || 15) + 15
-    }));
-  };
-
   const renderColumn = (
     title: string,
     hindiSub: string,
@@ -68,10 +50,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
     category: 'result' | 'admit_card' | 'latest_jobs' | 'answer_key' | 'syllabus' | 'important' | 'admission' | 'certificate_verification',
     viewMoreText: string
   ) => {
-    const currentLimit = visibleCounts[category] || 15;
-    const displayedPosts = posts.slice(0, currentLimit);
-    const hasMore = posts.length > currentLimit;
-
     return (
       <div className="border border-[#ab1616] bg-white rounded-xs flex flex-col shadow-xs overflow-hidden">
         <div className="bg-[#ab1616] border-b border-red-900 text-white py-2.5 sm:py-3.5 px-3.5 sm:px-5 text-center select-none">
@@ -84,7 +62,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         </div>
 
         <ul className="divide-y divide-slate-100 flex-1 p-2 sm:p-3 bg-white space-y-0.5">
-          {displayedPosts.map((post) => (
+          {posts.map((post) => (
             <PostListItem 
               key={post.id} 
               post={post} 
@@ -92,18 +70,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
               visitedPostIds={visitedPostIds} 
             />
           ))}
-
-          {hasMore && (
-            <li className="p-2 text-center">
-              <button
-                type="button"
-                onClick={() => handleLoadMore(category)}
-                className="text-xs bg-red-50 hover:bg-red-100 text-[#ab1616] font-extrabold px-3 py-1.5 rounded border border-red-200 cursor-pointer w-full transition-colors shadow-2xs"
-              >
-                ⬇️ और लोड करें (Load More)
-              </button>
-            </li>
-          )}
 
           {posts.length === 0 && (
             <li className="p-5 text-center text-xs sm:text-sm text-slate-500 font-medium">
