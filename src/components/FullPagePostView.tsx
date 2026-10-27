@@ -1310,63 +1310,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </table>
             </div>
 
-            {/* One-Click Share Box */}
-            <div className="mt-4 bg-emerald-50/90 border-2 border-emerald-500 rounded-xs p-3.5 sm:p-4 text-slate-900 shadow-xs font-sans">
-              <div className="bg-white border border-emerald-300 rounded p-3 text-xs sm:text-sm font-sans text-slate-900 whitespace-pre-wrap leading-relaxed shadow-2xs mb-3 select-all">
-                {getCategoryShareText(editablePost, getCleanShareUrl(editablePost.slug || editablePost.id))}
-              </div>
 
-              <div className="flex items-center gap-2 flex-wrap">
-                {/* WhatsApp Share Button */}
-                <a
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(getCategoryShareText(editablePost, getCleanShareUrl(editablePost.slug || editablePost.id)))}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xs shadow-2xs transition-colors cursor-pointer"
-                  title="WhatsApp पर शेयर करें"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>WhatsApp शेयर</span>
-                </a>
-
-                {/* Telegram Share Button */}
-                <a
-                  href={`https://t.me/share/url?text=${encodeURIComponent(getCategoryShareText(editablePost, getCleanShareUrl(editablePost.slug || editablePost.id)))}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 bg-[#0088cc] hover:bg-[#0077b3] text-white font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xs shadow-2xs transition-colors cursor-pointer"
-                  title="Telegram पर शेयर करें"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Telegram शेयर</span>
-                </a>
-
-                {/* Copy Text Button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    const text = getCategoryShareText(editablePost, getCleanShareUrl(editablePost.slug || editablePost.id));
-                    if (navigator.clipboard) {
-                      navigator.clipboard.writeText(text);
-                    } else {
-                      const ta = document.createElement('textarea');
-                      ta.value = text;
-                      document.body.appendChild(ta);
-                      ta.select();
-                      document.execCommand('copy');
-                      document.body.removeChild(ta);
-                    }
-                    setAlertFeedback('✅ शेयर टेक्स्ट कॉपी हो गया है! (Share text copied)');
-                    setTimeout(() => setAlertFeedback(null), 3000);
-                  }}
-                  className="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs sm:text-sm px-3.5 py-2 rounded-xs shadow-2xs transition-colors cursor-pointer"
-                  title="शेयर फॉर्मेट कॉपी करें"
-                >
-                  <Copy className="w-4 h-4" />
-                  <span>कॉपी टेक्स्ट</span>
-                </button>
-              </div>
-            </div>
           </div>
 
           {/* Section Body Details */}

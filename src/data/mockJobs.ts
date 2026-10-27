@@ -373,7 +373,66 @@ export const cgstLucknowPost: SarkariPost = {
   ]
 };
 
+export const ntaJeeMainPost: SarkariPost = {
+  id: 'job-nta-jee-main-2027-session-1',
+  slug: 'nta-jee-main-2027-session-1-online-form',
+  title: 'NTA Joint Entrance Examination JEE Main 2027 Session 1 Online Application Form',
+  shortTitle: 'NTA JEE Main 2027 Session 1 Online Form',
+  hindiTitle: 'एनटीए जेईई मेन 2027 सत्र 1 ऑनलाइन आवेदन फॉर्म',
+  category: 'admission',
+  department: 'Other',
+  qualifications: ['12th Pass'],
+  state: 'All India',
+  postDate: '2026-10-24',
+  notificationNumber: 'NTA/JEE-Main/2027/Session-1',
+  totalVacancies: 'National Level Admission',
+  isHot: true,
+  isNew: true,
+  lastDate: '22 November 2026',
+  examDate: '20-28 January 2027',
+  shortInfo: 'National Testing Agency (NTA) has released official public notice inviting online application forms for Joint Entrance Examination JEE (Main) - 2027 Session 1. Candidates who passed or appearing in 10+2 Intermediate (PCM) exam can apply online from 24 October 2026 to 22 November 2026 on jeemain.nta.nic.in.',
+  applicationFee: [
+    { category: 'General / OBC (Male)', amount: '₹ 1,000/-' },
+    { category: 'General / OBC (Female)', amount: '₹ 800/-' },
+    { category: 'SC / ST / PwD / Third Gender', amount: '₹ 500/-' }
+  ],
+  feePaymentMode: 'Online via Net Banking, Debit/Credit Card, or UPI Payment Gateway.',
+  ageLimit: {
+    asOnDate: '01/07/2027',
+    notes: 'No age limit for appearing in JEE (Main) 2027. Candidates who passed 12th in 2025, 2026 or appearing in 2027 are eligible.'
+  },
+  importantDates: [
+    { label: 'Online Application Begin', value: '24/10/2026' },
+    { label: 'Last Date for Apply Online', value: '22/11/2026 (11:50 PM)', isHighlight: true },
+    { label: 'Last Date Fee Transaction', value: '22/11/2026' },
+    { label: 'Correction in Application Particulars', value: '27/11/2026 to 29/11/2026' },
+    { label: 'Announcement of Exam City', value: '30/12/2026' },
+    { label: 'Admit Card Available', value: '13/01/2027', isHighlight: true },
+    { label: 'Date of Examination (Session 1)', value: '20, 21, 22, 23, 24 & 28 January 2027', isHighlight: true }
+  ],
+  vacancyBreakdown: [
+    {
+      postName: 'JEE (Main) 2027 Session 1 Admission (B.E / B.Tech / B.Arch / B.Planning)',
+      totalPosts: 'National Entrance Exam',
+      eligibility: 'Passed Class 12th Intermediate or appearing in 2027 with Physics, Mathematics and Chemistry / Biology / Technical Vocational Subject.'
+    }
+  ],
+  howToApplySteps: [
+    'Visit official NTA JEE Main website jeemain.nta.nic.in.',
+    'Register as a new candidate and fill personal details, mobile number, and email ID.',
+    'Upload clear scanned photograph, signature, and category certificate (if applicable).',
+    'Pay required examination fee via online payment gateway.',
+    'Download and save the confirmation page for future reference.'
+  ],
+  directLinks: [
+    { label: 'Apply Online for JEE Main 2027 Session 1', actionText: 'Apply Online', type: 'apply', url: 'https://jeemain.nta.nic.in/', isPrimary: true },
+    { label: 'Download Official NTA Notification PDF', actionText: 'Download (PDF)', type: 'notification', url: 'https://jeemain.nta.nic.in/', isPdf: true },
+    { label: 'NTA Official Portal', actionText: 'nta.ac.in', type: 'official', url: 'https://nta.ac.in/' }
+  ]
+};
+
 export const mockSarkariPosts: SarkariPost[] = [
+  ntaJeeMainPost,
   isroUrscPost,
   cgstLucknowPost,
   iafHindiTypistPost,

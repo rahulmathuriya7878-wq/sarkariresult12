@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
-import { mockSarkariPosts, iafHindiTypistPost } from './data/mockJobs';
+import { mockSarkariPosts, iafHindiTypistPost, ntaJeeMainPost } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
 import { QuickHighlightsGrid } from './components/QuickHighlightsGrid';
@@ -52,16 +52,16 @@ export default function App() {
           const mockIds = new Set(mockSarkariPosts.map(p => p.id));
           const extraCustom = parsed.filter((p: SarkariPost) => !mockIds.has(p.id));
           const combined = [...extraCustom, ...merged];
-          const hasIaf = combined.some(p => p.id === iafHindiTypistPost.id);
-          return hasIaf ? combined : [iafHindiTypistPost, ...combined];
+          const hasJee = combined.some(p => p.id === ntaJeeMainPost.id);
+          return hasJee ? combined : [ntaJeeMainPost, ...combined];
         }
       }
     } catch (e) {
       console.error('Failed to load posts from storage', e);
     }
     const combined = [...mockSarkariPosts];
-    const hasIaf = combined.some(p => p.id === iafHindiTypistPost.id);
-    return hasIaf ? combined : [iafHindiTypistPost, ...combined];
+    const hasJee = combined.some(p => p.id === ntaJeeMainPost.id);
+    return hasJee ? combined : [ntaJeeMainPost, ...combined];
   });
 
   // Save posts to localStorage whenever allPosts updates
@@ -1005,11 +1005,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
       )}
 
       <PushNotificationBanner />
-
-
-
-
-
     </div>
   );
 }
