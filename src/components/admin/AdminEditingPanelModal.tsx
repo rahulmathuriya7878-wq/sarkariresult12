@@ -40,10 +40,12 @@ import {
   CheckCircle2,
   Layers,
   Sparkles,
-  Bot
+  Bot,
+  Globe
 } from 'lucide-react';
 import { getPostFAQs } from '../FullPagePostView';
 import { AIBlogWriter } from './AIBlogWriter';
+import { GoogleIndexationManager } from './GoogleIndexationManager';
 import { readPdfFileAsDataUrl } from '../../utils/pdfGenerator';
 import { validateIso8601 } from '../../utils/dateUtils';
 
@@ -176,6 +178,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
 
   // Main Admin Panel Modules: 1. Full Post Editor, 2. AI Blog Writer
   const [adminMainTab, setAdminMainTab] = useState<'editor' | 'ai_blog'>('editor');
+  const [isGscModalOpen, setIsGscModalOpen] = useState<boolean>(false);
 
   // Editor State
   const [editingPost, setEditingPost] = useState<SarkariPost | null>(null);
@@ -482,14 +485,25 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
 
           <div className="flex items-center gap-2">
             {isAuthenticated && (
-              <button
-                onClick={handleLogout}
-                className="hidden sm:inline-flex items-center gap-1 text-xs bg-red-900 hover:bg-red-950 text-white px-2.5 py-1.5 rounded font-bold cursor-pointer transition-colors"
-                title="Sign out of admin"
-              >
-                <Lock className="w-3.5 h-3.5" />
-                <span>Lock / Exit</span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsGscModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs bg-amber-400 hover:bg-amber-500 text-red-950 px-3 py-1.5 rounded font-black cursor-pointer transition-colors shadow-2xs border border-amber-300"
+                  title="Google Search Console Indexing Manager & Sitemap Pinger"
+                >
+                  <Globe className="w-4 h-4 text-red-950" />
+                  <span>🔍 GSC Indexing Manager</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="hidden sm:inline-flex items-center gap-1 text-xs bg-red-900 hover:bg-red-950 text-white px-2.5 py-1.5 rounded font-bold cursor-pointer transition-colors"
+                  title="Sign out of admin"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Lock / Exit</span>
+                </button>
+              </>
             )}
             <button
               onClick={onClose}
@@ -2697,6 +2711,12 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           </div>
         )}
 
+        {/* Google Search Console Indexing Manager Modal */}
+        <GoogleIndexationManager
+          posts={posts}
+          isOpen={isGscModalOpen}
+          onClose={() => setIsGscModalOpen(false)}
+        />
       </div>
     </div>
   );

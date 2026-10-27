@@ -2680,6 +2680,109 @@ export const mockSarkariPosts: SarkariPost[] = [
 
   // --- ADMISSIONS ---
   {
+    id: 'admission-nta-jee-main-2027-session-1',
+    slug: 'nta-jee-main-2027-session-1-online-form',
+    title: 'NTA JEE Main 2027 Session 1 Online Form (Joint Entrance Exam B.E/B.Tech, B.Arch, B.Planning)',
+    shortTitle: 'NTA JEE Main 2027 Session 1 Online Form',
+    hindiTitle: 'एनटीए जेईई मेन 2027 सेशन-1 ऑनलाइन आवेदन पत्र (B.E/B.Tech, B.Arch)',
+    category: 'admission',
+    department: 'Engineering',
+    qualifications: ['12th Pass'],
+    state: 'All India',
+    postDate: '2026-10-24',
+    notificationNumber: 'NTA/JEE-Main/2027/Session-1',
+    totalVacancies: 'National Level Admission',
+    isHot: true,
+    isNew: true,
+    lastDate: '22 November 2026',
+    examDate: '20-28 January 2027',
+    admitCardDate: '13 January 2027',
+    shortInfo: 'National Testing Agency (NTA) has released the Public Notice for Joint Entrance Examination JEE (Main) - 2027 Session 1 for admission to Undergraduate Engineering Programs (B.E/B.Tech), B.Arch, and B.Planning at NITs, IIITs, CFTIs, and eligibility for JEE (Advanced). Online application forms are invited from 24th October 2026 to 22nd November 2026.',
+    applicationFee: [
+      { category: 'General / OBC / EWS (Male)', amount: '₹ 1,000/-' },
+      { category: 'Female / SC / ST / PwD', amount: '₹ 500/-' },
+      { category: 'Late Submission Fee (23-26 Nov)', amount: 'Additional ₹ 500/-' }
+    ],
+    feePaymentMode: 'Pay Examination Fee through Credit Card, Debit Card, Net Banking or UPI.',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      notes: 'No age limit for candidates in JEE (Main) 2027. Candidates who passed 10+2/equivalent exam in 2025, 2026, or appearing in 2027 are eligible.'
+    },
+    importantDates: [
+      { label: 'Public Notice Release Date', value: '24/10/2026' },
+      { label: 'Online Application Begin', value: '24/10/2026' },
+      { label: 'Last Date for Apply Online', value: '22/11/2026 (upto 11:50 PM)', isHighlight: true },
+      { label: 'Last Date Fee Payment', value: '22/11/2026 (upto 11:50 PM)' },
+      { label: 'Late Submission with Late Fee (₹500)', value: '23/11/2026 to 26/11/2026' },
+      { label: 'Correction Window in Application', value: '27/11/2026 to 29/11/2026' },
+      { label: 'Announcement of Exam City', value: '30/12/2026', isHighlight: true },
+      { label: 'Downloading Admit Cards from NTA', value: '13/01/2027', isHighlight: true },
+      { label: 'Date of Examination (Session 1)', value: '20, 21, 22, 23, 24 & 28 Jan 2027', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: 'JEE (Main) 2027 Paper 1: B.E / B.Tech Course',
+        totalPosts: 'All India Seats',
+        eligibility: 'Passed or Appearing Class 12th Intermediate / Equivalent Exam with Physics and Mathematics as compulsory subjects along with Chemistry / Biology / Technical Vocational Subject.'
+      },
+      {
+        postName: 'JEE (Main) 2027 Paper 2A: B.Arch Course',
+        totalPosts: 'All India Seats',
+        eligibility: 'Passed Class 12th Intermediate with Physics, Chemistry, and Mathematics.'
+      },
+      {
+        postName: 'JEE (Main) 2027 Paper 2B: B.Planning Course',
+        totalPosts: 'All India Seats',
+        eligibility: 'Passed Class 12th Intermediate with Mathematics.'
+      }
+    ],
+    directLinks: [
+      {
+        label: 'Apply Online (Session 1 Registration)',
+        actionText: 'Register Now',
+        type: 'apply',
+        url: 'https://jeemain.nta.nic.in/',
+        isPrimary: true
+      },
+      {
+        label: 'Download Official Notification PDF Public Notice',
+        actionText: 'Download PDF Notice',
+        type: 'notification',
+        url: 'https://jeemain.nta.nic.in/',
+        isPdf: true,
+        fileName: 'NTA_JEE_Main_2027_Public_Notice_Session_1.pdf',
+        fileSize: '1.2 MB'
+      },
+      {
+        label: 'Official NTA Website',
+        actionText: 'Visit NTA',
+        type: 'official',
+        url: 'https://nta.ac.in/'
+      }
+    ],
+    faqs: [
+      {
+        question: 'When is the last date to apply for JEE Main 2027 Session 1?',
+        answer: 'The last date for online submission of application form is 22nd November 2026 (upto 11:50 PM). Late submission with ₹500 late fee is allowed from 23 to 26 November 2026.'
+      },
+      {
+        question: 'When will JEE Main 2027 Session 1 Examination be conducted?',
+        answer: 'JEE Main 2027 Session 1 exam will be conducted on 20, 21, 22, 23, 24 and 28 January 2027 in two shifts (09:00 AM to 12:00 PM and 03:00 PM to 06:00 PM).'
+      },
+      {
+        question: 'How can I download the official NTA JEE Main 2027 PDF notice?',
+        answer: 'You can click on the "Download Official Notification PDF Public Notice" link above or visit jeemain.nta.nic.in to download the complete notification PDF.'
+      }
+    ],
+    howToApplySteps: [
+      'Visit the official website jeemain.nta.nic.in.',
+      'Click on "JEE(Main) 2027 Session 1 Registration" and complete online registration with email ID and mobile number.',
+      'Fill personal details, educational qualifications, exam city preference, and upload passport photo and signature.',
+      'Pay the online examination fee via Debit Card/Credit Card/Net Banking/UPI.',
+      'Submit the application form and download the confirmation page and official PDF receipt for future reference.'
+    ]
+  },
+  {
     id: 'admission-rajasthan-pg-2026',
     slug: 'rajasthan-pg-admission-2026',
     title: 'Rajasthan PG Admission Online Form 2026 (M.A, M.Sc, M.Com & Post Graduate Courses)',

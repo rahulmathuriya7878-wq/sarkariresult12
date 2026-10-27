@@ -156,16 +156,18 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="md:hidden flex items-center justify-between px-2 py-2">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-expanded={isMobileMenuOpen}
+            aria-label="Toggle Navigation Menu"
             className="flex items-center gap-2 text-white font-extrabold text-sm sm:text-base cursor-pointer py-1 px-2 hover:bg-neutral-800 rounded-xs select-none transition-colors"
           >
             {isMobileMenuOpen ? (
               <>
-                <X className="w-5 h-5 text-white" />
+                <X className="w-5 h-5 text-white" aria-hidden="true" />
                 <span>Menu</span>
               </>
             ) : (
               <>
-                <Menu className="w-5 h-5 text-white" />
+                <Menu className="w-5 h-5 text-white" aria-hidden="true" />
                 <span>Menu</span>
               </>
             )}
@@ -173,10 +175,11 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => setIsSearchVisible(!isSearchVisible)}
+            aria-label="Search Sarkari Result"
             className="p-1.5 text-white hover:bg-neutral-800 rounded-xs cursor-pointer select-none transition-colors"
             title="Search Sarkari Result"
           >
-            <Search className="w-5 h-5 text-white" />
+            <Search className="w-5 h-5 text-white" aria-hidden="true" />
           </button>
         </div>
 

@@ -175,8 +175,9 @@ export interface SarkariPost {
   salaryBand?: SalaryBand;
   salaryBreakdown?: SalaryBreakdownItem[];
   directLinks: DirectLinkItem[];
-  notificationNumber?: string;
+  faqs?: PostFAQItem[];
   customFaqs?: PostFAQItem[];
+  notificationNumber?: string;
   pdfAttachment?: {
     fileName: string;
     fileSize?: string;

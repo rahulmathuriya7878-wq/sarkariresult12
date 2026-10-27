@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
 import { mockSarkariPosts, iafHindiTypistPost } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
@@ -15,14 +15,15 @@ import { FullPagePostView } from './components/FullPagePostView';
 
 import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
-
-import { AdminEditingPanelModal } from './components/admin/AdminEditingPanelModal';
-import { AgeCalculatorModal } from './components/tools/AgeCalculatorModal';
-import { PhotoResizerTool } from './components/tools/PhotoResizerTool';
-import { EligibilityMatcherModal } from './components/tools/EligibilityMatcherModal';
-import { BookmarkedJobsModal } from './components/BookmarkedJobsModal';
-import { JobAlertsModal } from './components/JobAlertsModal';
 import { PushNotificationBanner } from './components/PushNotificationBanner';
+
+// Dynamic Lazy Imports for Modals to maximize Mobile PageSpeed & minimize initial bundle
+const AdminEditingPanelModal = lazy(() => import('./components/admin/AdminEditingPanelModal').then(m => ({ default: m.AdminEditingPanelModal })));
+const AgeCalculatorModal = lazy(() => import('./components/tools/AgeCalculatorModal').then(m => ({ default: m.AgeCalculatorModal })));
+const PhotoResizerTool = lazy(() => import('./components/tools/PhotoResizerTool').then(m => ({ default: m.PhotoResizerTool })));
+const EligibilityMatcherModal = lazy(() => import('./components/tools/EligibilityMatcherModal').then(m => ({ default: m.EligibilityMatcherModal })));
+const BookmarkedJobsModal = lazy(() => import('./components/BookmarkedJobsModal').then(m => ({ default: m.BookmarkedJobsModal })));
+const JobAlertsModal = lazy(() => import('./components/JobAlertsModal').then(m => ({ default: m.JobAlertsModal })));
 
 const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
   if (post.salaryBand) return post.salaryBand;
@@ -800,7 +801,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         />
       ) : (
         /* Home Main View */
-        <main className="flex-1 max-w-full w-full mx-auto px-1 sm:px-2 py-2">
+        <main id="main-content" className="flex-1 max-w-full w-full mx-auto px-1 sm:px-2 py-2">
           {/* Quick Highlights 8-box Grid (Headlight: Dynamic Top 8 Latest Posts) */}
           <QuickHighlightsGrid 
             posts={allPosts} 

@@ -857,9 +857,12 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       createdCanonical = true;
     }
     const originalCanonical = canonicalLink.href || '';
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://sarkariresult12.vercel.app';
-    const currentUrl = typeof window !== 'undefined' ? window.location.href : `${baseUrl}/#post/${post.slug}`;
-    canonicalLink.href = currentUrl;
+    const baseUrl = typeof window !== 'undefined' && !window.location.host.includes('run.app') && !window.location.host.includes('localhost')
+      ? window.location.origin 
+      : 'https://sarkariresult12.vercel.app';
+    const cleanCanonicalUrl = `${baseUrl}/post/${post.slug || post.id}`;
+    const currentUrl = cleanCanonicalUrl;
+    canonicalLink.href = cleanCanonicalUrl;
 
     // Dynamic Meta Description update
     let metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
