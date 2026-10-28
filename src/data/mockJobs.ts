@@ -431,7 +431,89 @@ export const ntaJeeMainPost: SarkariPost = {
   ]
 };
 
+export const ctet2026OnlinePost: SarkariPost = {
+  id: 'job-ctet-2026-online',
+  slug: 'ctet-2026-online-application-form',
+  title: 'Central Teacher Eligibility Test CTET 2026 Online Form, Notification & Exam Date Out',
+  shortTitle: 'CTET 2026 Online Form',
+  hindiTitle: 'केंद्रीय शिक्षक पात्रता परीक्षा (CTET) 2026 ऑनलाइन आवेदन फॉर्म',
+  category: 'latest_jobs',
+  department: 'Teaching',
+  qualifications: ['B.Ed / CTET', 'Graduate', 'Post Graduate'],
+  state: 'All India',
+  postDate: '2026-10-27',
+  notificationNumber: 'CTET Jan/Feb 2026 Exam',
+  totalVacancies: 'Teacher Eligibility Certification (Class I to VIII)',
+  salary: 'As per Govt Teacher Norms (Primary & Upper Primary)',
+  salaryBand: '25K - 50K',
+  isHot: true,
+  isNew: true,
+  lastDate: '28/11/2026',
+  examDate: '01/01/2027',
+  shortInfo: 'Central Board of Secondary Education (CBSE) has officially released the CTET 2026 notification for Central Teacher Eligibility Test (Paper I for Class 1 to 5 and Paper II for Class 6 to 8). Eligible B.Ed, D.El.Ed, and Graduation candidates can apply online up to 28 November 2026.',
+  applicationFee: [
+    { category: 'General / OBC (Paper I or II only)', amount: '₹ 1000/-' },
+    { category: 'General / OBC (Both Paper I & II)', amount: '₹ 1200/-' },
+    { category: 'SC / ST / PwD (Paper I or II only)', amount: '₹ 500/-' },
+    { category: 'SC / ST / PwD (Both Paper I & II)', amount: '₹ 600/-' }
+  ],
+  feePaymentMode: 'Online via Net Banking, Debit / Credit Card or UPI Payment Gateway.',
+  ageLimit: {
+    asOnDate: '01/01/2026',
+    notes: 'No age limit for CTET examination.'
+  },
+  importantDates: [
+    { label: 'Notification Released Date', value: '27/10/2026' },
+    { label: 'Online Application Begin', value: '27/10/2026', isHighlight: true },
+    { label: 'Last Date for Apply Online', value: '28/11/2026 (11:59 PM)', isHighlight: true },
+    { label: 'Last Date Fee Payment', value: '28/11/2026' },
+    { label: 'Correction Window', value: '01/12/2026 to 03/12/2026' },
+    { label: 'Admit Card Available', value: '10 Days Before Exam' },
+    { label: 'Exam Date', value: '01/01/2027', isHighlight: true }
+  ],
+  vacancyBreakdown: [
+    {
+      postName: 'CTET Paper I (Primary Teacher - Class 1 to 5)',
+      totalPosts: 'Eligibility Certificate',
+      eligibility: 'Senior Secondary (or its equivalent) with at least 50% marks and passed or appearing in final year of 2-year Diploma in Elementary Education / B.Ed.'
+    },
+    {
+      postName: 'CTET Paper II (Elementary Teacher - Class 6 to 8)',
+      totalPosts: 'Eligibility Certificate',
+      eligibility: 'Graduation and passed or appearing in final year of 2-year Diploma in Elementary Education / B.Ed / 4-year B.El.Ed.'
+    }
+  ],
+  paperPattern: {
+    examName: 'Central Teacher Eligibility Test (CTET 2026)',
+    examMode: 'Computer Based Test (CBT) / Offline OMR Mode',
+    totalQuestions: '150 Multiple Choice Questions',
+    totalMarks: '150 Marks (1 Mark per Question)',
+    totalDuration: '2.5 Hours (150 Minutes) per Paper',
+    negativeMarking: 'No Negative Marking',
+    subjects: [
+      { subjectName: 'Child Development and Pedagogy', totalQuestions: 30, totalMarks: 30 },
+      { subjectName: 'Language I (Compulsory)', totalQuestions: 30, totalMarks: 30 },
+      { subjectName: 'Language II (Compulsory)', totalQuestions: 30, totalMarks: 30 },
+      { subjectName: 'Mathematics (Paper I/II)', totalQuestions: 30, totalMarks: 30 },
+      { subjectName: 'Environmental Studies / Science / Social Studies', totalQuestions: 30, totalMarks: 30 }
+    ]
+  },
+  howToApplySteps: [
+    'Visit official CTET website ctet.nic.in.',
+    'Click on "Apply for CTET 2026 Online".',
+    'Register and fill in personal and educational qualification details.',
+    'Upload scanned photo and signature.',
+    'Pay the application fee and take printout of confirmation page.'
+  ],
+  directLinks: [
+    { label: 'Apply Online (CTET 2026)', actionText: 'Click Here', type: 'apply', isPrimary: true, url: 'https://ctet.nic.in/' },
+    { label: 'Download Information Bulletin (PDF)', actionText: 'Download', type: 'notification', url: 'https://ctet.nic.in/', isPdf: true },
+    { label: 'Official CTET Website', actionText: 'ctet.nic.in', type: 'official', url: 'https://ctet.nic.in/' }
+  ]
+};
+
 export const mockSarkariPosts: SarkariPost[] = [
+  ctet2026OnlinePost,
   ntaJeeMainPost,
   isroUrscPost,
   cgstLucknowPost,
@@ -2098,8 +2180,8 @@ export const mockSarkariPosts: SarkariPost[] = [
     department: 'Teaching',
     qualifications: ['B.Ed / CTET', 'Graduate'],
     state: 'All India',
-    postDate: '2026-10-06',
-    isHot: false,
+    postDate: '2026-10-28',
+    isHot: true,
     isNew: true,
     examDate: '01 November 2026',
     shortInfo: 'Central Board of Secondary Education (CBSE) has issued the CTET examination pre-admit card showing allocated city and shift details for Paper 1 and Paper 2.',

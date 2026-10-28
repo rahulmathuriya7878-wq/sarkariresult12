@@ -824,6 +824,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             onUpdatePost={handleUpdatePost}
           />
 
+
           {/* Active Search / Filter Status Banner */}
           {searchQuery.trim() && (
             <div className="my-3 bg-amber-50 border-2 border-amber-500 p-3 rounded flex flex-col sm:flex-row items-center justify-between gap-2 shadow-xs">
