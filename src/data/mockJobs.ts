@@ -512,7 +512,171 @@ export const ctet2026OnlinePost: SarkariPost = {
   ]
 };
 
+export const kvsSamvidaSathiPost: SarkariPost = {
+  id: 'job-kvs-samvida-sathi-2026',
+  slug: 'kvs-samvida-sathi-recruitment-2026',
+  title: 'KVS Samvida Sathi Portal Recruitment 2026 Online Registration for PGT, TGT, PRT & Other Posts',
+  shortTitle: 'KVS Samvida Sathi Portal 2026',
+  hindiTitle: 'केवीएस संविदा साथी पोर्टल भर्ती 2026 ऑनलाइन रजिस्ट्रेशन (पीजीटी, टीजीटी, पीआरटी एवं अन्य पद)',
+  category: 'latest_jobs',
+  department: 'Teaching',
+  qualifications: ['12th Pass', 'Graduate', 'Post Graduate', 'B.Ed / CTET', 'Diploma / ITI'],
+  state: 'All India',
+  postDate: '2026-10-29',
+  notificationNumber: 'KVS / Samvida Sathi Digital Portal Initiative 2026',
+  totalVacancies: 'School-Wise Dynamic Contractual Panel Vacancies',
+  salary: '₹ 21,250 - ₹ 32,500/- Per Month (Consolidated Monthly Remuneration)',
+  salaryBand: '25K - 50K',
+  salaryBreakdown: [
+    {
+      postName: 'PGT (All Subjects)',
+      payLevel: 'Consolidated Monthly',
+      basicPay: '₹ 27,500 - ₹ 32,500/-',
+      inHandSalary: '₹ 32,500/- (Hard Station) / ₹ 27,500/- (Normal)',
+      allowances: 'As per KVS Contractual Norms'
+    },
+    {
+      postName: 'TGT (All Subjects)',
+      payLevel: 'Consolidated Monthly',
+      basicPay: '₹ 26,250 - ₹ 31,250/-',
+      inHandSalary: '₹ 31,250/- (Hard Station) / ₹ 26,250/- (Normal)',
+      allowances: 'As per KVS Contractual Norms'
+    },
+    {
+      postName: 'PRT (Primary Teacher)',
+      payLevel: 'Consolidated Monthly',
+      basicPay: '₹ 21,250 - ₹ 26,250/-',
+      inHandSalary: '₹ 26,250/- (Hard Station) / ₹ 21,250/- (Normal)',
+      allowances: 'As per KVS Contractual Norms'
+    },
+    {
+      postName: 'Computer Instructor / Balvatika / Special Educator',
+      payLevel: 'Consolidated Monthly',
+      basicPay: '₹ 21,250 - ₹ 26,250/-',
+      inHandSalary: '₹ 26,250/- (Secondary/Sr Sec) / ₹ 21,250/- (Primary)',
+      allowances: 'As per KVS Contractual Norms'
+    },
+    {
+      postName: 'Doctor & Nurse',
+      payLevel: 'Daily Wage Basis',
+      basicPay: 'Doctor: ₹ 1,000/- Per Day | Nurse: ₹ 750/- Per Day',
+      inHandSalary: 'Doctor (2 Hrs daily) / Nurse (Full working day)',
+      allowances: 'For Working Days'
+    }
+  ],
+  isHot: true,
+  isNew: true,
+  lastDate: 'Ongoing / School-Wise Deadlines',
+  examDate: 'Walk-in-Interview / KV School Wise Selection',
+  shortInfo: 'Kendriya Vidyalaya Sangathan (KVS) has launched the official "KVS Samvida Sathi" portal (samvida-sathi.kvs.gov.in) for unified online registration of contractual teachers and staff across all Kendriya Vidyalayas in India. Candidates can create a single verified digital profile to apply for PGT, TGT, PRT, Computer Instructor, Balvatika Teacher, Special Educator, Coach, Counselor, Doctor, and Nurse vacancies announced dynamically by individual KVs without reapplying from scratch each time.',
+  applicationFee: [
+    { category: 'General / OBC / EWS', amount: '₹ 0/- (Nil - कोई शुल्क नहीं)' },
+    { category: 'SC / ST / PwD / Female', amount: '₹ 0/- (Nil - कोई शुल्क नहीं)' }
+  ],
+  feePaymentMode: '100% Free Registration on official KVS Samvida Sathi Portal. No application fee is charged.',
+  ageLimit: {
+    asOnDate: '01/04/2026',
+    minAge: 18,
+    maxAge: 65,
+    notes: 'Candidates between 18 to 65 years of age are eligible to register on KVS Samvida Sathi portal as per KVS Contractual appointment guidelines. Both fresh applicants and retired teachers (up to 65 years) can register.'
+  },
+  importantDates: [
+    { label: 'Portal Launch & Online Registration', value: 'Active Now (Open 24x7)', isHighlight: true },
+    { label: 'Profile Creation & Document Upload', value: 'Active / Ongoing', isHighlight: true },
+    { label: 'KV-Wise Contractual Walk-in Interviews', value: 'February - March & Dynamic throughout Academic Session', isHighlight: true },
+    { label: 'Last Date to Register', value: 'Ongoing (No Last Date - Single Digital Portal Profile)' },
+    { label: 'Application Fee Payment', value: '₹ 0/- (Exempted for All)' }
+  ],
+  vacancyBreakdown: [
+    {
+      postName: 'Post Graduate Teacher (PGT - English, Hindi, Maths, Physics, Chemistry, Biology, CS, Commerce, Economics, History, Geography, Pol Science)',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• Two Years Integrated Post Graduate M.Sc Course of Regional College of Education of NCERT in the concerned subject OR Master’s Degree from a recognized University with at least 50% marks in aggregate in the concerned subject.
+• B.Ed or equivalent degree from a recognized University.
+• Proficiency in teaching in Hindi and English media.
+• Desirable: Knowledge of Computer Applications.`
+    },
+    {
+      postName: 'Trained Graduate Teacher (TGT - English, Hindi, Sanskrit, Mathematics, Science, Social Studies)',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• Four Years Integrated Degree Course of Regional College of Education of NCERT in the concerned subject with at least 50% marks OR Bachelor’s Degree with at least 50% marks in the concerned subjects/combination of subjects and in aggregate.
+• B.Ed or equivalent degree from a recognized University.
+• Pass in the Central Teacher Eligibility Test (CTET Paper-II) conducted by CBSE.
+• Proficiency in teaching in Hindi and English media.`
+    },
+    {
+      postName: 'Primary Teacher (PRT)',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• Senior Secondary (Class 12th or equivalent) with at least 50% marks and 2-year Diploma in Elementary Education (D.El.Ed / JBT / BTC) OR 4-year Bachelor of Elementary Education (B.El.Ed).
+• Pass in the Central Teacher Eligibility Test (CTET Paper-I) conducted by CBSE.
+• Competence to teach through Hindi & English media.`
+    },
+    {
+      postName: 'Balvatika Teacher / Pre-Primary Teacher',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• Senior Secondary (Class 12th) with at least 50% marks.
+• Diploma in Nursery Teacher Education / Pre-School Education / Early Childhood Education Programme (D.E.C.Ed.) of a duration of not less than 2 years OR B.Ed (Nursery) from NCTE recognized institution.`
+    },
+    {
+      postName: 'Computer Instructor',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• B.E / B.Tech (Computer Science / IT) / BCA / MCA / M.Sc (Computer Science / IT) / Master’s Degree in any science subject/Maths with PGDCA / Post Graduate Degree with 'A' Level from DOEACC.`
+    },
+    {
+      postName: 'Vocational Coach (Games & Sports, Yoga, Art & Craft)',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• B.P.Ed / Diploma in Coaching from SAI / NS NIS or State/National level representation in relevant sports discipline.
+• For Yoga: Graduation with 1-Year Diploma in Yoga from a recognized University.`
+    },
+    {
+      postName: 'Educational Counselor',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• B.A / B.Sc (Psychology) with Certificate of Diploma in Guidance and Counseling from a recognized college or university.
+• Minimum 1 year experience in providing career/educational counseling to students.`
+    },
+    {
+      postName: 'Special Educator',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• Graduation with B.Ed (Special Education) OR B.Ed (General) with one or two-year Diploma in Special Education recognized by Rehabilitation Council of India (RCI).`
+    },
+    {
+      postName: 'Doctor (Part-Time Contractual)',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• Minimum MBBS degree and registration with Medical Council of India (MCI) / State Medical Council.`
+    },
+    {
+      postName: 'Staff Nurse',
+      totalPosts: 'Dynamic / School-Wise Panel',
+      eligibility: `• Diploma in General Nursing and Midwifery (GNM) OR B.Sc Nursing with valid registration in Indian / State Nursing Council.`
+    }
+  ],
+  selectionProcess: [
+    'One-Time Digital Profile Registration on KVS Samvida Sathi Portal (samvida-sathi.kvs.gov.in)',
+    'Document Verification & Scrutiny of Academic, CTET and Experience credentials',
+    'KV-Wise Open Invites Notification for Dynamic Contractual Vacancies',
+    'Walk-in Interview & Skill Demonstration at designated Kendriya Vidyalayas',
+    'Subject-wise Empanelment and Merit Panel Preparation for Academic Session'
+  ],
+  howToApplySteps: [
+    'Visit the official KVS Samvida Sathi Portal at https://samvida-sathi.kvs.gov.in/.',
+    'Click on "Candidate Registration / Register as Candidate" on the home page.',
+    'Enter your Mobile Number and Email ID to receive the registration OTP.',
+    'Complete your One-Time Digital Profile by providing personal details, educational qualifications, CTET roll number/marks, and teaching experience.',
+    'Upload clear scanned copies of your passport-size photo, signature, degree certificates, and CTET scorecard.',
+    'Browse available contractual vacancy notices posted by individual Kendriya Vidyalayas in your preferred districts/regions.',
+    'Apply to open invites directly through your Samvida Sathi dashboard with a single click.',
+    'Download and print your verified Samvida Sathi Candidate Profile summary sheet to carry along with original documents on the day of the walk-in interview at the respective KV.'
+  ],
+  directLinks: [
+    { label: 'Apply Online (KVS Samvida Sathi Portal)', actionText: 'Registration', type: 'apply', url: 'https://samvida-sathi.kvs.gov.in/', isPrimary: true },
+    { label: 'Candidate Login (Samvida Sathi)', actionText: 'Candidate Login', type: 'apply', url: 'https://samvida-sathi.kvs.gov.in/' },
+    { label: 'Detailed Recruitment Guide & Instructions', actionText: 'Rajasthan Vacancy', type: 'notification', url: 'https://rajasthanvacancy.com/kvs-samvida-sathi-recruitment-2026/' },
+    { label: 'KVS Official Website', actionText: 'kvsangathan.nic.in', type: 'official', url: 'https://kvsangathan.nic.in/' }
+  ]
+};
+
 export const mockSarkariPosts: SarkariPost[] = [
+  kvsSamvidaSathiPost,
   ctet2026OnlinePost,
   ntaJeeMainPost,
   isroUrscPost,
@@ -3889,6 +4053,8 @@ export const mockSarkariPosts: SarkariPost[] = [
 ];
 
 export const trendingAlerts = [
+  { id: 't-kvs', title: '🏫 KVS Samvida Sathi Portal Recruitment 2026 (PGT/TGT/PRT)', slug: 'kvs-samvida-sathi-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
+  { id: 't-ctet', title: '📝 CTET 2026 Online Form Released (Paper I & II)', slug: 'ctet-2026-online-application-form', category: 'latest_jobs', badge: 'Hot' },
   { id: 't-isro', title: '🚀 ISRO 10th Pass Recruitment 2026 (Last Date 13 Nov)', slug: 'isro-ursc-recruitment-2026', category: 'latest_jobs', badge: '10th Pass' },
   { id: 't-cgst', title: '💼 CGST Tax Assistant & Havaldar Sports Quota 2026', slug: 'cgst-lucknow-sports-quota-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
   { id: 't-iaf', title: '✈️ Indian Air Force IAF Hindi Typist 2026 Offline Form', slug: 'indian-air-force-hindi-typist-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
@@ -3908,6 +4074,8 @@ export const trendingAlerts = [
 ];
 
 export const highlightBoxes = [
+  { id: 'h-kvs', title: 'KVS Samvida Sathi Portal', sub: 'Apply Online (PGT/TGT/PRT)', slug: 'kvs-samvida-sathi-recruitment-2026', color: 'from-orange-600 to-amber-700' },
+  { id: 'h-ctet', title: 'CTET 2026 Online Form', sub: 'Paper I & II Apply Online', slug: 'ctet-2026-online-application-form', color: 'from-blue-700 to-indigo-900' },
   { id: 'h-isro', title: 'ISRO 10th Pass Recruitment', sub: 'Apply Online (Last Date 13 Nov)', slug: 'isro-ursc-recruitment-2026', color: 'from-purple-700 to-indigo-900' },
   { id: 'h-cgst', title: 'CGST Tax Assistant & Havaldar', sub: 'Sports Quota Recruitment 2026', slug: 'cgst-lucknow-sports-quota-recruitment-2026', color: 'from-blue-700 to-indigo-800' },
   { id: 'h-iaf', title: 'Air Force Hindi Typist 2026', sub: 'Offline Form (12th Pass)', slug: 'indian-air-force-hindi-typist-recruitment-2026', color: 'from-[#0000ff] to-blue-900' },
