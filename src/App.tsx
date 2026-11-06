@@ -12,7 +12,6 @@ import { FastUpdatesGrid } from './components/FastUpdatesGrid';
 import { SarkariFooter } from './components/SarkariFooter';
 import { CategoryDetailView } from './components/CategoryDetailView';
 import { FullPagePostView } from './components/FullPagePostView';
-import { StatePromotionalBanners } from './components/StatePromotionalBanners';
 
 import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
@@ -800,16 +799,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             bookmarkedIds={bookmarkedIds}
             isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
             onUpdatePost={handleUpdatePost}
-          />
-
-          {/* Dynamic State Promotional Banners (UP Govt Jobs, Bihar Exams, Rajasthan Vacancies, Central) */}
-          <StatePromotionalBanners
-            posts={allPosts}
-            onSelectStateFilter={(stateName) => {
-              setSearchQuery(stateName);
-              window.scrollTo({ top: 380, behavior: 'smooth' });
-            }}
-            onSelectPostSlug={handleSelectSlug}
           />
 
 
