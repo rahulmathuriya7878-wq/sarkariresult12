@@ -5,6 +5,14 @@ import fs from 'fs';
 import { generateRobotsTxt, generateSitemapXml } from './src/utils/sitemapGenerator.ts';
 import { generateRssXml, generateHtmlSitemapPage, generatePostSchemaJsonLd, CANONICAL_DOMAIN, escapeHtml } from './src/utils/seoHelpers.ts';
 import { mockSarkariPosts } from './src/data/mockJobs.ts';
+import {
+  notifyGoogleIndexingApi,
+  getIndexingLogs,
+  clearIndexingLogs,
+  getSavedCredentials,
+  saveCredentials,
+  GoogleServiceAccountKey
+} from './src/utils/googleIndexingService.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -100,6 +108,134 @@ async function startServer() {
         googlePingUrl,
         error: err?.message || 'Network request completed'
       });
+    }
+  });
+
+  // 6.1. Google Indexing API (Programmatic Real-Time Ping for Individual Posts)
+  app.post('/api/indexing/ping', async (req, res) => {
+    try {
+      const { url, type = 'URL_UPDATED', postTitle, postId } = req.body || {};
+      if (!url) {
+        return res.status(400).json({ success: false, error: 'URL is required' });
+      }
+
+      const baseUrl = getBaseUrl(req);
+      const logEntry = await notifyGoogleIndexingApi({
+        url,
+        type,
+        postTitle,
+        postId,
+        canonicalDomain: baseUrl
+      });
+
+      res.json({
+        success: logEntry.status !== 'FAILED',
+        log: logEntry,
+        message: logEntry.message
+      });
+    } catch (err: any) {
+      console.error('[API /api/indexing/ping] Error:', err);
+      res.status(500).json({
+        success: false,
+        error: err?.message || 'Failed to ping Google Indexing API'
+      });
+    }
+  });
+
+  // 6.2. Google Indexing Batch Ping Endpoint
+  app.post('/api/indexing/ping-batch', async (req, res) => {
+    try {
+      const { items } = req.body || {};
+      const baseUrl = getBaseUrl(req);
+      const postsToPing = Array.isArray(items) && items.length > 0 
+        ? items 
+        : mockSarkariPosts.map(p => ({
+            url: `${baseUrl}/post/${p.slug || `post-${p.id}`}`,
+            type: 'URL_UPDATED',
+            postTitle: p.title,
+            postId: p.id
+          }));
+
+      const results = [];
+      for (const item of postsToPing.slice(0, 100)) {
+        const log = await notifyGoogleIndexingApi({
+          url: item.url,
+          type: item.type || 'URL_UPDATED',
+          postTitle: item.postTitle,
+          postId: item.postId,
+          canonicalDomain: baseUrl
+        });
+        results.push(log);
+      }
+
+      res.json({
+        success: true,
+        total: results.length,
+        results
+      });
+    } catch (err: any) {
+      res.status(500).json({ success: false, error: err?.message });
+    }
+  });
+
+  // 6.3. Google Indexing API Logs
+  app.get('/api/indexing/logs', (_req, res) => {
+    res.json({
+      success: true,
+      logs: getIndexingLogs()
+    });
+  });
+
+  // 6.4. Clear Indexing Logs
+  app.post('/api/indexing/clear-logs', (_req, res) => {
+    clearIndexingLogs();
+    res.json({ success: true, message: 'Logs cleared successfully' });
+  });
+
+  // 6.5. Google Indexing Service Account Configuration
+  app.get('/api/indexing/config', (_req, res) => {
+    const creds = getSavedCredentials();
+    res.json({
+      configured: Boolean(creds?.client_email && creds?.private_key),
+      clientEmail: creds?.client_email || null,
+      projectId: creds?.project_id || null,
+      hasPrivateKey: Boolean(creds?.private_key)
+    });
+  });
+
+  app.post('/api/indexing/config', (req, res) => {
+    try {
+      const { credentials } = req.body || {};
+      let credsObj: GoogleServiceAccountKey;
+
+      if (typeof credentials === 'string') {
+        credsObj = JSON.parse(credentials);
+      } else if (typeof credentials === 'object' && credentials !== null) {
+        credsObj = credentials;
+      } else {
+        return res.status(400).json({ success: false, error: 'Invalid credentials payload' });
+      }
+
+      if (!credsObj.client_email || !credsObj.private_key) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Credentials must contain client_email and private_key' 
+        });
+      }
+
+      const saved = saveCredentials(credsObj);
+      if (!saved) {
+        return res.status(500).json({ success: false, error: 'Failed to write credentials file' });
+      }
+
+      res.json({
+        success: true,
+        message: 'Google Service Account credentials saved successfully!',
+        clientEmail: credsObj.client_email,
+        projectId: credsObj.project_id
+      });
+    } catch (err: any) {
+      res.status(400).json({ success: false, error: 'Failed to parse JSON: ' + err.message });
     }
   });
 

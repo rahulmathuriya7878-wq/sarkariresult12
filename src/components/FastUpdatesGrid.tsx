@@ -61,6 +61,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
           </span>
         </div>
 
+
         <ul className="divide-y divide-slate-100 flex-1 p-2 sm:p-3 bg-white space-y-0.5">
           {posts.map((post) => (
             <PostListItem 

@@ -1,1657 +1,1141 @@
 import { SarkariPost } from '../types/job';
 
 export const screenshotResultPosts: SarkariPost[] = [
+  // 1. SSC Constable GD 2025 Final Answer Key 2026 – Out
   {
-    id: 'res-upsc-cds-2-2026',
-    slug: 'upsc-cds-ii-result-2026',
-    title: 'UPSC Combined Defence Services CDS II Examination 2026 Written Exam Result with Roll Wise & Name Wise List',
-    shortTitle: 'UPSC CDS II Result 2026',
-    hindiTitle: 'यूपीएससी सीडीएस II लिखित परीक्षा परिणाम 2026',
-    category: 'result',
-    department: 'UPSC',
-    qualifications: ['Graduate', 'B.Tech / BE'],
-    state: 'All India',
-    postDate: '2026-10-19',
-    isHot: true,
-    isNew: true,
-    resultDate: '19 October 2026',
-    shortInfo: 'Union Public Service Commission (UPSC) has officially announced the Written Result of Combined Defence Services Examination (CDS II) 2026. Candidates who appeared for IMA, INA, AFA, and OTA courses can check their Roll Numbers in the qualified merit PDF list.',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/07/2026', notes: 'Age criteria according to Indian Military Academy, Naval Academy, Air Force Academy and OTA norms.' },
-    importantDates: [
-      { label: 'Written Exam Date', value: '01/09/2026' },
-      { label: 'Result Declared Date', value: '19/10/2026', isHighlight: true },
-      { label: 'SSB Interview Schedule', value: 'November - December 2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Indian Military Academy (IMA)', totalPosts: '100 Posts', eligibility: 'Degree from recognized University' },
-      { postName: 'Indian Naval Academy (INA)', totalPosts: '32 Posts', eligibility: 'Degree in Engineering' },
-      { postName: 'Air Force Academy (AFA)', totalPosts: '32 Posts', eligibility: 'Degree with Physics & Math at 10+2 or BE/B.Tech' },
-      { postName: 'Officers Training Academy (OTA)', totalPosts: '276 Posts', eligibility: 'Degree from recognized University' }
-    ],
-    howToApplySteps: [
-      'Download UPSC CDS II Written Result PDF list below.',
-      'Press Ctrl+F on desktop or search in PDF viewer on mobile.',
-      'Enter your Roll Number to check qualification status for SSB Interview.',
-      'Qualified candidates must register on Join Indian Army / Navy / Air Force official website.'
-    ],
-    directLinks: [
-      { label: 'Download CDS II Written Result (Roll Wise)', actionText: 'Download (PDF)', type: 'result', isPrimary: true },
-      { label: 'Download CDS II Result (Name Wise List)', actionText: 'Name Wise PDF', type: 'result' },
-      { label: 'UPSC Official Portal', actionText: 'upsc.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'res-sbi-clerk-backlog-2026',
-    slug: 'sbi-clerk-backlog-pre-result-2026',
-    title: 'SBI Junior Associates (Customer Support & Sales) Clerk Backlog Prelims Examination Result 2026 & Scorecard',
-    shortTitle: 'SBI Junior Associates Clerk Backlog Pre Result 2026',
-    hindiTitle: 'एसबीआई क्लर्क बैकलॉग प्री परीक्षा परिणाम 2026',
-    category: 'result',
-    department: 'Banking',
-    qualifications: ['Graduate'],
-    state: 'All India',
-    postDate: '2026-10-18',
-    isHot: true,
-    isNew: true,
-    resultDate: '18 October 2026',
-    shortInfo: 'State Bank of India (SBI) has declared the Preliminary Examination Result for Junior Associates (Clerk) Backlog recruitment. Candidates can check their scorecard and mains exam eligibility by logging in with Registration No and Password / Date of Birth.',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/04/2026', minAge: 20, maxAge: 28 },
-    importantDates: [
-      { label: 'Prelims Result Declared', value: '18/10/2026', isHighlight: true },
-      { label: 'Mains Admit Card Download', value: 'Active Now' },
-      { label: 'Mains Examination Date', value: 'November 2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Junior Associate (Clerk) Backlog', totalPosts: 'Special Drive', eligibility: 'Graduation in any discipline from a recognized University.' }
-    ],
-    howToApplySteps: [
-      'Click on Check SBI Clerk Prelims Result link.',
-      'Enter your Registration Number / Roll Number and Date of Birth.',
-      'Enter text verification captcha code and click Submit.',
-      'Download your Prelims Marks and Mains Call Letter if shortlisted.'
-    ],
-    directLinks: [
-      { label: 'Check SBI Clerk Backlog Pre Result & Marks', actionText: 'Click Here', type: 'result', isPrimary: true },
-      { label: 'Download Mains Exam Call Letter', actionText: 'Admit Card', type: 'admit_card' },
-      { label: 'SBI Official Careers Portal', actionText: 'sbi.co.in/careers', type: 'official' }
-    ]
-  },
-  {
-    id: 'res-uppsc-lt-grade-2025',
-    slug: 'uppsc-lt-grade-assistant-teacher-final-result-2026',
-    title: 'UPPSC LT Grade Assistant Teacher 2025 Final Result, Merit List & Cut Off Marks | Updated',
-    shortTitle: 'UPPSC LT Grade Assistant Teacher 2025 Final Result | Updated',
-    hindiTitle: 'यूपीपीएससी एलटी ग्रेड सहायक अध्यापक अंतिम परिणाम | अपडेटेड',
-    category: 'result',
-    department: 'Teaching',
-    qualifications: ['Graduate', 'B.Ed / CTET'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-17',
-    isHot: true,
-    isNew: false,
-    resultDate: '17 October 2026',
-    shortInfo: 'Uttar Pradesh Public Service Commission (UPPSC) has released the updated Final Merit List and subject-wise recommendation list for LT Grade Assistant Teacher recruitment across Uttar Pradesh Government Inter Colleges.',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/07/2025', minAge: 21, maxAge: 40 },
-    importantDates: [
-      { label: 'Updated Final Result Declared', value: '17/10/2026', isHighlight: true },
-      { label: 'Document Verification Dates', value: '25/10/2026 to 05/11/2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'LT Grade Assistant Teacher (Male/Female Branch)', totalPosts: '10,768 Posts', eligibility: 'Bachelor Degree in Related Subject with B.Ed degree.' }
-    ],
-    howToApplySteps: [
-      'Open the official UPPSC LT Grade updated result PDF.',
-      'Find your Roll Number in the merit rank list.',
-      'Check the date and venue assigned for Document Verification.'
-    ],
-    directLinks: [
-      { label: 'Download UPPSC LT Grade Updated Final Result', actionText: 'Download (PDF)', type: 'result', isPrimary: true },
-      { label: 'Download Subject-Wise Cutoff Marks', actionText: 'Check Cutoff', type: 'result' },
-      { label: 'UPPSC Official Portal', actionText: 'uppsc.up.nic.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'res-ibps-so-spl-16-2026',
-    slug: 'ibps-so-spl-16th-pre-result-2026',
-    title: 'IBPS Specialist Officer SO SPL 16th Prelims Exam Result 2026 & Category Wise Scorecard',
-    shortTitle: 'IBPS Specialist Officer SO SPL 16th Pre Result 2026',
-    hindiTitle: 'आईबीपीएस एसओ 16th प्री परिणाम 2026',
-    category: 'result',
-    department: 'Banking',
-    qualifications: ['B.Tech / BE', 'Post Graduate'],
-    state: 'All India',
-    postDate: '2026-10-16',
-    isHot: false,
-    isNew: true,
-    resultDate: '16 October 2026',
-    shortInfo: 'Institute of Banking Personnel Selection (IBPS) has activated the online result portal for Specialist Officers (SO) CRP SPL-XVI Prelims Exam for IT Officer, Agricultural Field Officer, Rajbhasha Adhikari, Law Officer, HR/Personnel Officer, and Marketing Officer.',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/08/2026', minAge: 20, maxAge: 30 },
-    importantDates: [
-      { label: 'Prelims Result Declared', value: '16/10/2026', isHighlight: true },
-      { label: 'Mains Examination Date', value: 'November 2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'IBPS Specialist Officer (IT, AFO, Law, HR, Marketing)', totalPosts: 'Multiple Banks', eligibility: 'Relevant Professional Degree (B.Tech / MBA / LLB).' }
-    ],
-    howToApplySteps: [
-      'Visit IBPS official result portal via link below.',
-      'Enter Registration No / Roll No and Date of Birth / Password.',
-      'View status of selection for Mains examination.'
-    ],
-    directLinks: [
-      { label: 'Check IBPS SO Prelims Result 2026', actionText: 'Click Here', type: 'result', isPrimary: true },
-      { label: 'Check Prelims Scores & Marks', actionText: 'View Marks', type: 'result' },
-      { label: 'Official Website', actionText: 'ibps.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'res-sbi-po-mains-2026',
-    slug: 'sbi-po-mains-result-2026',
-    title: 'SBI Probationary Officers PO Mains Examination Result 2026, Interview Shortlist & Score Card',
-    shortTitle: 'SBI Probationary Officers PO Mains Result 2026',
-    hindiTitle: 'एसबीआई पीओ मेन्स रिजल्ट व इंटरव्यू लिस्ट 2026',
-    category: 'result',
-    department: 'Banking',
-    qualifications: ['Graduate'],
-    state: 'All India',
-    postDate: '2026-10-15',
-    isHot: true,
-    isNew: true,
-    resultDate: '15 October 2026',
-    shortInfo: 'State Bank of India has published the Mains examination result of Probationary Officers (PO). Candidates who cleared Mains are now called for Psychometric Test, Group Discussion, and Personal Interview.',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/04/2026', minAge: 21, maxAge: 30 },
-    importantDates: [
-      { label: 'Mains Result Declared', value: '15/10/2026', isHighlight: true },
-      { label: 'Phase III (GD / Interview)', value: 'November 2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Probationary Officer (PO)', totalPosts: '2,000 Posts', eligibility: 'Graduation in any discipline from a recognized University.' }
-    ],
-    howToApplySteps: [
-      'Download SBI PO Mains Merit PDF list.',
-      'Search roll number in the list of candidates shortlisted for Phase III Interview.'
-    ],
-    directLinks: [
-      { label: 'Download SBI PO Mains Qualified Roll List (PDF)', actionText: 'Download (PDF)', type: 'result', isPrimary: true },
-      { label: 'Download Interview Call Letter', actionText: 'Admit Card', type: 'admit_card' },
-      { label: 'Official SBI Careers Portal', actionText: 'sbi.co.in/careers', type: 'official' }
-    ]
-  },
-  {
-    id: 'res-up-police-final-2026',
-    slug: 'up-police-constable-final-result-2026',
-    title: 'UP Police Constable Civil Police Recruitment 2026 (60,244 Posts) Final Selection Result & Cut Off Marks',
-    shortTitle: 'UP Police Constable Final Result 2026',
-    hindiTitle: 'यूपी पुलिस कांस्टेबल अंतिम चयन परिणाम 2026 (60,244 पद)',
-    category: 'result',
-    department: 'Police',
-    qualifications: ['12th Pass'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-14',
-    isHot: true,
-    isNew: true,
-    resultDate: '14 October 2026',
-    shortInfo: 'Uttar Pradesh Police Recruitment & Promotion Board (UPPRPB) has declared the Final Result for 60,244 Civil Police Constables following written exam, DV/PST, and Physical Efficiency Test (PET).',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/07/2026' },
-    importantDates: [
-      { label: 'Final Result Declared', value: '14/10/2026', isHighlight: true },
-      { label: 'Medical Exam & Joining', value: 'November 2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'UP Police Constable (Civil Police)', totalPosts: '60,244 Posts', eligibility: '12th Intermediate Passed from recognized board.' }
-    ],
-    howToApplySteps: [
-      'Open the official UP Police Constable final result PDF link.',
-      'Search your Roll Number or Registration Number.',
-      'Check category cutoff marks and instructions for Medical Examination.'
-    ],
-    directLinks: [
-      { label: 'Download UP Police Constable Final Result (PDF)', actionText: 'Download (PDF)', type: 'result', isPrimary: true },
-      { label: 'Download Category Cutoff Marks Notice', actionText: 'Cutoff PDF', type: 'result' },
-      { label: 'UPPRPB Official Website', actionText: 'uppbpb.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'res-ssb-hc-min-2020',
-    slug: 'ssb-head-constable-ministerial-result-marks-2026',
-    title: 'Sashastra Seema Bal SSB Head Constable Ministerial 2020 Final Result, Skill Test Marks & Scorecard 2026',
-    shortTitle: 'SSB Head Constable Ministerial 2020 Result / Marks 2026',
-    hindiTitle: 'एसएसबी हेड कांस्टेबल मिनिस्ट्रियल 2020 रिजल्ट व प्राप्तांक',
+    id: 'res-ssc-gd-final-ans-2026',
+    slug: 'ssc-constable-gd-2025-final-answer-key-2026-out',
+    title: 'SSC Constable GD in CAPFs, SSF, Rifleman GD in Assam Rifles 2025 Final Answer Key & Marks 2026 – Out',
+    shortTitle: 'SSC Constable GD 2025 Final Answer Key 2026 – Out',
+    hindiTitle: 'एसएससी कांस्टेबल जीडी 2025 फाइनल उत्तर कुंजी 2026 जारी',
     category: 'result',
     department: 'Defence',
-    qualifications: ['12th Pass'],
+    qualifications: ['10th Pass'],
     state: 'All India',
-    postDate: '2026-10-13',
-    isHot: false,
-    isNew: false,
-    resultDate: '13 October 2026',
-    shortInfo: 'Sashastra Seema Bal (SSB) has published the final selected candidate list along with typing skill test marks details for Head Constable Ministerial 2020 recruitment cycle.',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/01/2020' },
-    importantDates: [
-      { label: 'Final Marks / Result Declared', value: '13/10/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Head Constable (Ministerial)', totalPosts: '115 Posts', eligibility: '10+2 Intermediate with 35 wpm English or 30 wpm Hindi typing.' }
-    ],
-    howToApplySteps: [
-      'Open SSB result portal and download the merit sheet PDF.',
-      'Check marks obtained in Written Test and Typing Skill Test.'
-    ],
-    directLinks: [
-      { label: 'Download SSB Head Constable Ministerial Result (PDF)', actionText: 'Download', type: 'result', isPrimary: true },
-      { label: 'SSB Official Recruitment Portal', actionText: 'ssbrectt.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'res-upsc-nda-2-2026',
-    slug: 'upsc-nda-ii-written-exam-result-2026',
-    title: 'UPSC National Defence Academy & Naval Academy NDA II Written Exam Result 2026 | Name Wise List',
-    shortTitle: 'UPSC NDA II Written Exam Result 2026 | Name Wise List',
-    hindiTitle: 'यूपीएससी एनडीए II लिखित परीक्षा परिणाम (नामवार सूची)',
-    category: 'result',
-    department: 'UPSC',
-    qualifications: ['12th Pass'],
-    state: 'All India',
-    postDate: '2026-10-12',
+    postDate: '2026-11-04T12:00:00Z',
     isHot: true,
     isNew: true,
-    resultDate: '12 October 2026',
-    shortInfo: 'Union Public Service Commission (UPSC) has announced the Written Examination Result for NDA & NA (II) 2026. The commission has released both Roll Number wise and Name wise qualified lists for SSB Interview.',
+    resultDate: '04 November 2026',
+    shortInfo: 'Staff Selection Commission (SSC) has uploaded the Final Answer Key along with Question Paper(s) of Constable (GD) in Central Armed Police Forces (CAPFs), SSF, and Rifleman (GD) in Assam Rifles Examination 2025. Candidates can login using their Examination Roll Number and Password to download their final response sheet.',
     applicationFee: [],
-    ageLimit: { asOnDate: '01/01/2026' },
+    ageLimit: { asOnDate: '01/01/2025', minAge: 18, maxAge: 23 },
     importantDates: [
-      { label: 'Written Exam Date', value: '01/09/2026' },
-      { label: 'Written Result Declared', value: '12/10/2026', isHighlight: true }
+      { label: 'CBT Exam Date', value: 'February - March 2025' },
+      { label: 'Final Answer Key Released', value: '04/11/2026', isHighlight: true },
+      { label: 'Download Key Facility Available Up To', value: '18/11/2026 (05:00 PM)', isHighlight: true }
     ],
     vacancyBreakdown: [
-      { postName: 'National Defence Academy (Army, Navy, Air Force) & NA', totalPosts: '404 Posts', eligibility: '10+2 Passed / Appearing.' }
+      { postName: 'Constable GD (BSF, CISF, CRPF, SSB, ITBP, AR, SSF)', totalPosts: '46,617 Posts', eligibility: 'Class 10th (Matriculation) Passed from Any Recognized Board in India.' }
     ],
     howToApplySteps: [
-      'Download UPSC NDA II Name Wise Result PDF.',
-      'Find candidate name and roll number in the alphabetical / roll index.',
-      'Register on Indian Army recruitment website for SSB Interview centre selection.'
+      'Click on the "Download Final Answer Key & Response Sheet" link below.',
+      'Enter your SSC Roll Number and Password (as mentioned on Admit Card).',
+      'View and download the Final Answer Key along with the correct responses.',
+      'Take a printout or save the PDF for future reference before 18 November 2026.'
     ],
     directLinks: [
-      { label: 'Download NDA II Result (Name Wise List)', actionText: 'Name List PDF', type: 'result', isPrimary: true },
-      { label: 'Download NDA II Result (Roll Wise List)', actionText: 'Roll List PDF', type: 'result' },
-      { label: 'UPSC Official Website', actionText: 'upsc.gov.in', type: 'official' }
+      { label: 'Download Final Answer Key & Marks', actionText: 'Click Here', type: 'result', url: 'https://ssc.gov.in/', isPrimary: true },
+      { label: 'Download Final Answer Key Official Notice (PDF)', actionText: 'Notice (PDF)', type: 'notification', url: 'https://ssc.gov.in/' },
+      { label: 'SSC Official Portal', actionText: 'ssc.gov.in', type: 'official', url: 'https://ssc.gov.in/' }
     ]
   },
+
+  // 2. Indian Bank Specialist Officer SO Result 2026
   {
-    id: 'res-upsc-capf-2024',
-    slug: 'upsc-cpf-capf-ac-marks-details-2026',
-    title: 'UPSC Central Armed Police Forces (CAPF AC) Assistant Commandants Marks Details & Final Scorecard 2026',
-    shortTitle: 'UPSC CPF CAPF AC 2024 Marks Details 2026',
-    hindiTitle: 'यूपीएससी सीएपीएफ एसी प्राप्तांक विवरण 2026',
+    id: 'res-indian-bank-so-2026',
+    slug: 'indian-bank-specialist-officer-so-result-2026',
+    title: 'Indian Bank Specialist Officer SO Recruitment 2026 Written Exam Result & Interview Shortlist Out',
+    shortTitle: 'Indian Bank Specialist Officer SO Result 2026',
+    hindiTitle: 'इंडियन बैंक स्पेशलिस्ट ऑफिसर SO परीक्षा परिणाम 2026 जारी',
+    category: 'result',
+    department: 'Banking',
+    qualifications: ['Graduate', 'Post Graduate', 'B.Tech / BE'],
+    state: 'All India',
+    postDate: '2026-11-04T11:50:00Z',
+    isHot: true,
+    isNew: true,
+    resultDate: '04 November 2026',
+    shortInfo: 'Indian Bank has officially announced the Written Exam / Shortlisting Result for recruitment of Specialist Officers (SO) across various disciplines (Scale I, II, III & IV). Shortlisted candidates are qualified to attend the Personal Interview.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2026', minAge: 21, maxAge: 40 },
+    importantDates: [
+      { label: 'Written Exam Date', value: 'October 2026' },
+      { label: 'Written Exam Result Declared', value: '04/11/2026', isHighlight: true },
+      { label: 'Interview Call Letter', value: 'Coming Soon', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Specialist Officers (IT, Credit, Risk, Forex, Law, HR)', totalPosts: '300+ Posts', eligibility: 'BE / B.Tech / MBA / CA / LLB from recognized University.' }
+    ],
+    howToApplySteps: [
+      'Open the Indian Bank SO Result Merit List PDF from the link below.',
+      'Search for your Registration Number or Roll Number using search (Ctrl+F).',
+      'Download and check your interview schedule and reporting venue.'
+    ],
+    directLinks: [
+      { label: 'Download Indian Bank SO Result PDF', actionText: 'Download (PDF)', type: 'result', url: 'https://indianbank.in/career/', isPrimary: true },
+      { label: 'Indian Bank Official Careers Portal', actionText: 'indianbank.in', type: 'official', url: 'https://indianbank.in/' }
+    ]
+  },
+
+  // 3. UPSSSC PET Answer Key 2026 – Out
+  {
+    id: 'res-upsssc-pet-ans-2026',
+    slug: 'upsssc-pet-answer-key-2026-out',
+    title: 'UPSSSC Preliminary Eligibility Test PET 2026 Official Answer Key & Master Question Paper Released – Out',
+    shortTitle: 'UPSSSC PET Answer Key 2026 – Out',
+    hindiTitle: 'यूपीएसएसएससी पीईटी उत्तर कुंजी 2026 जारी',
+    category: 'result',
+    department: 'State PSC',
+    qualifications: ['10th Pass', '12th Pass', 'Graduate'],
+    state: 'Uttar Pradesh',
+    postDate: '2026-11-04T11:40:00Z',
+    isHot: true,
+    isNew: true,
+    resultDate: '04 November 2026',
+    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission (UPSSSC), Lucknow has uploaded the Official Shift-Wise Answer Key and Master Question Paper for PET 2026 examination. Candidates can register online objections.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2026', minAge: 18, maxAge: 40 },
+    importantDates: [
+      { label: 'PET Examination Date', value: '28-29 October 2026' },
+      { label: 'Answer Key Released Date', value: '04/11/2026', isHighlight: true },
+      { label: 'Last Date for Online Objection', value: '11/11/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'UP Preliminary Eligibility Test (PET 2026)', totalPosts: 'State Level Eligibility', eligibility: 'Class 10th (High School) or higher qualification.' }
+    ],
+    howToApplySteps: [
+      'Click on the UPSSSC PET 2026 Answer Key link.',
+      'Select your exam date and shift (Shift 1 / Shift 2).',
+      'Download the PDF and match your OMR response sheet.',
+      'Submit objections online through candidate dashboard if any discrepancy is found.'
+    ],
+    directLinks: [
+      { label: 'Download UPSSSC PET Answer Key (Shift 1 & 2)', actionText: 'Download (PDF)', type: 'result', url: 'http://upsssc.gov.in/', isPrimary: true },
+      { label: 'Submit Online Objections', actionText: 'Click Here', type: 'result', url: 'http://upsssc.gov.in/' },
+      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official', url: 'http://upsssc.gov.in/' }
+    ]
+  },
+
+  // 4. UPSC CDS-I Final Result 2026 – Out
+  {
+    id: 'res-upsc-cds-1-final-2026',
+    slug: 'upsc-cds-i-final-result-2026-out',
+    title: 'UPSC Combined Defence Services Examination CDS I 2026 Final Result with Merit List – Out',
+    shortTitle: 'UPSC CDS-I Final Result 2026 – Out',
+    hindiTitle: 'यूपीएससी सीडीएस-I अंतिम परिणाम 2026 मेरिट सूची जारी',
     category: 'result',
     department: 'UPSC',
     qualifications: ['Graduate'],
     state: 'All India',
-    postDate: '2026-10-11',
-    isHot: false,
-    isNew: false,
-    resultDate: '11 October 2026',
-    shortInfo: 'Union Public Service Commission (UPSC) has released candidate-wise marks details of recommended and non-recommended candidates for Central Armed Police Forces (Assistant Commandants) Examination.',
+    postDate: '2026-11-04T11:30:00Z',
+    isHot: true,
+    isNew: true,
+    resultDate: '03 November 2026',
+    shortInfo: 'Union Public Service Commission (UPSC) has officially announced the Final Result of Combined Defence Services Examination (CDS I) 2026 for admission to IMA Dehradun, Indian Naval Academy Ezhimala, Air Force Academy Hyderabad, and Officers Training Academy Chennai.',
     applicationFee: [],
-    ageLimit: { asOnDate: '01/08/2024', minAge: 20, maxAge: 25 },
+    ageLimit: { asOnDate: '01/01/2026', minAge: 19, maxAge: 25 },
     importantDates: [
-      { label: 'Marks Details Uploaded', value: '11/10/2026', isHighlight: true }
+      { label: 'Written Exam Date', value: '21/04/2026' },
+      { label: 'SSB Interviews', value: 'August - October 2026' },
+      { label: 'Final Result Declared', value: '03/11/2026', isHighlight: true }
     ],
     vacancyBreakdown: [
-      { postName: 'Assistant Commandant (BSF, CRPF, CISF, ITBP, SSB)', totalPosts: '506 Posts', eligibility: 'Bachelor Degree in any stream.' }
+      { postName: 'IMA, INA, AFA & OTA (Men & Women)', totalPosts: '457 Posts', eligibility: 'Degree from recognized University or Engineering Degree.' }
     ],
     howToApplySteps: [
-      'Login on UPSC marks portal using Registration ID or Roll Number.',
-      'Check Paper I, Paper II, and Personality Test marks.'
+      'Download the UPSC CDS I 2026 Final Result PDF below.',
+      'Check your Roll Number and Name in the merit list order.',
+      'Follow instructions from Indian Army / Navy / Air Force recruiting directorates.'
     ],
     directLinks: [
-      { label: 'Check UPSC CAPF AC Marks Details', actionText: 'Click Here', type: 'result', isPrimary: true },
-      { label: 'UPSC Official Portal', actionText: 'upsc.gov.in', type: 'official' }
+      { label: 'Download UPSC CDS I Final Result PDF', actionText: 'Download (PDF)', type: 'result', url: 'https://upsc.gov.in/', isPrimary: true },
+      { label: 'UPSC Official Portal', actionText: 'upsc.gov.in', type: 'official', url: 'https://upsc.gov.in/' }
     ]
   },
+
+  // 5. UPSC Geo Scientist Marks 2026
   {
-    id: 'res-rpsc-tgt-gr2-2026',
-    slug: 'rpsc-tgt-senior-teacher-gr-ii-result-2026',
-    title: 'RPSC Rajasthan Senior Teacher Grade II (Secondary Education) TGT Subject Wise Final Result & Cutoff 2026',
-    shortTitle: 'RPSC TGT Senior Teacher Gr II Result 2026',
-    hindiTitle: 'आरपीएससी वरिष्ठ अध्यापक ग्रेड-II अंतिम परिणाम व कटऑफ',
+    id: 'res-upsc-geo-scientist-marks-2026',
+    slug: 'upsc-geo-scientist-marks-2026',
+    title: 'UPSC Combined Geo-Scientist Examination 2026 Marks of Recommended Candidates Released',
+    shortTitle: 'UPSC Geo Scientist Marks 2026',
+    hindiTitle: 'यूपीएससी कंबाइंड जियो-साइंटिस्ट प्राप्तांक (मार्क्स) 2026',
+    category: 'result',
+    department: 'UPSC',
+    qualifications: ['Post Graduate'],
+    state: 'All India',
+    postDate: '2026-11-04T11:20:00Z',
+    isNew: true,
+    resultDate: '03 November 2026',
+    shortInfo: 'Union Public Service Commission (UPSC) has uploaded the Marks of Recommended Candidates for the Combined Geo-Scientist Examination 2026.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/01/2026', minAge: 21, maxAge: 32 },
+    importantDates: [
+      { label: 'Final Result Declared', value: 'October 2026' },
+      { label: 'Marks Released Date', value: '03/11/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Geologist, Geophysicist & Chemist (GSI & CGWB)', totalPosts: '56 Posts', eligibility: 'Master Degree in Geological Science / Geophysics / Chemistry.' }
+    ],
+    howToApplySteps: [
+      'Click on the UPSC Geo-Scientist Marks link.',
+      'Find your name and roll number to check stage-wise written and interview marks.'
+    ],
+    directLinks: [
+      { label: 'Download Geo-Scientist Marks List (PDF)', actionText: 'Marks (PDF)', type: 'result', url: 'https://upsc.gov.in/', isPrimary: true },
+      { label: 'UPSC Official Website', actionText: 'upsc.gov.in', type: 'official', url: 'https://upsc.gov.in/' }
+    ]
+  },
+
+  // 6. UPCISB UP Co-operative Bank Various Post Result 2026
+  {
+    id: 'res-upcisb-coop-bank-2026',
+    slug: 'upcisb-up-co-operative-bank-various-post-result-2026',
+    title: 'UPCISB UP Co-operative Institutional Service Board Various Posts Recruitment Exam Result 2026',
+    shortTitle: 'UPCISB UP Co-operative Bank Various Post Result 2026',
+    hindiTitle: 'यूपी को-ऑपरेटिव बैंक विभिन्न पद परीक्षा परिणाम 2026',
+    category: 'result',
+    department: 'Banking',
+    qualifications: ['Graduate'],
+    state: 'Uttar Pradesh',
+    postDate: '2026-11-04T11:10:00Z',
+    isNew: true,
+    resultDate: '02 November 2026',
+    shortInfo: 'Uttar Pradesh Co-operative Institutional Service Board (UPCISB), Lucknow has announced the Written Examination Result for Various Posts in District Co-operative Banks.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2026', minAge: 21, maxAge: 40 },
+    importantDates: [
+      { label: 'Result Declared Date', value: '02/11/2026', isHighlight: true },
+      { label: 'Interview / DV Schedule', value: 'November 2026' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Assistant Manager, Cashier, Clerk, Branch Manager', totalPosts: 'Various Posts', eligibility: 'Bachelor Degree in any discipline from recognized university.' }
+    ],
+    howToApplySteps: [
+      'Download UPCISB Result merit list PDF.',
+      'Verify roll number and category-wise qualification status.'
+    ],
+    directLinks: [
+      { label: 'Download UPCISB Co-operative Bank Result PDF', actionText: 'Download (PDF)', type: 'result', url: 'http://upsevamandal.org/', isPrimary: true },
+      { label: 'UPCISB Official Portal', actionText: 'upsevamandal.org', type: 'official', url: 'http://upsevamandal.org/' }
+    ]
+  },
+
+  // 7. BPSC AES Result 2026 – Out
+  {
+    id: 'res-bpsc-aes-result-2026',
+    slug: 'bpsc-aes-result-2026-out',
+    title: 'BPSC Assistant Engineer AES (Civil / Mechanical / Electrical) Written Examination Result 2026 – Out',
+    shortTitle: 'BPSC AES Result 2026 – Out',
+    hindiTitle: 'बीपीएससी सहायक अभियंता (AES) लिखित परीक्षा परिणाम 2026',
+    category: 'result',
+    department: 'State PSC',
+    qualifications: ['B.Tech / BE'],
+    state: 'Bihar',
+    postDate: '2026-11-04T11:00:00Z',
+    isNew: true,
+    resultDate: '02 November 2026',
+    shortInfo: 'Bihar Public Service Commission (BPSC), Patna has declared the Written Examination Result for Assistant Engineer (AES) in Road Construction, Building Construction, and PHED Departments.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/08/2026', minAge: 21, maxAge: 37 },
+    importantDates: [
+      { label: 'Result Declared Date', value: '02/11/2026', isHighlight: true },
+      { label: 'Document Verification Dates', value: 'November 2026' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Assistant Engineer (Civil, Mechanical, Electrical)', totalPosts: '118 Posts', eligibility: 'Degree in Engineering (BE / B.Tech) in relevant discipline.' }
+    ],
+    howToApplySteps: [
+      'Download BPSC AES Written Exam Result PDF.',
+      'Search your roll number in the qualified list.'
+    ],
+    directLinks: [
+      { label: 'Download BPSC AES Result (PDF)', actionText: 'Download (PDF)', type: 'result', url: 'https://bpsc.bih.nic.in/', isPrimary: true },
+      { label: 'BPSC Official Website', actionText: 'bpsc.bih.nic.in', type: 'official', url: 'https://bpsc.bih.nic.in/' }
+    ]
+  },
+
+  // 8. UPSSSC Stenographer 09/2023 Online Document upload
+  {
+    id: 'res-upsssc-steno-09-2023',
+    slug: 'upsssc-stenographer-09-2023-online-document-upload',
+    title: 'UPSSSC Stenographer Recruitment (Advt No. 09-Exam/2023) Online Document Upload & Verification Portal Active',
+    shortTitle: 'UPSSSC Stenographer 09/2023 Online Document upload',
+    hindiTitle: 'यूपीएसएसएससी आशुलिपिक 09/2023 ऑनलाइन दस्तावेज अपलोड',
+    category: 'result',
+    department: 'State PSC',
+    qualifications: ['12th Pass'],
+    state: 'Uttar Pradesh',
+    postDate: '2026-11-04T10:50:00Z',
+    isNew: true,
+    resultDate: '01 November 2026',
+    shortInfo: 'UPSSSC Lucknow has activated the online document upload link for shortlisted candidates of Stenographer Recruitment (Advt No. 09-Exam/2023).',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2023', minAge: 18, maxAge: 40 },
+    importantDates: [
+      { label: 'Document Upload Portal Active', value: '01/11/2026', isHighlight: true },
+      { label: 'Last Date to Upload Documents', value: '15/11/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Stenographer (Advt 09/2023)', totalPosts: '277 Posts', eligibility: 'Intermediate 12th Pass + Hindi Steno 80 WPM & Typing 25 WPM + CCC Certificate.' }
+    ],
+    howToApplySteps: [
+      'Login to UPSSSC candidate portal using PET Registration Number and OTP.',
+      'Upload scanned certificates (10th, 12th, Caste, Domicile, CCC, Steno certificate).',
+      'Submit and print acknowledgment receipt.'
+    ],
+    directLinks: [
+      { label: 'Online Document Upload Portal (Advt 09/2023)', actionText: 'Upload Documents', type: 'result', url: 'http://upsssc.gov.in/', isPrimary: true },
+      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official', url: 'http://upsssc.gov.in/' }
+    ]
+  },
+
+  // 9. UPSSSC Stenographer 2024 Online Documents Upload
+  {
+    id: 'res-upsssc-steno-2024',
+    slug: 'upsssc-stenographer-2024-online-documents-upload',
+    title: 'UPSSSC Stenographer General Selection 2024 Document Verification & Scanned Certificate Upload Link Active',
+    shortTitle: 'UPSSSC Stenographer 2024 Online Documents Upload',
+    hindiTitle: 'यूपीएसएसएससी आशुलिपिक 2024 ऑनलाइन दस्तावेज अपलोड',
+    category: 'result',
+    department: 'State PSC',
+    qualifications: ['12th Pass'],
+    state: 'Uttar Pradesh',
+    postDate: '2026-11-04T10:40:00Z',
+    isNew: true,
+    resultDate: '01 November 2026',
+    shortInfo: 'UPSSSC has opened the online document upload and scrutiny window for Stenographer Examination 2024 candidates.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/07/2024', minAge: 18, maxAge: 40 },
+    importantDates: [
+      { label: 'Online Document Upload Begin', value: '01/11/2026', isHighlight: true },
+      { label: 'Last Date for Document Upload', value: '16/11/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Stenographer 2024', totalPosts: '333 Posts', eligibility: 'Class 12th Intermediate + Steno 80 wpm & Hindi Typing 25 wpm.' }
+    ],
+    howToApplySteps: [
+      'Visit the UPSSSC portal and click on "Candidate Segment -> Upload Documents".',
+      'Submit required educational and category proofs before the closing date.'
+    ],
+    directLinks: [
+      { label: 'Upload Documents for Steno 2024', actionText: 'Click Here', type: 'result', url: 'http://upsssc.gov.in/', isPrimary: true },
+      { label: 'UPSSSC Official Website', actionText: 'upsssc.gov.in', type: 'official', url: 'http://upsssc.gov.in/' }
+    ]
+  },
+
+  // 10. RSSB Driver Result 2026
+  {
+    id: 'res-rssb-driver-2026',
+    slug: 'rssb-driver-result-2026',
+    title: 'Rajasthan RSSB RSMSSB Vehicle Driver Recruitment 2026 Written Exam Result & Driving Trade Test Merit List',
+    shortTitle: 'RSSB Driver Result 2026',
+    hindiTitle: 'राजस्थान आरएसएसबी वाहन चालक भर्ती परीक्षा परिणाम 2026',
+    category: 'result',
+    department: 'State PSC',
+    qualifications: ['10th Pass'],
+    state: 'Rajasthan',
+    postDate: '2026-11-04T10:30:00Z',
+    isNew: true,
+    resultDate: '31 October 2026',
+    shortInfo: 'Rajasthan Staff Selection Board (RSSB / RSMSSB), Jaipur has officially declared the Written Exam Result and Cutoff Marks for Vehicle Driver Recruitment 2026. Shortlisted candidates are eligible for the practical driving trade test.',
+    applicationFee: [],
+    ageLimit: { asOnDate: '01/01/2026', minAge: 18, maxAge: 40 },
+    importantDates: [
+      { label: 'Written Exam Date', value: 'September 2026' },
+      { label: 'Result Declared Date', value: '31/10/2026', isHighlight: true },
+      { label: 'Driving Test Schedule', value: 'November 2026' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Vehicle Driver (LMV / HMV)', totalPosts: 'Multiple Posts', eligibility: '10th Pass + Valid Commercial Heavy / Light Driving License + Experience.' }
+    ],
+    howToApplySteps: [
+      'Download RSSB Driver Result PDF from the direct link below.',
+      'Match your roll number and view category-wise cut-off marks.'
+    ],
+    directLinks: [
+      { label: 'Download RSSB Driver Result PDF', actionText: 'Download (PDF)', type: 'result', url: 'https://rsmssb.rajasthan.gov.in/', isPrimary: true },
+      { label: 'RSSB Official Website', actionText: 'rsmssb.rajasthan.gov.in', type: 'official', url: 'https://rsmssb.rajasthan.gov.in/' }
+    ]
+  },
+
+  // 11. RPSC 2nd Grade Teacher Result 2026 – Updated
+  {
+    id: 'res-rpsc-2nd-grade-updated-2026',
+    slug: 'rpsc-2nd-grade-teacher-result-2026-updated',
+    title: 'RPSC Senior Teacher (2nd Grade) Competitive Examination 2026 Revised Result & Subject Wise Cutoff Marks – Updated',
+    shortTitle: 'RPSC 2nd Grade Teacher Result 2026 – Updated',
+    hindiTitle: 'आरपीएससी द्वितीय श्रेणी शिक्षक संशोधित परिणाम 2026 अपडेटेड',
     category: 'result',
     department: 'Teaching',
     qualifications: ['Graduate', 'B.Ed / CTET'],
     state: 'Rajasthan',
-    postDate: '2026-10-10',
+    postDate: '2026-11-04T10:20:00Z',
     isHot: true,
-    isNew: true,
-    resultDate: '10 October 2026',
-    shortInfo: 'Rajasthan Public Service Commission (RPSC) has declared the Final Recommendation Result and Category-wise Cut-off marks for Senior Teacher (Grade II) Comp. Exam for Hindi, Social Science, Maths, and Sanskrit subjects.',
+    isNew: false,
+    resultDate: '30 October 2026',
+    shortInfo: 'Rajasthan Public Service Commission (RPSC), Ajmer has published the revised result and final selection recommendation list for 2nd Grade Senior Teacher (Secondary Education) for Hindi, English, Math, Science, and Social Science.',
     applicationFee: [],
     ageLimit: { asOnDate: '01/01/2026', minAge: 18, maxAge: 40 },
     importantDates: [
-      { label: 'Final Result Declared', value: '10/10/2026', isHighlight: true }
+      { label: 'Revised Result Released Date', value: '30/10/2026', isHighlight: true },
+      { label: 'Counseling & Posting Schedule', value: 'November 2026' }
     ],
     vacancyBreakdown: [
-      { postName: 'Senior Teacher Grade II (TGT Various Subjects)', totalPosts: '9,760 Posts', eligibility: 'Graduate with relevant optional subject and B.Ed / D.El.Ed.' }
+      { postName: 'Senior Teacher Grade II (All Subjects)', totalPosts: '9,760 Posts', eligibility: 'Graduation in concerned subject + B.Ed degree.' }
     ],
     howToApplySteps: [
-      'Open the official RPSC result PDF for your subject.',
-      'Check merit number and roll number in the main list or reserve list.'
+      'Download the subject-wise revised result PDF from RPSC portal.',
+      'Check your roll number and revised merit rank.'
     ],
     directLinks: [
-      { label: 'Download RPSC Senior Teacher Final Result PDF', actionText: 'Download (PDF)', type: 'result', isPrimary: true },
-      { label: 'Download Category Cutoff Notice', actionText: 'Check Cutoff', type: 'result' },
-      { label: 'RPSC Official Website', actionText: 'rpsc.rajasthan.gov.in', type: 'official' }
+      { label: 'Download RPSC 2nd Grade Revised Result PDF', actionText: 'Download (PDF)', type: 'result', url: 'https://rpsc.rajasthan.gov.in/', isPrimary: true },
+      { label: 'RPSC Official Website', actionText: 'rpsc.rajasthan.gov.in', type: 'official', url: 'https://rpsc.rajasthan.gov.in/' }
     ]
   },
+
+  // 12. UPPSC LT Grade Assistant Teacher Mains Result 2026 – Updated
   {
-    id: 'res-dsssb-prt-2026',
-    slug: 'dsssb-assistant-teacher-primary-result-2026',
-    title: 'DSSSB Assistant Teacher Primary (PRT) Post Code 01/24 Final Result, Marks & e-Dossier Rejection List',
-    shortTitle: 'DSSSB Assistant Teacher Primary Result 2026',
-    hindiTitle: 'डीएसएसएसबी सहायक अध्यापक प्राथमिक (पीआरटी) परिणाम 2026',
+    id: 'res-uppsc-lt-mains-updated-2026',
+    slug: 'uppsc-lt-grade-assistant-teacher-mains-result-2026-updated',
+    title: 'UPPSC LT Grade Assistant Teacher (Men/Women Branch) Mains Examination Result 2026 – Updated Merit List',
+    shortTitle: 'UPPSC LT Grade Assistant Teacher Mains Result 2026 – Updated',
+    hindiTitle: 'यूपीपीएससी एलटी ग्रेड सहायक अध्यापक मुख्य परीक्षा परिणाम अपडेटेड',
     category: 'result',
     department: 'Teaching',
-    qualifications: ['12th Pass', 'B.Ed / CTET'],
-    state: 'Delhi',
-    postDate: '2026-10-09',
-    isHot: true,
-    isNew: true,
-    resultDate: '09 October 2026',
-    shortInfo: 'Delhi Subordinate Services Selection Board (DSSSB) has declared the final result for Assistant Teacher (Primary) under Directorate of Education and Municipal Corporation of Delhi.',
+    qualifications: ['Graduate', 'B.Ed / CTET'],
+    state: 'Uttar Pradesh',
+    postDate: '2026-11-04T10:10:00Z',
+    isNew: false,
+    resultDate: '29 October 2026',
+    shortInfo: 'Uttar Pradesh Public Service Commission (UPPSC), Prayagraj has issued an updated Mains Examination selection result and cutoff marks for LT Grade Assistant Teachers in Government Secondary Schools.',
     applicationFee: [],
-    ageLimit: { asOnDate: '01/01/2026', maxAge: 30 },
+    ageLimit: { asOnDate: '01/07/2026', minAge: 21, maxAge: 40 },
     importantDates: [
-      { label: 'Final Result Declared', value: '09/10/2026', isHighlight: true }
+      { label: 'Updated Mains Result Declared', value: '29/10/2026', isHighlight: true },
+      { label: 'Document Verification', value: 'November 2026' }
     ],
     vacancyBreakdown: [
-      { postName: 'Assistant Teacher (Primary) PRT', totalPosts: '1,455 Posts', eligibility: '10+2 with 50% Marks + 2-Year Diploma in Elementary Education + CTET Qualified.' }
+      { postName: 'LT Grade Assistant Teacher (Men / Women)', totalPosts: '10,768 Posts', eligibility: 'Bachelor Degree in Relevant Subject with B.Ed from recognized University.' }
     ],
     howToApplySteps: [
-      'Download DSSSB PRT Final Result Notice.',
-      'Check shortlisted roll numbers and cutoff marks for UR, EWS, OBC, SC, ST, PwD.'
+      'Click the UPPSC LT Grade Mains Result link.',
+      'Search your roll number in the updated qualified list.'
     ],
     directLinks: [
-      { label: 'Download DSSSB PRT Final Result (PDF)', actionText: 'Download (PDF)', type: 'result', isPrimary: true },
-      { label: 'Check Candidate Marks on OARS Portal', actionText: 'Click Here', type: 'result' },
-      { label: 'DSSSB Official Website', actionText: 'dsssb.delhi.gov.in', type: 'official' }
+      { label: 'Download UPPSC LT Grade Updated Mains Result (PDF)', actionText: 'Download (PDF)', type: 'result', url: 'https://uppsc.up.nic.in/', isPrimary: true },
+      { label: 'UPPSC Official Website', actionText: 'uppsc.up.nic.in', type: 'official', url: 'https://uppsc.up.nic.in/' }
     ]
   },
+
+  // 13. BPSC ASO Mains Result 2026
   {
-    id: 'res-up-board-2027',
-    slug: 'up-board-high-school-inter-time-table-2027',
-    title: 'UPMSP Uttar Pradesh Board High School (Class 10th) & Intermediate (Class 12th) Exam Date Sheet / Time Table 2027',
-    shortTitle: 'UP Board Time Table 2027',
-    hindiTitle: 'यूपी बोर्ड 10वीं व 12वीं परीक्षा समय सारणी (टाइम टेबल) 2027',
+    id: 'res-bpsc-aso-mains-2026',
+    slug: 'bpsc-aso-mains-result-2026',
+    title: 'BPSC Assistant Section Officer ASO Mains Written Examination 2026 Result & Interview Qualification List',
+    shortTitle: 'BPSC ASO Mains Result 2026',
+    hindiTitle: 'बीपीएससी सहायक प्रशाखा पदाधिकारी (ASO) मुख्य परीक्षा परिणाम 2026',
     category: 'result',
     department: 'State PSC',
-    qualifications: ['10th Pass', '12th Pass'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-08',
-    isHot: true,
+    qualifications: ['Graduate'],
+    state: 'Bihar',
+    postDate: '2026-11-04T10:00:00Z',
     isNew: true,
-    resultDate: '08 October 2026',
-    shortInfo: 'Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP), Prayagraj has released the official Exam Date Sheet & Time Table for Class 10th (High School) and Class 12th (Intermediate) Annual Board Examinations 2027.',
+    resultDate: '28 October 2026',
+    shortInfo: 'Bihar Public Service Commission (BPSC), Patna has officially declared the Mains Written Examination Result for Assistant Section Officer (ASO) in Bihar Secretariat Services.',
     applicationFee: [],
-    ageLimit: { asOnDate: '01/07/2026' },
+    ageLimit: { asOnDate: '01/08/2026', minAge: 21, maxAge: 37 },
     importantDates: [
-      { label: 'Date Sheet Released Date', value: '08/10/2026', isHighlight: true },
-      { label: 'High School Exams Begin', value: 'February 2027' },
-      { label: 'Intermediate Exams Begin', value: 'February 2027' }
+      { label: 'Mains Result Released', value: '28/10/2026', isHighlight: true },
+      { label: 'Interview Dates', value: 'November 2026' }
     ],
     vacancyBreakdown: [
-      { postName: 'UPMSP Class 10th & 12th Board Examination 2027', totalPosts: 'Over 55 Lakh Registered Students', eligibility: 'Enrolled students in UP Board recognized schools.' }
+      { postName: 'Assistant Section Officer (ASO)', totalPosts: '44 Posts', eligibility: 'Bachelor Degree in any stream from recognized University.' }
     ],
     howToApplySteps: [
-      'Click on Download UP Board Time Table 2027 PDF link.',
-      'Check day-wise, subject-wise morning and evening shift exam schedule.',
-      'Take printout and plan your study revision timetable accordingly.'
+      'Open the BPSC ASO Mains Result PDF.',
+      'Search for your Roll Number in the interview shortlist.'
     ],
     directLinks: [
-      { label: 'Download UP Board 10th / 12th Time Table 2027 PDF', actionText: 'Download (PDF)', type: 'result', isPrimary: true },
-      { label: 'UPMSP Official Website', actionText: 'upmsp.edu.in', type: 'official' }
+      { label: 'Download BPSC ASO Mains Result (PDF)', actionText: 'Download (PDF)', type: 'result', url: 'https://bpsc.bih.nic.in/', isPrimary: true },
+      { label: 'BPSC Official Website', actionText: 'bpsc.bih.nic.in', type: 'official', url: 'https://bpsc.bih.nic.in/' }
     ]
   },
+
+  // 14. UPSC CDS-II (Name Wise) Result 2026 – Out
   {
-    id: 'res-upsssc-moharir-2026',
-    slug: 'upsssc-moharir-eligibility-result-2026',
-    title: 'UPSSSC Moharir (Clerk / Writer) Advt 08-Exam/2022 Shortlisting & Eligibility Result for Mains Exam 2026',
-    shortTitle: 'UPSSSC Moharir 2022 Eligibility Result 2026 for 92 Post',
-    hindiTitle: 'यूपीएसएसएससी मोहर्रिर 2022 पात्रता परिणाम (92 पद)',
+    id: 'res-upsc-cds-2-namewise-2026',
+    slug: 'upsc-cds-ii-name-wise-result-2026-out',
+    title: 'UPSC Combined Defence Services CDS II Examination 2026 Written Result (Name Wise List) Announced – Out',
+    shortTitle: 'UPSC CDS-II (Name Wise) Result 2026 – Out',
+    hindiTitle: 'यूपीएससी सीडीएस-II नामवार परिणाम सूची 2026 जारी',
     category: 'result',
-    department: 'State PSC',
-    qualifications: ['12th Pass'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-07',
-    isHot: false,
-    isNew: true,
-    resultDate: '07 October 2026',
-    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) has released the list of shortlisted candidates for Moharir (Chief Post Writer) 92 posts based on UPSSSC PET normalized scores.',
+    department: 'UPSC',
+    qualifications: ['Graduate'],
+    state: 'All India',
+    postDate: '2026-11-04T09:50:00Z',
+    isNew: false,
+    resultDate: '27 October 2026',
+    shortInfo: 'Union Public Service Commission (UPSC) has officially published the Written Result containing Names and Roll Numbers of candidates qualified for SSB Interviews for CDS Examination (II) 2026.',
     applicationFee: [],
-    ageLimit: { asOnDate: '01/07/2022', minAge: 18, maxAge: 40 },
+    ageLimit: { asOnDate: '01/07/2026', minAge: 19, maxAge: 25 },
     importantDates: [
-      { label: 'Shortlisting Result Declared', value: '07/10/2026', isHighlight: true },
-      { label: 'Mains Examination Date', value: 'November 2026' }
+      { label: 'Written Exam Date', value: '01/09/2026' },
+      { label: 'Name Wise List Released', value: '27/10/2026', isHighlight: true }
     ],
     vacancyBreakdown: [
-      { postName: 'Moharir (Chief Post Writer / Clerk)', totalPosts: '92 Posts', eligibility: 'Intermediate (10+2) with valid UPSSSC PET scorecard.' }
+      { postName: 'IMA, INA, AFA, OTA Courses', totalPosts: '459 Posts', eligibility: 'Graduation in Any Stream / Engineering Degree.' }
     ],
     howToApplySteps: [
-      'Login on UPSSSC portal using Registration Number & Date of Birth.',
-      'Check qualification status for Mains examination and pay Mains examination fee.'
+      'Download the CDS II Name Wise Result PDF.',
+      'Search your name alphabetically or by roll number.'
     ],
     directLinks: [
-      { label: 'Check UPSSSC Moharir Eligibility Result & Cutoff', actionText: 'Click Here', type: 'result', isPrimary: true },
-      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official' }
+      { label: 'Download UPSC CDS II (Name Wise) Result PDF', actionText: 'Name Wise PDF', type: 'result', url: 'https://upsc.gov.in/', isPrimary: true },
+      { label: 'UPSC Official Portal', actionText: 'upsc.gov.in', type: 'official', url: 'https://upsc.gov.in/' }
     ]
   },
+
+  // 15. RRB Section Controller Answer Key 2026 – Out
   {
-    id: 'res-up-police-home-guard-02-2025',
-    slug: 'up-police-home-guard-02-2025',
-    title: 'UP Police Home Guard Recruitment 2025 (Advt No 02/2025) Result, PET / Written Exam Status & Merit List',
-    shortTitle: 'UP Police Home Guard 02/2025 Result',
-    hindiTitle: 'यूपी पुलिस होम गार्ड भर्ती 02/2025 परिणाम व मेरिट लिस्ट',
+    id: 'res-rrb-section-controller-ans-2026',
+    slug: 'rrb-section-controller-answer-key-2026-out',
+    title: 'Railway RRB Section Controller Recruitment 2026 CBT-1 Official Answer Key, Question Paper & Response Sheet Out',
+    shortTitle: 'RRB Section Controller Answer Key 2026 – Out',
+    hindiTitle: 'रेलवे आरआरबी सेक्शन कंट्रोलर उत्तर कुंजी 2026 जारी',
     category: 'result',
-    department: 'Police',
-    qualifications: ['10th Pass', '12th Pass'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-25',
-    isHot: true,
+    department: 'Railway',
+    qualifications: ['Graduate'],
+    state: 'All India',
+    postDate: '2026-11-04T09:40:00Z',
     isNew: true,
-    resultDate: '25 October 2026',
-    shortInfo: 'Uttar Pradesh Police Recruitment & Promotion Board (UPPRPB) has announced the examination result, status and district-wise merit list for UP Police Home Guard Recruitment Advt No 02/2025. Candidates can check their status online.',
+    resultDate: '26 October 2026',
+    shortInfo: 'Railway Recruitment Boards (RRBs) have activated the link to view the CBT-1 Question Paper, Responses and Official Answer Key for Section Controller recruitment.',
     applicationFee: [],
-    ageLimit: { asOnDate: '01/07/2025', minAge: 18, maxAge: 45 },
+    ageLimit: { asOnDate: '01/07/2026', minAge: 20, maxAge: 36 },
     importantDates: [
-      { label: 'Result Declared Date', value: '25/10/2026', isHighlight: true },
-      { label: 'Physical / Document Verification', value: 'As Per Schedule' }
+      { label: 'CBT Exam Date', value: 'October 2026' },
+      { label: 'Answer Key & Response Sheet Out', value: '26/10/2026', isHighlight: true },
+      { label: 'Last Date for Objections', value: '05/11/2026', isHighlight: true }
     ],
     vacancyBreakdown: [
-      { postName: 'UP Police Home Guard Volunteer / Constable', totalPosts: '32,000+ Posts', eligibility: '10th / 12th Pass from recognized board with physical standards.' }
+      { postName: 'Section Controller (Operating Branch)', totalPosts: 'Multiple Vacancies', eligibility: 'Bachelor Degree in Science / Commerce / Arts with A-2 Medical fitness.' }
     ],
     howToApplySteps: [
-      'Click on Check UP Police Home Guard Result link below.',
-      'Enter Registration Number / Roll Number and Date of Birth.',
-      'Check district-wise merit and PET / Written examination status.'
+      'Login on rrbapply.gov.in with Registration No and User Password.',
+      'View question paper and response sheet.',
+      'Submit objections online with documentary proof.'
     ],
     directLinks: [
-      { label: 'Check UP Police Home Guard Result & Status', actionText: 'Click Here', type: 'result', isPrimary: true },
-      { label: 'UPPRPB Official Website', actionText: 'uppbpb.gov.in', type: 'official' }
+      { label: 'Check RRB Section Controller Answer Key & Responses', actionText: 'Click Here', type: 'result', url: 'https://rrbapply.gov.in/', isPrimary: true },
+      { label: 'RRB Official Portal', actionText: 'rrbapply.gov.in', type: 'official', url: 'https://rrbapply.gov.in/' }
     ]
   }
 ];
 
 export const screenshotLatestJobPosts: SarkariPost[] = [
+  // 1. BPSC School Teacher TRE 4.0 Online Form 2026 (33,320 Posts) – Last Date Today
   {
-    id: 'job-uppsc-ro-aro-2026',
-    slug: 'uppsc-review-officer-ro-aro-online-form-2026',
-    title: 'UPPSC Review Officer (RO) & Assistant Review Officer (ARO) Samiksha Adhikari Exam 2026 Online Form',
-    shortTitle: 'UPPSC Review Officer RO ARO Online Form 2026',
-    hindiTitle: 'यूपीपीएससी समीक्षा अधिकारी (RO) एवं सहायक समीक्षा अधिकारी (ARO) परीक्षा 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'State PSC',
-    qualifications: ['Graduate'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-25',
-    notificationNumber: 'A-1/E-1/2026',
-    totalVacancies: '411 Posts',
-    salary: 'Pay Level 8 (₹ 47,600 - ₹ 1,51,100/-) for RO | Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-) for ARO',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '24/11/2026',
-    admitCardDate: 'Before Exam',
-    examDate: 'As Per Schedule',
-    shortInfo: 'Uttar Pradesh Public Service Commission (UPPSC), Prayagraj has released the official notification for Review Officer (RO / Samiksha Adhikari) and Assistant Review Officer (ARO / Sahayak Samiksha Adhikari) Recruitment 2026. Eligible graduates with O Level / Typing speed can apply online from 25 October 2026 to 24 November 2026.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 125/-' },
-      { category: 'SC / ST', amount: '₹ 65/-' },
-      { category: 'PH (Divyang)', amount: '₹ 25/-' }
-    ],
-    feePaymentMode: 'Pay the Examination Fee Through Debit Card / Credit Card / Net Banking / SBI I-Collect Fee Mode.',
-    ageLimit: {
-      asOnDate: '01/07/2026',
-      minAge: 21,
-      maxAge: 40,
-      notes: 'Age Relaxation Extra as per UPPSC RO ARO Recruitment Rules 2026.'
-    },
-    importantDates: [
-      { label: 'Application Begin', value: '25/10/2026' },
-      { label: 'Last Date for Apply Online', value: '24/11/2026', isHighlight: true },
-      { label: 'Pay Exam Fee Last Date', value: '24/11/2026' },
-      { label: 'Exam Date', value: 'As Per Schedule' },
-      { label: 'Admit Card Available', value: 'Before Exam' }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Samiksha Adhikari (RO - Review Officer)',
-        totalPosts: '334',
-        eligibility: 'Bachelor Degree in Any Stream from Any Recognized University in India.'
-      },
-      {
-        postName: 'Sahayak Samiksha Adhikari (ARO - Assistant Review Officer)',
-        totalPosts: '77',
-        eligibility: 'Bachelor Degree with O Level Certificate from NIELIT & Hindi Typing 25 WPM on Computer.'
-      }
-    ],
-    howToApplySteps: [
-      'UPPSC Prayagraj Has Released RO / ARO Samiksha Adhikari Recruitment 2026. Candidate Can Apply Between 25/10/2026 to 24/11/2026.',
-      'Candidate Read the Notification Before Apply the Recruitment Application Form in UPPSC RO ARO 2026.',
-      'Kindly Check and Collect All Documents - Eligibility, ID Proof, Address Details, Basic Details.',
-      'Kindly Ready Scan Documents Related to Recruitment Form - Photo, Sign, ID Proof, Etc.',
-      'Before Submit the Application Form Must Check the Preview and All Columns Carefully.',
-      'Take A Print Out of Final Submitted Form.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for UPPSC RO ARO', actionText: 'Apply Online', type: 'apply', url: 'https://uppsc.up.nic.in/', isPrimary: true },
-      { label: 'Download Official Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://uppsc.up.nic.in/' },
-      { label: 'UPPSC Official Website', actionText: 'uppsc.up.nic.in', type: 'official', url: 'https://uppsc.up.nic.in/' }
-    ]
-  },
-  {
-    id: 'job-upessc-tgt-2026',
-    slug: 'up-madhyamic-tgt-teacher-recruitment-2026',
-    title: 'UP Madhyamic TGT Teacher Recruitment 2026 | UPESSC TGT Advt No 07/2026 Short Details Notification',
-    shortTitle: 'UP Madhyamic TGT Teacher Recruitment 2026',
-    hindiTitle: 'यूपी माध्यमिक टीजीटी शिक्षक भर्ती 2026 विज्ञापन संख्या 07/2026',
+    id: 'job-bpsc-tre-4-online-2026',
+    slug: 'bpsc-school-teacher-tre-4-online-form-2026',
+    title: 'BPSC Bihar School Teacher Recruitment Exam TRE 4.0 (33,320 Posts) Online Application Form – Last Date Today',
+    shortTitle: 'BPSC School Teacher TRE 4.0 Online Form 2026 (33,320 Posts) – Last Date Today',
+    hindiTitle: 'बीपीएससी बिहार शिक्षक भर्ती परीक्षा TRE 4.0 (33,320 पद) ऑनलाइन फॉर्म – आज अंतिम तिथि',
     category: 'latest_jobs',
     department: 'Teaching',
-    qualifications: ['Graduate', 'B.Ed / CTET'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-24',
-    notificationNumber: 'Advt No 07/2026',
-    totalVacancies: '17,735 Posts',
-    salary: 'Pay Level 7 (₹ 44,900 - ₹ 1,42,400/-)',
+    qualifications: ['Graduate', 'B.Ed / CTET', 'Post Graduate'],
+    state: 'Bihar',
+    postDate: '2026-11-04T12:00:00Z',
+    notificationNumber: 'Advt No. 22/2026',
+    totalVacancies: '33,320 Posts',
+    salary: '₹ 25,000 - ₹ 32,000/- Basic Pay + Allowances (7th CPC)',
     salaryBand: '25K - 50K',
     isHot: true,
     isNew: true,
-    lastDate: '23/11/2026',
-    admitCardDate: 'Before Exam',
-    examDate: '23-24 December 2026',
-    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) has released the notification for UP Madhyamic TGT Teacher Recruitment 2026 (Advt No 07/2026) with a total of 17,735 Posts. Interested candidates can apply online from 24/10/2026 to 23/11/2026.',
+    lastDate: '04/11/2026',
+    admitCardDate: 'November 2026',
+    examDate: '15-20 December 2026',
+    shortInfo: 'Bihar Public Service Commission (BPSC), Patna has released the notification for the massive TRE 4.0 School Teacher Recruitment 2026 for 33,320 Posts across Primary (Class 1-5), Middle (Class 6-8), Secondary (Class 9-10), and Higher Secondary (Class 11-12) schools. Today is the absolute last date to submit online applications.',
     applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 1000/-' },
-      { category: 'SC / ST', amount: '₹ 500/-' },
-      { category: 'PH (Divyang)', amount: '₹ 300/-' }
+      { category: 'General / OBC / Other State', amount: '₹ 750/-' },
+      { category: 'SC / ST / Divyang / Female of Bihar', amount: '₹ 200/-' }
     ],
-    feePaymentMode: 'Pay the Examination Fee Through Debit Card, Credit Card, Net Banking, UPI Fee Mode Only.',
+    feePaymentMode: 'Pay the Exam Fee Through Online Net Banking, Credit Card, Debit Card or UPI Mode.',
     ageLimit: {
-      asOnDate: '01/07/2026',
-      minAge: 21,
-      maxAge: 62,
-      notes: 'Age relaxation as per Uttar Pradesh UPESSC TGT Teacher Examination Rules Advt No 07/2026.'
+      asOnDate: '01/08/2026',
+      minAge: 18,
+      maxAge: 37,
+      notes: 'Minimum Age 18 Years for Primary & 21 Years for Secondary/Higher Secondary. Maximum Age 37 Years for Male & 40 Years for Female with Category Relaxations.'
     },
     importantDates: [
-      { label: 'Application Begin', value: '24/10/2026' },
-      { label: 'Last Date for Registration', value: '23/11/2026', isHighlight: true },
-      { label: 'Pay Exam Fee Last Date', value: '23/11/2026' },
-      { label: 'Last Date Correction', value: '26/11/2026' },
-      { label: 'UPESSC TGT 2026 Exam Date', value: '23-24 December 2026', isHighlight: true },
-      { label: 'Exam City Available', value: 'Before Exam' },
-      { label: 'Admit Card Available', value: 'Before Exam' },
-      { label: 'Answer Key Available', value: 'As Per Schedule' },
-      { label: 'Result Declared', value: 'As Per Schedule' }
+      { label: 'Online Application Begin', value: '15/10/2026' },
+      { label: 'Last Date for Apply Online', value: '04/11/2026 (Today)', isHighlight: true },
+      { label: 'Pay Exam Fee Last Date', value: '04/11/2026', isHighlight: true },
+      { label: 'Exam Date', value: '15-20 December 2026', isHighlight: true }
     ],
     vacancyBreakdown: [
-      {
-        postName: 'Trained Graduate Teacher TGT (Balak)',
-        totalPosts: '16193',
-        categoryBreakdown: { gen: 6057, ews: 2660, obc: 4069, sc: 3394, st: 13 },
-        eligibility: '• Bachelor / Master Degree with Related Subject.\n• B.Ed Exam Passed\n• Class 6-8 Upper Primary Level TET certificate by 30 June 2027'
-      },
-      {
-        postName: 'Trained Graduate Teacher TGT (Balika)',
-        totalPosts: '1542',
-        categoryBreakdown: { gen: 647, ews: 222, obc: 369, sc: 304, st: 0 },
-        eligibility: '• Bachelor / Master Degree with Related Subject.\n• B.Ed Exam Passed\n• Class 6-8 Upper Primary Level TET certificate by 30 June 2027'
-      }
+      { postName: 'Primary Teacher (Class 1 to 5)', totalPosts: '11,200', eligibility: '12th with 50% Marks + 2-Year D.El.Ed OR Graduation + D.El.Ed + CTET / BTET Paper 1 Passed.' },
+      { postName: 'Middle School Teacher (Class 6 to 8)', totalPosts: '8,500', eligibility: 'Bachelor Degree + D.El.Ed / B.Ed + CTET / BTET Paper 2 Passed.' },
+      { postName: 'Secondary School Teacher (Class 9 to 10)', totalPosts: '7,420', eligibility: 'Graduation in Related Subject + B.Ed + STET Paper 1 Passed.' },
+      { postName: 'Higher Secondary Teacher (Class 11 to 12)', totalPosts: '6,200', eligibility: 'Master Degree in Concerned Subject + B.Ed + STET Paper 2 Passed.' }
     ],
     howToApplySteps: [
-      'Visit official UPESSC portal.',
-      'Check notification Advt No 07/2026 details carefully.',
-      'Fill registration and pay examination fee (Gen/OBC/EWS: 1000/-, SC/ST: 500/-, PH: 300/-).',
-      'Submit final application form and take printout.'
+      'Visit bpsc.bih.nic.in or onlinebpsc.bihar.gov.in before midnight today.',
+      'Register with active Mobile Number and Email ID.',
+      'Fill personal, educational, and reservation details carefully.',
+      'Upload live webcam photograph and Hindi/English signatures.',
+      'Pay application fee online and download final submitted application form.'
     ],
     directLinks: [
-      { label: 'Apply Online for TGT Teacher', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
-      { label: 'Download Notification PDF', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
-      { label: 'UPESSC Official Website', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
+      { label: 'Apply Online for BPSC TRE 4.0 (Last Date Today)', actionText: 'Apply Online', type: 'apply', url: 'https://onlinebpsc.bihar.gov.in/', isPrimary: true },
+      { label: 'Download Detailed Notification (PDF)', actionText: 'Download (PDF)', type: 'notification', url: 'https://bpsc.bih.nic.in/' },
+      { label: 'BPSC Official Portal', actionText: 'bpsc.bih.nic.in', type: 'official', url: 'https://bpsc.bih.nic.in/' }
     ]
   },
+
+  // 2. RRB NTPC 10+2 UG Online Form 2026 (1688 Posts)
   {
-    id: 'job-upessc-headmaster-2026',
-    slug: 'upessc-up-headmaster-recruitment-2026',
-    title: 'UPESSC Uttar Pradesh Headmaster Recruitment 2026 Online Form | Total 1,172 Posts',
-    shortTitle: 'UPESSC UP Headmaster Recruitment 2026',
-    hindiTitle: 'यूपीईएसएससी यूपी हेडमास्टर भर्ती 2026 ऑनलाइन फॉर्म (1,172 पद)',
+    id: 'job-rrb-ntpc-ug-1688-2026',
+    slug: 'rrb-ntpc-10-2-ug-online-form-2026-1688-posts',
+    title: 'Railway RRB Under Graduate 10+2 Level NTPC Recruitment 2026 for 1688 Posts (CEN 06/2026) Online Form',
+    shortTitle: 'RRB NTPC 10+2 UG Online Form 2026 (1688 Posts)',
+    hindiTitle: 'रेलवे आरआरबी एनटीपीसी 10+2 अंडर ग्रेजुएट भर्ती 2026 (1688 पद) ऑनलाइन फॉर्म',
     category: 'latest_jobs',
-    department: 'Teaching',
-    qualifications: ['Graduate', 'Post Graduate', 'B.Ed / CTET'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-25',
-    notificationNumber: 'UPESSC/HM-03/2026',
-    totalVacancies: '1,172 Posts',
-    salary: 'Pay Level 7/10 (₹ 44,900 - ₹ 1,42,400/-)',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '23/11/2026',
-    admitCardDate: 'Before Exam',
-    examDate: 'As Per Schedule',
-    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) invites online applications for Headmaster Recruitment 2026 with a total of 1,172 Posts. Eligible candidates with Graduation/Post Graduation and teaching experience can apply online.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 1000/-' },
-      { category: 'SC / ST', amount: '₹ 500/-' },
-      { category: 'PH (Divyang)', amount: '₹ 300/-' }
-    ],
-    feePaymentMode: 'Pay the Examination Fee Through Debit Card, Credit Card, Net Banking, UPI Fee Mode Only.',
-    ageLimit: {
-      asOnDate: '01/07/2026',
-      minAge: 21,
-      maxAge: 40,
-      notes: 'Age Relaxation applicable as per UP Government Rules.'
-    },
-    importantDates: [
-      { label: 'Application Begin', value: '25/10/2026' },
-      { label: 'Last Date for Registration', value: '23/11/2026', isHighlight: true },
-      { label: 'Pay Exam Fee Last Date', value: '23/11/2026' },
-      { label: 'Last Date Correction', value: '26/11/2026' },
-      { label: 'Exam Date', value: 'As Per Schedule', isHighlight: true },
-      { label: 'Exam City Available', value: 'Before Exam' },
-      { label: 'Admit Card Available', value: 'Before Exam' },
-      { label: 'Answer Key Available', value: 'As Per Schedule' },
-      { label: 'Result Declared', value: 'As Per Schedule' }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Headmaster / Principal (Junior High School & Aided Schools)',
-        totalPosts: '1,172',
-        eligibility: 'Graduation / Post Graduation Degree with BTC / D.El.Ed / B.Ed and Minimum 5 Years Teaching Experience in Recognized Educational Institution.'
-      }
-    ],
-    howToApplySteps: [
-      'Register on UPESSC recruitment portal upessc.up.gov.in.',
-      'Enter teaching experience details and educational qualification.',
-      'Pay application fee and submit form.',
-      'Take final printout of submitted application.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for UP Headmaster', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
-      { label: 'Download Notification PDF', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
-      { label: 'UPESSC Official Website', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
-    ]
-  },
-  {
-    id: 'job-lic-hfl-apprentice-2026',
-    slug: 'lic-hfl-apprentice-recruitment-online-form-2026',
-    title: 'LIC Housing Finance Limited LIC HFL Apprentice Engagement 2026 Online Application Form',
-    shortTitle: 'LIC HFL Apprentice Online Online Form 2026',
-    hindiTitle: 'एलआईसी एचएफएल अप्रेंटिस भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Banking',
-    qualifications: ['Graduate'],
+    department: 'Railway',
+    qualifications: ['12th Pass'],
     state: 'All India',
-    postDate: '2026-10-25',
-    notificationNumber: 'LIC-HFL/Apprentice/2026/01',
-    totalVacancies: '200 Posts',
-    salary: 'Monthly Stipend ₹ 15,000/- to ₹ 18,000/- per month',
+    postDate: '2026-11-04T11:50:00Z',
+    notificationNumber: 'CEN 06/2026',
+    totalVacancies: '1,688 Posts',
+    salary: 'Pay Level 2 & Level 3 (₹ 19,900 - ₹ 63,200/- + DA, HRA, Transport Allowance)',
     salaryBand: 'Below 25K',
     isHot: true,
     isNew: true,
-    lastDate: '20/11/2026',
-    admitCardDate: 'December 2026',
-    examDate: 'December 2026',
-    shortInfo: 'LIC Housing Finance Limited (LIC HFL) invites online applications for engagement of Apprentices for a period of one year across various offices in India. Candidates with Graduation degree can apply online.',
+    lastDate: '27/11/2026',
+    admitCardDate: 'Before CBT-1',
+    examDate: 'February / March 2027',
+    shortInfo: 'Railway Recruitment Boards (RRBs) have issued official notification CEN 06/2026 for Under Graduate (10+2 Level) Non-Technical Popular Categories (NTPC) for 1688 Posts including Commercial cum Ticket Clerk, Accounts Clerk cum Typist, Junior Clerk cum Typist, and Trains Clerk across all 21 RRB zones.',
     applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 800/-' },
-      { category: 'SC / ST / Female / PwD', amount: '₹ 600/-' }
+      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 will be refunded after appearing in CBT 1)' },
+      { category: 'SC / ST / PwD / Female / Transgender / Minorities', amount: '₹ 250/- (Full ₹ 250 refunded after CBT 1)' }
     ],
-    feePaymentMode: 'Pay Fee Online through Debit Card, Credit Card or Net Banking.',
+    feePaymentMode: 'Pay online through Internet Banking, Debit Card, Credit Card or UPI.',
     ageLimit: {
-      asOnDate: '01/10/2026',
-      minAge: 20,
-      maxAge: 25,
-      notes: 'Age Relaxation as per LIC HFL Apprentice Rules.'
+      asOnDate: '01/01/2025',
+      minAge: 18,
+      maxAge: 33,
+      notes: '3 Years age relaxation for OBC (Non-Creamy Layer) and 5 Years for SC/ST candidates.'
     },
     importantDates: [
-      { label: 'Online Registration Begin', value: '25/10/2026' },
-      { label: 'Last Date to Apply Online', value: '20/11/2026', isHighlight: true },
-      { label: 'Online Exam Date', value: 'December 2026' }
+      { label: 'Application Start Date', value: '21/09/2026' },
+      { label: 'Last Date for Apply Online', value: '27/11/2026 (11:59 PM)', isHighlight: true },
+      { label: 'Online Fee Payment Last Date', value: '28/11/2026' },
+      { label: 'Application Correction Window', value: '29/11/2026 to 08/12/2026' }
     ],
     vacancyBreakdown: [
-      {
-        postName: 'LIC HFL Apprentice',
-        totalPosts: '200',
-        eligibility: 'Graduation in Any Stream from Any Recognized University in India.'
-      }
+      { postName: 'Commercial cum Ticket Clerk (Level 3)', totalPosts: '990 Posts', eligibility: 'Class 12th Passed with minimum 50% marks in aggregate.' },
+      { postName: 'Accounts Clerk cum Typist (Level 2)', totalPosts: '361 Posts', eligibility: 'Class 12th Passed + English Typing 30 WPM or Hindi Typing 25 WPM.' },
+      { postName: 'Junior Clerk cum Typist (Level 2)', totalPosts: '337 Posts', eligibility: 'Class 12th (Intermediate) Passed + Computer Typing.' }
     ],
     howToApplySteps: [
-      'Visit LIC HFL Careers section on lichousing.com.',
-      'Click on Apprentice Recruitment 2026 Apply Online link.',
-      'Fill required details, upload photograph and signature.',
-      'Pay application fee and take printout.'
+      'Open rrbapply.gov.in and create an account using Aadhaar Verification.',
+      'Fill Part-I and Part-II registration with education details.',
+      'Select preferred RRB zone and upload standard photo and signature.',
+      'Pay application fee and print final confirmation page.'
     ],
     directLinks: [
-      { label: 'Apply Online for LIC HFL Apprentice', actionText: 'Apply Online', type: 'apply', url: 'https://www.lichousing.com/', isPrimary: true },
-      { label: 'Download Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://www.lichousing.com/' },
-      { label: 'LIC HFL Official Website', actionText: 'lichousing.com', type: 'official', url: 'https://www.lichousing.com/' }
+      { label: 'Apply Online for RRB NTPC 10+2 (1688 Posts)', actionText: 'Apply Online', type: 'apply', url: 'https://rrbapply.gov.in/', isPrimary: true },
+      { label: 'Download Official Notification CEN 06/2026', actionText: 'Download (PDF)', type: 'notification', url: 'https://rrbapply.gov.in/' },
+      { label: 'RRB Official Apply Portal', actionText: 'rrbapply.gov.in', type: 'official', url: 'https://rrbapply.gov.in/' }
     ]
   },
+
+  // 3. UPSSSC Junior Engineer JE (Mechanical) Online Form 2026 (1156 Posts) – Start
   {
-    id: 'job-upessc-principal-inter-2026',
-    slug: 'upessc-up-principal-inter-level-online-form-2026',
-    title: 'UPESSC Uttar Pradesh Inter College Principal Recruitment 2026 Online Form',
-    shortTitle: 'UPESSC UP Principal Inter Level Online Form 2026',
-    hindiTitle: 'यूपीईएसएससी यूपी प्रधानाचार्य (इंटरमीडिएट स्तर) भर्ती 2026 ऑनलाइन फॉर्म',
+    id: 'job-upsssc-je-mech-2026',
+    slug: 'upsssc-junior-engineer-je-mechanical-online-form-2026',
+    title: 'UPSSSC Junior Engineer JE (Mechanical) Recruitment 2026 Online Form for 1156 Posts (Advt 08-Exam/2026) – Start',
+    shortTitle: 'UPSSSC Junior Engineer JE (Mechanical) Online Form 2026 (1156 Posts) – Start',
+    hindiTitle: 'यूपीएसएसएससी जूनियर इंजीनियर (मैकेनिकल) ऑनलाइन फॉर्म 2026 (1156 पद) शुरू',
     category: 'latest_jobs',
-    department: 'Teaching',
-    qualifications: ['Post Graduate', 'B.Ed / CTET'],
+    department: 'State PSC',
+    qualifications: ['Diploma / ITI', 'B.Tech / BE'],
     state: 'Uttar Pradesh',
-    postDate: '2026-10-25',
-    notificationNumber: 'UPESSC/Prin-Inter/2026',
-    totalVacancies: '1,453 Posts',
-    salary: 'Pay Level 12 (₹ 78,800 - ₹ 2,09,200/-)',
-    salaryBand: '50K - 1 Lakh',
+    postDate: '2026-11-04T11:40:00Z',
+    notificationNumber: 'Advt No. 08-Exam/2026',
+    totalVacancies: '1,156 Posts',
+    salary: 'Pay Level 6 (₹ 35,400 - ₹ 1,12,400/- + Grade Pay ₹ 4200/-)',
+    salaryBand: '25K - 50K',
     isHot: true,
     isNew: true,
     lastDate: '30/11/2026',
     admitCardDate: 'Before Exam',
-    examDate: 'As Per Schedule',
-    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) Prayagraj invites online applications for Principal posts in Government Aided Intermediate Colleges across Uttar Pradesh.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 1,000/-' },
-      { category: 'SC / ST', amount: '₹ 800/-' }
-    ],
-    feePaymentMode: 'Pay fee through online mode only.',
-    ageLimit: {
-      asOnDate: '01/07/2026',
-      minAge: 30,
-      maxAge: 55,
-      notes: 'Age Relaxation extra as per rules.'
-    },
-    importantDates: [
-      { label: 'Application Begin', value: '25/10/2026' },
-      { label: 'Last Date for Online Apply', value: '30/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Principal (Intermediate Level College)',
-        totalPosts: '1,453',
-        eligibility: 'Post Graduate Degree with B.Ed and 10 Years Teaching / Administrative Experience in Recognized High School / Inter College.'
-      }
-    ],
-    howToApplySteps: [
-      'Fill online application form at upessc.up.gov.in.',
-      'Upload teaching experience certificates and academic marks sheets.',
-      'Pay fee online and submit final application.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for UP Inter Principal', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.up.gov.in/', isPrimary: true },
-      { label: 'Download Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.up.gov.in/' },
-      { label: 'UPESSC Official Portal', actionText: 'upessc.up.gov.in', type: 'official', url: 'https://upessc.up.gov.in/' }
-    ]
-  },
-  {
-    id: 'job-nwr-rrc-jaipur-apprentice-2026',
-    slug: 'nwr-rrc-jaipur-apprentices-online-form-2026',
-    title: 'North Western Railway NWR RRC Jaipur Trade Apprentice Recruitment 2026 Online Form for 1791 Post',
-    shortTitle: 'NWR RRC Jaipur Apprentices Online Form 2026',
-    hindiTitle: 'उत्तर पश्चिम रेलवे (NWR RRC जयपुर) ट्रेड अप्रेंटिस भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Railway',
-    qualifications: ['10th Pass', 'Diploma / ITI'],
-    state: 'Rajasthan',
-    postDate: '2026-10-25',
-    notificationNumber: 'Notice No. 05/2026 (NWR/Act Apprentice)',
-    totalVacancies: '1,791 Posts',
-    salary: 'Stipend as per Railway Act Apprentice Rules (₹ 8,050 - ₹ 9,700/- p.m.)',
-    salaryBand: 'Below 25K',
-    isHot: true,
-    isNew: true,
-    lastDate: '25/11/2026',
-    admitCardDate: 'December 2026',
-    examDate: 'Merit Based No Exam',
-    shortInfo: 'Railway Recruitment Cell (RRC), North Western Railway (NWR), Jaipur invites online applications for engagement of 1,791 Act Apprentices in various divisions (Jaipur, Ajmer, Bikaner, Jodhpur) for 10th pass candidates with ITI certificate.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 100/-' },
-      { category: 'SC / ST / PwD / Female', amount: '₹ 0/- (Nil)' }
-    ],
-    feePaymentMode: 'Pay Application Fee Online through Debit Card, Credit Card or Net Banking.',
-    ageLimit: {
-      asOnDate: '25/11/2026',
-      minAge: 15,
-      maxAge: 24,
-      notes: 'Age Relaxation 5 Years for SC/ST and 3 Years for OBC.'
-    },
-    importantDates: [
-      { label: 'Online Application Begin', value: '25/10/2026' },
-      { label: 'Last Date for Apply Online', value: '25/11/2026 (05:00 PM)', isHighlight: true },
-      { label: 'Merit List Release Date', value: 'December 2026' }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Trade Apprentice (Fitter, Electrician, Welder, Machinist, Turner, Painter, Carpenter)',
-        totalPosts: '1,791',
-        eligibility: 'Class 10th High School Pass with Minimum 50% Marks & ITI Certificate in Relevant Trade (NCVT/SCVT).'
-      }
-    ],
-    howToApplySteps: [
-      'Visit RRC NWR official portal rrcjaipur.in.',
-      'Click on Online Application link for Act Apprentice CEN 05/2026.',
-      'Fill 10th marks and ITI trade details carefully.',
-      'Pay fee and download application form printout.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for NWR Apprentice', actionText: 'Apply Online', type: 'apply', url: 'https://rrcjaipur.in/', isPrimary: true },
-      { label: 'Download Detailed Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://rrcjaipur.in/' },
-      { label: 'RRC NWR Official Website', actionText: 'rrcjaipur.in', type: 'official', url: 'https://rrcjaipur.in/' }
-    ]
-  },
-  {
-    id: 'job-bhel-artisan-2026',
-    slug: 'bhel-artisan-various-trade-post-online-form-2026',
-    title: 'Bharat Heavy Electricals Limited BHEL Artisan (Various Trade Posts) Recruitment 2026 Online Form',
-    shortTitle: 'BHEL Artisan Various Trade Post Online Form 2026',
-    hindiTitle: 'भारत हैवी इलेक्ट्रिकल्स लिमिटेड (BHEL) आर्टिसन ट्रेड भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Other',
-    qualifications: ['10th Pass', 'Diploma / ITI'],
-    state: 'All India',
-    postDate: '2026-10-25',
-    notificationNumber: 'BHEL/Artisan-Trade/02/2026',
-    totalVacancies: '650 Posts',
-    salary: 'Basic Pay ₹ 28,000 - ₹ 85,000/- (Grade WG-IV) + Perks & IDA',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '21/11/2026',
-    admitCardDate: 'December 2026',
-    examDate: 'December 2026',
-    shortInfo: 'Bharat Heavy Electricals Limited (BHEL), a Maharatna Public Sector Enterprise, invites online applications for recruitment of Artisan in Fitter, Turner, Machinist, Welder, Electrician trades across its manufacturing units.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 500/- + Processing Fee' },
-      { category: 'SC / ST / PwD / Ex-SM', amount: '₹ 200/- Processing Fee Only' }
-    ],
-    feePaymentMode: 'Pay Fee Online through Net Banking, Debit Card, Credit Card or UPI.',
-    ageLimit: {
-      asOnDate: '01/10/2026',
-      minAge: 18,
-      maxAge: 27,
-      notes: 'Age Relaxation extra as per BHEL Rules.'
-    },
-    importantDates: [
-      { label: 'Application Begin', value: '25/10/2026' },
-      { label: 'Last Date to Apply Online', value: '21/11/2026', isHighlight: true },
-      { label: 'Computer Based Exam (CBT)', value: 'December 2026' }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Artisan (Fitter, Turner, Electrician, Welder, Machinist)',
-        totalPosts: '650',
-        eligibility: 'Matriculation / 10th Pass + National Trade Certificate (NTC / ITI) in Concerned Trade + National Apprenticeship Certificate (NAC).'
-      }
-    ],
-    howToApplySteps: [
-      'Visit BHEL Careers portal careers.bhel.in.',
-      'Register with email ID and phone number.',
-      'Fill educational and NAC apprenticeship details.',
-      'Pay fee online and submit application.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for BHEL Artisan', actionText: 'Apply Online', type: 'apply', url: 'https://careers.bhel.in/', isPrimary: true },
-      { label: 'Download BHEL Advertisement', actionText: 'Download (PDF)', type: 'notification', url: 'https://careers.bhel.in/' },
-      { label: 'BHEL Official Careers Portal', actionText: 'careers.bhel.in', type: 'official', url: 'https://careers.bhel.in/' }
-    ]
-  },
-  {
-    id: 'job-upsssc-physical-instructor-2026',
-    slug: 'upsssc-physical-instructor-and-other-post-online-form-2026',
-    title: 'UPSSSC Vyayam Trainer, Physical Instructor & Various Posts Recruitment 2026 Online Form',
-    shortTitle: 'UPSSSC Physical Instructor & Other Post Online Form 2026',
-    hindiTitle: 'यूपीएसएसएससी शारीरिक प्रशिक्षक एवं व्यायाम प्रशिक्षक भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'State PSC',
-    qualifications: ['Graduate', 'Diploma / ITI'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-25',
-    notificationNumber: 'UPSSSC/11-Exam/2026',
-    totalVacancies: '748 Posts',
-    salary: 'Pay Level 5 & Level 6 (₹ 29,200 - ₹ 92,300/-)',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '27/11/2026',
-    admitCardDate: 'Before Exam',
-    examDate: 'As Per Schedule',
-    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission (UPSSSC), Lucknow invites online applications for Physical Instructor (Vyayam Instructor) and Regional Youth Welfare Officer posts for PET qualified candidates.',
+    examDate: 'January 2027',
+    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission (UPSSSC), Lucknow has officially invited online applications for 1156 Posts of Junior Engineer JE (Mechanical / Automobile) across Irrigation, PWD, and Housing departments.',
     applicationFee: [
       { category: 'General / OBC / EWS', amount: '₹ 25/-' },
       { category: 'SC / ST / PwD', amount: '₹ 25/-' }
     ],
-    feePaymentMode: 'Pay processing fee online through SBI I-Collect or SBI e-Challan.',
+    feePaymentMode: 'Pay online through State Bank of India Collect or Debit Card / Credit Card / Net Banking.',
     ageLimit: {
       asOnDate: '01/07/2026',
-      minAge: 21,
+      minAge: 18,
       maxAge: 40,
-      notes: 'Age Relaxation extra as per UPSSSC Rules.'
+      notes: 'Age relaxation applicable as per Uttar Pradesh Government service rules.'
     },
     importantDates: [
-      { label: 'Online Application Begin', value: '25/10/2026' },
-      { label: 'Last Date to Apply Online', value: '27/11/2026', isHighlight: true },
-      { label: 'Correction Window Closes', value: '04/12/2026' }
+      { label: 'Online Application Start Date', value: '01/11/2026', isHighlight: true },
+      { label: 'Last Date for Apply Online', value: '30/11/2026', isHighlight: true },
+      { label: 'Fee Payment Last Date', value: '30/11/2026' },
+      { label: 'Form Correction Window', value: '07/12/2026' }
     ],
     vacancyBreakdown: [
-      {
-        postName: 'Physical Instructor / Vyayam Instructor',
-        totalPosts: '748',
-        eligibility: 'Bachelor Degree in Physical Education (B.P.Ed) or Diploma in Physical Education (D.P.Ed) with valid UPSSSC PET Scorecard.'
-      }
+      { postName: 'Junior Engineer JE (Mechanical / Automobile)', totalPosts: '1,156 Posts', eligibility: 'Valid UPSSSC PET Scorecard + 3-Year Diploma in Mechanical or Automobile Engineering.' }
     ],
     howToApplySteps: [
-      'Authenticate with UPSSSC PET Registration Number & OTP.',
-      'Fill academic details in Physical Instructor online form.',
-      'Pay fee of ₹ 25/- and print application confirmation.'
+      'Visit upsssc.gov.in and login using your PET Registration Number & OTP.',
+      'Check auto-filled personal data and enter engineering diploma details.',
+      'Pay online processing fee of Rs 25/- and submit form.'
     ],
     directLinks: [
-      { label: 'Apply Online for Physical Instructor', actionText: 'Apply Online', type: 'apply', url: 'https://upsssc.gov.in/', isPrimary: true },
-      { label: 'Download Detailed Advertisement', actionText: 'Download (PDF)', type: 'notification', url: 'https://upsssc.gov.in/' },
-      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official', url: 'https://upsssc.gov.in/' }
+      { label: 'Apply Online for UPSSSC JE Mechanical', actionText: 'Apply Online', type: 'apply', url: 'http://upsssc.gov.in/', isPrimary: true },
+      { label: 'Download JE Mechanical Notification (PDF)', actionText: 'Download (PDF)', type: 'notification', url: 'http://upsssc.gov.in/' },
+      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official', url: 'http://upsssc.gov.in/' }
     ]
   },
+
+  // 4. RRB NTPC Graduate Level Online Form 2026 (3548 Posts)
   {
-    id: 'job-sci-junior-court-attendant-2026',
-    slug: 'supreme-court-of-india-jca-oct26',
-    title: 'Supreme Court of India SCI Junior Court Attendant JCA Recruitment 2026 Exam for 130 Post',
-    shortTitle: 'Supreme Court of India Junior Court Attendant Online Form 2026',
-    hindiTitle: 'सुप्रीम कोर्ट ऑफ इंडिया जूनियर कोर्ट अटेंडेंट (जेसीए) भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Other',
-    qualifications: ['10th Pass'],
-    state: 'All India',
-    postDate: '2026-10-15',
-    notificationNumber: 'SCI/Estt.II/JCA-2026/05',
-    totalVacancies: '130 Post',
-    salary: '₹ 21,700 - ₹ 69,100/- (Pay Level 3) + Central Allowances',
-    salaryBand: 'Below 25K',
-    isHot: true,
-    isNew: true,
-    lastDate: '25/11/2026',
-    admitCardDate: 'Before Exam',
-    examDate: 'As Per Schedule',
-    shortInfo: 'Supreme Court of India SCI has released Junior Court Attendant JCA Notification. Those candidates who are interested in this SCI Junior Court Attendant JCA Recruitment 2025 Exam can can Apply Online from 04 November 2026 to 25 November 2026. Read the notification for SCI Junior Court Attendant 2026 Exam, eligibility, Subject Details information, Document Required, age limit, How to Apply and all other information.',
-    applicationFee: [
-      { category: 'General', amount: '1500/-' },
-      { category: 'OBC/ SC / ST / PH', amount: '750/-' }
-    ],
-    feePaymentMode: 'Pay the Examination Fee Through Debit Card / Credit Card / Net Banking / Online Only.',
-    ageLimit: {
-      asOnDate: '01/10/2026',
-      minAge: 18,
-      maxAge: 27,
-      notes: 'Age Relaxation as per SCI Junior Court Attendant Recruitment 2026 Rules.'
-    },
-    importantDates: [
-      { label: 'Application Begin', value: '04/11/2026' },
-      { label: 'Last Date for Apply', value: '25/11/2026', isHighlight: true },
-      { label: 'Pay Exam Fee Last Date', value: '25/11/2026' },
-      { label: 'Exam Date', value: 'As Per Schedule' },
-      { label: 'Admit Card Available', value: 'Before Exam' }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Junior Court Attendant (Group ‘C’ Non-Clerical post)',
-        totalPosts: '130',
-        eligibility: 'Class 10th Matric Exam Passed from Any Recognized Board in India.'
-      }
-    ],
-    salaryBreakdown: [
-      {
-        postName: 'Junior Court Attendant',
-        payLevel: 'Pay Level 3',
-        basicPay: '₹ 21,700/-',
-        grossSalary: '₹ 35,000/-',
-        inHandSalary: '₹ 31,500/-',
-        allowances: 'DA, HRA, Transport Allowance, Medical Benefits'
-      }
-    ],
-    howToApplySteps: [
-      'Supreme Court of India SCI has Released Junior Court Attendant Recruitment 2026 Notification. Candidate Can Apply Between 04 November 2026 to 25 November 2026.',
-      'Candidate Read the Notification Before Apply the Recruitment Application Form in SCI Apply Online for SCI Junior Court Attendant Recruitment 2026.',
-      'Kindly Check and College the All Document – Eligibility, ID Proof, Address Details, Basic Details.',
-      'Kindly Ready Scan Document Related to Recruitment Form – Photo, Sign, ID Proof, Etc.',
-      'Before Submit the Application Form Must Check the Preview and All Column Carefully.',
-      'Take A Print Out of Final Submitted Form.',
-      'For the latest updates on Sarkari Result, admit card, answer key, and result, always visit our official portal.'
-    ],
-    directLinks: [
-      { label: 'Apply Online', actionText: 'Link will be Activate on 04/11/2026', type: 'apply', url: 'https://www.sci.gov.in/', isPrimary: true },
-      { label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://cdnbbsr.s3waas.gov.in/s3ec0490f1f4972d133619a60c30f3559e/uploads/2026/10/2026101560.pdf' },
-      { label: 'Join Sarkari Result Channel', actionText: 'Telegram | WhatsApp', type: 'official', url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j' },
-      { label: 'Official Website', actionText: 'SCI Official Website', type: 'official', url: 'https://www.sci.gov.in/' }
-    ],
-    customFaqs: [
-      {
-        question: 'Supreme Court of India SCI Junior Court Attendant Online Form 2026 Start Date?',
-        answer: 'The online application process started on 04 November 2026.'
-      },
-      {
-        question: 'SCI Junior Court Attendant 2026 Exam Date?',
-        answer: 'The Examination will be conducted in As Per Schedule.'
-      },
-      {
-        question: 'Where can I find the syllabus for the SCI Junior Court Attendant Examination 2026?',
-        answer: 'The detailed syllabus and examination scheme for the SCI Junior Court Attendant Examination are available in the official notification. Candidates are advised to read the notification carefully for complete syllabus details.'
-      },
-      {
-        question: 'Supreme Court of India Junior Court Attendant 2026 Notification PDF?',
-        answer: 'Candidates can download the notification through the official portal.'
-      },
-      {
-        question: 'Supreme Court of India Junior Court Attendant Recruitment 2026 Last Date?',
-        answer: 'The last date to apply online is 25 November 2026.'
-      },
-      {
-        question: 'What is the last date to Pay Exam fee Details?',
-        answer: 'Candidates can pay the application fee up to 25 November 2026.'
-      },
-      {
-        question: 'How can I apply for Supreme Court of India Junior Court Attendant Exam 2026?',
-        answer: 'Candidates can apply online through the official recruitment link available on Supreme Court of India Junior Court Attendant Online Form 2026.'
-      }
-    ]
-  },
-  {
-    id: 'job-sci-court-master-2026',
-    slug: 'sci-court-master-oct26',
-    title: 'Supreme Court of India SCI Court Master (Shorthand) Recruitment 2026 Exam for 20 Post',
-    shortTitle: 'Supreme Court of India Court Master Online Form 2026',
-    hindiTitle: 'सुप्रीम कोर्ट ऑफ इंडिया कोर्ट मास्टर (आशुलिपिक) भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Other',
-    qualifications: ['Graduate'],
-    state: 'All India',
-    postDate: '2026-10-19',
-    notificationNumber: 'SCI/Estt.II/CM-2026/04',
-    totalVacancies: '20 Posts',
-    salary: 'Pay Level 11 (₹ 67,700 - ₹ 2,08,700) + Central Allowances',
-    salaryBand: '50K - 1 Lakh',
-    isHot: true,
-    isNew: true,
-    lastDate: '15/11/2026',
-    admitCardDate: 'Before Exam',
-    examDate: 'As per Schedule',
-    shortInfo: 'Supreme Court of India SCI has released Court Master (Shorthand) Notification. Those candidates who are interested in this SCI Court Master Recruitment 2026 Exam can Apply Online from 25 October 2026 to 15 November 2026. Read the notification for SCI Court Master 2026 Exam, eligibility, Subject Details information, Document Required, age limit, How to Apply and all other information.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '1500/-' },
-      { category: 'SC / ST / PH', amount: '750/-' }
-    ],
-    feePaymentMode: 'Pay the Examination Fee Through Cast / Net Banking / Debit Card / Credit Card / UPI Mode Only.',
-    ageLimit: {
-      asOnDate: '01/10/2026',
-      minAge: 30,
-      maxAge: 45,
-      notes: 'Age Relaxation Extra as per Supreme Court of India Court Master (Shorthand) Recruitment Rules 2026.'
-    },
-    importantDates: [
-      { label: 'Application Begin', value: '25/10/2026' },
-      { label: 'Last Date for Apply Online', value: '15/11/2026', isHighlight: true },
-      { label: 'Pay Exam Fee Last Date', value: '15/11/2026' },
-      { label: 'Exam Date', value: 'As per Schedule' },
-      { label: 'Admit Card Available', value: 'Before Exam' }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Court Master (Shorthand)',
-        totalPosts: '20',
-        eligibility: `• Bachelor Degree in Any Stream in Any Recognized University in India.
-• English Shorthand Speed : 120 WPM.
-• Typing Speed on Computer : 40 WPM.
-• Knowledge of Computer Operation with 5 Year Experience.
-• For More Eligibility Details Read the Notification.`,
-        modeOfSelection: 'Objective Type Written Test -> Shorthand (English) Test -> Typing Speed Test on Computer -> Personal Interview',
-        categoryBreakdown: { gen: 10, obc: 5, ews: 2, sc: 2, st: 1 }
-      }
-    ],
-    howToApplySteps: [
-      'Supreme Court of India SCI Released Court Master (Shorthand) Recruitment 2026. Candidate Can Apply Between 25/10/2026 to 15/11/2026.',
-      'Candidate Read the Notification Before Apply the Recruitment Application Form in Supreme Court Latest Recruitment 2026.',
-      'Kindly Check and Collect the All Document - Eligibility, ID Proof, Address Details, Basic Details.',
-      'Kindly Ready Scan Document Related to Recruitment Form - Photo, Sign, ID Proof, Etc.',
-      'Before Submit the Application Form Must Check the Preview and All Column Carefully.',
-      'If Candidate Required to Paying the Application Fee Must Submit. If You have Not the Required Application Fees Your Form is Not Completed.',
-      'Take A Print Out of Final Submitted Form.'
-    ],
-    directLinks: [
-      { label: 'Apply Online (Link Activate 25/10/2026)', actionText: 'Click Here', type: 'apply', url: 'https://main.sci.gov.in/recruitment', isPrimary: true },
-      { label: 'Download Notification', actionText: 'Click Here', type: 'notification', url: 'https://main.sci.gov.in/recruitment' },
-      { label: 'Supreme Court Official Website', actionText: 'Click Here', type: 'official', url: 'https://main.sci.gov.in/' }
-    ]
-  },
-  {
-    id: 'job-upessc-pgt-correction-2026',
-    slug: 'upessc-up-pgt-teacher-correction-edit-form-2026',
-    title: 'UPESSC Uttar Pradesh Post Graduate Teacher (PGT) Online Form Correction & Edit Window 2026',
-    shortTitle: 'UPESSC UP PGT Teacher Online Correction / Edit Form 2026',
-    hindiTitle: 'यूपीईएसएससी यूपी पीजीटी शिक्षक संशोधन / एडिट फॉर्म 2026',
-    category: 'latest_jobs',
-    department: 'Teaching',
-    qualifications: ['Post Graduate', 'B.Ed / CTET'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-18',
-    notificationNumber: 'UPESSC/PGT-02/2026',
-    totalVacancies: '4,163 Posts',
-    salary: 'Pay Level 8 (₹ 47,600 - ₹ 1,51,100/-)',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '26/10/2026 (Correction Window Closes)',
-    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC), Prayagraj has opened the online correction / edit window for candidates who have applied for UP PGT (Post Graduate Teacher) recruitment. Candidates can edit their personal details, photograph, subject choices, and qualifications.',
-    applicationFee: [
-      { category: 'Correction / Modification Fee', amount: '₹ 200/- per correction' }
-    ],
-    feePaymentMode: 'Online through Net Banking or Debit Card.',
-    ageLimit: { asOnDate: '01/07/2026', minAge: 21, notes: 'No upper age limit for PGT teachers in UP.' },
-    importantDates: [
-      { label: 'Correction Window Opens', value: '18/10/2026' },
-      { label: 'Last Date for Correction / Edit', value: '26/10/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Post Graduate Teacher (PGT - Various Subjects)',
-        totalPosts: '4,163 Posts',
-        eligibility: 'Master Degree in concerned subject with B.Ed degree.'
-      }
-    ],
-    howToApplySteps: [
-      'Click on UP PGT Correction Portal link below.',
-      'Enter Registration Number and Password / OTP received on registered mobile.',
-      'Make necessary edits in editable fields and verify preview.',
-      'Submit correction and download updated application confirmation slip.'
-    ],
-    directLinks: [
-      { label: 'Edit / Correct UP PGT Application Form', actionText: 'Edit Form', type: 'apply', isPrimary: true },
-      { label: 'Download Official Correction Notice', actionText: 'Notice (PDF)', type: 'notification' },
-      { label: 'UPESSC Official Portal', actionText: 'upessc.up.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-icsil-deo-2026',
-    slug: 'icsil-data-entry-operator-deo-online-form-2026',
-    title: 'ICSIL Delhi Data Entry Operator (DEO) & Computer Operator Recruitment 2026 Online Form',
-    shortTitle: 'ICSIL Data Entry Operator DEO Post Online Form 2026',
-    hindiTitle: 'आईसीएसआईएल दिल्ली डाटा एंट्री ऑपरेटर (डीईओ) भर्ती 2026',
-    category: 'latest_jobs',
-    department: 'Other',
-    qualifications: ['12th Pass', 'Graduate'],
-    state: 'Delhi',
-    postDate: '2026-10-17',
-    notificationNumber: 'ICSIL/DEO-Contract/2026',
-    totalVacancies: '320 Posts',
-    salary: '₹ 23,082/- to ₹ 25,500/- per month (as per Delhi Govt minimum wages)',
-    salaryBand: 'Below 25K',
-    isHot: false,
-    isNew: true,
-    lastDate: '30/10/2026',
-    shortInfo: 'Intelligent Communication Systems India Limited (ICSIL), a joint venture of TCIL (Govt of India) and DSIIDC (Govt of NCT of Delhi), invites applications for engagement of Data Entry Operators (DEO) purely on contractual basis in Delhi Govt departments.',
-    applicationFee: [
-      { category: 'One Time Registration Fee', amount: '₹ 1000/- (Payable at time of joining)' }
-    ],
-    ageLimit: { asOnDate: '01/10/2026', minAge: 18, maxAge: 35 },
-    importantDates: [
-      { label: 'Online Application Begin', value: '17/10/2026' },
-      { label: 'Last Date for Online Apply', value: '30/10/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      {
-        postName: 'Data Entry Operator (DEO)',
-        totalPosts: '320 Posts',
-        eligibility: 'Graduate from recognized University or 10+2 with at least 30 wpm typing speed on computer.'
-      }
-    ],
-    howToApplySteps: [
-      'Visit ICSIL official career page.',
-      'Fill in applicant details, educational qualifications, and typing speeds.',
-      'Shortlisted candidates will be invited for typing skill test at ICSIL Delhi office.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for ICSIL DEO Vacancy', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download ICSIL DEO Detailed Notice', actionText: 'Download (PDF)', type: 'notification' },
-      { label: 'ICSIL Official Portal', actionText: 'icsil.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-cwc-asst-mgr-2026',
-    slug: 'cwc-assistant-manager-junior-executive-form-2026',
-    title: 'Central Warehousing Corporation CWC Assistant Manager & Junior Executive Recruitment 2026 Online Form',
-    shortTitle: 'CWC Assistant Manager and Junior Executive Online Form 2026',
-    hindiTitle: 'सीडब्ल्यूसी सहायक प्रबंधक एवं कनिष्ठ कार्यकारी भर्ती 2026',
-    category: 'latest_jobs',
-    department: 'Other',
-    qualifications: ['Graduate', 'Post Graduate'],
-    state: 'All India',
-    postDate: '2026-10-16',
-    notificationNumber: 'CWC/1-Rectt./2026/02',
-    totalVacancies: '153 Posts',
-    salary: 'Assistant Manager: ₹ 40,000 - ₹ 1,40,000 | Jr Executive: ₹ 29,000 - ₹ 93,000',
-    salaryBand: '25K - 50K',
-    isHot: false,
-    isNew: true,
-    lastDate: '04/11/2026',
-    shortInfo: 'Central Warehousing Corporation (CWC), a Premier Schedule ‘A’ Mini-Ratna Public Sector Enterprise under Ministry of Consumer Affairs, Food & Public Distribution, invites online applications for Assistant Manager (General/Technical) and Junior Executive positions.',
-    applicationFee: [
-      { category: 'Male Candidates (General / EWS / OBC)', amount: '₹ 1250/-' },
-      { category: 'SC / ST / PwBD / Ex-Servicemen / Female', amount: '₹ 400/-' }
-    ],
-    ageLimit: { asOnDate: '01/10/2026', minAge: 18, maxAge: 30 },
-    importantDates: [
-      { label: 'Online Registration Begin', value: '16/10/2026' },
-      { label: 'Last Date to Apply Online', value: '04/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Assistant Manager (General / Technical)', totalPosts: '81 Posts', eligibility: 'Degree with Agriculture / Zoology / Chemistry or Post Graduate Degree.' },
-      { postName: 'Junior Executive', totalPosts: '72 Posts', eligibility: 'Graduation in any discipline from a recognized University.' }
-    ],
-    howToApplySteps: [
-      'Register on IBPS CWC application portal.',
-      'Fill required details, upload photo & signature, and pay application fee.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for CWC Recruitment', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download Detailed Information Bulletin', actionText: 'Download (PDF)', type: 'notification' },
-      { label: 'CWC Official Website', actionText: 'cewacor.nic.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-upsssc-inter-level-2026',
-    slug: 'upsssc-10-plus-2-inter-level-various-post-2026',
-    title: 'UPSSSC 10+2 Intermediate Level Various Posts (Junior Assistant, Clerk, Typist) Recruitment 2026 Online Form',
-    shortTitle: 'UPSSSC 10+2 Inter Level Various Post Online Form 2026',
-    hindiTitle: 'यूपीएसएसएससी 10+2 इंटर लेवल विभिन्न पद भर्ती 2026',
-    category: 'latest_jobs',
-    department: 'State PSC',
-    qualifications: ['12th Pass'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-15',
-    notificationNumber: 'UPSSSC/09-Exam/2026',
-    totalVacancies: '5,512 Posts',
-    salary: 'Pay Level 3 & Level 4 (₹ 21,700 - ₹ 69,100/-)',
-    salaryBand: 'Below 25K',
-    isHot: true,
-    isNew: true,
-    lastDate: '10/11/2026',
-    shortInfo: 'Uttar Pradesh Subordinate Services Selection Commission (UPSSSC), Lucknow has announced recruitment for 5,512 positions of Junior Assistant, Junior Clerk, and Assistant Grade-III in various Government departments of Uttar Pradesh for candidates with valid UPSSSC PET scorecard.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 25/-' },
-      { category: 'SC / ST / PwD', amount: '₹ 25/-' }
-    ],
-    ageLimit: { asOnDate: '01/07/2026', minAge: 18, maxAge: 40 },
-    importantDates: [
-      { label: 'Online Application Begin', value: '15/10/2026' },
-      { label: 'Last Date for Apply Online', value: '10/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Junior Assistant / Clerk / Typist', totalPosts: '5,512 Posts', eligibility: '10+2 Intermediate Exam with UPSSSC PET scorecard, Hindi Typing 25 wpm, English Typing 30 wpm & CCC Certificate.' }
-    ],
-    howToApplySteps: [
-      'Authentication with UPSSSC PET Registration Number & OTP/Personal details.',
-      'Fill required academic details and upload documents.',
-      'Pay processing fee of Rs. 25/- online and take printout.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for UPSSSC Inter Level Posts', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download Detailed Advertisement', actionText: 'Download (PDF)', type: 'notification' },
-      { label: 'UPSSSC Official Portal', actionText: 'upsssc.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-mpesb-police-driver-2026',
-    slug: 'mpesb-mp-police-constable-driver-form-2026',
-    title: 'MPESB Madhya Pradesh Police Constable (Driver & Tradesman) Recruitment 2026 Online Form',
-    shortTitle: 'MPESB MP Police Constable Driver Online Form 2026',
-    hindiTitle: 'एमपी पुलिस कांस्टेबल ड्राइवर भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Police',
-    qualifications: ['10th Pass'],
-    state: 'Madhya Pradesh',
-    postDate: '2026-10-14',
-    notificationNumber: 'MPESB/Police-Driver/2026',
-    totalVacancies: '1,820 Posts',
-    salary: '₹ 19,500 - ₹ 62,000/- per month',
-    salaryBand: 'Below 25K',
-    isHot: true,
-    isNew: true,
-    lastDate: '08/11/2026',
-    shortInfo: 'Madhya Pradesh Employees Selection Board (MPESB), Bhopal invites online applications for recruitment to the post of Police Constable (Driver) in MP State Police. Candidates with valid Heavy / Light Motor Vehicle (HMV/LMV) driving licence are eligible.',
-    applicationFee: [
-      { category: 'Unreserved Candidates', amount: '₹ 500/- + Portal fee' },
-      { category: 'SC / ST / OBC / EWS (MP Domicile)', amount: '₹ 250/- + Portal fee' }
-    ],
-    ageLimit: { asOnDate: '01/01/2026', minAge: 18, maxAge: 33 },
-    importantDates: [
-      { label: 'Online Registration Begin', value: '14/10/2026' },
-      { label: 'Last Date for Online Apply', value: '08/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Constable (Driver)', totalPosts: '1,820 Posts', eligibility: 'Class 10th High School Pass with valid Heavy Motor Vehicle (HMV) driving license.' }
-    ],
-    howToApplySteps: [
-      'Login via MP Online Portal with Profile Registration ID.',
-      'Select MP Police Constable Driver 2026 Form.',
-      'Pay fee through MP Online Kiosk or Net Banking/UPI.'
-    ],
-    directLinks: [
-      { label: 'Apply Online (MP Police Driver)', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download Official Notification Rulebook', actionText: 'Rulebook (PDF)', type: 'notification' },
-      { label: 'MPESB Official Website', actionText: 'esb.mp.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-upessc-primary-extended-2026',
-    slug: 'upessc-up-primary-teacher-super-tet-2026',
-    title: 'UPESSC UP Primary Teacher (Super TET) 2026 Recruitment Online Form | Extended',
-    shortTitle: 'UPESSC UP Primary Teacher (Super TET) Online Form 2026 | Extended',
-    hindiTitle: 'यूपी प्राइमरी टीचर (सुपर टीईटी) भर्ती 2026 | अंतिम तिथि विस्तारित',
-    category: 'latest_jobs',
-    department: 'Teaching',
-    qualifications: ['Graduate', 'B.Ed / CTET'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-13',
-    notificationNumber: 'UPESSC/PRT-SuperTET/2026/01',
-    totalVacancies: '17,000+ Posts',
-    salary: 'Pay Level 6 (₹ 35,400 - ₹ 1,12,400/-) + DA & HRA',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '15/11/2026 (Date Extended)',
-    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC) has extended the last date to submit online applications for UP Primary Assistant Teacher (Super TET) recruitment. Eligible candidates can apply till 15 November 2026.',
-    applicationFee: [
-      { category: 'General / OBC', amount: '₹ 700/-' },
-      { category: 'SC / ST', amount: '₹ 500/-' },
-      { category: 'Divyang / PwD', amount: '₹ 200/-' }
-    ],
-    ageLimit: { asOnDate: '01/07/2026', minAge: 21, maxAge: 40 },
-    importantDates: [
-      { label: 'Online Application Begin', value: '01/10/2026' },
-      { label: 'Last Date Extended Till', value: '15/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Assistant Teacher (Primary School - Classes 1 to 5)', totalPosts: '17,000+ Posts', eligibility: 'Graduation + 2-Year D.El.Ed / B.T.C. with UPTET or CTET Paper-I qualified.' }
-    ],
-    howToApplySteps: [
-      'Visit UPESSC portal and register using Aadhaar card verification.',
-      'Enter TET roll number to fetch verified score.',
-      'Complete application and pay fee online.'
-    ],
-    directLinks: [
-      { label: 'Apply Online (UP Super TET 2026)', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download Date Extension Notice', actionText: 'Notice (PDF)', type: 'notification' },
-      { label: 'UPESSC Official Website', actionText: 'upessc.up.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-army-tes-57-2026',
-    slug: 'army-10-plus-2-tes-57th-entry-2026',
-    title: 'Join Indian Army 10+2 Technical Entry Scheme (TES-57 Course Commencing July 2027) Online Form',
-    shortTitle: 'Army 10+2 TES 57th Online Form 2026',
-    hindiTitle: 'ज्वाइन इंडियन आर्मी 10+2 टेक्निकल एंट्री स्कीम (टीईएस-57)',
-    category: 'latest_jobs',
-    department: 'Defence',
-    qualifications: ['12th Pass'],
-    state: 'All India',
-    postDate: '2026-10-12',
-    notificationNumber: 'TES-57/Army/2026',
-    totalVacancies: '90 Posts',
-    salary: 'Stipend ₹ 56,100/- p.m. during training, Lt Rank on Commissioning',
-    salaryBand: '50K - 1 Lakh',
-    isHot: true,
-    isNew: true,
-    lastDate: '12/11/2026',
-    shortInfo: 'Applications are invited from unmarried male candidates who have passed 10+2 examination with Physics, Chemistry and Mathematics (PCM) and appeared in JEE (Mains) 2026 examination for grant of Permanent Commission in the Army.',
-    applicationFee: [
-      { category: 'All Candidates', amount: '₹ 0/- (Free - No Application Fee)' }
-    ],
-    ageLimit: { asOnDate: '01/07/2027', notes: 'Candidate must not be below 16½ years and above 19½ years on the first day of the month in which the course begins.' },
-    importantDates: [
-      { label: 'Online Application Begin', value: '12/10/2026' },
-      { label: 'Last Date for Online Apply', value: '12/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Technical Entry Scheme (TES-57)', totalPosts: '90 Posts', eligibility: '10+2 passed with at least 60% aggregate marks in PCM and JEE Mains 2026 appearance.' }
-    ],
-    howToApplySteps: [
-      'Register on Join Indian Army website (joinindianarmy.nic.in).',
-      'Click on Officers Selection -> Apply Online.',
-      'Enter JEE Mains Application Number and 10+2 marks.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for Army TES-57 Course', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download TES-57 Detailed Notification', actionText: 'Notification PDF', type: 'notification' },
-      { label: 'Join Indian Army Portal', actionText: 'joinindianarmy.nic.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-bpsc-tre-4-2026',
-    slug: 'bpsc-school-teacher-tre-4-online-form-2026',
-    title: 'BPSC Bihar School Teacher Recruitment Exam TRE 4.0 (Primary, Middle, Secondary & Higher Secondary) Online Form',
-    shortTitle: 'BPSC School Teacher TRE 4.0 Online Form 2026',
-    hindiTitle: 'बीपीएससी बिहार शिक्षक भर्ती परीक्षा TRE 4.0 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Teaching',
-    qualifications: ['Graduate', 'B.Ed / CTET'],
-    state: 'Bihar',
-    postDate: '2026-10-11',
-    notificationNumber: 'BPSC/TRE-4.0/2026',
-    totalVacancies: '87,000+ Posts',
-    salary: '₹ 25,000 - ₹ 35,000 Basic + DA + HRA (Net approx ₹ 40,000 - ₹ 55,000)',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '20/11/2026',
-    shortInfo: 'Bihar Public Service Commission (BPSC), Patna has invited online applications for the grand Phase-4 (TRE 4.0) School Teacher Recruitment for Primary (Class 1-5), Middle (Class 6-8), Secondary (Class 9-10), and Higher Secondary (Class 11-12) schools across Bihar.',
-    applicationFee: [
-      { category: 'General / OBC / Other State Candidates', amount: '₹ 750/-' },
-      { category: 'SC / ST / Female / PwD of Bihar', amount: '₹ 200/-' }
-    ],
-    ageLimit: { asOnDate: '01/08/2026', minAge: 18, maxAge: 37 },
-    importantDates: [
-      { label: 'Online Application Begin', value: '11/10/2026' },
-      { label: 'Last Date for Online Apply', value: '20/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Primary Teacher (Class 1-5)', totalPosts: '28,000 Posts', eligibility: '12th + D.El.Ed with CTET / BTET Paper 1.' },
-      { postName: 'Middle Teacher (Class 6-8)', totalPosts: '19,500 Posts', eligibility: 'Graduation + D.El.Ed / B.Ed with CTET / BTET Paper 2.' },
-      { postName: 'Secondary Teacher (Class 9-10)', totalPosts: '22,000 Posts', eligibility: 'Graduation + B.Ed with STET Paper 1.' },
-      { postName: 'Higher Secondary (Class 11-12)', totalPosts: '17,500 Posts', eligibility: 'Post Graduation + B.Ed with STET Paper 2.' }
-    ],
-    howToApplySteps: [
-      'Register on BPSC Online portal (onlinebpsc.bihar.gov.in).',
-      'Upload live webcam photograph and Hindi/English signatures.',
-      'Pay application fee and take final print of confirmation page.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for BPSC TRE 4.0', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download TRE 4.0 Full Notification', actionText: 'Notification (PDF)', type: 'notification' },
-      { label: 'BPSC Official Website', actionText: 'bpsc.bih.nic.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-rrb-paramedical-2026',
-    slug: 'railway-rrb-paramedical-recruitment-2026',
-    title: 'Railway Recruitment Board (RRB) Paramedical Categories (Nursing Superintendent, Pharmacist, Lab Tech) Online Form',
-    shortTitle: 'Railway RRB Paramedical Online Form 2026',
-    hindiTitle: 'रेलवे आरआरबी पैरामेडिकल भर्ती 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Railway',
-    qualifications: ['Medical / Nursing', 'Diploma / ITI'],
-    state: 'All India',
-    postDate: '2026-10-10',
-    notificationNumber: 'CEN 04/2026 (Paramedical)',
-    totalVacancies: '1,376 Posts',
-    salary: 'Pay Level 4, 5, 6 & 7 (₹ 25,500 - ₹ 1,42,400/-)',
-    salaryBand: '25K - 50K',
-    isHot: true,
-    isNew: true,
-    lastDate: '05/11/2026',
-    shortInfo: 'Government of India, Ministry of Railways (Railway Recruitment Boards) invites online applications for various Paramedical posts including Nursing Superintendent, Pharmacist, Health Inspector, and Lab Assistant.',
-    applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 refunded after CBT)' },
-      { category: 'SC / ST / Ex-SM / PwBD / Female', amount: '₹ 250/- (Full ₹ 250 refunded after CBT)' }
-    ],
-    ageLimit: { asOnDate: '01/01/2027', minAge: 20, maxAge: 40 },
-    importantDates: [
-      { label: 'Online Application Begin', value: '10/10/2026' },
-      { label: 'Last Date for Online Apply', value: '05/11/2026', isHighlight: true }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Nursing Superintendent', totalPosts: '713 Posts', eligibility: 'B.Sc Nursing / GNM Registered Nurse & Midwife.' },
-      { postName: 'Pharmacist Entry Grade', totalPosts: '246 Posts', eligibility: '10+2 with Diploma / Degree in Pharmacy (D.Pharm / B.Pharm).' },
-      { postName: 'Lab Assistant Grade II', totalPosts: '94 Posts', eligibility: '12th in Science with DMLT.' }
-    ],
-    howToApplySteps: [
-      'Open RRB centralized portal and create your One-Time Profile.',
-      'Fill required educational credentials and council registration numbers.',
-      'Pay fee online and submit choice of Railway Zone.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for RRB Paramedical Categories', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download RRB Paramedical Detailed Notice', actionText: 'CEN 04/2026 PDF', type: 'notification' },
-      { label: 'Railway Recruitment Boards Portal', actionText: 'rrbapply.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-bar-aibe-2026',
-    slug: 'all-india-bar-aibe-xix-2026-online-form',
-    title: 'Bar Council of India All India Bar Examination (AIBE XIX / 19) 2026 Online Registration & Application Form',
-    shortTitle: 'All India BAR AIBE 2026 Apply Online',
-    hindiTitle: 'ऑल इंडिया बार परीक्षा (AIBE XIX) 2026 ऑनलाइन फॉर्म',
-    category: 'latest_jobs',
-    department: 'Other',
-    qualifications: ['Graduate'],
-    state: 'All India',
-    postDate: '2026-10-09',
-    notificationNumber: 'BCI/AIBE-XIX/2026',
-    totalVacancies: 'Certificate of Practice (COP)',
-    salary: 'Advocate Certificate of Practice (Legal Practice License across Courts of India)',
-    salaryBand: '50K - 1 Lakh',
-    isHot: true,
-    isNew: true,
-    lastDate: '15/11/2026',
-    shortInfo: 'Bar Council of India (BCI) has opened online registration for All India Bar Examination (AIBE-XIX). Law graduates enrolled as advocates with any State Bar Council must clear this exam to obtain Certificate of Practice (COP) to practice in any court in India.',
-    applicationFee: [
-      { category: 'General / OBC Candidates', amount: '₹ 3560/-' },
-      { category: 'SC / ST Candidates', amount: '₹ 2560/-' }
-    ],
-    ageLimit: { asOnDate: '01/01/2026', notes: 'No upper age limit for appearing in AIBE examination.' },
-    importantDates: [
-      { label: 'Online Registration Begin', value: '09/10/2026' },
-      { label: 'Last Date for Online Apply', value: '15/11/2026', isHighlight: true },
-      { label: 'Admit Card Download', value: 'December 2026' },
-      { label: 'AIBE XIX Exam Date', value: '22 December 2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Advocate Certificate of Practice (COP)', totalPosts: 'Qualifying Examination', eligibility: '3-Year or 5-Year LL.B Degree from BCI recognized law college and enrolled in State Bar Council.' }
-    ],
-    howToApplySteps: [
-      'Visit official AIBE registration portal: allindiabarexamination.com.',
-      'Enter State Bar Council Enrollment Number.',
-      'Upload Law Degree / Provisional Certificate, Enrollment Certificate, Photo & Sign.',
-      'Pay registration fee online and take printout of application.'
-    ],
-    directLinks: [
-      { label: 'Apply Online for AIBE XIX 2026', actionText: 'Apply Online', type: 'apply', url: 'https://allindiabarexamination.com', isPrimary: true },
-      { label: 'Download AIBE Syllabus & Exam Pattern', actionText: 'Syllabus (PDF)', type: 'syllabus' },
-      { label: 'Bar Council of India Official Website', actionText: 'barcouncilofindia.org', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-up-police-pet-admit-2026',
-    slug: 'up-police-constable-pet-admit-card-2026',
-    title: 'UP Police Constable 60,244 Posts Physical Efficiency Test (PET) & Physical Standard Test (PST) Admit Card 2026',
-    shortTitle: 'UP Police Constable PET Admit Card',
-    hindiTitle: 'यूपी पुलिस कांस्टेबल 60,244 पद शारीरिक दक्षता परीक्षा (PET) प्रवेश पत्र',
-    category: 'admit_card',
-    department: 'Police',
-    qualifications: ['12th Pass'],
-    state: 'Uttar Pradesh',
-    postDate: '2026-10-08',
-    notificationNumber: 'UPPRPB/PET/2026',
-    totalVacancies: '60,244 Posts',
-    isHot: true,
-    isNew: true,
-    examDate: 'Running Active Across UP Centres',
-    shortInfo: 'Uttar Pradesh Police Recruitment and Promotion Board (UPPRPB), Lucknow has released the Physical Efficiency Test (PET) / Running Admit Card for candidates who qualified the Written Examination for 60,244 Constable Civil Police posts.',
-    applicationFee: [],
-    ageLimit: { asOnDate: '01/07/2026' },
-    importantDates: [
-      { label: 'PET Admit Card Released', value: '08/10/2026', isHighlight: true },
-      { label: 'Physical Test Dates', value: 'October - November 2026' }
-    ],
-    vacancyBreakdown: [
-      { postName: 'Constable (Civil Police)', totalPosts: '60,244 Posts', eligibility: 'Male: 4.8 Km in 25 Minutes | Female: 2.4 Km in 14 Minutes.' }
-    ],
-    howToApplySteps: [
-      'Click on Download UP Police PET Admit Card link.',
-      'Enter your Registration Number and Date of Birth.',
-      'Download and print hall ticket along with identity declaration.'
-    ],
-    directLinks: [
-      { label: 'Download UP Police PET Admit Card', actionText: 'Download', type: 'admit_card', isPrimary: true },
-      { label: 'UPPRPB Official Portal', actionText: 'uppbpb.gov.in', type: 'official' }
-    ]
-  },
-  {
-    id: 'job-railway-ntpc-grad-2026',
-    slug: 'railway-rrb-ntpc-graduate-level-2026',
-    title: 'Railway RRB NTPC Graduate Level CEN 05/2026 (Station Master, Goods Train Manager, Senior Clerk) Online Form',
-    shortTitle: 'Railway NTPC Graduate Level Apply Online',
-    hindiTitle: 'रेलवे आरआरबी एनटीपीसी स्नातक स्तर भर्ती 2026 ऑनलाइन फॉर्म',
+    id: 'job-rrb-ntpc-grad-3548-2026',
+    slug: 'rrb-ntpc-graduate-level-online-form-2026-3548-posts',
+    title: 'Railway RRB Non-Technical Popular Categories NTPC Graduate Level (3,548 Posts) Recruitment 2026 Online Form',
+    shortTitle: 'RRB NTPC Graduate Level Online Form 2026 (3548 Posts)',
+    hindiTitle: 'रेलवे आरआरबी एनटीपीसी ग्रेजुएट लेवल ऑनलाइन फॉर्म 2026 (3548 पद)',
     category: 'latest_jobs',
     department: 'Railway',
     qualifications: ['Graduate'],
     state: 'All India',
-    postDate: '2026-10-07',
-    notificationNumber: 'CEN 05/2026 (Graduate)',
-    totalVacancies: '8,113 Posts',
+    postDate: '2026-11-04T11:30:00Z',
+    notificationNumber: 'CEN 05/2026',
+    totalVacancies: '3,548 Posts',
     salary: 'Pay Level 5 & Level 6 (₹ 29,200 - ₹ 92,300 + DA & HRA)',
     salaryBand: '25K - 50K',
     isHot: true,
     isNew: true,
-    lastDate: '13/11/2026',
-    shortInfo: 'Railway Recruitment Boards (RRBs) invite online applications for 8,113 Graduate Level posts under Non-Technical Popular Categories (NTPC) including Goods Train Manager, Chief Commercial cum Ticket Supervisor, Senior Clerk cum Typist, and Station Master.',
+    lastDate: '20/11/2026',
+    admitCardDate: 'Before CBT-1',
+    examDate: 'March / April 2027',
+    shortInfo: 'Railway Recruitment Boards (RRBs) have extended the online application deadline for 3,548 Graduate Level posts under NTPC including Station Master, Goods Train Manager, and Senior Commercial cum Ticket Clerk across all Indian Railway zones.',
     applicationFee: [
-      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 refunded after CBT-1)' },
-      { category: 'SC / ST / PwBD / Female / Minorities', amount: '₹ 250/- (Full ₹ 250 refunded after CBT-1)' }
+      { category: 'General / OBC / EWS', amount: '₹ 500/- (₹ 400 will be refunded after CBT-1)' },
+      { category: 'SC / ST / PwD / Female / Ex-Servicemen', amount: '₹ 250/- (Full ₹ 250 refunded after CBT-1)' }
     ],
+    feePaymentMode: 'Pay Examination Fee Through Debit Card / Credit Card / Net Banking / UPI.',
     ageLimit: { asOnDate: '01/01/2025', minAge: 18, maxAge: 36 },
     importantDates: [
-      { label: 'Notification Released Date', value: '13/09/2026' },
-      { label: 'Online Application Begin', value: '14/09/2026', isHighlight: true },
-      { label: 'Last Date for Apply Online', value: '13/11/2026 (11:59 PM)', isHighlight: true },
-      { label: 'Fee Payment Last Date', value: '14/11/2026 (11:59 PM)' },
-      { label: 'Form Correction / Modification Window', value: '15/11/2026 to 24/11/2026', isHighlight: true },
-      { label: 'CBT-1 Examination Schedule', value: 'March / April 2027 (Tentative)', isHighlight: true }
+      { label: 'Application Start Date', value: '14/09/2026' },
+      { label: 'Last Date for Apply Online', value: '20/11/2026 (11:59 PM)', isHighlight: true },
+      { label: 'CBT 1 Exam Schedule', value: 'March - April 2027' }
     ],
     vacancyBreakdown: [
-      { postName: 'Chief Commercial cum Ticket Supervisor (Level 6)', totalPosts: '1,736 Posts', eligibility: 'Degree in any discipline from recognized University.' },
-      { postName: 'Station Master (Level 6)', totalPosts: '994 Posts', eligibility: 'Degree in any discipline with A-2 Medical Standard & CBAT.' },
-      { postName: 'Goods Train Manager (GTM - Level 5)', totalPosts: '3,144 Posts', eligibility: 'Bachelor Degree in any stream from recognized University.' },
-      { postName: 'Junior Account Assistant cum Typist (Level 5)', totalPosts: '1,507 Posts', eligibility: 'Bachelor Degree with English/Hindi typing.' },
-      { postName: 'Senior Clerk Cum Typist (Level 5)', totalPosts: '732 Posts', eligibility: 'Bachelor Degree with English/Hindi Typing proficiency.' }
+      { postName: 'Station Master & Goods Train Manager', totalPosts: '3,548 Posts', eligibility: 'Bachelor Degree in any stream from a recognized University in India.' }
     ],
     howToApplySteps: [
-      'Visit rrbapply.gov.in and login to your existing account or register anew.',
-      'Select CEN 05/2026 (Graduate Level) and submit preferred RRB zones.',
-      'Pay application fee online and print application confirmation.'
+      'Visit rrbapply.gov.in and click on Online Registration.',
+      'Submit zone preference and degree details.',
+      'Pay fee online and download registration receipt.'
     ],
     directLinks: [
-      { label: 'Apply Online for RRB NTPC Graduate Level', actionText: 'Apply Online', type: 'apply', isPrimary: true },
-      { label: 'Download Official Notification CEN 05/2026', actionText: 'Download (PDF)', type: 'notification' },
-      { label: 'RRB Official Apply Portal', actionText: 'rrbapply.gov.in', type: 'official' }
+      { label: 'Apply Online for RRB NTPC Graduate Level', actionText: 'Apply Online', type: 'apply', url: 'https://rrbapply.gov.in/', isPrimary: true },
+      { label: 'Download Official Notification CEN 05/2026', actionText: 'Download (PDF)', type: 'notification', url: 'https://rrbapply.gov.in/' },
+      { label: 'RRB Official Apply Portal', actionText: 'rrbapply.gov.in', type: 'official', url: 'https://rrbapply.gov.in/' }
+    ]
+  },
+
+  // 5. AFCAT 01/2027 Batch Online Form
+  {
+    id: 'job-afcat-01-2027',
+    slug: 'afcat-01-2027-batch-online-form',
+    title: 'Air Force Common Admission Test AFCAT 01/2027 Batch Flying and Ground Duty (Technical & Non-Technical) Online Form',
+    shortTitle: 'AFCAT 01/2027 Batch Online Form',
+    hindiTitle: 'भारतीय वायु सेना एएफसीएटी (AFCAT 01/2027) बैच ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Defence',
+    qualifications: ['Graduate', 'B.Tech / BE'],
+    state: 'All India',
+    postDate: '2026-11-04T11:20:00Z',
+    notificationNumber: 'AFCAT 01/2027 / NCC Special Entry',
+    totalVacancies: '317 Posts',
+    salary: '₹ 56,100 - ₹ 1,77,500/- (Pay Level 10 + Military Service Pay ₹ 15,500/-)',
+    salaryBand: '50K - 1 Lakh',
+    isHot: true,
+    isNew: true,
+    lastDate: '30/11/2026',
+    admitCardDate: 'January 2027',
+    examDate: 'February 2027',
+    shortInfo: 'Indian Air Force (IAF) invites Indian citizens (Men and Women) to join as Commissioned Officers in Flying and Ground Duty (Technical and Non-Technical) branches for courses commencing in January 2027.',
+    applicationFee: [
+      { category: 'AFCAT Entry (All Candidates)', amount: '₹ 550/- + GST' },
+      { category: 'NCC Special Entry', amount: '₹ 0/- (Exempted)' }
+    ],
+    feePaymentMode: 'Pay through Debit Card, Credit Card, Net Banking or UPI.',
+    ageLimit: {
+      asOnDate: '01/01/2027',
+      minAge: 20,
+      maxAge: 26,
+      notes: 'Flying Branch: 20 to 24 Years. Ground Duty (Technical/Non-Technical): 20 to 26 Years.'
+    },
+    importantDates: [
+      { label: 'Online Application Start Date', value: '01/11/2026', isHighlight: true },
+      { label: 'Last Date for Apply Online', value: '30/11/2026 (11:00 PM)', isHighlight: true },
+      { label: 'Online Exam Date', value: 'February 2027' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Flying Branch (Men & Women)', totalPosts: '28 Posts', eligibility: '10+2 with 50% in Math & Physics + Graduation with 60% or B.Tech.' },
+      { postName: 'Ground Duty (Technical - Aeronautical Engg)', totalPosts: '156 Posts', eligibility: '4-Year Engineering Degree in relevant stream with 60% marks.' },
+      { postName: 'Ground Duty (Non-Technical - Admin, Logistics, Accounts)', totalPosts: '133 Posts', eligibility: 'Graduation / B.Com / Post Graduation with 60% marks.' }
+    ],
+    howToApplySteps: [
+      'Visit afcat.cdac.in and register on candidate portal.',
+      'Fill preference of branches, educational marks, and AFSB centers.',
+      'Pay fee online and print registration acknowledgment.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for AFCAT 01/2027', actionText: 'Apply Online', type: 'apply', url: 'https://afcat.cdac.in/', isPrimary: true },
+      { label: 'Download Detailed AFCAT Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://afcat.cdac.in/' },
+      { label: 'Join Indian Air Force Portal', actionText: 'careerindianairforce.cdac.in', type: 'official', url: 'https://careerindianairforce.cdac.in/' }
+    ]
+  },
+
+  // 6. Bihar BCECEB Sr. Resident/ Tutor Phase-III Online Form 2026 – Start
+  {
+    id: 'job-bceceb-sr-resident-phase3-2026',
+    slug: 'bihar-bceceb-sr-resident-tutor-phase-iii-online-form-2026-start',
+    title: 'Bihar BCECEB Senior Resident / Tutor (Phase-III) Special Recruitment 2026 Online Form – Start',
+    shortTitle: 'Bihar BCECEB Sr. Resident/ Tutor Phase-III Online Form 2026 – Start',
+    hindiTitle: 'बिहार बीसीईसीईबी सीनियर रेजिडेंट / ट्यूटर फेज-3 ऑनलाइन फॉर्म 2026 शुरू',
+    category: 'latest_jobs',
+    department: 'Medical',
+    qualifications: ['Post Graduate'],
+    state: 'Bihar',
+    postDate: '2026-11-04T11:10:00Z',
+    notificationNumber: 'BCECEB(Health)-2026/03',
+    totalVacancies: '1,540 Posts',
+    salary: '₹ 67,700 - ₹ 2,08,700/- (Pay Level 11 of 7th CPC)',
+    salaryBand: '50K - 1 Lakh',
+    isNew: true,
+    lastDate: '22/11/2026',
+    admitCardDate: 'To be notified',
+    examDate: 'Interview / Merit Based',
+    shortInfo: 'Bihar Combined Entrance Competitive Examination Board (BCECEB), Patna invites online applications for Senior Resident and Tutor (Phase-III) posts in Government Medical Colleges & Hospitals of Bihar under Health Department.',
+    applicationFee: [
+      { category: 'General / BC / EBC / EWS', amount: '₹ 2250/-' },
+      { category: 'SC / ST / DQ (Divyang)', amount: '₹ 2250/-' }
+    ],
+    feePaymentMode: 'Online Net Banking / Debit Card / Credit Card / UPI.',
+    ageLimit: { asOnDate: '01/08/2026', minAge: 25, maxAge: 45 },
+    importantDates: [
+      { label: 'Online Application Begin', value: '02/11/2026', isHighlight: true },
+      { label: 'Last Date for Apply Online', value: '22/11/2026', isHighlight: true },
+      { label: 'Fee Payment Last Date', value: '23/11/2026' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Senior Resident / Tutor (Phase-III)', totalPosts: '1,540 Posts', eligibility: 'MD / MS / DNB in concerned super specialty or PG Degree recognized by NMC.' }
+    ],
+    howToApplySteps: [
+      'Visit bceceboard.bihar.gov.in and click on Online Portal of Senior Resident / Tutor 2026.',
+      'Complete registration, upload MCI/NMC registration, and pay fee.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for BCECEB Sr. Resident / Tutor', actionText: 'Apply Online', type: 'apply', url: 'https://bceceboard.bihar.gov.in/', isPrimary: true },
+      { label: 'Download Detailed Phase-III Prospectus', actionText: 'Download (PDF)', type: 'notification', url: 'https://bceceboard.bihar.gov.in/' },
+      { label: 'BCECEB Official Portal', actionText: 'bceceboard.bihar.gov.in', type: 'official', url: 'https://bceceboard.bihar.gov.in/' }
+    ]
+  },
+
+  // 7. UPESSC PRT Assistant Teacher Online Form 2026 (12405 Posts)
+  {
+    id: 'job-upessc-prt-12405-2026',
+    slug: 'upessc-prt-assistant-teacher-online-form-2026-12405-posts',
+    title: 'UPESSC Primary PRT Assistant Teacher Recruitment 2026 for 12,405 Posts Online Application Form',
+    shortTitle: 'UPESSC PRT Assistant Teacher Online Form 2026 (12405 Posts)',
+    hindiTitle: 'यूपीईएसएससी प्राथमिक शिक्षक (PRT) भर्ती 2026 (12,405 पद) ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Teaching',
+    qualifications: ['12th Pass', 'B.Ed / CTET', 'Graduate'],
+    state: 'Uttar Pradesh',
+    postDate: '2026-11-04T11:00:00Z',
+    notificationNumber: 'Advt No. 09/2026 (UPESSC PRT)',
+    totalVacancies: '12,405 Posts',
+    salary: 'Pay Level 6 (₹ 35,400 - ₹ 1,12,400/- + Grade Pay ₹ 4200/-)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '28/11/2026',
+    admitCardDate: 'January 2027',
+    examDate: 'February 2027',
+    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC), Prayagraj has released the bumper notification for 12,405 Primary Assistant Teachers (PRT / Super TET) across Parishadiya Primary Schools of Uttar Pradesh Basic Education Board.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 700/-' },
+      { category: 'SC / ST', amount: '₹ 400/-' },
+      { category: 'Divyang (PH)', amount: '₹ 0/- (Exempted)' }
+    ],
+    feePaymentMode: 'Pay fee online via SBI MOPS Debit/Credit/Net Banking/UPI.',
+    ageLimit: { asOnDate: '01/07/2026', minAge: 21, maxAge: 40 },
+    importantDates: [
+      { label: 'Online Application Begin', value: '28/10/2026' },
+      { label: 'Last Date for Apply Online', value: '28/11/2026', isHighlight: true },
+      { label: 'Fee Payment Last Date', value: '29/11/2026' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Primary Assistant Teacher (PRT)', totalPosts: '12,405 Posts', eligibility: 'Graduation + 2-Year D.El.Ed (BTC) + UPTET / CTET Paper-1 Qualified.' }
+    ],
+    howToApplySteps: [
+      'Visit upessc.gov.in and complete one-time registration.',
+      'Fill academic details and UPTET/CTET roll number.',
+      'Upload photograph and signature, pay fee, and save application form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for UPESSC PRT 12405 Posts', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.gov.in/', isPrimary: true },
+      { label: 'Download UP PRT Notification (PDF)', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.gov.in/' },
+      { label: 'UPESSC Official Portal', actionText: 'upessc.gov.in', type: 'official', url: 'https://upessc.gov.in/' }
+    ]
+  },
+
+  // 8. UPESSC UP TGT Online Form 2026 (17,735 Posts)
+  {
+    id: 'job-upessc-tgt-17735-2026',
+    slug: 'upessc-up-tgt-online-form-2026-17735-posts',
+    title: 'UPESSC UP Madhyamic Trained Graduate Teacher TGT Recruitment 2026 (17,735 Posts) Online Form',
+    shortTitle: 'UPESSC UP TGT Online Form 2026 (17,735 Posts)',
+    hindiTitle: 'यूपीईएसएससी यूपी टीजीटी शिक्षक भर्ती 2026 (17,735 पद) ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Teaching',
+    qualifications: ['Graduate', 'B.Ed / CTET'],
+    state: 'Uttar Pradesh',
+    postDate: '2026-11-04T10:50:00Z',
+    notificationNumber: 'Advt No. 07/2026',
+    totalVacancies: '17,735 Posts',
+    salary: 'Pay Level 7 (₹ 44,900 - ₹ 1,42,400/- + Grade Pay ₹ 4600/-)',
+    salaryBand: '25K - 50K',
+    isHot: true,
+    isNew: true,
+    lastDate: '28/11/2026',
+    admitCardDate: 'Before Exam',
+    examDate: '23-24 December 2026',
+    shortInfo: 'Uttar Pradesh Education Service Selection Commission (UPESSC), Prayagraj has issued Advt 07/2026 for 17,735 Trained Graduate Teachers (TGT) across aided secondary schools of Uttar Pradesh.',
+    applicationFee: [
+      { category: 'General / OBC', amount: '₹ 750/-' },
+      { category: 'EWS', amount: '₹ 650/-' },
+      { category: 'SC', amount: '₹ 450/-' },
+      { category: 'ST', amount: '₹ 250/-' }
+    ],
+    feePaymentMode: 'Pay Examination Fee Through Net Banking / Debit Card / Credit Card.',
+    ageLimit: { asOnDate: '01/07/2026', minAge: 21, maxAge: 60 },
+    importantDates: [
+      { label: 'Online Application Begin', value: '24/10/2026' },
+      { label: 'Last Date for Apply Online', value: '28/11/2026 (Extended)', isHighlight: true },
+      { label: 'Last Date for Fee Payment', value: '29/11/2026' }
+    ],
+    vacancyBreakdown: [
+      { postName: 'TGT Trained Graduate Teacher (Subject Wise)', totalPosts: '17,735 Posts', eligibility: 'Graduate Degree in concerned subject + B.Ed Degree from recognized University.' }
+    ],
+    howToApplySteps: [
+      'Visit upessc.gov.in and click on TGT 2026 Online Application.',
+      'Fill registration, verify subject eligibility, and pay fee.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for UP TGT 17,735 Posts', actionText: 'Apply Online', type: 'apply', url: 'https://upessc.gov.in/', isPrimary: true },
+      { label: 'Download UP TGT Notification (PDF)', actionText: 'Download (PDF)', type: 'notification', url: 'https://upessc.gov.in/' },
+      { label: 'UPESSC Official Website', actionText: 'upessc.gov.in', type: 'official', url: 'https://upessc.gov.in/' }
+    ]
+  },
+
+  // 9. PGCIL Engineer Trainee Online Form 2026
+  {
+    id: 'job-pgcil-et-2026',
+    slug: 'pgcil-engineer-trainee-online-form-2026',
+    title: 'Power Grid Corporation of India Limited PGCIL Engineer Trainee (ET) Recruitment 2026 Through GATE Online Form',
+    shortTitle: 'PGCIL Engineer Trainee Online Form 2026',
+    hindiTitle: 'पावरग्रिड पीजीसीआईएल इंजीनियर ट्रेनी ऑनलाइन फॉर्म 2026',
+    category: 'latest_jobs',
+    department: 'Engineering',
+    qualifications: ['B.Tech / BE'],
+    state: 'All India',
+    postDate: '2026-11-04T10:40:00Z',
+    notificationNumber: 'CC/06/2026',
+    totalVacancies: '435 Posts',
+    salary: '₹ 40,000 - ₹ 1,40,000/- during training | ₹ 50,000 - ₹ 1,60,000/- on regularization',
+    salaryBand: '50K - 1 Lakh',
+    isNew: true,
+    lastDate: '25/11/2026',
+    admitCardDate: 'To be notified',
+    examDate: 'Through GATE Score',
+    shortInfo: 'Power Grid Corporation of India Limited (POWERGRID), a Maharatna Central PSU, invites bright, committed and energetic engineering graduates to join as Engineer Trainee in Electrical, Civil, Electronics, and Computer Science disciplines.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 500/-' },
+      { category: 'SC / ST / PwD / Ex-SM', amount: '₹ 0/- (Exempted)' }
+    ],
+    feePaymentMode: 'Online Payment Gateway (Debit/Credit Card/Net Banking/UPI).',
+    ageLimit: { asOnDate: '31/12/2026', maxAge: 28 },
+    importantDates: [
+      { label: 'Online Application Start Date', value: '25/10/2026' },
+      { label: 'Last Date for Apply Online', value: '25/11/2026 (11:59 PM)', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Engineer Trainee (Electrical, Civil, Electronics, CS)', totalPosts: '435 Posts', eligibility: 'Full-time B.E./B.Tech/B.Sc (Engg) with minimum 60% marks + Valid GATE Score.' }
+    ],
+    howToApplySteps: [
+      'Visit powergrid.in and go to Careers -> Job Opportunities.',
+      'Enter GATE Registration Number and upload essential documents.',
+      'Pay fee and submit online form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for PGCIL Engineer Trainee', actionText: 'Apply Online', type: 'apply', url: 'https://www.powergrid.in/', isPrimary: true },
+      { label: 'Download Detailed Notification (PDF)', actionText: 'Download (PDF)', type: 'notification', url: 'https://www.powergrid.in/' },
+      { label: 'POWERGRID Official Careers Portal', actionText: 'powergrid.in', type: 'official', url: 'https://www.powergrid.in/' }
+    ]
+  },
+
+  // 10. Semi Conductor SCL Various Post Online Form 2026
+  {
+    id: 'job-scl-various-2026',
+    slug: 'semi-conductor-scl-various-post-online-form-2026',
+    title: 'Semi-Conductor Laboratory SCL Mohali Various Technical & Administrative Posts Recruitment 2026 Online Form',
+    shortTitle: 'Semi Conductor SCL Various Post Online Form 2026',
+    hindiTitle: 'सेमी-कंडक्टर लेबोरेटरी (SCL) विभिन्न पद ऑनलाइन फॉर्म 2026',
+    category: 'latest_jobs',
+    department: 'Engineering',
+    qualifications: ['Diploma / ITI', 'B.Tech / BE', 'Graduate'],
+    state: 'All India',
+    postDate: '2026-11-04T10:30:00Z',
+    notificationNumber: 'Advt No. 03/2026 / SCL Mohali',
+    totalVacancies: '68 Posts',
+    salary: 'Pay Level 2 to Level 10 (₹ 19,900 - ₹ 1,77,500/- as per 7th CPC)',
+    salaryBand: '25K - 50K',
+    isNew: true,
+    lastDate: '20/11/2026',
+    admitCardDate: 'To be notified',
+    examDate: 'Written Test / Trade Test',
+    shortInfo: 'Semi-Conductor Laboratory (SCL), Mohali, an autonomous body under MeitY, Government of India, invites online applications for Scientist/Engineer, Technical Assistant, Technician, and Junior Assistant posts.',
+    applicationFee: [
+      { category: 'General / OBC / EWS (Scientist/Engg)', amount: '₹ 500/-' },
+      { category: 'General / OBC / EWS (Technician/Other)', amount: '₹ 250/-' },
+      { category: 'SC / ST / PwD / Female', amount: '₹ 0/- (Nil)' }
+    ],
+    feePaymentMode: 'Online through Net Banking, Debit Card, Credit Card or UPI.',
+    ageLimit: { asOnDate: '20/11/2026', minAge: 18, maxAge: 35 },
+    importantDates: [
+      { label: 'Online Application Start', value: '26/10/2026' },
+      { label: 'Last Date for Apply Online', value: '20/11/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Scientist / Engineer ‘SC’', totalPosts: '22 Posts', eligibility: 'BE / B.Tech in Electronics / VLSI / Computer Science with 65% marks.' },
+      { postName: 'Technical Assistant / Technician ‘B’', totalPosts: '46 Posts', eligibility: 'Diploma in Engineering or ITI Certificate in relevant trade.' }
+    ],
+    howToApplySteps: [
+      'Visit scl.gov.in and click on Careers / Recruitment section.',
+      'Fill required profile details, upload certificate proofs, and submit.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for SCL Mohali Various Posts', actionText: 'Apply Online', type: 'apply', url: 'https://www.scl.gov.in/', isPrimary: true },
+      { label: 'Download SCL Official Advertisement (PDF)', actionText: 'Download (PDF)', type: 'notification', url: 'https://www.scl.gov.in/' },
+      { label: 'SCL Mohali Official Portal', actionText: 'scl.gov.in', type: 'official', url: 'https://www.scl.gov.in/' }
+    ]
+  },
+
+  // 11. Supreme Court SCI Court Assistant Online Form 2026 – Start
+  {
+    id: 'job-sci-court-asst-2026',
+    slug: 'supreme-court-sci-court-assistant-online-form-2026-start',
+    title: 'Supreme Court of India SCI Junior Court Assistant JCA Recruitment 2026 Online Form – Start',
+    shortTitle: 'Supreme Court SCI Court Assistant Online Form 2026 – Start',
+    hindiTitle: 'सुप्रीम कोर्ट एससीआई कोर्ट सहायक (JCA) भर्ती 2026 ऑनलाइन फॉर्म शुरू',
+    category: 'latest_jobs',
+    department: 'Other',
+    qualifications: ['Graduate'],
+    state: 'All India',
+    postDate: '2026-11-04T10:20:00Z',
+    notificationNumber: 'SCI/Recruitment/JCA/2026',
+    totalVacancies: '210 Posts',
+    salary: 'Pay Level 6 (₹ 35,400 - ₹ 1,12,400/- + Approx In-Hand ₹ 63,000/- with HRA)',
+    salaryBand: '50K - 1 Lakh',
+    isHot: true,
+    isNew: true,
+    lastDate: '24/11/2026',
+    admitCardDate: 'December 2026',
+    examDate: 'Written Test & Computer Typing',
+    shortInfo: 'Supreme Court of India, New Delhi invites online applications from eligible Indian citizens for 210 posts of Junior Court Assistant (Group ‘B’ Non-Gazetted). Candidates with Bachelor Degree and computer typing skills can apply.',
+    applicationFee: [
+      { category: 'General / OBC / EWS', amount: '₹ 500/-' },
+      { category: 'SC / ST / PH / Ex-Servicemen', amount: '₹ 250/-' }
+    ],
+    feePaymentMode: 'Online through Payment Gateway via Debit Card / Credit Card / Net Banking.',
+    ageLimit: { asOnDate: '01/11/2026', minAge: 18, maxAge: 30 },
+    importantDates: [
+      { label: 'Online Application Start Date', value: '25/10/2026', isHighlight: true },
+      { label: 'Last Date for Apply Online', value: '24/11/2026 (11:59 PM)', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Junior Court Assistant (JCA)', totalPosts: '210 Posts', eligibility: 'Bachelor Degree in any stream + English Typing 35 WPM on Computer.' }
+    ],
+    howToApplySteps: [
+      'Visit main.sci.gov.in and click on "Recruitment -> Apply Online for JCA 2026".',
+      'Fill candidate bio-data, academic qualifications, and upload photograph.',
+      'Pay online fee and download confirmed application form.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for SCI Junior Court Assistant', actionText: 'Apply Online', type: 'apply', url: 'https://main.sci.gov.in/', isPrimary: true },
+      { label: 'Download Supreme Court JCA Notification', actionText: 'Download (PDF)', type: 'notification', url: 'https://main.sci.gov.in/' },
+      { label: 'Supreme Court of India Official Portal', actionText: 'main.sci.gov.in', type: 'official', url: 'https://main.sci.gov.in/' }
+    ]
+  },
+
+  // 12. ONGC Apprentice Online Form 2026
+  {
+    id: 'job-ongc-apprentice-2026',
+    slug: 'ongc-apprentice-online-form-2026',
+    title: 'Oil and Natural Gas Corporation ONGC Apprentice Recruitment 2026 for 2,500+ Posts Across All India Work Centres',
+    shortTitle: 'ONGC Apprentice Online Form 2026',
+    hindiTitle: 'ओएनजीसी (ONGC) अप्रेंटिस भर्ती 2026 (2,500+ पद) ऑनलाइन फॉर्म',
+    category: 'latest_jobs',
+    department: 'Engineering',
+    qualifications: ['10th Pass', 'Diploma / ITI', 'Graduate'],
+    state: 'All India',
+    postDate: '2026-11-04T10:10:00Z',
+    notificationNumber: 'Advt No. ONGC/APPR/2026/02',
+    totalVacancies: '2,500 Posts',
+    salary: 'Monthly Stipend ₹ 7,000 - ₹ 9,000/- as per Apprenticeship Rules',
+    salaryBand: 'Below 25K',
+    isNew: true,
+    lastDate: '15/11/2026',
+    admitCardDate: 'Not Applicable (Merit Based)',
+    examDate: 'No Exam (Selection on Marks Merit)',
+    shortInfo: 'Oil and Natural Gas Corporation Limited (ONGC), a Maharatna enterprise, invites online applications for engagement of 2,500 Trade, Technician, and Graduate Apprentices across Northern, Central, Western, Eastern, and Southern Work Centres.',
+    applicationFee: [
+      { category: 'All Categories (General / OBC / SC / ST / PwD)', amount: '₹ 0/- (Nil - No Fee)' }
+    ],
+    feePaymentMode: 'No Application Fee is required. Free Application.',
+    ageLimit: { asOnDate: '25/10/2026', minAge: 18, maxAge: 24 },
+    importantDates: [
+      { label: 'Online Application Start Date', value: '25/10/2026' },
+      { label: 'Last Date for Apply Online', value: '15/11/2026', isHighlight: true },
+      { label: 'Merit List Publication Date', value: '25/11/2026', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      { postName: 'Trade Apprentice (Electrician, Fitter, Welder, COPA)', totalPosts: '1,450 Posts', eligibility: '10th Pass + ITI in relevant trade from NCVT/SCVT.' },
+      { postName: 'Technician Apprentice (Civil, Mech, Electrical, Electronics)', totalPosts: '550 Posts', eligibility: 'Diploma in Engineering in concerned discipline.' },
+      { postName: 'Graduate Apprentice (B.A, B.Com, B.Sc, BBA)', totalPosts: '500 Posts', eligibility: 'Bachelor Degree in Arts, Science, Commerce or BBA.' }
+    ],
+    howToApplySteps: [
+      'First register on apprenticeshipindia.gov.in (Trade) or nats.education.gov.in (Graduate/Diploma).',
+      'Then visit ongcapprentices.ongc.co.in to fill the ONGC Apprentice form.',
+      'Submit choice of work centre and print application receipt.'
+    ],
+    directLinks: [
+      { label: 'Apply Online for ONGC Apprentice 2026', actionText: 'Apply Online', type: 'apply', url: 'https://ongcapprentices.ongc.co.in/', isPrimary: true },
+      { label: 'Download Detailed ONGC Notification (PDF)', actionText: 'Download (PDF)', type: 'notification', url: 'https://ongcapprentices.ongc.co.in/' },
+      { label: 'ONGC Official Portal', actionText: 'ongcindia.com', type: 'official', url: 'https://ongcindia.com/' }
     ]
   }
 ];

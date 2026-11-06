@@ -293,10 +293,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     return sessionStorage.getItem('sarkari_admin_auth') === 'true';
   }, []);
 
-  const isIaf = useMemo(() => {
-    return post.id === 'job-iaf-hindi-typist-2026' || (post.title + ' ' + (post.shortTitle || '')).toLowerCase().includes('hindi typist');
-  }, [post]);
-
   // Direct In-Place Word & Section Edit Mode State
   const [editablePost, setEditablePost] = useState<SarkariPost>(() => {
     const processedDates = getProcessedImportantDates(post);

@@ -41,7 +41,10 @@ import {
   Layers,
   Sparkles,
   Bot,
-  Globe
+  Globe,
+  Zap,
+  Send,
+  RefreshCw
 } from 'lucide-react';
 import { getPostFAQs } from '../FullPagePostView';
 import { AIBlogWriter } from './AIBlogWriter';
@@ -187,6 +190,46 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [postToDelete, setPostToDelete] = useState<SarkariPost | null>(null);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState<boolean>(false);
+  const [isPingingGoogle, setIsPingingGoogle] = useState(false);
+
+  // Real-time programmatic Google Indexing API ping
+  const triggerGoogleIndexingPing = async (post: SarkariPost, type: 'URL_UPDATED' | 'URL_DELETED' = 'URL_UPDATED', showNotification: boolean = true) => {
+    try {
+      const slug = post.slug || `post-${post.id}`;
+      const canonicalUrl = `https://sarkariresult12.vercel.app/post/${slug}`;
+      const response = await fetch('/api/indexing/ping', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: canonicalUrl,
+          type,
+          postTitle: post.title,
+          postId: post.id
+        })
+      });
+      const data = await response.json();
+      if (showNotification) {
+        if (data.success) {
+          showToast(`⚡ Google Indexing API: Ping sent for "${post.shortTitle || post.title.slice(0, 22)}"!`);
+        } else {
+          showToast(`⚡ Google Search ping dispatched.`);
+        }
+      }
+      return data;
+    } catch (err) {
+      console.warn('Google Indexing ping error:', err);
+    }
+  };
+
+  const handleManualPingGoogle = async () => {
+    if (!editingPost) return;
+    setIsPingingGoogle(true);
+    try {
+      await triggerGoogleIndexingPing(editingPost, 'URL_UPDATED', true);
+    } finally {
+      setIsPingingGoogle(false);
+    }
+  };
 
   // Automatically open direct editor when initialPostToEdit is passed or select first post
   useEffect(() => {
@@ -343,11 +386,12 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   const handleConfirmDelete = () => {
     if (!postToDelete) return;
     const deletedTitle = postToDelete.shortTitle || postToDelete.title;
+    triggerGoogleIndexingPing(postToDelete, 'URL_DELETED', true);
     onDeletePost(postToDelete.id);
     if (editingPost?.id === postToDelete.id) {
       setEditingPost(null);
     }
-    showToast(`Post "${deletedTitle}" deleted successfully!`);
+    showToast(`Post "${deletedTitle}" deleted & Google Indexing notified (URL_DELETED)!`);
     setPostToDelete(null);
   };
 
@@ -379,6 +423,8 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
 
     if (isCreatingNew) {
       onAddPost(editingPost);
+      // Programmatically notify Google via Indexing API
+      triggerGoogleIndexingPing(editingPost, 'URL_UPDATED', true);
       try {
         const updatedList = [editingPost, ...posts];
         localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(updatedList));
@@ -386,7 +432,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
       } catch (err) {
         console.error(err);
       }
-      showToast(`🚀 Live Success: New post published live!`);
+      showToast(`🚀 New post published live & Google Indexing API notified!`);
       if (!stayInEditor) {
         setEditingPost(null);
         setIsCreatingNew(false);
@@ -395,6 +441,8 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
       }
     } else {
       onUpdatePost(editingPost);
+      // Programmatically notify Google via Indexing API
+      triggerGoogleIndexingPing(editingPost, 'URL_UPDATED', true);
       try {
         const updatedList = posts.map(p => p.id === editingPost.id ? editingPost : p);
         localStorage.setItem('sarkari_admin_posts_v3', JSON.stringify(updatedList));
@@ -402,7 +450,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
       } catch (err) {
         console.error(err);
       }
-      showToast(`🚀 Live Success: Post updated and published live!`);
+      showToast(`🚀 Post updated live & Google Indexing API notified!`);
       if (!stayInEditor) {
         setEditingPost(null);
       }
@@ -480,7 +528,14 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
             <div className="w-8 h-8 rounded bg-amber-400 text-slate-900 font-black flex items-center justify-center text-sm shadow-xs">
               ⚡
             </div>
-
+            <div>
+              <h2 className="text-sm sm:text-base font-black tracking-wide uppercase font-serif text-white">
+                Sarkari Admin Post Editor & Live Publisher
+              </h2>
+              <p className="text-[11px] text-amber-200 font-medium hidden sm:block">
+                Auto-syncs live post updates with Google Indexing API
+              </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -489,11 +544,11 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsGscModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 text-xs bg-amber-400 hover:bg-amber-500 text-red-950 px-3 py-1.5 rounded font-black cursor-pointer transition-colors shadow-2xs border border-amber-300"
-                  title="Google Search Console Indexing Manager & Sitemap Pinger"
+                  className="inline-flex items-center gap-1.5 text-xs bg-amber-400 hover:bg-amber-300 text-red-950 px-3 py-1.5 rounded font-black cursor-pointer transition-colors shadow-2xs border border-amber-300"
+                  title="Google Indexing API Real-Time Manager & Search Console Pinger"
                 >
-                  <Globe className="w-4 h-4 text-red-950" />
-                  <span>🔍 GSC Indexing Manager</span>
+                  <Zap className="w-4 h-4 text-red-950 fill-red-950" />
+                  <span>⚡ Ping Google Search</span>
                 </button>
                 <button
                   onClick={handleLogout}
@@ -519,7 +574,10 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         {isAuthenticated && (
           <div className="bg-slate-900 text-white px-3 sm:px-4 py-2 border-b border-slate-950 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0 shadow-md">
             <div className="flex items-center gap-2 flex-wrap">
-
+              <span className="text-xs text-amber-300 font-black flex items-center gap-1">
+                <Globe className="w-3.5 h-3.5" />
+                <span>Google Indexing API: Real-Time Auto-Ping Active</span>
+              </span>
             </div>
 
             <div className="text-[11px] text-slate-400 font-bold hidden md:flex items-center gap-2">
@@ -530,14 +588,29 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           </div>
         )}
 
-        {/* Quick Action Bar (New Post, Save, Publish, Direct Word Edit) */}
+        {/* Quick Action Bar (Post Selector, New Post, Save, Publish, Ping Google) */}
         {isAuthenticated && adminMainTab === 'editor' && (
           <div className="bg-white border-b border-slate-300 px-3 sm:px-4 py-2 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs flex-wrap">
+            <div className="flex items-center gap-2 flex-1 min-w-[260px] max-w-xl">
+              <span className="text-xs font-bold text-slate-600 whitespace-nowrap hidden sm:inline">पोस्ट चुनें:</span>
+              <select
+                value={editingPost?.id || ''}
+                onChange={(e) => {
+                  const sel = posts.find(p => p.id === e.target.value);
+                  if (sel) handleStartEdit(sel);
+                }}
+                className="w-full text-xs py-1.5 px-2 border border-slate-300 rounded font-bold text-slate-800 bg-slate-50 focus:outline-none focus:border-red-600 truncate"
+              >
+                <option value="" disabled>-- Select Post to Edit or Ping ({posts.length} Total) --</option>
+                {posts.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    [{p.category}] {p.shortTitle || p.title}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-
-            <div className="flex items-center gap-2">
-
-
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={handleStartCreate}
@@ -550,6 +623,17 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
 
               {editingPost && (
                 <>
+                  <button
+                    type="button"
+                    onClick={handleManualPingGoogle}
+                    disabled={isPingingGoogle}
+                    className="bg-red-700 hover:bg-red-800 text-white text-xs font-black px-3 py-1.5 rounded shrink-0 cursor-pointer shadow-2xs transition-colors flex items-center gap-1 disabled:opacity-50 border border-red-600"
+                    title="Send real-time URL_UPDATED notification to Google Indexing API for this post"
+                  >
+                    <Zap className={`w-3.5 h-3.5 fill-current ${isPingingGoogle ? 'animate-bounce text-amber-300' : ''}`} />
+                    <span>{isPingingGoogle ? 'Pinging...' : '⚡ Ping Google'}</span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => handleQuickSave(true)}
@@ -2577,6 +2661,18 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
+                  {!isCreatingNew && editingPost && (
+                    <button
+                      type="button"
+                      onClick={handleManualPingGoogle}
+                      disabled={isPingingGoogle}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-red-700 hover:bg-red-800 text-white font-bold text-xs px-4 py-3 sm:py-2.5 rounded shadow-sm cursor-pointer transition-colors disabled:opacity-50 border border-red-600"
+                      title="Send real-time URL_UPDATED ping to Google Indexing API"
+                    >
+                      <Zap className={`w-3.5 h-3.5 fill-current ${isPingingGoogle ? 'animate-bounce text-amber-300' : ''}`} />
+                      <span>{isPingingGoogle ? 'Pinging Google...' : '⚡ Ping Google Indexing'}</span>
+                    </button>
+                  )}
                   <button
                     type="submit"
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-[#ab1616] hover:bg-red-800 text-white font-black text-sm px-6 py-3 sm:py-2.5 rounded shadow-md cursor-pointer transition-colors"

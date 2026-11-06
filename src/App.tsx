@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
-import { mockSarkariPosts, iafHindiTypistPost, ntaJeeMainPost } from './data/mockJobs';
+import { mockSarkariPosts, ntaJeeMainPost } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
 import { QuickHighlightsGrid } from './components/QuickHighlightsGrid';
@@ -12,6 +12,7 @@ import { FastUpdatesGrid } from './components/FastUpdatesGrid';
 import { SarkariFooter } from './components/SarkariFooter';
 import { CategoryDetailView } from './components/CategoryDetailView';
 import { FullPagePostView } from './components/FullPagePostView';
+import { StatePromotionalBanners } from './components/StatePromotionalBanners';
 
 import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
@@ -109,26 +110,6 @@ export default function App() {
     };
   }, []);
 
-  // Ensure latest added jobs like Air Force Hindi Typist are at the very top of allPosts and have PDF attachments
-  useEffect(() => {
-    setAllPosts((prev) => {
-      const idx = prev.findIndex((p) => p.id === iafHindiTypistPost.id);
-      if (idx === -1) {
-        return [iafHindiTypistPost, ...prev];
-      }
-      const existing = prev[idx];
-      const hasPdf = existing.directLinks?.some((l) => l.fileName && l.isPdf);
-      if (!hasPdf) {
-        const next = [...prev];
-        next[idx] = {
-          ...existing,
-          directLinks: iafHindiTypistPost.directLinks
-        };
-        return next;
-      }
-      return prev;
-    });
-  }, []);
 
   // Admin Modal state
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
@@ -696,9 +677,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
   });
 
   return uniquePosts.sort((a, b) => {
-    // IAF Hindi Typist recruitment always guaranteed at the top
-    if (a.id === iafHindiTypistPost.id) return -1;
-    if (b.id === iafHindiTypistPost.id) return 1;
 
     // 1. Explicit newest badge prioritization (sabse uper)
     if (a.isNew && !b.isNew) return -1;
@@ -822,6 +800,16 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             bookmarkedIds={bookmarkedIds}
             isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
             onUpdatePost={handleUpdatePost}
+          />
+
+          {/* Dynamic State Promotional Banners (UP Govt Jobs, Bihar Exams, Rajasthan Vacancies, Central) */}
+          <StatePromotionalBanners
+            posts={allPosts}
+            onSelectStateFilter={(stateName) => {
+              setSearchQuery(stateName);
+              window.scrollTo({ top: 380, behavior: 'smooth' });
+            }}
+            onSelectPostSlug={handleSelectSlug}
           />
 
 

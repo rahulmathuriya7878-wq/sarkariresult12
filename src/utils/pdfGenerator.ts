@@ -53,10 +53,10 @@ export const generateRecruitmentNotificationPdf = (post: {
 }): string => {
   const title = escapePdfText(post.title || 'Government Recruitment Notification 2026');
   const dept = escapePdfText(post.department || 'Government of India');
-  const advt = escapePdfText(post.notificationNumber || 'Advt No. 04/2026 / HQ SAC');
-  const lastDate = escapePdfText(post.lastDate || '23/11/2026');
-  const vacancies = escapePdfText(String(post.totalVacancies || '01'));
-  const salary = escapePdfText(post.salary || 'Pay Level-2 (Rs 19,900 - 63,200)');
+  const advt = escapePdfText(post.notificationNumber || 'Recruitment Advt. 2026');
+  const lastDate = escapePdfText(post.lastDate || 'Refer to official portal');
+  const vacancies = escapePdfText(String(post.totalVacancies || 'As per norms'));
+  const salary = escapePdfText(post.salary || 'As per 7th CPC Pay Matrix');
 
   const streamContent = `BT
 /F1 16 Tf
@@ -66,50 +66,46 @@ export const generateRecruitmentNotificationPdf = (post: {
 0 -24 Td
 (DEPARTMENT: ${dept} | ${advt}) Tj
 0 -20 Td
-(OFFICIAL DETAILED NOTIFICATION & OFFLINE APPLICATION FORM FORMAT) Tj
+(OFFICIAL DETAILED NOTIFICATION & INFORMATION BROCHURE) Tj
 /F1 12 Tf
 0 -30 Td
 (1. RECRUITMENT DETAILS & VACANCY BREAKDOWN) Tj
 /F2 10 Tf
 0 -20 Td
-(Total Number of Posts: ${vacancies} Post | Category: OBC | Salary: ${salary}) Tj
+(Total Number of Posts: ${vacancies} | Salary: ${salary}) Tj
 0 -18 Td
-(Minimum Educational Qualification: 12th Pass from Recognized Board) Tj
+(Eligibility: Educational Qualification as prescribed in the official advertisement) Tj
 0 -18 Td
-(Typing Speed Requirement: 30 WPM in Hindi OR 35 WPM in English on Computer) Tj
+(Category-wise reservations applicable as per Government of India rules) Tj
 /F1 12 Tf
 0 -26 Td
 (2. IMPORTANT DATES & APPLICATION TIMELINE) Tj
 /F2 10 Tf
 0 -18 Td
-(Application Begin Date: 24/10/2026 | Last Date to Receive Application Form: ${lastDate}) Tj
+(Last Date to Submit Application: ${lastDate}) Tj
 0 -18 Td
-(Application Fee: NIL / Rs 0/- (Free for all categories)) Tj
+(Application Fee: As prescribed in the detailed recruitment advertisement) Tj
 /F1 12 Tf
 0 -26 Td
-(3. HOW TO APPLY - POSTAL SUBMISSION INSTRUCTIONS) Tj
+(3. HOW TO APPLY - GENERAL INSTRUCTIONS) Tj
 /F2 10 Tf
 0 -18 Td
-(Step 1: Download and print this prescribed offline application format on A4 paper.) Tj
+(Step 1: Read the official notification and eligibility guidelines thoroughly.) Tj
 0 -18 Td
-(Step 2: Fill in all entries neatly in Hindi or English (Block Capital Letters).) Tj
+(Step 2: Fill in all entries accurately without overwriting or false declarations.) Tj
 0 -18 Td
-(Step 3: Paste a self-attested passport photograph on the top right corner.) Tj
+(Step 3: Attach self-attested copies of required certificates and identification proof.) Tj
 0 -18 Td
-(Step 4: Attach self-attested copies of 10th, 12th marksheet, OBC caste certificate & ID proof.) Tj
-0 -18 Td
-(Step 5: Enclose one self-addressed envelope with required postal stamps affixed.) Tj
-0 -18 Td
-(Step 6: Write on envelope: "APPLICATION FOR THE POST OF HINDI TYPIST (OBC CATEGORY)".) Tj
+(Step 4: Submit application form before the closing date through official mode.) Tj
 /F1 11 Tf
 0 -26 Td
-(OFFICIAL POSTAL ADDRESS TO SEND APPLICATION:) Tj
+(OFFICIAL RECRUITMENT PORTAL:) Tj
 /F2 10 Tf
 0 -18 Td
-(The Commanding Officer, Head Quarter Southern Air Command Unit, Akkulam, Trivandrum - 695011) Tj
+(Please visit official recruitment website for regular updates and announcements.) Tj
 /F2 9 Tf
 0 -35 Td
-(Note: Generated and verified via Sarkari Result Official Portal - Verified Notification PDF) Tj
+(Note: Verified via Sarkari Result Official Portal - Official Recruitment Document) Tj
 ET`;
 
   const streamBytes = new TextEncoder().encode(streamContent);
