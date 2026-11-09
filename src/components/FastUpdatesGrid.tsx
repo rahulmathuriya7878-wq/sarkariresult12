@@ -222,7 +222,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
       </div>
 
-      {/* Pair 2: Admit Card | Answer Key */}
+      {/* Pair 2: Admit Card | Admission (Admit card ke bagal me Admission) */}
       <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
           isHindi ? 'प्रवेश पत्र (Admit Card)' : 'Admit Card',
@@ -233,30 +233,30 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
 
         {renderColumn(
+          isHindi ? 'प्रवेश (Admission)' : 'Admission',
+          '✍️ यूनिवर्सिटी एवं कॉलेज प्रवेश फॉर्म',
+          admissions,
+          'admission',
+          'View More Admission'
+        )}
+      </div>
+
+      {/* Pair 3: Answer Key | Syllabus */}
+      <div className="grid grid-cols-2 gap-1 sm:gap-2">
+        {renderColumn(
           isHindi ? 'उत्तर कुंजी (Answer Key)' : 'Answer Key',
           '✍️ आधिकारिक उत्तर कुंजी व आपत्ति दर्ज',
           answerKeys,
           'answer_key',
           'View More Answer Key'
         )}
-      </div>
 
-      {/* Pair 3: Syllabus | Admission */}
-      <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
           isHindi ? 'पाठ्यक्रम (Syllabus)' : 'Syllabus',
           '✍️ विषयवार परीक्षा पैटर्न एवं विस्तृत सिलेबस',
           syllabi,
           'syllabus',
           'View More Syllabus'
-        )}
-
-        {renderColumn(
-          isHindi ? 'प्रवेश (Admission)' : 'Admission',
-          '✍️ यूनिवर्सिटी एवं कॉलेज प्रवेश फॉर्म',
-          admissions,
-          'admission',
-          'View More Admission'
         )}
       </div>
 

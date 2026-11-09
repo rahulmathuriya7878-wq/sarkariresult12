@@ -215,6 +215,15 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
 
               <button
+                onClick={() => handleNavClick('admission')}
+                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
+                  activeCategory === 'admission' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
+                }`}
+              >
+                Admission
+              </button>
+
+              <button
                 onClick={() => handleNavClick('result')}
                 className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
                   activeCategory === 'result' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
@@ -230,15 +239,6 @@ export const Header: React.FC<HeaderProps> = ({
                 }`}
               >
                 Syllabus
-              </button>
-
-              <button
-                onClick={() => handleNavClick('admission')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'admission' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
-                }`}
-              >
-                Admission
               </button>
 
               {/* Mobile More Accordion */}
@@ -327,6 +327,15 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <button
+              onClick={() => handleNavClick('admission')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
+                activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
+              }`}
+            >
+              Admission
+            </button>
+
+            <button
               onClick={() => handleNavClick('result')}
               className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
                 activeCategory === 'result' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
@@ -342,15 +351,6 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               Syllabus
-            </button>
-
-            <button
-              onClick={() => handleNavClick('admission')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
-                activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Admission
             </button>
 
             {/* Desktop More Button */}
