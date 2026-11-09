@@ -95,11 +95,28 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
       'datePosted': postedDate,
       'validThrough': validThroughDate,
       'employmentType': 'FULL_TIME',
+      'directApply': true,
+      'jobImmediateStart': true,
+      'image': [`${domain}/sarkari-result-logo.jpg`],
       'keywords': keywordsString,
+      'educationRequirements': post.qualifications && post.qualifications.length > 0 
+        ? post.qualifications.join(', ') 
+        : '10th / 12th / Graduate from recognized Indian board or university',
+      'experienceRequirements': 'Freshers eligible / No prior experience required',
+      'applicantLocationRequirements': {
+        '@type': 'Country',
+        'name': 'India'
+      },
+      'identifier': {
+        '@type': 'PropertyValue',
+        'name': post.department || 'Government of India',
+        'value': post.id
+      },
       'hiringOrganization': {
         '@type': 'Organization',
         'name': post.department || 'Government Organization of India',
-        'sameAs': domain
+        'sameAs': domain,
+        'logo': `${domain}/sarkari-result-logo.jpg`
       },
       'jobLocation': {
         '@type': 'Place',
@@ -126,6 +143,7 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
       'name': post.title,
       'serviceType': categoryLabel,
       'keywords': keywordsString,
+      'image': [`${domain}/sarkari-result-logo.jpg`],
       'provider': {
         '@type': 'GovernmentOrganization',
         'name': post.department || 'Government of India',
@@ -146,9 +164,14 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
     'headline': post.title,
     'description': post.shortInfo || post.title,
     'keywords': keywordsString,
+    'image': [`${domain}/sarkari-result-logo.jpg`],
     'datePublished': postedDate,
     'dateModified': postedDate,
     'mainEntityOfPage': postUrl,
+    'speakable': {
+      '@type': 'SpeakableSpecification',
+      'cssSelector': ['h1', 'p']
+    },
     'author': {
       '@type': 'Organization',
       'name': 'Sarkari Result Portal',
@@ -159,7 +182,9 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
       'name': 'Sarkari Result Portal',
       'logo': {
         '@type': 'ImageObject',
-        'url': `${domain}/sarkari-result-logo.jpg`
+        'url': `${domain}/sarkari-result-logo.jpg`,
+        'width': 1200,
+        'height': 630
       }
     }
   };
@@ -224,6 +249,8 @@ export function generateRssXml(posts: SarkariPost[] = mockSarkariPosts, domain: 
     <language>hi-in</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${domain}/rss.xml" rel="self" type="application/rss+xml" />
+    <atom:link rel="hub" href="https://pubsubhubbub.appspot.com/" />
+    <atom:link rel="hub" href="https://superfeedr.com/hub/api" />
     <image>
       <url>${domain}/sarkari-result-logo.jpg</url>
       <title>Sarkari Result Portal</title>
