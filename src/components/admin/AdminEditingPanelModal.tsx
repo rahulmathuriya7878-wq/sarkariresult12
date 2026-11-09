@@ -44,13 +44,17 @@ import {
   Globe,
   Zap,
   Send,
-  RefreshCw
+  RefreshCw,
+  TrendingUp,
+  Hash
 } from 'lucide-react';
 import { getPostFAQs } from '../FullPagePostView';
 import { AIBlogWriter } from './AIBlogWriter';
 import { GoogleIndexationManager } from './GoogleIndexationManager';
+import { TrafficGrowthHub } from './TrafficGrowthHub';
 import { readPdfFileAsDataUrl } from '../../utils/pdfGenerator';
 import { validateIso8601 } from '../../utils/dateUtils';
+import { getPostViralTags, formatViralTagsString } from '../../utils/viralTagsHelper';
 
 interface AdminEditingPanelModalProps {
   isOpen: boolean;
@@ -182,6 +186,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   // Main Admin Panel Modules: 1. Full Post Editor, 2. AI Blog Writer
   const [adminMainTab, setAdminMainTab] = useState<'editor' | 'ai_blog'>('editor');
   const [isGscModalOpen, setIsGscModalOpen] = useState<boolean>(false);
+  const [isTrafficHubOpen, setIsTrafficHubOpen] = useState<boolean>(false);
 
   // Editor State
   const [editingPost, setEditingPost] = useState<SarkariPost | null>(null);
@@ -541,6 +546,15 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           <div className="flex items-center gap-2">
             {isAuthenticated && (
               <>
+                <button
+                  type="button"
+                  onClick={() => setIsTrafficHubOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded font-black cursor-pointer transition-colors shadow-2xs border border-emerald-400"
+                  title="Traffic Growth Hub - WhatsApp & Telegram Broadcasts, Viral Keywords & SEO"
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span>🚀 Traffic Growth Hub</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => setIsGscModalOpen(true)}
@@ -2637,6 +2651,145 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 </div>
               </div>
 
+              {/* 🔥 Trending Viral Search Tags & Keywords Management Section */}
+              <div className="border border-red-200 bg-red-50/20 rounded p-4 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-red-200 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🔥</span>
+                    <div>
+                      <h4 className="text-xs font-black text-slate-900 uppercase tracking-wide">
+                        Trending Viral Search Tags (वायरल सर्च टैग्स & कीवर्ड्स)
+                      </h4>
+                      <p className="text-[11px] text-slate-500 font-medium">
+                        Automatically generated hashtags & keywords for SEO, WhatsApp & Telegram Broadcasts
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const autoTags = getPostViralTags({
+                          ...editingPost,
+                          viralTags: undefined // force regeneration based on current title/category/department
+                        });
+                        setEditingPost({
+                          ...editingPost,
+                          viralTags: autoTags
+                        });
+                        showToast(`⚡ ${autoTags.length} Viral Tags Generated!`);
+                      }}
+                      className="text-xs bg-red-700 hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded flex items-center gap-1 shadow-2xs cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>⚡ Auto-Generate Tags</span>
+                    </button>
+                    {editingPost.viralTags && editingPost.viralTags.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = { ...editingPost };
+                          delete next.viralTags;
+                          setEditingPost(next);
+                          showToast('Tags reset to dynamic defaults');
+                        }}
+                        className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold px-2.5 py-1.5 rounded cursor-pointer"
+                        title="Reset to dynamic auto tags"
+                      >
+                        Reset to Auto
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Tags preview chips */}
+                {(() => {
+                  const currentTags = (editingPost.viralTags && editingPost.viralTags.length > 0)
+                    ? editingPost.viralTags
+                    : getPostViralTags(editingPost);
+
+                  return (
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-center gap-1.5 bg-white p-3 rounded border border-slate-300 max-h-48 overflow-y-auto">
+                        {currentTags.map((tag, tIdx) => (
+                          <span
+                            key={tIdx}
+                            className="inline-flex items-center gap-1 bg-red-50 text-red-900 border border-red-200 px-2.5 py-1 rounded text-xs font-bold shadow-2xs"
+                          >
+                            <span className="text-red-600 font-black">#</span>
+                            <span>{tag.replace(/^#/, '')}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updated = currentTags.filter((_, idx) => idx !== tIdx);
+                                setEditingPost({
+                                  ...editingPost,
+                                  viralTags: updated
+                                });
+                              }}
+                              className="text-red-400 hover:text-red-700 font-black ml-1 cursor-pointer"
+                              title="हटाएं (Remove)"
+                            >
+                              ✕
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Manual Add / Comma-separated Text Input */}
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
+                          Add or Bulk Paste Tags (कॉमा या स्पेस से अलग करके नए टैग्स जोड़ें):
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            placeholder="e.g. #UPPolice, #AnswerKey2026, #BPSCTRE4, #CutOff"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                const input = (e.target as HTMLInputElement).value;
+                                if (!input.trim()) return;
+                                const newTokens = input
+                                  .split(/[\s,]+/)
+                                  .map(t => t.trim())
+                                  .filter(t => t.length > 1)
+                                  .map(t => t.startsWith('#') ? t : `#${t}`);
+                                
+                                const merged = Array.from(new Set([...currentTags, ...newTokens]));
+                                setEditingPost({ ...editingPost, viralTags: merged });
+                                (e.target as HTMLInputElement).value = '';
+                                showToast(`+${newTokens.length} Tags Added!`);
+                              }
+                            }}
+                            className="flex-1 px-3 py-1.5 border border-slate-300 rounded text-xs text-slate-800 font-semibold focus:outline-none focus:border-red-600 bg-white"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const text = formatViralTagsString(currentTags);
+                              navigator.clipboard.writeText(text);
+                              showToast('📋 All Viral Tags Copied to Clipboard!');
+                            }}
+                            className="text-xs bg-slate-900 hover:bg-slate-800 text-white font-bold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copy All</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="text-[11px] text-slate-500 bg-amber-50/60 p-2 rounded border border-amber-200/60 flex items-center gap-2">
+                        <span>💡</span>
+                        <span>
+                          ये वायरल टैग्स पोस्ट पेज पर विज़िबल चिप्स के रूप में, Google Schema (JobPosting / NewsArticle) और Meta Keywords में स्वतः जुड़ते हैं जिससे सर्च इंजन रैंकिंग व सोशल शेयरिंग तेज़ होती है।
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
               {/* Bottom Actions Bar - Optimized for Mobile & Desktop */}
               <div className="border border-slate-300 py-3 px-3 sm:px-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between sticky bottom-0 bg-white rounded-none sm:rounded shadow-lg z-20 mt-4 gap-2.5">
                 <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
@@ -2812,6 +2965,14 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           posts={posts}
           isOpen={isGscModalOpen}
           onClose={() => setIsGscModalOpen(false)}
+        />
+
+        {/* Website Traffic & Viral Growth Hub Modal */}
+        <TrafficGrowthHub
+          posts={posts}
+          isOpen={isTrafficHubOpen}
+          onClose={() => setIsTrafficHubOpen(false)}
+          onOpenGscManager={() => setIsGscModalOpen(true)}
         />
       </div>
     </div>

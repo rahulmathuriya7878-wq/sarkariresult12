@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { generateRobotsTxt, generateSitemapXml } from './src/utils/sitemapGenerator.ts';
 import { generateRssXml, generateHtmlSitemapPage, generatePostSchemaJsonLd, CANONICAL_DOMAIN, escapeHtml } from './src/utils/seoHelpers.ts';
+import { getPostViralTags } from './src/utils/viralTagsHelper.ts';
 import { mockSarkariPosts } from './src/data/mockJobs.ts';
 import {
   notifyGoogleIndexingApi,
@@ -335,10 +336,12 @@ async function startServer() {
   // Helper for dynamic HTML meta & pre-render injection
   const renderDynamicHtml = (req: express.Request, rawHtml: string): string => {
     const baseUrl = getBaseUrl(req);
-    const urlPath = req.path;
+    const rawUrl = req.originalUrl || req.path || '/';
+    const [pathPart] = rawUrl.split('?');
+    const cleanPath = (pathPart || '/').replace(/\/+$/, '') || '/';
 
     // Check if matching a post slug: /post/:slug
-    const postSlugMatch = urlPath.match(/\/post\/([^\/]+)/);
+    const postSlugMatch = cleanPath.match(/\/post\/([^\/]+)/);
     let matchedPost = null;
 
     if (postSlugMatch) {
@@ -348,9 +351,12 @@ async function startServer() {
 
     let pageTitle = "Sarkari Result Portal - Latest Govt Jobs, Admit Card & Results";
     let metaDesc = "India's premier portal for Sarkari Result, Sarkari Naukri, Admit Card, Answer Key, Syllabus, and competitive government exam notifications with real-time updates.";
-    let canonicalUrl = `${baseUrl}${urlPath}`;
+    // Self-referencing clean canonical URL (Query strings & trailing slashes removed)
+    let canonicalUrl = `${baseUrl}${cleanPath === '/' ? '/' : cleanPath}`;
     let schemaJsonLd = "";
     let bodyFallback = "";
+
+    let metaKeywords = "Sarkari Result, Sarkari Naukri, Latest Jobs, Admit Card 2026, Exam Results, Answer Key, Online Form";
 
     if (matchedPost) {
       const postTitle = matchedPost.title;
@@ -361,6 +367,13 @@ async function startServer() {
       }
       canonicalUrl = `${baseUrl}/post/${matchedPost.slug || matchedPost.id}`;
       schemaJsonLd = generatePostSchemaJsonLd(matchedPost, baseUrl);
+
+      const postTags = getPostViralTags(matchedPost);
+      metaKeywords = postTags.map(t => t.replace(/^#/, '')).join(', ');
+
+      const tagsHtml = postTags
+        .map(t => `<span style="display:inline-block; background:#f1f5f9; color:#ab1616; border:1px solid #e2e8f0; font-size:12px; font-weight:bold; padding:3px 8px; border-radius:4px; margin:2px 4px 2px 0;">${escapeHtml(t)}</span>`)
+        .join(' ');
 
       bodyFallback = `
         <div style="font-family: sans-serif; padding: 20px; max-width: 900px; margin: 0 auto; color: #1e293b;">
@@ -373,18 +386,45 @@ async function startServer() {
             ${matchedPost.lastDate ? `<p><strong>Last Date to Apply:</strong> ${escapeHtml(matchedPost.lastDate)}</p>` : ''}
             ${matchedPost.totalVacancies ? `<p><strong>Total Vacancies:</strong> ${escapeHtml(String(matchedPost.totalVacancies))}</p>` : ''}
           </div>
+          <div style="margin: 20px 0; padding: 15px; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px;">
+            <p style="font-weight: bold; margin-bottom: 8px; color: #0f172a;">🔥 Trending Viral Search Tags (वायरल सर्च टैग्स):</p>
+            <div>${tagsHtml}</div>
+          </div>
           <p>Read full eligibility criteria, age relaxation, selection process, syllabus, and official application form on Sarkari Result Portal.</p>
         </div>
       `;
-    } else if (urlPath.includes('latest-jobs')) {
+    } else if (cleanPath === '/latest-jobs' || cleanPath.includes('latest-jobs')) {
       pageTitle = "Latest Government Jobs 2026 (Sarkari Naukri) - Sarkari Result Portal";
       metaDesc = "Explore all active Sarkari Naukri notifications, UPSC, SSC, Banking, Railway, Defense, State PSC job alerts with direct official links.";
-    } else if (urlPath.includes('result')) {
+      canonicalUrl = `${baseUrl}/latest-jobs`;
+    } else if (cleanPath === '/result' || cleanPath.includes('result')) {
       pageTitle = "Government Exam Results 2026 (Sarkari Result) - Direct Download Links";
       metaDesc = "Check official Sarkari Result 2026 for UPSC, SSC CGL, Railway RRB, Banking IBPS, Police & State Level Competitive Examinations.";
-    } else if (urlPath.includes('admit-card')) {
+      canonicalUrl = `${baseUrl}/result`;
+    } else if (cleanPath === '/admit-card' || cleanPath.includes('admit-card')) {
       pageTitle = "Admit Card 2026 - Hall Ticket & Exam City Intimation Download";
       metaDesc = "Download official admit cards and hall tickets for competitive exams across India. Fast & direct official login links.";
+      canonicalUrl = `${baseUrl}/admit-card`;
+    } else if (cleanPath === '/admission' || cleanPath.includes('admission')) {
+      pageTitle = "Admission 2026 - University & National Entrance Exam Forms";
+      metaDesc = "Find all university entrance exam notifications, NTA admissions, counseling schedules, and online application links.";
+      canonicalUrl = `${baseUrl}/admission`;
+    } else if (cleanPath === '/answer-key' || cleanPath.includes('answer-key')) {
+      pageTitle = "Answer Key 2026 - Official Question Papers & Solution Keys";
+      metaDesc = "Download official exam answer keys, response sheets, and submit objection forms with direct portal links.";
+      canonicalUrl = `${baseUrl}/answer-key`;
+    } else if (cleanPath === '/syllabus' || cleanPath.includes('syllabus')) {
+      pageTitle = "Exam Pattern & Detailed Syllabus 2026 - Sarkari Result";
+      metaDesc = "Download latest exam pattern, marking scheme, and topic-wise syllabus PDFs for all central and state exams.";
+      canonicalUrl = `${baseUrl}/syllabus`;
+    } else if (cleanPath === '/certificate-verification') {
+      pageTitle = "Certificate Verification & Official Services - Sarkari Result";
+      metaDesc = "Verify caste certificate, income certificate, domicile certificate, and official government document portals.";
+      canonicalUrl = `${baseUrl}/certificate-verification`;
+    } else if (cleanPath === '/important-services') {
+      pageTitle = "Important Official Services & Portals - Sarkari Result";
+      metaDesc = "Access pan card, voter ID, aadhar card, scholarship forms, and national welfare service portals.";
+      canonicalUrl = `${baseUrl}/important-services`;
     }
 
     let modifiedHtml = rawHtml;
@@ -394,6 +434,13 @@ async function startServer() {
 
     // Replace Description
     modifiedHtml = modifiedHtml.replace(/<meta\s+name="description"\s+content=".*?"\s*\/?>/gi, `<meta name="description" content="${escapeHtml(metaDesc)}" />`);
+
+    // Replace or Inject Keywords
+    if (/<meta\s+[^>]*name=["']keywords["']/i.test(modifiedHtml)) {
+      modifiedHtml = modifiedHtml.replace(/<meta\s+[^>]*name=["']keywords["'][^>]*\/?>/gi, `<meta name="keywords" content="${escapeHtml(metaKeywords)}" />`);
+    } else {
+      modifiedHtml = modifiedHtml.replace('</head>', `    <meta name="keywords" content="${escapeHtml(metaKeywords)}" />\n</head>`);
+    }
 
     // Replace Canonical
     modifiedHtml = modifiedHtml.replace(/<link\s+rel="canonical"\s+href=".*?"\s*\/?>/gi, `<link rel="canonical" href="${escapeHtml(canonicalUrl)}" />`);
@@ -423,7 +470,7 @@ async function startServer() {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: 'spa',
+      appType: 'custom',
     });
     app.use(vite.middlewares);
 

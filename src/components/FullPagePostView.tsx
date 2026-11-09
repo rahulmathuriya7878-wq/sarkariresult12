@@ -69,11 +69,15 @@ import {
   Share2,
   Copy,
   X,
-  Edit3
+  Edit3,
+  Check,
+  Hash
 } from 'lucide-react';
 import { isPostAlertActive, togglePostAlert, getPostStatus } from '../utils/alertManager';
 import { PostAlertModal } from './PostAlertModal';
 import { ALL_RRB_BOARDS } from '../data/rrbBoards';
+import { getPostViralTags, formatViralTagsString } from '../utils/viralTagsHelper';
+import { CANONICAL_DOMAIN } from '../utils/seoHelpers';
 
 interface FullPagePostViewProps {
   post: SarkariPost;
@@ -352,6 +356,68 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   const [isPdfModalOpen, setIsPdfModalOpen] = useState<boolean>(false);
   const [pdfUploadTargetIndex, setPdfUploadTargetIndex] = useState<number | null>(null);
   const pdfFileInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  // Viral Tags computed for this post
+  const viralTags = useMemo(() => {
+    return getPostViralTags(editablePost);
+  }, [editablePost]);
+
+  const [copiedTag, setCopiedTag] = useState<string | null>(null);
+  const [isCopiedAll, setIsCopiedAll] = useState<boolean>(false);
+  const [newTagInput, setNewTagInput] = useState<string>('');
+
+  const handleCopyTag = (tag: string) => {
+    try {
+      navigator.clipboard.writeText(tag);
+      setCopiedTag(tag);
+      setTimeout(() => setCopiedTag(null), 2000);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleCopyAllTags = () => {
+    try {
+      const allText = formatViralTagsString(viralTags);
+      navigator.clipboard.writeText(allText);
+      setIsCopiedAll(true);
+      setTimeout(() => setIsCopiedAll(false), 2500);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleShareWhatsApp = () => {
+    const baseUrl = typeof window !== 'undefined' && !window.location.host.includes('run.app') && !window.location.host.includes('localhost')
+      ? window.location.origin 
+      : 'https://sarkariresult12.vercel.app';
+    const cleanSlug = editablePost.slug || `post-${editablePost.id}`;
+    const postUrl = `${baseUrl}/post/${cleanSlug}`;
+    const tagsStr = formatViralTagsString(viralTags);
+    const msg = `🔥 *${editablePost.shortTitle || editablePost.title}*\n\n🏛️ विभाग: ${editablePost.department || 'सरकारी विभाग'}\n📅 अंतिम तिथि: ${editablePost.lastDate || 'विस्तृत सूचना देखें'}\n\n👉 *ऑनलाइन आवेदन व आधिकारिक लिंक:* \n${postUrl}\n\n${tagsStr}\n\n📲 सबसे तेज सरकारी रिजल्ट व जॉब्स अपडेट: https://t.me/newsarkariresultt`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
+  const handleAddCustomTag = () => {
+    if (!newTagInput.trim()) return;
+    const cleanTag = newTagInput.trim().startsWith('#') ? newTagInput.trim() : `#${newTagInput.trim()}`;
+    const currentTags = editablePost.viralTags && editablePost.viralTags.length > 0 ? editablePost.viralTags : viralTags;
+    if (!currentTags.includes(cleanTag)) {
+      setEditablePost(prev => ({
+        ...prev,
+        viralTags: [...currentTags, cleanTag]
+      }));
+    }
+    setNewTagInput('');
+  };
+
+  const handleResetViralTags = () => {
+    setEditablePost(prev => {
+      const next = { ...prev };
+      delete next.viralTags;
+      return next;
+    });
+  };
 
   // Real-time automatic persistence: only persists when editablePost actually changes
   useEffect(() => {
@@ -861,8 +927,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     }
     const originalCanonical = canonicalLink.href || '';
     const baseUrl = typeof window !== 'undefined' && !window.location.host.includes('run.app') && !window.location.host.includes('localhost')
-      ? window.location.origin 
-      : 'https://sarkariresult12.vercel.app';
+      ? window.location.origin.replace(/\/+$/, '') 
+      : CANONICAL_DOMAIN;
     const cleanCanonicalUrl = `${baseUrl}/post/${post.slug || post.id}`;
     const currentUrl = cleanCanonicalUrl;
     canonicalLink.href = cleanCanonicalUrl;
@@ -879,6 +945,19 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     const originalDesc = metaDesc.getAttribute('content') || '';
     const postDesc = (post.shortInfo || `${post.title} check official recruitment notice, important dates, eligibility, total vacancies, online application fee, selection process, and direct download link.`).replace(/\n+/g, ' ').slice(0, 160);
     metaDesc.setAttribute('content', postDesc);
+
+    // Dynamic Meta Keywords update
+    let metaKeywords = document.querySelector('meta[name="keywords"]') as HTMLMetaElement | null;
+    let createdKeywords = false;
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.name = 'keywords';
+      document.head.appendChild(metaKeywords);
+      createdKeywords = true;
+    }
+    const originalKeywords = metaKeywords.getAttribute('content') || '';
+    const keywordsStr = viralTags.map(t => t.replace(/^#/, '')).join(', ');
+    metaKeywords.setAttribute('content', keywordsStr);
 
     // Dynamic OG Meta Tags
     const ogTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
@@ -965,6 +1044,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         "@type": "JobPosting",
         "title": post.title,
         "description": post.shortInfo || post.title,
+        "keywords": keywordsStr,
         "identifier": {
           "@type": "PropertyValue",
           "name": post.department || "Government of India",
@@ -1001,6 +1081,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         if (createdDesc) metaDesc.remove();
         else metaDesc.setAttribute('content', originalDesc);
       }
+      if (metaKeywords) {
+        if (createdKeywords) metaKeywords.remove();
+        else metaKeywords.setAttribute('content', originalKeywords);
+      }
       const existingFaq = document.getElementById(faqScriptId);
       if (existingFaq) existingFaq.remove();
       const existingBc = document.getElementById(breadcrumbScriptId);
@@ -1008,7 +1092,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       const existingJob = document.getElementById(jobScriptId);
       if (existingJob) existingJob.remove();
     };
-  }, [post, faqs]);
+  }, [post, faqs, viralTags]);
 
   const isServiceOrScheme = post.category === 'important' || post.category === 'certificate_verification';
 
@@ -1300,6 +1384,40 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           {renderFormattedShortInfo(editablePost.shortInfo)}
                         </div>
                       )}
+                    </td>
+                  </tr>
+                  {/* Row 4: Trending Viral Tags Strip */}
+                  <tr className="border-t border-slate-200 bg-slate-50/70">
+                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[12pt] sm:text-[13pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
+                      Trending Tags :
+                    </td>
+                    <td className="p-3 sm:p-4 align-top">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {viralTags.slice(0, 8).map((tag) => (
+                          <button
+                            key={tag}
+                            type="button"
+                            onClick={() => handleCopyTag(tag)}
+                            title={`Click to copy ${tag}`}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-red-50 text-slate-800 hover:text-red-700 font-bold text-[11px] rounded border border-slate-300 hover:border-red-400 shadow-2xs transition-all cursor-pointer"
+                          >
+                            <span className="text-red-600 font-black">#</span>
+                            <span>{tag.replace(/^#/, '')}</span>
+                            {copiedTag === tag && (
+                              <Check className="w-3 h-3 text-emerald-600 inline ml-0.5" />
+                            )}
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={handleCopyAllTags}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-extrabold text-[11px] rounded border border-red-300 cursor-pointer transition-colors shadow-2xs"
+                          title="Copy all viral tags"
+                        >
+                          <Copy className="w-3 h-3" />
+                          <span>{isCopiedAll ? 'Copied!' : 'Copy All'}</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -2240,7 +2358,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     </span>
                   </div>
                   <a
-                    href="https://whatsapp.com/channel/sarkariresult"
+                    href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-1 px-3 py-1 text-white font-bold text-[10pt] bg-blue-600 hover:bg-blue-700 rounded-md shadow-2xs cursor-pointer transition-colors"
@@ -2258,7 +2376,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     </span>
                   </div>
                   <a
-                    href="https://t.me/sarkariresult"
+                    href="https://t.me/newsarkariresultt"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-1 px-3 py-1 text-white font-bold text-[10pt] bg-[#229ED9] hover:bg-sky-600 rounded-md shadow-2xs cursor-pointer transition-colors"
@@ -2344,6 +2462,187 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               ) : renderHiddenBanner('sec_faqs', 'FAQs')
             )}
+
+            {/* 🔥 Trending Viral Search Tags & Keywords Section */}
+            {!hiddenSections['sec_viral_tags'] ? (
+              <div className="border-2 border-red-200 bg-gradient-to-br from-amber-50/40 via-white to-red-50/30 rounded-xl overflow-hidden shadow-xs my-5 font-sans">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-red-700 via-rose-700 to-red-800 text-white px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl animate-pulse">🔥</span>
+                    <div>
+                      <h3 className="font-black text-[12pt] sm:text-[13pt] tracking-wide uppercase flex items-center gap-1.5 text-white">
+                        <span>Trending Viral Search Tags</span>
+                        <span className="text-amber-300 text-xs sm:text-sm font-bold">| वायरल सर्च टैग्स & कीवर्ड्स</span>
+                      </h3>
+                      <p className="text-[10px] sm:text-[11px] text-red-100 font-medium">
+                        Search Trends, WhatsApp & Telegram Broadcast Hashtags for High Visibility
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="bg-amber-400 text-slate-950 font-black text-[10px] uppercase px-2 py-0.5 rounded shadow-2xs">
+                      {viralTags.length} Viral Tags
+                    </span>
+                    {renderSectionControls('sec_viral_tags', 'Viral Tags')}
+                  </div>
+                </div>
+
+                <div className="p-4 sm:p-5 space-y-4">
+                  {/* Informational Subtext */}
+                  <div className="flex items-start gap-2 text-xs text-slate-700 bg-white/90 p-3 rounded-lg border border-slate-200">
+                    <span className="text-red-600 font-bold text-sm shrink-0">💡</span>
+                    <p className="leading-relaxed">
+                      अभ्यर्थी एवं छात्र इन ट्रेंडिंग वायरल टैग्स के माध्यम से सोशल मीडिया (WhatsApp, Telegram, YouTube) एवं गूगल सर्च पर इस भर्ती व रिजल्ट से संबंधित सभी नवीनतम अपडेट तुरंत प्राप्त कर सकते हैं।
+                    </p>
+                  </div>
+
+                  {/* Viral Tags Pills Cloud */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {viralTags.map((tag) => {
+                      const isJustCopied = copiedTag === tag;
+                      return (
+                        <div key={tag} className="inline-flex items-center">
+                          <button
+                            type="button"
+                            onClick={() => handleCopyTag(tag)}
+                            title="Click to copy this viral tag"
+                            className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-2xs cursor-pointer border ${
+                              isJustCopied
+                                ? 'bg-emerald-600 text-white border-emerald-700 scale-105'
+                                : 'bg-white hover:bg-red-50 text-slate-800 hover:text-red-700 border-slate-300 hover:border-red-400'
+                            }`}
+                          >
+                            <Hash className={`w-3.5 h-3.5 ${isJustCopied ? 'text-white' : 'text-red-600 group-hover:scale-110 transition-transform'}`} />
+                            <span>{tag.replace(/^#/, '')}</span>
+                            {isJustCopied ? (
+                              <Check className="w-3.5 h-3.5 text-white" />
+                            ) : (
+                              <Copy className="w-3 h-3 text-slate-400 group-hover:text-red-600 opacity-60 group-hover:opacity-100 transition-opacity" />
+                            )}
+                          </button>
+                          {isDirectEditMode && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const current = editablePost.viralTags && editablePost.viralTags.length > 0 ? editablePost.viralTags : viralTags;
+                                setEditablePost(prev => ({
+                                  ...prev,
+                                  viralTags: current.filter(t => t !== tag)
+                                }));
+                              }}
+                              className="ml-1 text-red-500 hover:text-red-700 font-black text-xs px-1 cursor-pointer"
+                              title="हटाएं (Remove tag)"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Actions Bar */}
+                  <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleCopyAllTags}
+                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold text-xs transition-all cursor-pointer shadow-sm ${
+                          isCopiedAll 
+                            ? 'bg-emerald-600 text-white' 
+                            : 'bg-slate-900 hover:bg-slate-800 text-white'
+                        }`}
+                      >
+                        {isCopiedAll ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-200" />
+                            <span>Copied All Tags! (सभी टैग्स कॉपी हो गए)</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>📋 Copy All Tags (सभी टैग्स कॉपी करें)</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleShareWhatsApp}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#25D366] hover:bg-emerald-600 text-white font-bold text-xs rounded-lg shadow-sm transition-colors cursor-pointer"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5 fill-current" />
+                        <span>Share on WhatsApp with Tags</span>
+                      </button>
+
+                      <a
+                        href="https://t.me/newsarkariresultt"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#229ED9] hover:bg-sky-600 text-white font-bold text-xs rounded-lg shadow-sm transition-colors cursor-pointer"
+                      >
+                        <Send className="w-3.5 h-3.5 fill-current" />
+                        <span>Join Telegram Channel</span>
+                      </a>
+                    </div>
+
+                    {copiedTag && (
+                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-200 flex items-center gap-1 animate-pulse">
+                        <Check className="w-3.5 h-3.5" />
+                        "{copiedTag}" क्लिपबोर्ड में कॉपी हो गया!
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Direct Admin Edit Tag Controls */}
+                  {isDirectEditMode && (
+                    <div className="mt-3 p-3 bg-red-50/70 border border-red-200 rounded-lg space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-red-900 flex items-center gap-1">
+                          <Edit3 className="w-3.5 h-3.5 text-red-700" />
+                          <span>Admin Tag Editor (कस्टम टैग्स जोड़ें / बदलें)</span>
+                        </span>
+                        {editablePost.viralTags && editablePost.viralTags.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={handleResetViralTags}
+                            className="text-[11px] font-bold text-slate-600 hover:text-red-700 underline cursor-pointer"
+                          >
+                            Reset to Auto-Generated Tags
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="relative flex-1">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs">#</span>
+                          <input
+                            type="text"
+                            value={newTagInput}
+                            onChange={(e) => setNewTagInput(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleAddCustomTag();
+                              }
+                            }}
+                            placeholder="नया वायरल टैग लिखें (e.g. PoliceCutOff2026)"
+                            className="w-full pl-6 pr-3 py-1.5 bg-white border border-slate-300 rounded text-xs text-slate-800 font-semibold focus:outline-none focus:border-red-600"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleAddCustomTag}
+                          className="px-3 py-1.5 bg-red-700 hover:bg-red-800 text-white rounded text-xs font-bold cursor-pointer"
+                        >
+                          + Add Tag
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : renderHiddenBanner('sec_viral_tags', 'Viral Tags')}
 
             {/* 1. Latest Jobs Section (Vertical Stack) */}
             <div className="border border-slate-300 bg-white rounded-xs overflow-hidden shadow-2xs font-sans">

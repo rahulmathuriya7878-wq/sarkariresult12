@@ -184,4 +184,5 @@ export interface SarkariPost {
     url: string;
     uploadedAt?: string;
   };
+  viralTags?: string[];
 }

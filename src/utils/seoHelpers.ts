@@ -1,5 +1,6 @@
 import { SarkariPost } from '../types/job';
 import { mockSarkariPosts } from '../data/mockJobs';
+import { getPostViralTags, formatViralTagsString } from './viralTagsHelper';
 
 export const CANONICAL_DOMAIN = 'https://sarkariresult12.vercel.app';
 
@@ -82,6 +83,9 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
   // 2. Primary Entity Schema
   let mainEntitySchema: Record<string, any>;
 
+  const viralTags = getPostViralTags(post);
+  const keywordsString = viralTags.map(t => t.replace(/^#/, '')).join(', ');
+
   if (post.category === 'latest_jobs') {
     mainEntitySchema = {
       '@type': 'JobPosting',
@@ -91,6 +95,7 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
       'datePosted': postedDate,
       'validThrough': validThroughDate,
       'employmentType': 'FULL_TIME',
+      'keywords': keywordsString,
       'hiringOrganization': {
         '@type': 'Organization',
         'name': post.department || 'Government Organization of India',
@@ -120,6 +125,7 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
       '@id': `${postUrl}#service`,
       'name': post.title,
       'serviceType': categoryLabel,
+      'keywords': keywordsString,
       'provider': {
         '@type': 'GovernmentOrganization',
         'name': post.department || 'Government of India',
@@ -139,6 +145,7 @@ export function generatePostSchemaJsonLd(post: SarkariPost, domain: string = CAN
     '@id': `${postUrl}#article`,
     'headline': post.title,
     'description': post.shortInfo || post.title,
+    'keywords': keywordsString,
     'datePublished': postedDate,
     'dateModified': postedDate,
     'mainEntityOfPage': postUrl,

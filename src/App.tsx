@@ -16,6 +16,7 @@ import { FullPagePostView } from './components/FullPagePostView';
 import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
 import { PushNotificationBanner } from './components/PushNotificationBanner';
+import { updateDocumentCanonical } from './utils/canonicalManager';
 
 // Dynamic Lazy Imports for Modals to maximize Mobile PageSpeed & minimize initial bundle
 const AdminEditingPanelModal = lazy(() => import('./components/admin/AdminEditingPanelModal').then(m => ({ default: m.AdminEditingPanelModal })));
@@ -301,14 +302,23 @@ export default function App() {
     };
   }, []);
 
-  // Handle URL pathname and hash routing
+  // Handle dynamic title and self-referential canonical URL management
   useEffect(() => {
-    // Dynamic title management
     if (selectedPost) {
       document.title = `${selectedPost.shortTitle || selectedPost.title} - Sarkari Result`;
+      updateDocumentCanonical(`/post/${selectedPost.slug || selectedPost.id}`);
+    } else if (activeCategory && activeCategory !== 'all') {
+      const cleanCat = activeCategory.replace('_', '-');
+      document.title = `${cleanCat.toUpperCase()} - Sarkari Result 2026`;
+      updateDocumentCanonical(`/${cleanCat}`);
     } else {
       document.title = 'Sarkari Result 2026 - Official Job Alerts & Notifications';
+      updateDocumentCanonical('/');
     }
+  }, [selectedPost, activeCategory]);
+
+  // Handle URL pathname and hash routing
+  useEffect(() => {
 
     const handleRoute = () => {
       // Check if user landed via shared link
