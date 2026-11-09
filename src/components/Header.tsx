@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   Search,
   ChevronDown,
@@ -57,14 +57,29 @@ export const Header: React.FC<HeaderProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const trendingTags = [
-    { label: 'Supreme Court Form 2026', slug: 'supreme-court-court-master-online-form-2026' },
-    { label: 'UP Primary Teacher', slug: 'upessc-up-primary-teacher-super-tet-2026' },
-    { label: 'BPSC TRE 4.0', slug: 'bpsc-school-teacher-tre-4-online-form-2026' },
-    { label: 'Railway NTPC', slug: 'rrb-ntpc-12th-level-recruitment-2026' },
-    { label: 'UP Police Constable', slug: 'up-police-constable-final-result-2026' },
-    { label: 'BAR AIBE 2026', slug: 'all-india-bar-aibe-xix-2026-online-form' },
-  ];
+  // Dynamically derive trending search chips from the latest added posts
+  const trendingTags = useMemo(() => {
+    if (!allPosts || allPosts.length === 0) {
+      return [
+        { label: 'Supreme Court Form 2026', slug: 'supreme-court-court-master-online-form-2026' },
+        { label: 'UP Primary Teacher', slug: 'upessc-up-primary-teacher-super-tet-2026' },
+        { label: 'BPSC TRE 4.0', slug: 'bpsc-school-teacher-tre-4-online-form-2026' },
+        { label: 'Railway NTPC', slug: 'rrb-ntpc-12th-level-recruitment-2026' },
+        { label: 'UP Police Constable', slug: 'up-police-constable-final-result-2026' },
+        { label: 'BAR AIBE 2026', slug: 'all-india-bar-aibe-xix-2026-online-form' },
+      ];
+    }
+    return allPosts.slice(0, 6).map(p => ({
+      label: p.shortTitle || p.title,
+      slug: p.slug
+    }));
+  }, [allPosts]);
+
+  // Dynamically derive top 8 latest added posts for the running marquee ticker
+  const latestTickerPosts = useMemo(() => {
+    if (!allPosts || allPosts.length === 0) return [];
+    return allPosts.slice(0, 8);
+  }, [allPosts]);
 
   return (
     <header className="w-full bg-white shadow-sm">
@@ -113,39 +128,31 @@ export const Header: React.FC<HeaderProps> = ({
         </span>
         <div className="overflow-hidden whitespace-nowrap w-full">
           <div className="inline-block animate-marquee cursor-pointer select-none">
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('upsc-cds-ii-result-2026')}>
-              🔥 UPSC CDS II Result 2026 Written Exam Declared - Click to Check Roll No List!
-            </span>
-            <span className="text-red-900 font-extrabold mx-2">★</span>
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('rrb-station-master-recruitment-2026')}>
-              ⚡ Railway RRB Station Master 994 Posts Online Form 2026 Active!
-            </span>
-            <span className="text-red-900 font-extrabold mx-2">★</span>
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('bpsc-school-teacher-tre-4-online-form-2026')}>
-              📢 BPSC School Teacher TRE 4.0 Form Open Now!
-            </span>
-            <span className="text-red-900 font-extrabold mx-2">★</span>
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('up-police-constable-final-result-2026')}>
-              🏆 UP Police Constable Final Result 2026 Declared!
-            </span>
-            <span className="text-red-900 font-extrabold mx-2">★</span>
-
-            {/* Repeat for seamless continuous scrolling */}
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('upsc-cds-ii-result-2026')}>
-              🔥 UPSC CDS II Result 2026 Written Exam Declared - Click to Check Roll No List!
-            </span>
-            <span className="text-red-900 font-extrabold mx-2">★</span>
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('rrb-station-master-recruitment-2026')}>
-              ⚡ Railway RRB Station Master 994 Posts Online Form 2026 Active!
-            </span>
-            <span className="text-red-900 font-extrabold mx-2">★</span>
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('bpsc-school-teacher-tre-4-online-form-2026')}>
-              📢 BPSC School Teacher TRE 4.0 Form Open Now!
-            </span>
-            <span className="text-red-900 font-extrabold mx-2">★</span>
-            <span className="mx-4 text-slate-950 font-black hover:underline" onClick={() => onOpenPostBySlug('up-police-constable-final-result-2026')}>
-              🏆 UP Police Constable Final Result 2026 Declared!
-            </span>
+            {latestTickerPosts.map((p, idx) => (
+              <React.Fragment key={`ticker-${p.id}-${idx}`}>
+                <span 
+                  className="mx-4 text-slate-950 font-black hover:underline" 
+                  onClick={() => onOpenPostBySlug(p.slug)}
+                >
+                  {p.category === 'result' ? '🏆 ' : p.category === 'admit_card' ? '🎫 ' : '🔥 '}
+                  {p.shortTitle || p.title}
+                </span>
+                <span className="text-red-900 font-extrabold mx-2">★</span>
+              </React.Fragment>
+            ))}
+            {/* Seamless duplicate loop for continuous scrolling */}
+            {latestTickerPosts.map((p, idx) => (
+              <React.Fragment key={`ticker-dup-${p.id}-${idx}`}>
+                <span 
+                  className="mx-4 text-slate-950 font-black hover:underline" 
+                  onClick={() => onOpenPostBySlug(p.slug)}
+                >
+                  {p.category === 'result' ? '🏆 ' : p.category === 'admit_card' ? '🎫 ' : '🔥 '}
+                  {p.shortTitle || p.title}
+                </span>
+                <span className="text-red-900 font-extrabold mx-2">★</span>
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </div>
