@@ -386,10 +386,6 @@ async function startServer() {
             ${matchedPost.lastDate ? `<p><strong>Last Date to Apply:</strong> ${escapeHtml(matchedPost.lastDate)}</p>` : ''}
             ${matchedPost.totalVacancies ? `<p><strong>Total Vacancies:</strong> ${escapeHtml(String(matchedPost.totalVacancies))}</p>` : ''}
           </div>
-          <div style="margin: 20px 0; padding: 15px; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px;">
-            <p style="font-weight: bold; margin-bottom: 8px; color: #0f172a;">🔥 Trending Viral Search Tags (वायरल सर्च टैग्स):</p>
-            <div>${tagsHtml}</div>
-          </div>
           <p>Read full eligibility criteria, age relaxation, selection process, syllabus, and official application form on Sarkari Result Portal.</p>
         </div>
       `;
@@ -435,11 +431,17 @@ async function startServer() {
     // Replace Description
     modifiedHtml = modifiedHtml.replace(/<meta\s+name="description"\s+content=".*?"\s*\/?>/gi, `<meta name="description" content="${escapeHtml(metaDesc)}" />`);
 
-    // Replace or Inject Keywords
+    // Replace or Inject Keywords & News Keywords (Hidden for organic search & Discover)
     if (/<meta\s+[^>]*name=["']keywords["']/i.test(modifiedHtml)) {
       modifiedHtml = modifiedHtml.replace(/<meta\s+[^>]*name=["']keywords["'][^>]*\/?>/gi, `<meta name="keywords" content="${escapeHtml(metaKeywords)}" />`);
     } else {
       modifiedHtml = modifiedHtml.replace('</head>', `    <meta name="keywords" content="${escapeHtml(metaKeywords)}" />\n</head>`);
+    }
+
+    if (/<meta\s+[^>]*name=["']news_keywords["']/i.test(modifiedHtml)) {
+      modifiedHtml = modifiedHtml.replace(/<meta\s+[^>]*name=["']news_keywords["'][^>]*\/?>/gi, `<meta name="news_keywords" content="${escapeHtml(metaKeywords)}" />`);
+    } else {
+      modifiedHtml = modifiedHtml.replace('</head>', `    <meta name="news_keywords" content="${escapeHtml(metaKeywords)}" />\n</head>`);
     }
 
     // Replace Canonical

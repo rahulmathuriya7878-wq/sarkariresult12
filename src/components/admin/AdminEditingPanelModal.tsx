@@ -196,6 +196,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   const [postToDelete, setPostToDelete] = useState<SarkariPost | null>(null);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState<boolean>(false);
   const [isPingingGoogle, setIsPingingGoogle] = useState(false);
+  const [seoTagInput, setSeoTagInput] = useState<string>('');
 
   // Real-time programmatic Google Indexing API ping
   const triggerGoogleIndexingPing = async (post: SarkariPost, type: 'URL_UPDATED' | 'URL_DELETED' = 'URL_UPDATED', showNotification: boolean = true) => {
@@ -735,6 +736,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 <a href="#sec-links" className="px-2.5 py-1 rounded font-bold bg-white hover:bg-purple-50 text-purple-900 border border-purple-300 shrink-0 flex items-center gap-1 transition-colors">🔗 Links</a>
                 <a href="#sec-steps" className="px-2.5 py-1 rounded font-bold bg-white hover:bg-amber-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-1 transition-colors">✍️ Steps</a>
                 <a href="#sec-faqs" className="px-2.5 py-1 rounded font-bold bg-white hover:bg-red-50 text-slate-800 border border-slate-200 shrink-0 flex items-center gap-1 transition-colors">❓ FAQs</a>
+                <a href="#sec-seo-tags" className="px-2.5 py-1 rounded font-bold bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-300 shrink-0 flex items-center gap-1 transition-colors">🏷️ Viral SEO Tags</a>
               </div>
             </div>
 
@@ -2651,19 +2653,19 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 </div>
               </div>
 
-              {/* 🔥 Trending Viral Search Tags & Keywords Management Section */}
-              <div className="border border-red-200 bg-red-50/20 rounded p-4 space-y-3">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-red-200 pb-2">
+              {/* SECTION 9: 🔒 HIDDEN SEO META-DATA FIELD (VIRAL TAGS & KEYWORD META TAGS) */}
+              <div id="sec-seo-tags" className="border-2 border-purple-300 bg-gradient-to-br from-purple-50/50 via-white to-indigo-50/40 rounded-md p-4 sm:p-5 space-y-4 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-purple-200 pb-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">🔥</span>
-                    <div>
-                      <h4 className="text-xs font-black text-slate-900 uppercase tracking-wide">
-                        Trending Viral Search Tags (वायरल सर्च टैग्स & कीवर्ड्स)
-                      </h4>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Automatically generated hashtags & keywords for SEO, WhatsApp & Telegram Broadcasts
-                      </p>
-                    </div>
+                    <span className="bg-purple-700 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">
+                      SECTION 9 • HIDDEN SEO META-DATA
+                    </span>
+                    <h3 className="font-black text-sm text-purple-950 uppercase tracking-wide flex items-center gap-1.5 flex-wrap">
+                      <span>🔒 Hidden Meta-Data: Viral Tags & Keywords</span>
+                      <span className="bg-purple-100 text-purple-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-purple-200">
+                        Invisible to Visitors • Injected into HTML & Schema
+                      </span>
+                    </h3>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -2677,12 +2679,12 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                           ...editingPost,
                           viralTags: autoTags
                         });
-                        showToast(`⚡ ${autoTags.length} Viral Tags Generated!`);
+                        showToast(`⚡ ${autoTags.length} Viral SEO Meta Tags Generated!`);
                       }}
-                      className="text-xs bg-red-700 hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded flex items-center gap-1 shadow-2xs cursor-pointer"
+                      className="text-xs bg-purple-700 hover:bg-purple-800 text-white font-bold px-3 py-1.5 rounded flex items-center gap-1 shadow-2xs cursor-pointer"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span>⚡ Auto-Generate Tags</span>
+                      <span>⚡ Auto-Generate Viral Tags</span>
                     </button>
                     {editingPost.viralTags && editingPost.viralTags.length > 0 && (
                       <button
@@ -2702,21 +2704,58 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                   </div>
                 </div>
 
-                {/* Tags preview chips */}
+                <div className="bg-purple-100/70 border border-purple-200 p-3 rounded text-xs text-purple-900 leading-relaxed flex items-start gap-2">
+                  <span className="text-base leading-none shrink-0 mt-0.5">ℹ️</span>
+                  <div>
+                    <strong>Hidden SEO Meta-Data Field:</strong> ये वायरल टैग्स और कीवर्ड्स सामान्य विज़िटर्स को पोस्ट पेज पर दिखाई नहीं देते हैं। इन्हें सीधे प्रत्येक पोस्ट के <code>&lt;head&gt;</code> में <code>&lt;meta name="keywords"&gt;</code>, <code>&lt;meta name="news_keywords"&gt;</code>, और <code>Schema.org (JobPosting/NewsArticle)</code> के रूप में इंजेक्ट किया जाता है ताकि Google Organic Search और Discover में पोस्ट की रैंकिंग सबसे ऊपर रहे।
+                  </div>
+                </div>
+
+                {/* Tags preview chips & editor */}
                 {(() => {
                   const currentTags = (editingPost.viralTags && editingPost.viralTags.length > 0)
                     ? editingPost.viralTags
                     : getPostViralTags(editingPost);
 
+                  const keywordsCommaList = currentTags.map(t => t.replace(/^#/, '')).join(', ');
+
                   return (
-                    <div className="space-y-3">
-                      <div className="flex flex-wrap items-center gap-1.5 bg-white p-3 rounded border border-slate-300 max-h-48 overflow-y-auto">
+                    <div className="space-y-3.5">
+                      {/* Active Tag Chips Header */}
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-black text-slate-800 uppercase flex items-center gap-1.5">
+                          <span>Active Hidden SEO Keywords:</span>
+                          <span className="bg-purple-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            {currentTags.length} Keywords Active
+                          </span>
+                        </label>
+                        {currentTags.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (confirm('Clear all custom viral tags?')) {
+                                setEditingPost({
+                                  ...editingPost,
+                                  viralTags: []
+                                });
+                                showToast('All viral tags cleared.');
+                              }
+                            }}
+                            className="text-[11px] text-red-600 hover:text-red-800 font-bold underline cursor-pointer"
+                          >
+                            Clear All Tags
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Chips Box */}
+                      <div className="flex flex-wrap items-center gap-1.5 bg-white p-3 rounded border border-purple-200 max-h-48 overflow-y-auto shadow-2xs">
                         {currentTags.map((tag, tIdx) => (
                           <span
                             key={tIdx}
-                            className="inline-flex items-center gap-1 bg-red-50 text-red-900 border border-red-200 px-2.5 py-1 rounded text-xs font-bold shadow-2xs"
+                            className="inline-flex items-center gap-1 bg-purple-50 text-purple-900 border border-purple-200 px-2.5 py-1 rounded text-xs font-bold shadow-2xs"
                           >
-                            <span className="text-red-600 font-black">#</span>
+                            <span className="text-purple-600 font-black">#</span>
                             <span>{tag.replace(/^#/, '')}</span>
                             <button
                               type="button"
@@ -2727,43 +2766,70 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                                   viralTags: updated
                                 });
                               }}
-                              className="text-red-400 hover:text-red-700 font-black ml-1 cursor-pointer"
+                              className="text-purple-400 hover:text-red-600 font-black ml-1 cursor-pointer transition-colors"
                               title="हटाएं (Remove)"
                             >
                               ✕
                             </button>
                           </span>
                         ))}
+                        {currentTags.length === 0 && (
+                          <span className="text-xs text-slate-400 italic">No viral tags configured yet. Click "⚡ Auto-Generate Viral Tags" or add manually below.</span>
+                        )}
                       </div>
 
-                      {/* Manual Add / Comma-separated Text Input */}
+                      {/* Add Tag Field */}
                       <div>
-                        <label className="block text-xs font-bold text-slate-700 mb-1">
-                          Add or Bulk Paste Tags (कॉमा या स्पेस से अलग करके नए टैग्स जोड़ें):
+                        <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                          Add or Bulk Paste Hidden Keywords (कॉमा या स्पेस से अलग करके नए कीवर्ड्स जोड़ें):
                         </label>
                         <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            placeholder="e.g. #UPPolice, #AnswerKey2026, #BPSCTRE4, #CutOff"
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                e.preventDefault();
-                                const input = (e.target as HTMLInputElement).value;
-                                if (!input.trim()) return;
-                                const newTokens = input
-                                  .split(/[\s,]+/)
-                                  .map(t => t.trim())
-                                  .filter(t => t.length > 1)
-                                  .map(t => t.startsWith('#') ? t : `#${t}`);
-                                
-                                const merged = Array.from(new Set([...currentTags, ...newTokens]));
-                                setEditingPost({ ...editingPost, viralTags: merged });
-                                (e.target as HTMLInputElement).value = '';
-                                showToast(`+${newTokens.length} Tags Added!`);
-                              }
+                          <div className="relative flex-1">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-600 font-black text-xs">#</span>
+                            <input
+                              type="text"
+                              value={seoTagInput}
+                              onChange={(e) => setSeoTagInput(e.target.value)}
+                              placeholder="e.g. PoliceCutOff2026, AnswerKey, AdmitCardDirectLink, SalaryDetails"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  if (!seoTagInput.trim()) return;
+                                  const newTokens = seoTagInput
+                                    .split(/[\s,]+/)
+                                    .map(t => t.trim())
+                                    .filter(t => t.length > 1)
+                                    .map(t => t.startsWith('#') ? t : `#${t}`);
+                                  
+                                  const merged = Array.from(new Set([...currentTags, ...newTokens]));
+                                  setEditingPost({ ...editingPost, viralTags: merged });
+                                  setSeoTagInput('');
+                                  showToast(`+${newTokens.length} Hidden SEO Keywords Added!`);
+                                }
+                              }}
+                              className="w-full pl-7 pr-3 py-2 border border-purple-300 rounded text-xs text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white shadow-2xs"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!seoTagInput.trim()) return;
+                              const newTokens = seoTagInput
+                                .split(/[\s,]+/)
+                                .map(t => t.trim())
+                                .filter(t => t.length > 1)
+                                .map(t => t.startsWith('#') ? t : `#${t}`);
+                              
+                              const merged = Array.from(new Set([...currentTags, ...newTokens]));
+                              setEditingPost({ ...editingPost, viralTags: merged });
+                              setSeoTagInput('');
+                              showToast(`+${newTokens.length} Hidden SEO Keywords Added!`);
                             }}
-                            className="flex-1 px-3 py-1.5 border border-slate-300 rounded text-xs text-slate-800 font-semibold focus:outline-none focus:border-red-600 bg-white"
-                          />
+                            className="text-xs bg-purple-700 hover:bg-purple-800 text-white font-bold px-4 py-2 rounded shadow-2xs cursor-pointer flex items-center gap-1 shrink-0"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>+ Add Tag</span>
+                          </button>
                           <button
                             type="button"
                             onClick={() => {
@@ -2771,19 +2837,38 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                               navigator.clipboard.writeText(text);
                               showToast('📋 All Viral Tags Copied to Clipboard!');
                             }}
-                            className="text-xs bg-slate-900 hover:bg-slate-800 text-white font-bold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer"
+                            className="text-xs bg-slate-900 hover:bg-slate-800 text-white font-bold px-3 py-2 rounded flex items-center gap-1 cursor-pointer shrink-0"
+                            title="Copy hashtag string"
                           >
                             <Copy className="w-3.5 h-3.5" />
-                            <span>Copy All</span>
+                            <span>Copy Hashtags</span>
                           </button>
                         </div>
                       </div>
 
-                      <div className="text-[11px] text-slate-500 bg-amber-50/60 p-2 rounded border border-amber-200/60 flex items-center gap-2">
-                        <span>💡</span>
-                        <span>
-                          ये वायरल टैग्स पोस्ट पेज पर विज़िबल चिप्स के रूप में, Google Schema (JobPosting / NewsArticle) और Meta Keywords में स्वतः जुड़ते हैं जिससे सर्च इंजन रैंकिंग व सोशल शेयरिंग तेज़ होती है।
-                        </span>
+                      {/* Live Code Snippet of Injected Hidden Meta Tags */}
+                      <div className="bg-slate-900 text-emerald-400 p-3 rounded font-mono text-[11px] space-y-1 overflow-x-auto shadow-inner border border-slate-800">
+                        <div className="text-slate-400 font-bold text-[10px] uppercase tracking-wider mb-1 flex items-center justify-between">
+                          <span>🔍 Live Injected HTML Meta Tags (Googlebot & Search Engines):</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const metaSnippet = `<meta name="keywords" content="${keywordsCommaList}" />\n<meta name="news_keywords" content="${keywordsCommaList}" />`;
+                              navigator.clipboard.writeText(metaSnippet);
+                              showToast('📋 HTML Meta Tag snippet copied!');
+                            }}
+                            className="text-[10px] text-amber-300 hover:underline cursor-pointer flex items-center gap-1"
+                          >
+                            <Copy className="w-3 h-3" />
+                            <span>Copy HTML Meta</span>
+                          </button>
+                        </div>
+                        <div className="text-emerald-300 select-all">
+                          &lt;meta name="keywords" content="{keywordsCommaList.slice(0, 100)}..." /&gt;
+                        </div>
+                        <div className="text-sky-300 select-all">
+                          &lt;meta name="news_keywords" content="{keywordsCommaList.slice(0, 100)}..." /&gt;
+                        </div>
                       </div>
                     </div>
                   );

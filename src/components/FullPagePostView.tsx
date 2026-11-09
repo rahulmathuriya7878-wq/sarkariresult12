@@ -946,7 +946,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     const postDesc = (post.shortInfo || `${post.title} check official recruitment notice, important dates, eligibility, total vacancies, online application fee, selection process, and direct download link.`).replace(/\n+/g, ' ').slice(0, 160);
     metaDesc.setAttribute('content', postDesc);
 
-    // Dynamic Meta Keywords update
+    // Dynamic Meta Keywords & News Keywords injection for Organic Search & Google Discover
     let metaKeywords = document.querySelector('meta[name="keywords"]') as HTMLMetaElement | null;
     let createdKeywords = false;
     if (!metaKeywords) {
@@ -958,6 +958,28 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     const originalKeywords = metaKeywords.getAttribute('content') || '';
     const keywordsStr = viralTags.map(t => t.replace(/^#/, '')).join(', ');
     metaKeywords.setAttribute('content', keywordsStr);
+
+    let metaNewsKeywords = document.querySelector('meta[name="news_keywords"]') as HTMLMetaElement | null;
+    let createdNewsKeywords = false;
+    if (!metaNewsKeywords) {
+      metaNewsKeywords = document.createElement('meta');
+      metaNewsKeywords.name = 'news_keywords';
+      document.head.appendChild(metaNewsKeywords);
+      createdNewsKeywords = true;
+    }
+    const originalNewsKeywords = metaNewsKeywords.getAttribute('content') || '';
+    metaNewsKeywords.setAttribute('content', keywordsStr);
+
+    let metaTwitterKeywords = document.querySelector('meta[name="twitter:keywords"]') as HTMLMetaElement | null;
+    let createdTwitterKeywords = false;
+    if (!metaTwitterKeywords) {
+      metaTwitterKeywords = document.createElement('meta');
+      metaTwitterKeywords.name = 'twitter:keywords';
+      document.head.appendChild(metaTwitterKeywords);
+      createdTwitterKeywords = true;
+    }
+    const originalTwitterKeywords = metaTwitterKeywords.getAttribute('content') || '';
+    metaTwitterKeywords.setAttribute('content', keywordsStr);
 
     // Dynamic OG Meta Tags
     const ogTitle = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
@@ -1084,6 +1106,14 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       if (metaKeywords) {
         if (createdKeywords) metaKeywords.remove();
         else metaKeywords.setAttribute('content', originalKeywords);
+      }
+      if (metaNewsKeywords) {
+        if (createdNewsKeywords) metaNewsKeywords.remove();
+        else metaNewsKeywords.setAttribute('content', originalNewsKeywords);
+      }
+      if (metaTwitterKeywords) {
+        if (createdTwitterKeywords) metaTwitterKeywords.remove();
+        else metaTwitterKeywords.setAttribute('content', originalTwitterKeywords);
       }
       const existingFaq = document.getElementById(faqScriptId);
       if (existingFaq) existingFaq.remove();

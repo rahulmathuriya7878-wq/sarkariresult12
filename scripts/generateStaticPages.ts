@@ -44,11 +44,18 @@ export async function generateStaticPages() {
     // Description
     html = html.replace(/<meta\s+name=["']description["']\s+content=["'].*?["']\s*\/?>/gi, `<meta name="description" content="${escapeHtml(params.metaDesc)}" />`);
 
-    // Keywords
+    // Keywords (Hidden for organic search)
     if (/<meta\s+[^>]*name=["']keywords["']/i.test(html)) {
       html = html.replace(/<meta\s+[^>]*name=["']keywords["'][^>]*\/?>/gi, `<meta name="keywords" content="${escapeHtml(params.metaKeywords)}" />`);
     } else {
       html = html.replace('</head>', `    <meta name="keywords" content="${escapeHtml(params.metaKeywords)}" />\n</head>`);
+    }
+
+    // News Keywords for Google News & Discover reach
+    if (/<meta\s+[^>]*name=["']news_keywords["']/i.test(html)) {
+      html = html.replace(/<meta\s+[^>]*name=["']news_keywords["'][^>]*\/?>/gi, `<meta name="news_keywords" content="${escapeHtml(params.metaKeywords)}" />`);
+    } else {
+      html = html.replace('</head>', `    <meta name="news_keywords" content="${escapeHtml(params.metaKeywords)}" />\n</head>`);
     }
 
     // Exact Self-Referencing Canonical URL (Crucial for fixing "Alternate page with proper canonical tag")
