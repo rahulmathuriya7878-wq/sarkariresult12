@@ -381,35 +381,13 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
               Terms & Rules
             </button>
             <span>•</span>
+            <button
+              onClick={() => onOpenPostBySlug('contact-us')}
+              className="text-[#7e22ce] hover:text-purple-900 underline cursor-pointer font-bold"
+            >
+              Contact Us
+            </button>
           </div>
-        </div>
-
-        {/* Googlebot & Crawler Fast-Discovery Index Links for Maximum Reach */}
-        <div className="mt-3 pt-2.5 border-t border-slate-200/80 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[11px] text-slate-500 font-sans">
-          <span className="font-bold text-slate-700">Googlebot Index Links:</span>
-          <a href="/all-jobs-index" className="text-red-700 hover:text-red-900 font-bold hover:underline">
-            Complete HTML Directory (सभी 181+ भर्तियां)
-          </a>
-          <span>•</span>
-          <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-red-700 font-semibold hover:underline">
-            Sitemap.xml
-          </a>
-          <span>•</span>
-          <a href="/rss.xml" target="_blank" rel="noopener noreferrer" className="hover:text-red-700 font-semibold hover:underline">
-            RSS News Feed
-          </a>
-          <span>•</span>
-          <a href="/latest-jobs" className="hover:text-red-700 font-semibold hover:underline">
-            Latest Jobs 2026
-          </a>
-          <span>•</span>
-          <a href="/result" className="hover:text-red-700 font-semibold hover:underline">
-            Sarkari Result 2026
-          </a>
-          <span>•</span>
-          <a href="/admit-card" className="hover:text-red-700 font-semibold hover:underline">
-            Admit Card
-          </a>
         </div>
       </div>
     </footer>
