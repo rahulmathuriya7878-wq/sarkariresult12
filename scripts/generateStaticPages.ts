@@ -91,10 +91,6 @@ export async function generateStaticPages() {
     const metaKeywords = postViralTags.map(t => t.replace(/^#/, '')).join(', ');
     const schemaJsonLd = generatePostSchemaJsonLd(post, CANONICAL_DOMAIN);
 
-    const tagsHtml = postViralTags
-      .map(t => `<span style="display:inline-block; background:#f1f5f9; color:#ab1616; border:1px solid #e2e8f0; font-size:12px; font-weight:bold; padding:3px 8px; border-radius:4px; margin:2px 4px 2px 0;">${escapeHtml(t)}</span>`)
-      .join(' ');
-
     const bodyHtml = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; max-width: 900px; margin: 0 auto; color: #1e293b;">
         <h1 style="color: #ab1616; font-size: 26px; font-weight: 800; line-height: 1.3;">${escapeHtml(post.title)}</h1>
@@ -105,10 +101,6 @@ export async function generateStaticPages() {
           <p style="margin: 4px 0;"><strong>Updated Date:</strong> ${escapeHtml(post.postDate || '2026')}</p>
           ${post.lastDate ? `<p style="margin: 4px 0;"><strong>Last Date to Apply:</strong> ${escapeHtml(post.lastDate)}</p>` : ''}
           ${post.totalVacancies ? `<p style="margin: 4px 0;"><strong>Total Vacancies:</strong> ${escapeHtml(String(post.totalVacancies))}</p>` : ''}
-        </div>
-        <div style="margin: 20px 0; padding: 15px; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px;">
-          <p style="font-weight: bold; margin-bottom: 8px; color: #0f172a;">🔥 Trending Viral Search Tags & Keywords:</p>
-          <div>${tagsHtml}</div>
         </div>
         <p style="line-height: 1.6;">Check full eligibility criteria, age limits, syllabus, direct links, and official notification on Sarkari Result Portal.</p>
       </div>

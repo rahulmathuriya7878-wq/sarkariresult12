@@ -1386,40 +1386,45 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       )}
                     </td>
                   </tr>
-                  {/* Row 4: Trending Viral Tags Strip */}
-                  <tr className="border-t border-slate-200 bg-slate-50/70">
-                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[12pt] sm:text-[13pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
-                      Trending Tags :
-                    </td>
-                    <td className="p-3 sm:p-4 align-top">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {viralTags.slice(0, 8).map((tag) => (
+                  {/* Row 4: Trending Viral Tags Strip - Hidden for regular users, visible only in Admin Direct Edit Mode */}
+                  {isDirectEditMode && (
+                    <tr className="border-t border-slate-200 bg-amber-50/70">
+                      <td className="p-3 sm:p-4 text-red-700 font-bold text-[12pt] sm:text-[13pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
+                        Trending Tags (Admin Only) :
+                      </td>
+                      <td className="p-3 sm:p-4 align-top">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="text-[10px] bg-red-700 text-white font-bold px-1.5 py-0.5 rounded mr-1">
+                            Hidden from Users
+                          </span>
+                          {viralTags.slice(0, 8).map((tag) => (
+                            <button
+                              key={tag}
+                              type="button"
+                              onClick={() => handleCopyTag(tag)}
+                              title={`Click to copy ${tag}`}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-red-50 text-slate-800 hover:text-red-700 font-bold text-[11px] rounded border border-slate-300 hover:border-red-400 shadow-2xs transition-all cursor-pointer"
+                            >
+                              <span className="text-red-600 font-black">#</span>
+                              <span>{tag.replace(/^#/, '')}</span>
+                              {copiedTag === tag && (
+                                <Check className="w-3 h-3 text-emerald-600 inline ml-0.5" />
+                              )}
+                            </button>
+                          ))}
                           <button
-                            key={tag}
                             type="button"
-                            onClick={() => handleCopyTag(tag)}
-                            title={`Click to copy ${tag}`}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-red-50 text-slate-800 hover:text-red-700 font-bold text-[11px] rounded border border-slate-300 hover:border-red-400 shadow-2xs transition-all cursor-pointer"
+                            onClick={handleCopyAllTags}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-extrabold text-[11px] rounded border border-red-300 cursor-pointer transition-colors shadow-2xs"
+                            title="Copy all viral tags"
                           >
-                            <span className="text-red-600 font-black">#</span>
-                            <span>{tag.replace(/^#/, '')}</span>
-                            {copiedTag === tag && (
-                              <Check className="w-3 h-3 text-emerald-600 inline ml-0.5" />
-                            )}
+                            <Copy className="w-3 h-3" />
+                            <span>{isCopiedAll ? 'Copied!' : 'Copy All'}</span>
                           </button>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={handleCopyAllTags}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-extrabold text-[11px] rounded border border-red-300 cursor-pointer transition-colors shadow-2xs"
-                          title="Copy all viral tags"
-                        >
-                          <Copy className="w-3 h-3" />
-                          <span>{isCopiedAll ? 'Copied!' : 'Copy All'}</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -2463,140 +2468,142 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               ) : renderHiddenBanner('sec_faqs', 'FAQs')
             )}
 
-            {/* 🔥 Trending Viral Search Tags & Keywords Section */}
-            {!hiddenSections['sec_viral_tags'] ? (
-              <div className="border-2 border-red-200 bg-gradient-to-br from-amber-50/40 via-white to-red-50/30 rounded-xl overflow-hidden shadow-xs my-5 font-sans">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-red-700 via-rose-700 to-red-800 text-white px-4 py-3 flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl animate-pulse">🔥</span>
-                    <div>
-                      <h3 className="font-black text-[12pt] sm:text-[13pt] tracking-wide uppercase flex items-center gap-1.5 text-white">
-                        <span>Trending Viral Search Tags</span>
-                        <span className="text-amber-300 text-xs sm:text-sm font-bold">| वायरल सर्च टैग्स & कीवर्ड्स</span>
-                      </h3>
-                      <p className="text-[10px] sm:text-[11px] text-red-100 font-medium">
-                        Search Trends, WhatsApp & Telegram Broadcast Hashtags for High Visibility
+            {/* 🔥 Trending Viral Search Tags & Keywords Section - Hidden for regular visitors, visible only to Admin in Direct Edit Mode */}
+            {isDirectEditMode && (
+              !hiddenSections['sec_viral_tags'] ? (
+                <div className="border-2 border-amber-300 bg-gradient-to-br from-amber-50/40 via-white to-red-50/30 rounded-xl overflow-hidden shadow-xs my-5 font-sans">
+                  {/* Header */}
+                  <div className="bg-gradient-to-r from-red-700 via-rose-700 to-red-800 text-white px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl animate-pulse">🔥</span>
+                      <div>
+                        <h3 className="font-black text-[12pt] sm:text-[13pt] tracking-wide uppercase flex items-center gap-1.5 text-white">
+                          <span>Viral Tags & Search Keywords</span>
+                          <span className="bg-amber-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded shadow-2xs ml-1.5 uppercase">
+                            Admin Only (Hidden from Users)
+                          </span>
+                        </h3>
+                        <p className="text-[10px] sm:text-[11px] text-red-100 font-medium">
+                          Active in background meta keywords and Schema.org for Google Search SEO, but hidden from visitors.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="bg-amber-400 text-slate-950 font-black text-[10px] uppercase px-2 py-0.5 rounded shadow-2xs">
+                        {viralTags.length} Viral Tags
+                      </span>
+                      {renderSectionControls('sec_viral_tags', 'Viral Tags')}
+                    </div>
+                  </div>
+
+                  <div className="p-4 sm:p-5 space-y-4">
+                    {/* Informational Subtext */}
+                    <div className="flex items-start gap-2 text-xs text-slate-700 bg-white/90 p-3 rounded-lg border border-slate-200">
+                      <span className="text-red-600 font-bold text-sm shrink-0">💡</span>
+                      <p className="leading-relaxed">
+                        ये वायरल टैग्स बैकग्राउंड में <strong>Google Search Keywords</strong>, <strong>Meta SEO</strong>, और <strong>Schema.org Rich Snippets</strong> के लिए पूर्णतः सक्रिय हैं। सामान्य उपयोगकर्ताओं को यह पैनल दिखाई नहीं देगा।
                       </p>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="bg-amber-400 text-slate-950 font-black text-[10px] uppercase px-2 py-0.5 rounded shadow-2xs">
-                      {viralTags.length} Viral Tags
-                    </span>
-                    {renderSectionControls('sec_viral_tags', 'Viral Tags')}
-                  </div>
-                </div>
 
-                <div className="p-4 sm:p-5 space-y-4">
-                  {/* Informational Subtext */}
-                  <div className="flex items-start gap-2 text-xs text-slate-700 bg-white/90 p-3 rounded-lg border border-slate-200">
-                    <span className="text-red-600 font-bold text-sm shrink-0">💡</span>
-                    <p className="leading-relaxed">
-                      अभ्यर्थी एवं छात्र इन ट्रेंडिंग वायरल टैग्स के माध्यम से सोशल मीडिया (WhatsApp, Telegram, YouTube) एवं गूगल सर्च पर इस भर्ती व रिजल्ट से संबंधित सभी नवीनतम अपडेट तुरंत प्राप्त कर सकते हैं।
-                    </p>
-                  </div>
-
-                  {/* Viral Tags Pills Cloud */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    {viralTags.map((tag) => {
-                      const isJustCopied = copiedTag === tag;
-                      return (
-                        <div key={tag} className="inline-flex items-center">
-                          <button
-                            type="button"
-                            onClick={() => handleCopyTag(tag)}
-                            title="Click to copy this viral tag"
-                            className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-2xs cursor-pointer border ${
-                              isJustCopied
-                                ? 'bg-emerald-600 text-white border-emerald-700 scale-105'
-                                : 'bg-white hover:bg-red-50 text-slate-800 hover:text-red-700 border-slate-300 hover:border-red-400'
-                            }`}
-                          >
-                            <Hash className={`w-3.5 h-3.5 ${isJustCopied ? 'text-white' : 'text-red-600 group-hover:scale-110 transition-transform'}`} />
-                            <span>{tag.replace(/^#/, '')}</span>
-                            {isJustCopied ? (
-                              <Check className="w-3.5 h-3.5 text-white" />
-                            ) : (
-                              <Copy className="w-3 h-3 text-slate-400 group-hover:text-red-600 opacity-60 group-hover:opacity-100 transition-opacity" />
-                            )}
-                          </button>
-                          {isDirectEditMode && (
+                    {/* Viral Tags Pills Cloud */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      {viralTags.map((tag) => {
+                        const isJustCopied = copiedTag === tag;
+                        return (
+                          <div key={tag} className="inline-flex items-center">
                             <button
                               type="button"
-                              onClick={() => {
-                                const current = editablePost.viralTags && editablePost.viralTags.length > 0 ? editablePost.viralTags : viralTags;
-                                setEditablePost(prev => ({
-                                  ...prev,
-                                  viralTags: current.filter(t => t !== tag)
-                                }));
-                              }}
-                              className="ml-1 text-red-500 hover:text-red-700 font-black text-xs px-1 cursor-pointer"
-                              title="हटाएं (Remove tag)"
+                              onClick={() => handleCopyTag(tag)}
+                              title="Click to copy this viral tag"
+                              className={`group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-2xs cursor-pointer border ${
+                                isJustCopied
+                                  ? 'bg-emerald-600 text-white border-emerald-700 scale-105'
+                                  : 'bg-white hover:bg-red-50 text-slate-800 hover:text-red-700 border-slate-300 hover:border-red-400'
+                              }`}
                             >
-                              ✕
+                              <Hash className={`w-3.5 h-3.5 ${isJustCopied ? 'text-white' : 'text-red-600 group-hover:scale-110 transition-transform'}`} />
+                              <span>{tag.replace(/^#/, '')}</span>
+                              {isJustCopied ? (
+                                <Check className="w-3.5 h-3.5 text-white" />
+                              ) : (
+                                <Copy className="w-3 h-3 text-slate-400 group-hover:text-red-600 opacity-60 group-hover:opacity-100 transition-opacity" />
+                              )}
                             </button>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Actions Bar */}
-                  <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={handleCopyAllTags}
-                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold text-xs transition-all cursor-pointer shadow-sm ${
-                          isCopiedAll 
-                            ? 'bg-emerald-600 text-white' 
-                            : 'bg-slate-900 hover:bg-slate-800 text-white'
-                        }`}
-                      >
-                        {isCopiedAll ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-200" />
-                            <span>Copied All Tags! (सभी टैग्स कॉपी हो गए)</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>📋 Copy All Tags (सभी टैग्स कॉपी करें)</span>
-                          </>
-                        )}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handleShareWhatsApp}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#25D366] hover:bg-emerald-600 text-white font-bold text-xs rounded-lg shadow-sm transition-colors cursor-pointer"
-                      >
-                        <MessageCircle className="w-3.5 h-3.5 fill-current" />
-                        <span>Share on WhatsApp with Tags</span>
-                      </button>
-
-                      <a
-                        href="https://t.me/newsarkariresultt"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#229ED9] hover:bg-sky-600 text-white font-bold text-xs rounded-lg shadow-sm transition-colors cursor-pointer"
-                      >
-                        <Send className="w-3.5 h-3.5 fill-current" />
-                        <span>Join Telegram Channel</span>
-                      </a>
+                            {isDirectEditMode && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const current = editablePost.viralTags && editablePost.viralTags.length > 0 ? editablePost.viralTags : viralTags;
+                                  setEditablePost(prev => ({
+                                    ...prev,
+                                    viralTags: current.filter(t => t !== tag)
+                                  }));
+                                }}
+                                className="ml-1 text-red-500 hover:text-red-700 font-black text-xs px-1 cursor-pointer"
+                                title="हटाएं (Remove tag)"
+                              >
+                                ✕
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
 
-                    {copiedTag && (
-                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-200 flex items-center gap-1 animate-pulse">
-                        <Check className="w-3.5 h-3.5" />
-                        "{copiedTag}" क्लिपबोर्ड में कॉपी हो गया!
-                      </span>
-                    )}
-                  </div>
+                    {/* Actions Bar */}
+                    <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleCopyAllTags}
+                          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold text-xs transition-all cursor-pointer shadow-sm ${
+                            isCopiedAll 
+                              ? 'bg-emerald-600 text-white' 
+                              : 'bg-slate-900 hover:bg-slate-800 text-white'
+                          }`}
+                        >
+                          {isCopiedAll ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-emerald-200" />
+                              <span>Copied All Tags! (सभी टैग्स कॉपी हो गए)</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5" />
+                              <span>📋 Copy All Tags (सभी टैग्स कॉपी करें)</span>
+                            </>
+                          )}
+                        </button>
 
-                  {/* Direct Admin Edit Tag Controls */}
-                  {isDirectEditMode && (
+                        <button
+                          type="button"
+                          onClick={handleShareWhatsApp}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#25D366] hover:bg-emerald-600 text-white font-bold text-xs rounded-lg shadow-sm transition-colors cursor-pointer"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 fill-current" />
+                          <span>Share on WhatsApp with Tags</span>
+                        </button>
+
+                        <a
+                          href="https://t.me/newsarkariresultt"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#229ED9] hover:bg-sky-600 text-white font-bold text-xs rounded-lg shadow-sm transition-colors cursor-pointer"
+                        >
+                          <Send className="w-3.5 h-3.5 fill-current" />
+                          <span>Join Telegram Channel</span>
+                        </a>
+                      </div>
+
+                      {copiedTag && (
+                        <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md border border-emerald-200 flex items-center gap-1 animate-pulse">
+                          <Check className="w-3.5 h-3.5" />
+                          "{copiedTag}" क्लिपबोर्ड में कॉपी हो गया!
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Direct Admin Edit Tag Controls */}
                     <div className="mt-3 p-3 bg-red-50/70 border border-red-200 rounded-lg space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-red-900 flex items-center gap-1">
@@ -2639,10 +2646,10 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                         </button>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            ) : renderHiddenBanner('sec_viral_tags', 'Viral Tags')}
+              ) : renderHiddenBanner('sec_viral_tags', 'Viral Tags')
+            )}
 
             {/* 1. Latest Jobs Section (Vertical Stack) */}
             <div className="border border-slate-300 bg-white rounded-xs overflow-hidden shadow-2xs font-sans">
