@@ -46,7 +46,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
 }) => {
   const renderColumn = (
     title: string,
-    hindiSub: string,
+    _hindiSub: string,
     posts: SarkariPost[],
     category: 'result' | 'admit_card' | 'latest_jobs' | 'answer_key' | 'syllabus' | 'important' | 'admission' | 'certificate_verification',
     viewMoreText: string
@@ -57,9 +57,6 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
           <h2 className="font-black text-lg sm:text-xl md:text-2xl tracking-wide uppercase leading-tight font-serif text-white">
             {title}
           </h2>
-          <span className="block text-[11px] sm:text-xs font-handwriting text-amber-200 font-bold tracking-normal normal-case mt-0.5">
-            {hindiSub}
-          </span>
         </div>
 
 
