@@ -1,6 +1,7 @@
 import React from 'react';
 import { Send, AlertTriangle, MessageCircle } from 'lucide-react';
 import { SarkariPost, PostCategory, Department } from '../types/job';
+import { AdBanner } from './common/AdBanner';
 
 interface SarkariFooterProps {
   onOpenAgeCalculator?: () => void;
@@ -333,10 +334,14 @@ export const SarkariFooter: React.FC<SarkariFooterProps> = ({
 
           </div>
 
-
         </div>
 
-        {/* 4. Bottom Copyright & Legal Navigation Strip */}
+        {/* 4. Ad Section directly above Legal Navigation (About Us, Privacy Policy, Disclaimer, Terms & Rules) */}
+        <div className="pt-2 pb-1">
+          <AdBanner placement="postBottom" onOpenTool={_onOpenPhotoResizer} />
+        </div>
+
+        {/* 5. Bottom Copyright & Legal Navigation Strip */}
         <div className="pt-4 border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-600 text-xs sm:text-sm">
           <div className="text-center sm:text-left">
             <span>Copyright © 2026 Sarkari Result - </span>

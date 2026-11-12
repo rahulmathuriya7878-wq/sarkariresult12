@@ -17,6 +17,7 @@ import { getVisitedPostIds, markPostVisited } from './utils/visitedPosts';
 import { checkAndNotifyPostStatusChanges } from './utils/alertManager';
 import { PushNotificationBanner } from './components/PushNotificationBanner';
 import { updateDocumentCanonical } from './utils/canonicalManager';
+import { AdBanner } from './components/common/AdBanner';
 
 // Dynamic Lazy Imports for Modals to maximize Mobile PageSpeed & minimize initial bundle
 const AdminEditingPanelModal = lazy(() => import('./components/admin/AdminEditingPanelModal').then(m => ({ default: m.AdminEditingPanelModal })));
@@ -811,6 +812,8 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             onUpdatePost={handleUpdatePost}
           />
 
+          {/* Ad Section between Quick Highlights and Main Sections */}
+          <AdBanner placement="homeMid" onOpenTool={() => setIsJobAlertsOpen(true)} />
 
           {/* Active Search / Filter Status Banner */}
           {searchQuery.trim() && (

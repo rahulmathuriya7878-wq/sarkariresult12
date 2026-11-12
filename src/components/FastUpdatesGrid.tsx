@@ -2,6 +2,7 @@ import React from 'react';
 import { SarkariPost } from '../types/job';
 import { ChevronRight } from 'lucide-react';
 import { isPostVisited } from '../utils/visitedPosts';
+import { AdBanner } from './common/AdBanner';
 
 
 interface FastUpdatesGridProps {
@@ -36,7 +37,7 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
   onSelectPost,
   onViewCategory,
   isHindi,
-  onOpenAppInfo: _onOpenAppInfo,
+  onOpenAppInfo,
   visitedPostIds = new Set(),
   isGlobalWordEditActive = false,
   onUpdatePost,
@@ -222,6 +223,9 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
       </div>
 
+      {/* Mid-Grid Sponsored / AdSense Banner */}
+      <AdBanner placement="homeMid" onOpenTool={onOpenAppInfo} />
+
       {/* Pair 2: Admit Card | Admission (Admit card ke bagal me Admission) */}
       <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
@@ -241,6 +245,9 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
         )}
       </div>
 
+      {/* Ad Section between Pair 2 (Admit Card / Admission) & Pair 3 (Answer Key / Syllabus) */}
+      <AdBanner placement="homeMid" onOpenTool={onOpenAppInfo} />
+
       {/* Pair 3: Answer Key | Syllabus */}
       <div className="grid grid-cols-2 gap-1 sm:gap-2">
         {renderColumn(
@@ -259,6 +266,9 @@ export const FastUpdatesGrid: React.FC<FastUpdatesGridProps> = ({
           'View More Syllabus'
         )}
       </div>
+
+      {/* Ad Section between Pair 3 (Answer Key / Syllabus) & Pair 4 (Certificate Verification / Important) */}
+      <AdBanner placement="homeMid" onOpenTool={onOpenAppInfo} />
 
       {/* Pair 4 (Web ke sabse niche): Certificate Verification | Important */}
       <div className="grid grid-cols-2 gap-1 sm:gap-2">

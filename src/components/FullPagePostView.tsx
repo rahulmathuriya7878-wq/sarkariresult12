@@ -78,6 +78,7 @@ import { PostAlertModal } from './PostAlertModal';
 import { ALL_RRB_BOARDS } from '../data/rrbBoards';
 import { getPostViralTags, formatViralTagsString } from '../utils/viralTagsHelper';
 import { CANONICAL_DOMAIN } from '../utils/seoHelpers';
+import { AdBanner } from './common/AdBanner';
 
 interface FullPagePostViewProps {
   post: SarkariPost;
@@ -289,6 +290,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   onOpenDirectEditor,
   onUpdatePost,
   onDeletePost,
+  onOpenPhotoResizer,
   isGlobalWordEditActive = false,
   onToggleGlobalWordEdit
 }) => {
@@ -1129,16 +1131,20 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   // Only show Age Relaxation Rules and Selection Process for main recruitment categories
   const showRecruitmentDetails = ['latest_jobs', 'result', 'admit_card', 'answer_key'].includes(post.category);
 
-  // Identify statutory & informational posts (Disclaimer, Rules, Contact Us, etc.)
+  // Identify statutory & informational posts (About Us, Privacy Policy, Disclaimer, Terms & Rules, Contact Us)
   const isInformationalPost = useMemo(() => {
     return (
       post.slug === 'disclaimer' || 
       post.slug === 'rules-and-regulations' || 
       post.slug === 'contact-us' ||
+      post.slug === 'about-us' ||
+      post.slug === 'privacy-policy' ||
       (post.category === 'important' && (
         post.slug.includes('disclaimer') || 
         post.slug.includes('rules') || 
-        post.slug.includes('contact')
+        post.slug.includes('contact') ||
+        post.slug.includes('about') ||
+        post.slug.includes('privacy')
       ))
     );
   }, [post.slug, post.category]);
@@ -1459,6 +1465,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </table>
             </div>
 
+            {/* Post Top Ad Unit (Under Main Post Details Table) */}
+            <AdBanner placement="postTop" onOpenTool={onOpenPhotoResizer} />
 
           </div>
 
@@ -1484,24 +1492,33 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
               </div>
             </div>
 
-            {/* IF INFORMATIONAL POST (Disclaimer, Rules, Contact Us): Render Normal Article Layout */}
+            {/* IF INFORMATIONAL POST (About Us, Privacy Policy, Disclaimer, Terms & Rules, Contact Us): Render Article with Ad Sections */}
             {isInformationalPost && (
               <div className="space-y-6 sm:space-y-7">
-                {/* Informational Policy & Contact Cards */}
+                {/* Informational Policy & Content Cards */}
                 {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
                   <div className="space-y-6">
                     {post.vacancyBreakdown.map((item, idx) => (
-                      <div key={idx} className="border border-slate-300 bg-white p-4 sm:p-6 text-[10pt] space-y-2.5 shadow-2xs">
-                        <h4 
-                          className="text-[#16a34a] font-black text-[11pt] border-b border-slate-200 pb-2 font-sans"
-                          style={{ color: '#16a34a' }}
-                        >
-                          {item.postName}
-                        </h4>
-                        <div className="text-slate-800 leading-relaxed whitespace-pre-line font-sans pt-1 text-[10pt]">
-                          {item.eligibility}
+                      <React.Fragment key={idx}>
+                        <div className="border border-slate-300 bg-white p-4 sm:p-6 text-[10pt] space-y-2.5 shadow-2xs">
+                          <h4 
+                            className="text-[#16a34a] font-black text-[11pt] border-b border-slate-200 pb-2 font-sans"
+                            style={{ color: '#16a34a' }}
+                          >
+                            {item.postName}
+                          </h4>
+                          <div className="text-slate-800 leading-relaxed whitespace-pre-line font-sans pt-1 text-[10pt]">
+                            {item.eligibility}
+                          </div>
                         </div>
-                      </div>
+
+                        {/* Mid-Article Ad Section between policy blocks */}
+                        {idx === 0 && (
+                          <div className="my-3">
+                            <AdBanner placement="homeMid" onOpenTool={onOpenPhotoResizer} />
+                          </div>
+                        )}
+                      </React.Fragment>
                     ))}
                   </div>
                 )}
@@ -1522,6 +1539,11 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     </ul>
                   </div>
                 )}
+
+                {/* In-Article Ad Section for Informational Posts */}
+                <div className="my-3">
+                  <AdBanner placement="postBottom" onOpenTool={onOpenPhotoResizer} />
+                </div>
               </div>
             )}
 
@@ -1820,6 +1842,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                     )}
                   </div>
                 )}
+
+                {/* Ad Section between Vacancy Details and Subsequent Sections */}
+                <AdBanner placement="postMid" onOpenTool={onOpenPhotoResizer} />
 
                 {/* Category Wise Vacancy Details Table (Renders ONLY if categoryBreakdown data exists) */}
                 {categoryBreakdowns.length > 0 && (
@@ -2196,6 +2221,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
 
 
+            {/* Post Mid Ad Unit (Directly Above Useful Important Links Table) */}
+            <AdBanner placement="postMid" onOpenTool={onOpenPhotoResizer} />
+
             {/* Useful Important Links Table (Matches Screenshot Layout) */}
             <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
               <div className="bg-white text-slate-900 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
@@ -2497,6 +2525,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                 </div>
               ) : renderHiddenBanner('sec_faqs', 'FAQs')
             )}
+
+            {/* Post Bottom Ad Unit (Above Candidate Tools & Footer) */}
+            <AdBanner placement="postBottom" onOpenTool={onOpenPhotoResizer} />
 
             {/* 🔥 Trending Viral Search Tags & Keywords Section - Hidden for regular visitors, visible only to Admin in Direct Edit Mode */}
             {isDirectEditMode && (

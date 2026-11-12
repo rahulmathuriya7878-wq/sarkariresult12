@@ -3862,6 +3862,66 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'Google Ads Settings & Opt-Out', actionText: 'Ad Settings', type: 'official', url: 'https://myadcenter.google.com/', isPrimary: true },
       { label: 'Official Contact Us', actionText: 'Contact Support', type: 'official', url: '#contact-us' }
     ]
+  },
+  {
+    id: 'info-about-us',
+    slug: 'about-us',
+    title: 'About Us - Sarkari Result Official Portal 2026 (हमारे बारे में)',
+    shortTitle: 'About Us (हमारे बारे में)',
+    hindiTitle: 'सरकारी रिजल्ट पोर्टल का परिचय एवं उद्देश्य (About Us)',
+    category: 'important',
+    department: 'Other',
+    qualifications: [],
+    state: 'All India',
+    postDate: '2026-10-19',
+    notificationNumber: 'SR/ABOUT/US-2026',
+    salary: 'Educational & Public Service Portal',
+    salaryBand: '25K - 50K',
+    isHot: false,
+    isNew: false,
+    shortInfo: 'Sarkari Result is India’s leading educational & government examination alert platform, delivering instantaneous verified updates for Latest Jobs, Admit Cards, Results, Answer Keys, and Admissions across all Central and State government recruitment boards.',
+    applicationFee: [],
+    ageLimit: {
+      asOnDate: '01/01/2026',
+      notes: 'Informational platform overview.'
+    },
+    importantDates: [
+      { label: 'Portal Established', value: '2012' },
+      { label: 'Annual Active Aspirants', value: '50 Million+' },
+      { label: 'Updates Frequency', value: 'Real-Time 24x7', isHighlight: true }
+    ],
+    vacancyBreakdown: [
+      {
+        postName: '1. हमारा मिशन एवं दृष्टिकोण (Our Mission & Vision)',
+        totalPosts: 'Mission',
+        eligibility: `• भारत के प्रत्येक अभ्यर्थी तक नवीनतम सरकारी नौकरियों, प्रवेश पत्रों, परीक्षा परिणामों एवं प्रवेश सूचनाओं को सबसे तेज, सरल और सटीक माध्यम से पहुंचाना।
+• किसी भी प्रकार के भ्रामक विज्ञापनों और फर्जी खबरों से दूर रहकर केवल प्रामाणिक सरकारी गजट और आयोगों द्वारा जारी विज्ञप्तियों का विश्लेषण प्रस्तुत करना।`
+      },
+      {
+        postName: '2. मुख्य सेवाएं एवं विशेषताएं (Core Services)',
+        totalPosts: 'Features',
+        eligibility: `• नवीनतम सरकारी नौकरी (Latest Jobs) - SSC, UPSC, Railway, Banking, Police, Defense, Teaching एवं State PCS.
+• एडमिट कार्ड एवं हॉल टिकट (Admit Cards) - डायरेक्ट डाउनलोड सर्वर लिंक।
+• परीक्षा परिणाम व कट-ऑफ (Results & Cutoffs) - मेरिट लिस्ट एवं स्कोरकार्ड।
+• अभ्यर्थियों हेतु निःशुल्क टूल्स (Candidate Tools) - Age Calculator, Photo & Signature Resizer.`
+      },
+      {
+        postName: '3. संपादकीय नीति एवं प्रामाणिकता (Editorial Standards)',
+        totalPosts: 'Standards',
+        eligibility: `• हमारी समर्पित संपादकीय टीम प्रतिदिन 100+ आधिकारिक भर्ती बोर्डों (जैसे ssc.gov.in, upsc.gov.in, rrbapply.gov.in) की निगरानी करती है।
+• प्रत्येक अधिसूचना की आयु सीमा, परीक्षा शुल्क, शैक्षणिक योग्यता और आवेदन लिंक की दोहरी जांच (Double Verification) की जाती है।`
+      }
+    ],
+    howToApplySteps: [
+      'सभी नवीनतम अपडेट सबसे पहले पाने के लिए हमारे आधिकारिक WhatsApp चैनल और Telegram ग्रुप से अवश्य जुड़ें।',
+      'अपने मोबाइल ब्राउज़र पर Sarkari Result को बुकमार्क करें अथवा होम स्क्रीन पर शॉर्टकट बनाएं।',
+      'किसी भी समस्या या सुझाव हेतु हमारे सहायता डेस्क (Contact Us) पर ईमेल भेजें।'
+    ],
+    directLinks: [
+      { label: 'Official WhatsApp Channel for Daily Alerts', actionText: 'Join WhatsApp', type: 'official', url: 'https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j', isPrimary: true },
+      { label: 'Official Telegram Channel', actionText: 'Join Telegram', type: 'official', url: 'https://t.me/newsarkariresultt' },
+      { label: 'Read Privacy Policy & Guidelines', actionText: 'Privacy Policy', type: 'official', url: '#privacy-policy' }
+    ]
   }
 ];
 

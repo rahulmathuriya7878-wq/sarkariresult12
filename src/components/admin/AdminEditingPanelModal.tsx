@@ -52,6 +52,7 @@ import { getPostFAQs } from '../FullPagePostView';
 import { AIBlogWriter } from './AIBlogWriter';
 import { GoogleIndexationManager } from './GoogleIndexationManager';
 import { TrafficGrowthHub } from './TrafficGrowthHub';
+import { AdsManagerModal } from './AdsManagerModal';
 import { readPdfFileAsDataUrl } from '../../utils/pdfGenerator';
 import { validateIso8601 } from '../../utils/dateUtils';
 import { getPostViralTags, formatViralTagsString } from '../../utils/viralTagsHelper';
@@ -187,6 +188,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   const [adminMainTab, setAdminMainTab] = useState<'editor' | 'ai_blog'>('editor');
   const [isGscModalOpen, setIsGscModalOpen] = useState<boolean>(false);
   const [isTrafficHubOpen, setIsTrafficHubOpen] = useState<boolean>(false);
+  const [isAdsModalOpen, setIsAdsModalOpen] = useState<boolean>(false);
 
   // Editor State
   const [editingPost, setEditingPost] = useState<SarkariPost | null>(null);
@@ -564,6 +566,15 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                 >
                   <Zap className="w-4 h-4 text-red-950 fill-red-950" />
                   <span>⚡ Ping Google Search</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAdsModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 px-3 py-1.5 rounded font-black cursor-pointer transition-colors shadow-2xs border border-amber-300"
+                  title="Google AdSense & Sponsored Banner Ads Manager"
+                >
+                  <DollarSign className="w-4 h-4 text-slate-950" />
+                  <span>📢 Ads Manager</span>
                 </button>
                 <button
                   onClick={handleLogout}
@@ -3058,6 +3069,13 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
           isOpen={isTrafficHubOpen}
           onClose={() => setIsTrafficHubOpen(false)}
           onOpenGscManager={() => setIsGscModalOpen(true)}
+        />
+
+        {/* Google AdSense & Sponsored Ads Manager Modal */}
+        <AdsManagerModal
+          isOpen={isAdsModalOpen}
+          onClose={() => setIsAdsModalOpen(false)}
+          onShowToast={(msg) => setToastMessage(msg)}
         />
       </div>
     </div>
