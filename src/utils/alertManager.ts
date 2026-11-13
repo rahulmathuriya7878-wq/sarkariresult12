@@ -14,7 +14,7 @@ const STORAGE_KEY = 'sarkari_job_post_alerts_v1';
 /**
  * Determines whether a job post is 'upcoming', 'active', or 'closed'
  */
-export const getPostStatus = (post: SarkariPost): 'upcoming' | 'active' | 'closed' => {
+const getPostStatus = (post: SarkariPost): 'upcoming' | 'active' | 'closed' => {
   // If post explicitly specifies status
   if (post.status) return post.status;
   if (post.isUpcoming) return 'upcoming';
@@ -49,7 +49,7 @@ export const getPostStatus = (post: SarkariPost): 'upcoming' | 'active' | 'close
 /**
  * Retrieve all saved post alerts from localStorage
  */
-export const getSavedPostAlerts = (): Record<string, PostAlertItem> => {
+const getSavedPostAlerts = (): Record<string, PostAlertItem> => {
   if (typeof window === 'undefined') return {};
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -58,72 +58,6 @@ export const getSavedPostAlerts = (): Record<string, PostAlertItem> => {
     console.error('Error reading saved post alerts:', e);
     return {};
   }
-};
-
-/**
- * Check if a specific post has an active alert
- */
-export const isPostAlertActive = (postId: string): boolean => {
-  const alerts = getSavedPostAlerts();
-  return Boolean(alerts[postId]);
-};
-
-/**
- * Toggle alert for a post and request browser notification permission if setting alert
- */
-export const togglePostAlert = async (
-  post: SarkariPost
-): Promise<{ isAlertSet: boolean; permission: NotificationPermission | 'unsupported' }> => {
-  const alerts = getSavedPostAlerts();
-  const currentStatus = getPostStatus(post);
-
-  if (alerts[post.id]) {
-    // Remove alert
-    delete alerts[post.id];
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(alerts));
-    } catch (e) {
-      console.error(e);
-    }
-    return { isAlertSet: false, permission: 'granted' };
-  }
-
-  // Request Notification permission if browser supports it
-  let permission: NotificationPermission | 'unsupported' = 'unsupported';
-  if (typeof window !== 'undefined' && 'Notification' in window) {
-    try {
-      permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        try {
-          new Notification(`🔔 Job Alert Set: ${post.shortTitle}`, {
-            body: `You will be notified as soon as "${post.title}" status updates from Upcoming to Active!`,
-            icon: '/favicon.ico'
-          });
-        } catch (err) {
-          console.warn('Could not fire immediate notification:', err);
-        }
-      }
-    } catch (err) {
-      console.warn('Error requesting notification permission:', err);
-    }
-  }
-
-  // Save alert to localStorage
-  alerts[post.id] = {
-    postId: post.id,
-    postTitle: post.title || post.shortTitle,
-    slug: post.slug,
-    previousStatus: currentStatus,
-    createdAt: new Date().toISOString()
-  };
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(alerts));
-  } catch (e) {
-    console.error('Error saving post alert:', e);
-  }
-
-  return { isAlertSet: true, permission };
 };
 
 /**

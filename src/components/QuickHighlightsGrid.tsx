@@ -6,7 +6,6 @@ interface QuickHighlightsGridProps {
   onSelectHighlight: (slug: string) => void;
   posts?: SarkariPost[];
   visitedPostIds?: Set<string>;
-  bookmarkedIds?: string[];
   isGlobalWordEditActive?: boolean;
   onUpdatePost?: (updatedPost: SarkariPost) => void;
 }
@@ -25,8 +24,6 @@ const HIGHLIGHT_CLASSES = [
 export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({ 
   onSelectHighlight,
   posts = [],
-  visitedPostIds = new Set(),
-  bookmarkedIds = [],
   isGlobalWordEditActive = false,
   onUpdatePost
 }) => {
@@ -101,31 +98,18 @@ export const QuickHighlightsGrid: React.FC<QuickHighlightsGridProps> = ({
     const finalCandidates = eligibleScored.length >= 8 ? eligibleScored : scoredCandidates;
     finalCandidates.sort((a, b) => b.score - a.score);
 
-    return finalCandidates.slice(0, 8).map(({ post, clicks }, idx) => {
+    return finalCandidates.slice(0, 8).map(({ post }, idx) => {
       const bgClass = HIGHLIGHT_CLASSES[idx % HIGHLIGHT_CLASSES.length];
-      const isBookmarked = bookmarkedIds.includes(post.id);
-      const isVisited = visitedPostIds.has(post.id) || (post.slug && visitedPostIds.has(post.slug));
-
-      let badgeText: string | null = null;
-      if (clicks >= 2) badgeText = `🔥 ${clicks} CLICKS`;
-      else if (clicks === 1) badgeText = 'POPULAR';
-      else if (post.isNew) badgeText = 'NEW';
-      else if ((post as any).isUpdated) badgeText = 'UPDATED';
-      else if (post.isHot) badgeText = 'HOT';
-      else if (isVisited) badgeText = 'TRENDING';
-      else if (isBookmarked) badgeText = 'SAVED';
 
       return {
         post,
         id: post.id,
         slug: post.slug,
         title: post.shortTitle || post.title,
-        bgClass,
-        badgeText,
-        clicks
+        bgClass
       };
     });
-  }, [posts, visitedPostIds, bookmarkedIds]);
+  }, [posts]);
 
   if (highlightItems.length === 0) return null;
 

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { SarkariPost, Qualification } from '../../types/job';
-import { Sparkles, X, Check, ArrowRight, Filter, Briefcase } from 'lucide-react';
+import { Sparkles, X, ArrowRight, Briefcase } from 'lucide-react';
 
 interface EligibilityMatcherModalProps {
   isOpen: boolean;

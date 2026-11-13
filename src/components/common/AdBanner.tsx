@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ExternalLink, Sparkles } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { getAdsConfig, AdsConfig, DEFAULT_ADS_CONFIG } from '../../utils/adsConfig';
 
 interface AdBannerProps {
@@ -17,7 +17,6 @@ declare global {
 
 export const AdBanner: React.FC<AdBannerProps> = ({
   placement,
-  format = 'leaderboard',
   className = '',
   onOpenTool
 }) => {
@@ -86,12 +85,6 @@ export const AdBanner: React.FC<AdBannerProps> = ({
   }[placement];
 
   const hasAdSense = Boolean(config.adSensePublisherId && slotId);
-
-  // Determine display mode:
-  // If publisher ID and slot ID exist, and displayType is 'adsense', show AdSense.
-  // If displayType is 'sponsored', show custom promotional creative.
-  // Default is 'ad_space': standard 728x90 and 320x50 placeholder banners with sizes.
-  const isAdSpaceMode = config.adDisplayType === 'ad_space';
 
   const handleClickBanner = () => {
     if (bannerData.linkUrl === '#' && onOpenTool) {

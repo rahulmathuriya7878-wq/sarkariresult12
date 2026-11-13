@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { SarkariPost, PostCategory } from '../types/job';
-import { ArrowLeft, ChevronRight, Search } from 'lucide-react';
+import { ArrowLeft, Search } from 'lucide-react';
 import { isPostVisited } from '../utils/visitedPosts';
 
 interface CategoryDetailViewProps {

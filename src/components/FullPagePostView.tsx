@@ -59,22 +59,13 @@ import {
   Send,
   MessageCircle,
   Trash2,
-  Plus,
-  ShieldCheck,
-  Settings,
-  BookOpen,
   FileText,
-  Download,
-  Upload,
   Share2,
   Copy,
-  X,
   Edit3,
   Check,
   Hash
 } from 'lucide-react';
-import { isPostAlertActive, togglePostAlert, getPostStatus } from '../utils/alertManager';
-import { PostAlertModal } from './PostAlertModal';
 import { ALL_RRB_BOARDS } from '../data/rrbBoards';
 import { getPostViralTags, formatViralTagsString } from '../utils/viralTagsHelper';
 import { CANONICAL_DOMAIN } from '../utils/seoHelpers';
@@ -83,17 +74,13 @@ import { AdBanner } from './common/AdBanner';
 interface FullPagePostViewProps {
   post: SarkariPost;
   onBack: () => void;
-  isBookmarked?: boolean;
-  onToggleBookmark?: (postId: string) => void;
   onOpenAgeCalculator?: () => void;
   onOpenPhotoResizer?: () => void;
-  isHindi?: boolean;
   onSelectPost?: (post: SarkariPost) => void;
   allPosts?: SarkariPost[];
   onOpenAdmin?: () => void;
   onOpenDirectEditor?: () => void;
   onUpdatePost?: (updatedPost: SarkariPost) => void;
-  onDeletePost?: (postId: string) => void;
   isGlobalWordEditActive?: boolean;
   onToggleGlobalWordEdit?: () => void;
 }
@@ -181,7 +168,7 @@ export const getPostFAQs = (post: SarkariPost): PostFAQ[] => {
   return faqs;
 };
 
-export const getCategoryShareText = (post: SarkariPost, postUrl: string): string => {
+const getCategoryShareText = (post: SarkariPost, postUrl: string): string => {
   const postName = post.shortTitle || post.title;
   const qual = post.qualifications && post.qualifications.length > 0 ? post.qualifications.join(', ') : 'अधिसूचना अनुसार';
   
@@ -252,46 +239,14 @@ export const getCategoryLabel = (category: string): string => {
   }
 };
 
-const getDepartmentHeader = (dept: string, postTitle: string, isInfo: boolean): string => {
-  if (isInfo) return 'Sarkari Result Official Notice';
-  const titleLower = (postTitle + ' ' + dept).toLowerCase();
-  if (titleLower.includes('supreme court') || titleLower.includes('court master') || titleLower.includes('sci')) {
-    return 'Supreme Court of India (SCI)';
-  }
-  if (dept === 'UPSC' || titleLower.includes('upsc') || titleLower.includes('civil services') || titleLower.includes('cds')) {
-    return 'Union Public Service Commission (UPSC)';
-  }
-  if (dept === 'SSC' || titleLower.includes('staff selection') || titleLower.includes('ssc')) {
-    return 'Staff Selection Commission (SSC)';
-  }
-  if (dept === 'Railway' || titleLower.includes('railway') || titleLower.includes('rrb') || titleLower.includes('rrc') || titleLower.includes('alp')) {
-    return 'Railway Recruitment Board (RRB / RRC)';
-  }
-  if (dept === 'Banking' || titleLower.includes('ibps') || titleLower.includes('sbi') || titleLower.includes('bank')) {
-    return 'Institute of Banking Personnel Selection (IBPS / SBI)';
-  }
-  if (dept === 'Police' || titleLower.includes('police') || titleLower.includes('constable') || titleLower.includes('si ')) {
-    return 'Police Recruitment & Promotion Board';
-  }
-  if (dept === 'Teaching' || titleLower.includes('tet') || titleLower.includes('ctet') || titleLower.includes('teacher')) {
-    return 'Teacher Eligibility & Education Board';
-  }
-  if (dept && dept !== 'Other') return dept;
-  return 'Supreme Court of India (SCI)';
-};
-
 export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   post,
   onBack,
-  isBookmarked = false,
-  onToggleBookmark,
   onSelectPost,
-  isHindi,
   allPosts = [],
   onOpenAdmin,
   onOpenDirectEditor,
   onUpdatePost,
-  onDeletePost,
   onOpenPhotoResizer,
   isGlobalWordEditActive = false,
   onToggleGlobalWordEdit
@@ -353,11 +308,8 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     return list.slice(0, 4);
   }, [editablePost]);
 
-  const [isAlertActive, setIsAlertActive] = React.useState<boolean>(() => isPostAlertActive(post.id));
-  const [isAlertModalOpen, setIsAlertModalOpen] = React.useState<boolean>(false);
   const [alertFeedback, setAlertFeedback] = React.useState<string | null>(null);
   const [hiddenSections, setHiddenSections] = React.useState<Record<string, boolean>>({});
-  const [isPdfModalOpen, setIsPdfModalOpen] = useState<boolean>(false);
   const [pdfUploadTargetIndex, setPdfUploadTargetIndex] = useState<number | null>(null);
   const pdfFileInputRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -854,35 +806,11 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
       setAlertFeedback(`✅ PDF फ़ाइल "${file.name}" (${fileSizeStr}) सफलतापूर्वक जोड़ी गई!`);
       setTimeout(() => setAlertFeedback(null), 3500);
-      setIsPdfModalOpen(false);
       setPdfUploadTargetIndex(null);
       if (pdfFileInputRef.current) pdfFileInputRef.current.value = '';
     };
 
     reader.readAsDataURL(file);
-  };
-
-  const handleAddPresetPdfLink = (label: string, defaultActionText: string = 'Click Here', type: any = 'notification') => {
-    const customUrl = prompt(`"${label}" के लिए PDF URL या Google Drive लिंक दर्ज करें (Enter PDF Link / Drive Link):`, 'https://');
-    if (customUrl === null) return;
-    
-    setEditablePost(prev => ({
-      ...prev,
-      directLinks: [
-        ...(prev.directLinks || []),
-        {
-          label: label,
-          actionText: defaultActionText,
-          type: type,
-          url: customUrl.trim() || 'https://sarkariresult12.vercel.app/#',
-          isPdf: true,
-          isPrimary: true
-        }
-      ]
-    }));
-    setAlertFeedback(`✅ PDF लिंक "${label}" जोड़ा गया!`);
-    setTimeout(() => setAlertFeedback(null), 3000);
-    setIsPdfModalOpen(false);
   };
 
   const handleAttachPdfToLink = (index: number) => {
@@ -1050,33 +978,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         </button>
       </div>
     );
-  };
-
-  useEffect(() => {
-    setIsAlertActive(isPostAlertActive(post.id));
-  }, [post.id]);
-
-
-
-
-  const handleAlertToggle = async () => {
-    const res = await togglePostAlert(post);
-    setIsAlertActive(res.isAlertSet);
-    if (res.isAlertSet) {
-      if (res.permission === 'granted') {
-        setAlertFeedback('🔔 Job Alert Set! Browser notification will trigger as soon as status becomes Active.');
-      } else if (res.permission === 'denied') {
-        setAlertFeedback('⚠️ Alert Saved! Note: Browser notifications are currently blocked in site settings.');
-      } else {
-        setAlertFeedback('🔔 Alert Saved to your Watchlist!');
-      }
-      if (onToggleBookmark && !isBookmarked) {
-        onToggleBookmark(post.id);
-      }
-    } else {
-      setAlertFeedback('Alert removed for this post.');
-    }
-    setTimeout(() => setAlertFeedback(null), 4000);
   };
 
   // Contextual Latest Jobs (excluding current open post)
@@ -1337,9 +1238,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
 
   const isServiceOrScheme = post.category === 'important' || post.category === 'certificate_verification';
 
-  // Only show Age Relaxation Rules and Selection Process for main recruitment categories
-  const showRecruitmentDetails = ['latest_jobs', 'result', 'admit_card', 'answer_key'].includes(post.category);
-
   // Identify statutory & informational posts (About Us, Privacy Policy, Disclaimer, Terms & Rules, Contact Us)
   const isInformationalPost = useMemo(() => {
     return (
@@ -1410,37 +1308,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
           (z.hindiZoneName || '').toLowerCase().includes(q)
       );
   }, [editablePost.zoneBreakdown, isRailwayPost, isServiceOrScheme, isInformationalPost, defaultRrbZones, rrbSearch]);
-
-  // Useful Links for all posts (excluding social channels)
-  const allDirectLinks = useMemo(() => {
-    const existing = [...(post.directLinks || [])];
-    return existing.filter(l => 
-      !l.label?.toLowerCase().includes('whatsapp') && 
-      !l.label?.toLowerCase().includes('telegram') && 
-      !l.url?.toLowerCase().includes('whatsapp') && 
-      !l.url?.toLowerCase().includes('t.me')
-    );
-  }, [post.directLinks]);
-
-  // Category breadcrumb text (e.g. "Admit card updates", "Latest jobs updates", "Result updates")
-  const getCategoryUpdatesLabel = () => {
-    switch (post.category) {
-      case 'admit_card':
-        return 'Admit card updates';
-      case 'result':
-        return 'Result updates';
-      case 'latest_jobs':
-        return 'Latest jobs updates';
-      case 'answer_key':
-        return 'Answer key updates';
-      case 'admission':
-        return 'Admission updates';
-      case 'certificate_verification':
-        return 'Certificate Verification updates';
-      default:
-        return 'Recruitment updates';
-    }
-  };
 
   return (
     <div 
@@ -3474,66 +3341,6 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         accept="application/pdf,.pdf"
         className="hidden"
         onChange={handlePdfFileChange}
-      />
-
-      {/* Add / Attach PDF Dialog Modal */}
-      {isPdfModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full border border-slate-300 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-3 bg-rose-700 text-white">
-              <div className="flex items-center gap-2 font-black text-sm">
-                <FileText className="w-4 h-4" />
-                <span>
-                  {pdfUploadTargetIndex !== null ? 'मौजूदा लिंक के लिए PDF अपलोड करें' : 'नया PDF डॉक्यूमेंट जोड़ें'}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsPdfModalOpen(false)}
-                className="text-white hover:bg-rose-800 p-1 rounded cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="p-4 space-y-4">
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded text-xs text-rose-900 space-y-1">
-                <p className="font-bold">📄 PDF फाइल अपलोड निर्देश:</p>
-                <p>कंप्यूटर या मोबाइल से कोई भी आधिकारिक PDF (नोटिफिकेशन, सिलेबस, रिजल्ट, फॉर्म) चुनें। यह तुरंत लिंक के साथ अटैच होकर डाउनलोड करने योग्य बन जाएगी।</p>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  PDF फ़ाइल चुनें (.pdf)
-                </label>
-                <input
-                  type="file"
-                  accept="application/pdf,.pdf"
-                  onChange={handlePdfFileChange}
-                  className="block w-full text-xs text-slate-700 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-rose-600 file:text-white hover:file:bg-rose-700 cursor-pointer border border-slate-300 rounded p-1 bg-slate-50"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-200">
-                <button
-                  type="button"
-                  onClick={() => setIsPdfModalOpen(false)}
-                  className="px-3 py-1.5 rounded text-xs font-bold text-slate-600 hover:bg-slate-100 border border-slate-300 cursor-pointer"
-                >
-                  रद्द करें
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Post Alert Popup Modal */}
-      <PostAlertModal
-        isOpen={isAlertModalOpen}
-        onClose={() => setIsAlertModalOpen(false)}
-        post={post}
-        onAlertChange={(active) => setIsAlertActive(active)}
       />
     </div>
   );

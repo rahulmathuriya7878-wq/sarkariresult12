@@ -371,10 +371,6 @@ async function startServer() {
       const postTags = getPostViralTags(matchedPost);
       metaKeywords = postTags.map(t => t.replace(/^#/, '')).join(', ');
 
-      const tagsHtml = postTags
-        .map(t => `<span style="display:inline-block; background:#f1f5f9; color:#ab1616; border:1px solid #e2e8f0; font-size:12px; font-weight:bold; padding:3px 8px; border-radius:4px; margin:2px 4px 2px 0;">${escapeHtml(t)}</span>`)
-        .join(' ');
-
       bodyFallback = `
         <div style="font-family: sans-serif; padding: 20px; max-width: 900px; margin: 0 auto; color: #1e293b;">
           <h1 style="color: #ab1616; font-size: 26px;">${escapeHtml(matchedPost.title)}</h1>

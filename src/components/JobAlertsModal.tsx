@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BellRing, X, CheckCircle, Mail, Globe, Send, ShieldCheck, Sparkles, AlertCircle, MessageCircle } from 'lucide-react';
+import { BellRing, X, CheckCircle, Mail, Globe, Send, ShieldCheck, Sparkles, MessageCircle } from 'lucide-react';
 import { requestFcmPermissionAndToken, simulatePushNotification } from '../utils/fcm';
 
 interface JobAlertsModalProps {

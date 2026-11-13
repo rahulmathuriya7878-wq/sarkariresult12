@@ -7,16 +7,9 @@ import {
   Check, 
   ExternalLink, 
   Sparkles, 
-  Globe, 
-  Search, 
   Flame, 
   CheckCircle2, 
-  Users, 
-  Rss, 
-  ListTree,
-  Send,
-  Zap,
-  HelpCircle,
+  Zap, 
   X
 } from 'lucide-react';
 

@@ -1,6 +1,5 @@
 import { SarkariPost } from '../types/job';
 import { screenshotResultPosts, screenshotLatestJobPosts } from './screenshotPosts';
-import { generateRecruitmentNotificationPdf } from '../utils/pdfGenerator';
 
 export const upscCdsResultPost: SarkariPost = {
   id: 'res-upsc-cds-ii-2026',
@@ -3923,37 +3922,4 @@ export const mockSarkariPosts: SarkariPost[] = [
       { label: 'Read Privacy Policy & Guidelines', actionText: 'Privacy Policy', type: 'official', url: '#privacy-policy' }
     ]
   }
-];
-
-export const trendingAlerts = [
-  { id: 't-kvs', title: '🏫 KVS Samvida Sathi Portal Recruitment 2026 (PGT/TGT/PRT)', slug: 'kvs-samvida-sathi-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
-  { id: 't-ctet', title: '📝 CTET 2026 Online Form Released (Paper I & II)', slug: 'ctet-2026-online-application-form', category: 'latest_jobs', badge: 'Hot' },
-  { id: 't-isro', title: '🚀 ISRO 10th Pass Recruitment 2026 (Last Date 13 Nov)', slug: 'isro-ursc-recruitment-2026', category: 'latest_jobs', badge: '10th Pass' },
-  { id: 't-cgst', title: '💼 CGST Tax Assistant & Havaldar Sports Quota 2026', slug: 'cgst-lucknow-sports-quota-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
-  { id: 't-ugc', title: '🎓 NTA UGC NET 2026 Online Form (Assistant Professor & JRF)', slug: 'nta-ugc-net-2026-online-form', category: 'latest_jobs', badge: 'New Job' },
-  { id: 't-ssp', title: '🏛️ Rajasthan Samajik Suraksha Pension 2026 (RAJSSP) Online Form & Varshik Satypan', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', category: 'important', badge: 'Hot' },
-  { id: 't-sci', title: '⚖️ Supreme Court Attendant (130 Posts) Online Form 2026', slug: 'supreme-court-attendant-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
-  { id: 't-itbp', title: '🛡️ ITBP Motor Mechanic (21 Posts) Online Form Active', slug: 'itbp-motor-mechanic-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
-  { id: 't0', title: '🚂 Railway RRB NTPC 12th Level (3,445 Posts) Online Form Active', slug: 'rrb-ntpc-12th-level-recruitment-2026', category: 'latest_jobs', badge: 'New Job' },
-  { id: 't1', title: '🚨 RUHS Medical Officer (1,220 Posts) Online Form Active', slug: 'ruhs-medical-officer-recruitment-2026', category: 'latest_jobs', badge: 'Hot' },
-  { id: 't2', title: 'UPSC Civil Services 2026 Prelims Online Form', slug: 'upsc-civil-services-ias-ifs-2026', category: 'latest_jobs', badge: 'Apply Now' },
-  { id: 't3', title: 'SSC CGL 2026 Tier-II Admit Card Released', slug: 'ssc-cgl-tier-ii-admit-card-2026', category: 'admit_card', badge: 'Admit Card' },
-  { id: 't4', title: 'Railway RRB NTPC 11,558 Vacancies Form Active', slug: 'railway-rrb-ntpc-recruitment-2026', category: 'latest_jobs', badge: '11,558 Posts' },
-  { id: 't5', title: 'SSC CHSL Tier-I Result & Cutoff Marks Declared', slug: 'ssc-chsl-tier-i-result-cutoff-2026', category: 'result', badge: 'Result' },
-  { id: 't6', title: 'UP Police Constable 60,244 Posts Exam Updates', slug: 'up-police-constable-recruitment-60244', category: 'latest_jobs', badge: 'Hot' },
-  { id: 't7', title: 'SSC GD Constable Answer Key Released With Response Sheet', slug: 'ssc-gd-constable-answer-key-2026', category: 'answer_key', badge: 'Answer Key' },
-  { id: 't8', title: 'NTA NEET UG 2026 Online Registration Open', slug: 'nta-neet-ug-2026-online-registration', category: 'admission', badge: 'Admission' }
-];
-
-export const highlightBoxes = [
-  { id: 'h-kvs', title: 'KVS Samvida Sathi Portal', sub: 'Apply Online (PGT/TGT/PRT)', slug: 'kvs-samvida-sathi-recruitment-2026', color: 'from-orange-600 to-amber-700' },
-  { id: 'h-ctet', title: 'CTET 2026 Online Form', sub: 'Paper I & II Apply Online', slug: 'ctet-2026-online-application-form', color: 'from-blue-700 to-indigo-900' },
-  { id: 'h-isro', title: 'ISRO 10th Pass Recruitment', sub: 'Apply Online (Last Date 13 Nov)', slug: 'isro-ursc-recruitment-2026', color: 'from-purple-700 to-indigo-900' },
-  { id: 'h-cgst', title: 'CGST Tax Assistant & Havaldar', sub: 'Sports Quota Recruitment 2026', slug: 'cgst-lucknow-sports-quota-recruitment-2026', color: 'from-blue-700 to-indigo-800' },
-  { id: 'h-ugc', title: 'NTA UGC NET 2026', sub: 'Apply Online (JRF & Asst Prof)', slug: 'nta-ugc-net-2026-online-form', color: 'from-emerald-700 to-teal-800' },
-  { id: 'h-ssp', title: 'Raj Samajik Suraksha Pension', sub: 'Online Form & Verification', slug: 'rajasthan-samajik-suraksha-pension-yojana-2026', color: 'from-red-700 to-indigo-800' },
-  { id: 'h-sci', title: 'Supreme Court Attendant', sub: 'Apply Online (130 Posts)', slug: 'supreme-court-attendant-recruitment-2026', color: 'from-[#ab1616] to-red-800' },
-  { id: 'h-itbp', title: 'ITBP Motor Mechanic', sub: 'Apply Online (21 Posts)', slug: 'itbp-motor-mechanic-recruitment-2026', color: 'from-blue-600 to-blue-700' },
-  { id: 'h0', title: 'RRB NTPC 12th Level 2026', sub: 'Apply Online (3,445 Posts)', slug: 'rrb-ntpc-12th-level-recruitment-2026', color: 'from-amber-600 to-amber-700' },
-  { id: 'h1', title: 'RUHS Medical Officer 2026', sub: 'Apply Online (1,220 Posts)', slug: 'ruhs-medical-officer-recruitment-2026', color: 'from-emerald-600 to-emerald-700' }
 ];

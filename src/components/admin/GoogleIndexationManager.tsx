@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SarkariPost } from '../../types/job';
 import { 
-  Globe, 
   CheckCircle2, 
   ExternalLink, 
   Search, 
@@ -9,7 +8,6 @@ import {
   ListTree, 
   Copy, 
   Send, 
-  Sparkles, 
   FileCheck2, 
   HelpCircle,
   X,

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Calendar, CheckCircle2, XCircle, Calculator, X, Sparkles } from 'lucide-react';
+import { CheckCircle2, XCircle, Calculator, X, Sparkles } from 'lucide-react';
 
 interface AgeCalculatorModalProps {
   isOpen: boolean;

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useMemo, useCallback, lazy } from 'react';
 import { mockSarkariPosts, ntaJeeMainPost } from './data/mockJobs';
 import { SarkariPost, PostCategory, Department, Qualification, SalaryBand } from './types/job';
 import { Header } from './components/Header';
@@ -24,7 +24,6 @@ const AdminEditingPanelModal = lazy(() => import('./components/admin/AdminEditin
 const AgeCalculatorModal = lazy(() => import('./components/tools/AgeCalculatorModal').then(m => ({ default: m.AgeCalculatorModal })));
 const PhotoResizerTool = lazy(() => import('./components/tools/PhotoResizerTool').then(m => ({ default: m.PhotoResizerTool })));
 const EligibilityMatcherModal = lazy(() => import('./components/tools/EligibilityMatcherModal').then(m => ({ default: m.EligibilityMatcherModal })));
-const BookmarkedJobsModal = lazy(() => import('./components/BookmarkedJobsModal').then(m => ({ default: m.BookmarkedJobsModal })));
 const JobAlertsModal = lazy(() => import('./components/JobAlertsModal').then(m => ({ default: m.JobAlertsModal })));
 
 const getPostSalaryBand = (post: SarkariPost): SalaryBand => {
@@ -136,7 +135,6 @@ export default function App() {
   const [isAgeCalcOpen, setIsAgeCalcOpen] = useState<boolean>(false);
   const [isPhotoResizerOpen, setIsPhotoResizerOpen] = useState<boolean>(false);
   const [isJobFinderOpen, setIsJobFinderOpen] = useState<boolean>(false);
-  const [isBookmarksOpen, setIsBookmarksOpen] = useState<boolean>(false);
   const [isJobAlertsOpen, setIsJobAlertsOpen] = useState<boolean>(false);
 
   // Global Live Word Edit State across the entire website and all sections
@@ -158,20 +156,6 @@ export default function App() {
       }
       return next;
     });
-  };
-
-  const handleStartDirectWordEdit = (postToEdit?: SarkariPost) => {
-    setIsGlobalWordEditActive(true);
-    try {
-      localStorage.setItem('sarkari_global_word_edit', 'true');
-    } catch (e) {
-      console.error(e);
-    }
-    setIsAdminOpen(false);
-    if (postToEdit) {
-      setSelectedPost(postToEdit);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Post Mutation Handlers for Admin Panel & Word Editor
@@ -249,27 +233,8 @@ export default function App() {
   // Initial visit push prompt is handled cleanly by PushNotificationBanner;
   // JobAlertsModal opens on demand via alert/footer triggers.
 
-  // Preference state
-  const [isHindi, setIsHindi] = useState<boolean>(false);
-  const [isClassicTheme, setIsClassicTheme] = useState<boolean>(false);
-
-  // Bookmarks persistence
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('sarkari_saved_jobs');
-      return saved ? JSON.parse(saved) : ['job-1', 'job-2'];
-    } catch {
-      return ['job-1', 'job-2'];
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('sarkari_saved_jobs', JSON.stringify(bookmarkedIds));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [bookmarkedIds]);
+  // Language preference
+  const [isHindi] = useState<boolean>(false);
 
   // Secret Keyboard Shortcut (Ctrl + Shift + A) & URL check to open Hidden Admin Panel
   useEffect(() => {
@@ -597,20 +562,6 @@ export default function App() {
     }
   };
 
-  const handleToggleBookmark = (postId: string) => {
-    setBookmarkedIds((prev) => 
-      prev.includes(postId) ? prev.filter((id) => id !== postId) : [...prev, postId]
-    );
-  };
-
-  const handleClearAllBookmarks = () => {
-    setBookmarkedIds([]);
-  };
-
-  const bookmarkedPosts = useMemo(() => {
-    return allPosts.filter((p) => bookmarkedIds.includes(p.id));
-  }, [allPosts, bookmarkedIds]);
-
   // Filtered posts based on search query, department, qualification, state
   const filteredPosts = useMemo(() => {
     let result = allPosts.filter((post) => {
@@ -781,12 +732,8 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onBack={handleBackToHome}
           onSelectPost={handleOpenPostFullPage}
           onUpdatePost={handleUpdatePost}
-          onDeletePost={handleDeletePost}
-          isBookmarked={bookmarkedIds.includes(selectedPost.id)}
-          onToggleBookmark={handleToggleBookmark}
           onOpenAgeCalculator={() => setIsAgeCalcOpen(true)}
           onOpenPhotoResizer={() => setIsPhotoResizerOpen(true)}
-          isHindi={isHindi}
           onOpenAdmin={() => setIsAdminOpen(true)}
           onOpenDirectEditor={() => setIsAdminOpen(true)}
           isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
@@ -800,7 +747,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
             posts={allPosts} 
             onSelectHighlight={handleSelectSlug} 
             visitedPostIds={visitedPostIds}
-            bookmarkedIds={bookmarkedIds}
             isGlobalWordEditActive={isAdmin && isGlobalWordEditActive}
             onUpdatePost={handleUpdatePost}
           />
@@ -952,17 +898,6 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
         />
       )}
 
-      {isBookmarksOpen && (
-        <BookmarkedJobsModal
-          isOpen={isBookmarksOpen}
-          onClose={() => setIsBookmarksOpen(false)}
-          bookmarkedPosts={bookmarkedPosts}
-          onSelectPost={handleOpenPostFullPage}
-          onRemoveBookmark={handleToggleBookmark}
-          onClearAll={handleClearAllBookmarks}
-        />
-      )}
-
       {isJobAlertsOpen && (
         <JobAlertsModal
           isOpen={isJobAlertsOpen}
@@ -980,12 +915,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           onUpdatePost={handleUpdatePost}
           onDeletePost={handleDeletePost}
           onResetToDefault={handleResetToDefault}
-          onSelectPost={handleOpenPostFullPage}
           initialPostToEdit={selectedPost}
-          isHindi={isHindi}
-          isGlobalWordEditActive={isGlobalWordEditActive}
-          onToggleGlobalWordEdit={handleToggleGlobalWordEdit}
-          onStartDirectWordEdit={handleStartDirectWordEdit}
         />
       )}
 

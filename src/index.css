@@ -34,9 +34,6 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .font-headlight {
-    font-family: Arial, Helvetica, sans-serif;
-  }
   .font-post {
     font-family: Arial, Helvetica, sans-serif;
   }
@@ -111,28 +108,6 @@
   background-color: #5c0000;
 }
 
-/* Intro & Marquee Links */
-.sr-intro {
-  text-align: center;
-  padding: 10px 6px;
-  font-weight: bold;
-}
-
-.sr-intro h1 {
-  margin: 0 0 6px;
-  font-size: 17px;
-  color: #000000;
-}
-
-.sr-marquee-links {
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
-
-.sr-marquee-links a,
 .sr-box-list a,
 .sr-link-blue {
   color: var(--sr-link);
@@ -260,30 +235,6 @@
   border-top: 1px solid #e5e7eb;
 }
 
-/* Job Post Page Styles */
-.post-title {
-  font-size: 21px;
-  font-weight: bold;
-  color: var(--sr-green);
-  text-align: center;
-  margin: 14px 0 6px;
-}
-
-.post-meta {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.post-meta span {
-  color: var(--sr-red);
-}
-
-.post-short-info {
-  margin: 0 0 12px;
-  font-size: 14px;
-}
-
 .social-bar {
   display: flex;
   flex-wrap: wrap;
@@ -304,24 +255,6 @@
 
 .pill-tg { background: #0088cc; }
 .pill-wa { background: #128c7e; }
-
-/* Outstream Ad Slot Placeholder */
-.ad-slot-inarticle {
-  border: 1px dashed #9ca3af;
-  background: #f9fafb;
-  padding: 12px;
-  text-align: center;
-  margin: 12px 0 16px;
-  font-size: 13px;
-  color: #374151;
-}
-
-.ad-slot-label {
-  font-weight: bold;
-  color: #111827;
-  display: block;
-  margin-bottom: 4px;
-}
 
 /* Post HTML Tables */
 .sr-table {
@@ -375,50 +308,6 @@
   font-weight: bold;
 }
 
-/* Sticky Bottom-Right Floating Video Ad Widget */
-.sticky-video-ad {
-  position: fixed;
-  right: 14px;
-  bottom: 14px;
-  width: 240px;
-  background: #111827;
-  color: #ffffff;
-  border: 2px solid #ab0000;
-  border-radius: 4px;
-  padding: 8px;
-  font-size: 12px;
-  z-index: 50;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-}
-
-.sticky-video-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-  font-weight: bold;
-}
-
-.sticky-close {
-  background: #ab0000;
-  color: #ffffff;
-  border: none;
-  padding: 2px 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.sticky-video-frame {
-  background: #1f2937;
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 8px;
-  color: #d1d5db;
-}
-
 /* Footer */
 .sr-footer {
   margin-top: 20px;
@@ -427,60 +316,6 @@
   text-align: center;
   font-size: 13px;
   color: #111827;
-}
-
-/* Legacy RV Job Table Aliases mapped to SR Table Style */
-.rv-job-wrap {
-  overflow-x: auto;
-  margin: 14px 0;
-}
-.rv-job-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #ffffff;
-  font-size: 14px;
-  margin-bottom: 14px;
-}
-.rv-job-table th,
-.rv-job-table td {
-  border: 1px solid var(--sr-table-border);
-  padding: 8px 10px;
-  vertical-align: top;
-}
-.rv-job-title {
-  background-color: var(--sr-header);
-  color: #ffffff !important;
-  text-align: center !important;
-  font-size: 16px !important;
-  font-weight: bold;
-}
-.rv-section-head {
-  background-color: var(--sr-green);
-  color: #ffffff !important;
-  text-align: center !important;
-  font-size: 15px !important;
-  font-weight: bold;
-}
-.rv-sub-head {
-  background-color: var(--sr-green);
-  color: #ffffff !important;
-  font-weight: bold;
-  text-align: center !important;
-  font-size: 15px !important;
-}
-.rv-job-table ul {
-  margin: 0;
-  padding-left: 18px;
-  list-style-type: disc;
-}
-.rv-job-table li {
-  margin-bottom: 4px;
-}
-.rv-link-btn {
-  color: var(--sr-link);
-  font-weight: bold;
-  text-decoration: underline;
-  font-size: 14px;
 }
 
 @media (max-width: 680px) {
@@ -493,15 +328,10 @@
   .sr-header-title {
     font-size: 22px;
   }
-  .sticky-video-ad {
-    width: 190px;
-    right: 8px;
-    bottom: 8px;
-  }
 }
 
 @media print {
-  header, footer, .no-print, .sticky-video-ad {
+  header, footer, .no-print {
     display: none !important;
   }
   body {

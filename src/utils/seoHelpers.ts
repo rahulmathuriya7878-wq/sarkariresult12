@@ -1,6 +1,6 @@
 import { SarkariPost } from '../types/job';
 import { mockSarkariPosts } from '../data/mockJobs';
-import { getPostViralTags, formatViralTagsString } from './viralTagsHelper';
+import { getPostViralTags } from './viralTagsHelper';
 
 export const CANONICAL_DOMAIN = 'https://sarkariresult12.vercel.app';
 

@@ -5,7 +5,6 @@ import {
   RotateCcw, 
   Check, 
   DollarSign, 
-  Globe, 
   Layout, 
   ExternalLink,
   Sparkles,

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Image as ImageIcon, Download, Upload, RefreshCw, X, Check, ShieldAlert } from 'lucide-react';
+import { Image as ImageIcon, Download, Upload, X, Check, ShieldAlert } from 'lucide-react';
 
 interface PhotoResizerToolProps {
   isOpen: boolean;
@@ -12,7 +12,6 @@ export const PhotoResizerTool: React.FC<PhotoResizerToolProps> = ({ isOpen, onCl
   const [photoDate, setPhotoDate] = useState<string>('11-10-2026');
   const [includeDateStamp, setIncludeDateStamp] = useState<boolean>(true);
   const [quality, setQuality] = useState<number>(0.85);
-  const [targetKb, setTargetKb] = useState<number>(35);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [outputBlobUrl, setOutputBlobUrl] = useState<string | null>(null);
   const [outputFileSizeKb, setOutputFileSizeKb] = useState<number | null>(null);
@@ -54,15 +53,12 @@ export const PhotoResizerTool: React.FC<PhotoResizerToolProps> = ({ isOpen, onCl
   useEffect(() => {
     if (selectedPreset === 'ssc_photo') {
       setDimensions({ width: 350, height: 450 });
-      setTargetKb(35);
       setIncludeDateStamp(false);
     } else if (selectedPreset === 'ssc_sig') {
       setDimensions({ width: 400, height: 200 });
-      setTargetKb(15);
       setIncludeDateStamp(false);
     } else if (selectedPreset === 'upsc_photo') {
       setDimensions({ width: 350, height: 450 });
-      setTargetKb(40);
       setIncludeDateStamp(true);
     }
   }, [selectedPreset]);

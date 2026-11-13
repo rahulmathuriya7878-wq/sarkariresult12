@@ -32,31 +32,6 @@ function formatPostDateToIso(dateStr?: string): string {
   return fallback;
 }
 
-export interface SitemapStats {
-  totalPosts: number;
-  activeJobsCount: number;
-  resultsCount: number;
-  admissionsCount: number;
-  admitCardsCount: number;
-  totalUrls: number;
-}
-
-export function getSitemapStats(posts: SarkariPost[] = mockSarkariPosts): SitemapStats {
-  const activeJobsCount = posts.filter((p) => p.category === 'latest_jobs').length;
-  const resultsCount = posts.filter((p) => p.category === 'result').length;
-  const admissionsCount = posts.filter((p) => p.category === 'admission').length;
-  const admitCardsCount = posts.filter((p) => p.category === 'admit_card').length;
-
-  return {
-    totalPosts: posts.length,
-    activeJobsCount,
-    resultsCount,
-    admissionsCount,
-    admitCardsCount,
-    totalUrls: posts.length + 9 // static portals + posts
-  };
-}
-
 /**
  * Generates dynamic sitemap.xml strictly compliant with sitemaps.org schema.
  * Automatically indexes all active job posts, results, admission pages, and portals.

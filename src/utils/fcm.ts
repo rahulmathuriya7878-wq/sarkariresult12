@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging, getToken } from 'firebase/messaging';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
@@ -62,21 +62,6 @@ export async function requestFcmPermissionAndToken(): Promise<FcmSubscriptionRes
   } catch (error: any) {
     console.error('Error requesting FCM token:', error);
     return { success: false, error: error.message || String(error) };
-  }
-}
-
-/**
- * Setup foreground message listener
- */
-export function setupForegroundFcmListener(onNotificationCallback: (payload: any) => void) {
-  if (!messaging) return;
-  try {
-    onMessage(messaging, (payload) => {
-      console.log('Foreground FCM message received:', payload);
-      onNotificationCallback(payload);
-    });
-  } catch (e) {
-    console.warn('Error setting up foreground message listener:', e);
   }
 }
 

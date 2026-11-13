@@ -1,57 +1,35 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   SarkariPost, 
   PostCategory, 
   Department, 
   Qualification, 
   SalaryBand,
-  ApplicationFeeItem,
-  ImportantDateItem,
-  DirectLinkItem,
-  VacancyBreakdown,
   SalaryBreakdownItem,
   PaperPattern,
-  ExamSubjectItem,
   StateVacancyItem,
   ZoneVacancyItem
 } from '../../types/job';
 import { 
   X, 
-  Search, 
   Plus, 
-  Edit3, 
   Trash2, 
   Copy, 
   Save, 
   RotateCcw, 
   Lock, 
-  Unlock, 
-  ExternalLink, 
   Check, 
   AlertTriangle, 
-  FileText, 
-  Calendar, 
-  Link as LinkIcon, 
   DollarSign, 
-  Users, 
-  Download, 
   Upload,
-  ArrowLeft,
   HelpCircle,
   Eye,
-  CheckCircle2,
-  Layers,
   Sparkles,
-  Bot,
   Globe,
   Zap,
-  Send,
-  RefreshCw,
-  TrendingUp,
-  Hash
+  TrendingUp
 } from 'lucide-react';
 import { getPostFAQs } from '../FullPagePostView';
-import { AIBlogWriter } from './AIBlogWriter';
 import { GoogleIndexationManager } from './GoogleIndexationManager';
 import { TrafficGrowthHub } from './TrafficGrowthHub';
 import { AdsManagerModal } from './AdsManagerModal';
@@ -68,12 +46,7 @@ interface AdminEditingPanelModalProps {
   onUpdatePost: (post: SarkariPost) => void;
   onDeletePost: (postId: string) => void;
   onResetToDefault: () => void;
-  onSelectPost?: (post: SarkariPost) => void;
-  isHindi?: boolean;
   initialPostToEdit?: SarkariPost | null;
-  isGlobalWordEditActive?: boolean;
-  onToggleGlobalWordEdit?: () => void;
-  onStartDirectWordEdit?: (post?: SarkariPost) => void;
 }
 
 const CATEGORIES: { value: PostCategory; label: string }[] = [
@@ -170,11 +143,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   onUpdatePost,
   onDeletePost,
   onResetToDefault,
-  onSelectPost,
-  initialPostToEdit,
-  isGlobalWordEditActive,
-  onToggleGlobalWordEdit,
-  onStartDirectWordEdit
+  initialPostToEdit
 }) => {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -182,13 +151,6 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   });
   const [pinInput, setPinInput] = useState('');
 
-  // Filter & Search in Table
-  const [filterCategory, setFilterCategory] = useState<string>('all');
-  const [filterDept, setFilterDept] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // Main Admin Panel Modules: 1. Full Post Editor, 2. AI Blog Writer
-  const [adminMainTab, setAdminMainTab] = useState<'editor' | 'ai_blog'>('editor');
   const [isGscModalOpen, setIsGscModalOpen] = useState<boolean>(false);
   const [isTrafficHubOpen, setIsTrafficHubOpen] = useState<boolean>(false);
   const [isAdsModalOpen, setIsAdsModalOpen] = useState<boolean>(false);
@@ -196,7 +158,6 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
   // Editor State
   const [editingPost, setEditingPost] = useState<SarkariPost | null>(null);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
-  const [activeTab, setActiveTab] = useState<'basic' | 'dates_fees' | 'links' | 'vacancy' | 'faqs'>('basic');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [postToDelete, setPostToDelete] = useState<SarkariPost | null>(null);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState<boolean>(false);
@@ -344,32 +305,10 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     setEditingPost(null);
   };
 
-  // Filtered Posts
-  const filteredPosts = useMemo(() => {
-    return posts.filter((p) => {
-      if (filterCategory !== 'all' && p.category !== filterCategory) return false;
-      if (filterDept !== 'all' && p.department !== filterDept) return false;
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const matches = 
-          p.title.toLowerCase().includes(q) ||
-          p.shortTitle.toLowerCase().includes(q) ||
-          p.department.toLowerCase().includes(q) ||
-          p.state.toLowerCase().includes(q) ||
-          p.id.toLowerCase().includes(q) ||
-          p.slug.toLowerCase().includes(q) ||
-          (p.notificationNumber && p.notificationNumber.toLowerCase().includes(q));
-        if (!matches) return false;
-      }
-      return true;
-    });
-  }, [posts, filterCategory, filterDept, searchQuery]);
-
   // Start Adding New Post
   const handleStartCreate = () => {
     setEditingPost(createEmptyPost());
     setIsCreatingNew(true);
-    setActiveTab('basic');
   };
 
   // Start Editing Existing Post
@@ -377,20 +316,6 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
     // deep clone so we can discard edits if cancelled
     setEditingPost(JSON.parse(JSON.stringify(post)));
     setIsCreatingNew(false);
-    setActiveTab('basic');
-  };
-
-  // Duplicate a Post
-  const handleDuplicatePost = (post: SarkariPost) => {
-    const cloned: SarkariPost = JSON.parse(JSON.stringify(post));
-    cloned.id = `job-${Date.now()}`;
-    cloned.slug = `${cloned.slug}-copy-${Date.now().toString().slice(-4)}`;
-    cloned.title = `[Copy] ${cloned.title}`;
-    cloned.shortTitle = `[Copy] ${cloned.shortTitle}`;
-    cloned.postDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    cloned.isNew = true;
-    onAddPost(cloned);
-    showToast(`Post duplicated successfully!`);
   };
 
   // Delete a Post confirmation trigger
@@ -470,44 +395,6 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
 
   const handleSavePost = (e: React.FormEvent) => {
     handleQuickSave(false, e);
-  };
-
-  // Export JSON
-  const handleExportJSON = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(posts, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `sarkari_result_posts_${Date.now()}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-    showToast('Posts database exported as JSON!');
-  };
-
-  // File Upload JSON Import
-  const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const imported = JSON.parse(event.target?.result as string);
-        if (Array.isArray(imported) && imported.length > 0 && imported[0].id && imported[0].title) {
-          if (window.confirm(`Found ${imported.length} posts in backup. Do you want to replace current posts database?`)) {
-            // Replace by updating or adding each
-            imported.forEach((p: SarkariPost) => onUpdatePost(p));
-            showToast(`Imported ${imported.length} posts!`);
-          }
-        } else {
-          alert('Invalid JSON structure. Expected array of SarkariPost items.');
-        }
-      } catch (err) {
-        alert('Failed to parse JSON file.');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
   };
 
   if (!isOpen) return null;
@@ -618,7 +505,7 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
         )}
 
         {/* Quick Action Bar (Post Selector, New Post, Save, Publish, Ping Google) */}
-        {isAuthenticated && adminMainTab === 'editor' && (
+        {isAuthenticated && (
           <div className="bg-white border-b border-slate-300 px-3 sm:px-4 py-2 flex items-center justify-between gap-2.5 shrink-0 shadow-2xs flex-wrap">
             <div className="flex items-center gap-2 flex-1 min-w-[260px] max-w-xl">
               <span className="text-xs font-bold text-slate-600 whitespace-nowrap hidden sm:inline">पोस्ट चुनें:</span>
