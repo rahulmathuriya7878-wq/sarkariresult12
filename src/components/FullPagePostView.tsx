@@ -687,40 +687,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     }));
   };
 
-  const defaultSalaryRows: SalaryBreakdownItem[] = useMemo(() => {
-    const vacs = editablePost.vacancyBreakdown || [];
-    if (vacs.length > 0) {
-      return vacs.map((v) => ({
-        postName: v.postName,
-        payLevel: 'As per 7th CPC',
-        basicPay: editablePost.salary || 'As per Official Notification',
-        inHandSalary: 'As per Govt Rules',
-        allowances: 'DA, HRA, TA & Medical as per Govt Norms',
-      }));
-    }
-    return [
-      {
-        postName: editablePost.shortTitle || editablePost.title,
-        payLevel: 'As per 7th CPC',
-        basicPay: editablePost.salary || 'As per Official Notification',
-        inHandSalary: 'As per Govt Rules',
-        allowances: 'DA, HRA, TA & Medical as per Govt Norms',
-      },
-    ];
-  }, [editablePost.vacancyBreakdown, editablePost.shortTitle, editablePost.title, editablePost.salary]);
-
-  const displayedSalaryRows = useMemo(() => {
-    return editablePost.salaryBreakdown && editablePost.salaryBreakdown.length > 0
-      ? editablePost.salaryBreakdown
-      : defaultSalaryRows;
-  }, [editablePost.salaryBreakdown, defaultSalaryRows]);
-
   const updateSalaryRow = (index: number, patch: Partial<SalaryBreakdownItem>) => {
     setEditablePost(prev => {
-      const base =
-        prev.salaryBreakdown && prev.salaryBreakdown.length > 0
-          ? [...prev.salaryBreakdown]
-          : defaultSalaryRows.map(item => ({ ...item }));
+      const base = [...(prev.salaryBreakdown || [])];
       if (!base[index]) return prev;
       base[index] = { ...base[index], ...patch };
       return { ...prev, salaryBreakdown: base };
@@ -728,38 +697,24 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   };
 
   const handleAddSalaryRow = () => {
-    setEditablePost(prev => {
-      const base =
-        prev.salaryBreakdown && prev.salaryBreakdown.length > 0
-          ? [...prev.salaryBreakdown]
-          : defaultSalaryRows.map(item => ({ ...item }));
-      return {
-        ...prev,
-        salaryBreakdown: [
-          ...base,
-          {
-            postName: 'New Post Name',
-            payLevel: 'Pay Level 6',
-            basicPay: 'As per Notification',
-            inHandSalary: '-',
-            allowances: 'DA, HRA, TA as per Govt Norms',
-          },
-        ],
-      };
-    });
+    setEditablePost(prev => ({
+      ...prev,
+      salaryBreakdown: [
+        ...(prev.salaryBreakdown || []),
+        {
+          postName: prev.vacancyBreakdown?.[0]?.postName || 'Post Name',
+          payLevel: 'Pay Level 6',
+          basicPay: prev.salary || 'As per Notification',
+        },
+      ],
+    }));
   };
 
   const handleDeleteSalaryRow = (index: number) => {
-    setEditablePost(prev => {
-      const base =
-        prev.salaryBreakdown && prev.salaryBreakdown.length > 0
-          ? [...prev.salaryBreakdown]
-          : defaultSalaryRows.map(item => ({ ...item }));
-      return {
-        ...prev,
-        salaryBreakdown: base.filter((_, i) => i !== index),
-      };
-    });
+    setEditablePost(prev => ({
+      ...prev,
+      salaryBreakdown: (prev.salaryBreakdown || []).filter((_, i) => i !== index),
+    }));
   };
 
   const defaultPaperSubjects: ExamSubjectItem[] = useMemo(
@@ -2539,27 +2494,29 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   ) : renderHiddenBanner('sec_zone_vacancy', 'Zone-Wise Vacancy')
                 )}
 
-                {/* Salary & Pay Scale Table (वेतन सारणी) */}
+                {/* Compact Salary & Pay Scale Table (वेतन सारणी - Short) */}
                 {!isServiceOrScheme && !isInformationalPost && (
                   !hiddenSections['sec_salary'] ? (
                     <div className="overflow-x-auto">
                       <table className="sr-table">
                         <thead>
                           <tr>
-                            <th colSpan={isDirectEditMode ? 6 : 5} className="sr-table-head-green">
+                            <th colSpan={isDirectEditMode ? 4 : 3} className="sr-table-head-green">
                               <div className="flex items-center justify-between flex-wrap gap-2">
                                 <span className="flex-1 text-center">
-                                  {editablePost.shortTitle || editablePost.title} — Pay Scale &amp; Salary Details (वेतन सारणी)
+                                  Pay Scale &amp; Salary (वेतन सारणी)
                                 </span>
                                 {renderSectionControls('sec_salary', 'Salary (वेतन सारणी)')}
                               </div>
                             </th>
                           </tr>
+                        </thead>
+                        <tbody>
                           <tr>
-                            <th colSpan={isDirectEditMode ? 6 : 5} className="bg-slate-50 text-left font-normal">
+                            <td colSpan={isDirectEditMode ? 4 : 3} className="bg-slate-50">
                               <div className="flex flex-wrap items-center justify-between gap-2 text-slate-900">
                                 <span>
-                                  <strong>Pay Scale (वेतनमान): </strong>
+                                  <strong>Pay Scale (वेतनमान) : </strong>
                                   <EditableText
                                     value={editablePost.salary || 'As per 7th Pay Commission (7th CPC)'}
                                     onChange={(val) => setEditablePost(prev => ({ ...prev, salary: val }))}
@@ -2568,75 +2525,61 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                 </span>
                                 {editablePost.salaryBand && editablePost.salaryBand !== 'All' && (
                                   <span className="bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded text-xs border border-emerald-300">
-                                    Band: {editablePost.salaryBand}
+                                    {editablePost.salaryBand}
                                   </span>
                                 )}
                               </div>
-                            </th>
+                            </td>
                           </tr>
-                          <tr className="bg-slate-100">
-                            <th className="text-left" style={{ color: '#ff00ff' }}>Post Name</th>
-                            <th className="text-center" style={{ color: '#008000' }}>Pay Level</th>
-                            <th className="text-left text-blue-900">Basic Pay</th>
-                            <th className="text-left text-purple-900">In-Hand Salary</th>
-                            <th className="text-left">Allowances / Grade Pay</th>
-                            {isDirectEditMode && <th className="text-center">Action</th>}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {displayedSalaryRows.map((sal, idx) => (
-                            <tr key={idx}>
-                              <td className="font-bold text-blue-900">
-                                <EditableText
-                                  value={sal.postName}
-                                  onChange={(val) => updateSalaryRow(idx, { postName: val })}
-                                  titlePrefix="पद का नाम (Post Name)"
-                                />
-                              </td>
-                              <td className="center-cell text-emerald-800">
-                                <EditableText
-                                  value={sal.payLevel}
-                                  onChange={(val) => updateSalaryRow(idx, { payLevel: val })}
-                                  titlePrefix="पे लेवल (Pay Level)"
-                                />
-                              </td>
-                              <td className="font-bold text-slate-900">
-                                <EditableText
-                                  value={sal.basicPay}
-                                  onChange={(val) => updateSalaryRow(idx, { basicPay: val })}
-                                  titlePrefix="बेसिक पे (Basic Pay)"
-                                />
-                              </td>
-                              <td className="font-bold text-purple-900">
-                                <EditableText
-                                  value={sal.inHandSalary || '-'}
-                                  onChange={(val) => updateSalaryRow(idx, { inHandSalary: val })}
-                                  titlePrefix="इन-हैंड वेतन (In-Hand Salary)"
-                                />
-                              </td>
-                              <td>
-                                <EditableText
-                                  value={sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}
-                                  onChange={(val) => updateSalaryRow(idx, { allowances: val })}
-                                  titlePrefix="भत्ते (Allowances)"
-                                />
-                              </td>
-                              {isDirectEditMode && (
-                                <td className="center-cell">
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDeleteSalaryRow(idx)}
-                                    className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-0.5 rounded cursor-pointer"
-                                  >
-                                    ✕
-                                  </button>
-                                </td>
-                              )}
-                            </tr>
-                          ))}
+                          {editablePost.salaryBreakdown && editablePost.salaryBreakdown.length > 0 && (
+                            <>
+                              <tr className="bg-slate-100 font-bold">
+                                <th className="text-left" style={{ color: '#ff00ff' }}>Post Name</th>
+                                <th className="text-center" style={{ color: '#008000' }}>Pay Level</th>
+                                <th className="text-left text-blue-900">Basic Pay / Salary</th>
+                                {isDirectEditMode && <th className="text-center">Action</th>}
+                              </tr>
+                              {editablePost.salaryBreakdown.map((sal, idx) => (
+                                <tr key={idx}>
+                                  <td className="font-bold text-blue-900">
+                                    <EditableText
+                                      value={sal.postName}
+                                      onChange={(val) => updateSalaryRow(idx, { postName: val })}
+                                      titlePrefix="पद का नाम (Post Name)"
+                                    />
+                                  </td>
+                                  <td className="center-cell text-emerald-800">
+                                    <EditableText
+                                      value={sal.payLevel}
+                                      onChange={(val) => updateSalaryRow(idx, { payLevel: val })}
+                                      titlePrefix="पे लेवल (Pay Level)"
+                                    />
+                                  </td>
+                                  <td className="font-bold text-slate-900">
+                                    <EditableText
+                                      value={sal.basicPay}
+                                      onChange={(val) => updateSalaryRow(idx, { basicPay: val })}
+                                      titlePrefix="वेतनमान (Basic Pay)"
+                                    />
+                                  </td>
+                                  {isDirectEditMode && (
+                                    <td className="center-cell">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleDeleteSalaryRow(idx)}
+                                        className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-0.5 rounded cursor-pointer"
+                                      >
+                                        ✕
+                                      </button>
+                                    </td>
+                                  )}
+                                </tr>
+                              ))}
+                            </>
+                          )}
                           {isDirectEditMode && (
                             <tr>
-                              <td colSpan={6} className="bg-slate-50 text-right">
+                              <td colSpan={4} className="bg-slate-50 text-right">
                                 <button
                                   type="button"
                                   onClick={handleAddSalaryRow}
