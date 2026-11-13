@@ -246,16 +246,8 @@ export default function App() {
     }
   };
 
-  // Auto-prompt Job Alerts modal for new users on initial visit
-  useEffect(() => {
-    const hasSeenAlerts = localStorage.getItem('sarkari_job_alerts_seen');
-    if (!hasSeenAlerts) {
-      const timer = setTimeout(() => {
-        setIsJobAlertsOpen(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  // Initial visit push prompt is handled cleanly by PushNotificationBanner;
+  // JobAlertsModal opens on demand via alert/footer triggers.
 
   // Preference state
   const [isHindi, setIsHindi] = useState<boolean>(false);
@@ -724,60 +716,61 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
   }, [activeCategory, filteredPosts]);
 
   return (
-    <div className={`min-h-screen flex flex-col ${isClassicTheme ? 'bg-[#fffbf0]' : 'bg-slate-50'}`}>
-      {/* Global Live Word Edit Status & Control Bar */}
-      {isAdmin && isGlobalWordEditActive && (
-        <div className="bg-slate-950 text-amber-300 border-b-2 border-amber-400 py-2 px-3 sm:px-6 sticky top-0 z-50 flex items-center justify-between flex-wrap gap-2 text-xs sm:text-sm font-sans shadow-lg">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
-            <span className="bg-[#ab1616] text-white font-black text-[11px] px-2 py-0.5 rounded uppercase tracking-wider shadow-2xs">
-              LIVE
-            </span>
-            <span className="font-extrabold text-white text-sm">
-              वर्ड एडिट चालू है (LIVE)
-            </span>
-            <span className="text-amber-200 hidden md:inline font-medium">
-              — पूरी वेबसाइट, 8-बॉक्स हेडलाइट और सभी सेक्शन के किसी भी शब्द/शीर्षक पर क्लिक करके तुरंत एडिट करें!
-            </span>
-          </div>
+    <div className="min-h-screen flex flex-col bg-white text-black">
+      <div className="sr-wrapper w-full flex-1 flex flex-col">
+        {/* Global Live Word Edit Status & Control Bar */}
+        {isAdmin && isGlobalWordEditActive && (
+          <div className="bg-slate-950 text-amber-300 border-b-2 border-amber-400 py-2 px-3 sm:px-6 sticky top-0 z-50 flex items-center justify-between flex-wrap gap-2 text-xs sm:text-sm font-sans shadow-lg">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
+              <span className="bg-[#ab1616] text-white font-black text-[11px] px-2 py-0.5 rounded uppercase tracking-wider shadow-2xs">
+                LIVE
+              </span>
+              <span className="font-extrabold text-white text-sm">
+                वर्ड एडिट चालू है (LIVE)
+              </span>
+              <span className="text-amber-200 hidden md:inline font-medium">
+                — पूरी वेबसाइट, 8-बॉक्स हेडलाइट और सभी सेक्शन के किसी भी शब्द/शीर्षक पर क्लिक करके तुरंत एडिट करें!
+              </span>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setIsAdminOpen(true)}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded text-xs cursor-pointer shadow-xs"
-            >
-              + नया पोस्ट जोड़ें
-            </button>
-            <button
-              type="button"
-              onClick={handleToggleGlobalWordEdit}
-              className="bg-amber-400 hover:bg-yellow-300 text-slate-950 font-black px-3 py-1 rounded text-xs cursor-pointer shadow-xs transition-colors"
-              title="वर्ड एडिट मोड बंद करें"
-            >
-              ✕ एडिट मोड बंद करें
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsAdminOpen(true)}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded text-xs cursor-pointer shadow-xs"
+              >
+                + नया पोस्ट जोड़ें
+              </button>
+              <button
+                type="button"
+                onClick={handleToggleGlobalWordEdit}
+                className="bg-amber-400 hover:bg-yellow-300 text-slate-950 font-black px-3 py-1 rounded text-xs cursor-pointer shadow-xs transition-colors"
+                title="वर्ड एडिट मोड बंद करें"
+              >
+                ✕ एडिट मोड बंद करें
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* 1. Header (Classic Sarkari Result Masthead, Black Menu Bar & Integrated Search) */}
-      <Header
-        activeCategory={activeCategory}
-        onCategoryChange={(cat) => {
-          setSelectedPost(null);
-          setActiveCategory(cat);
-          setSearchQuery('');
-          setSelectedDept('All');
-          setSelectedQual('All');
-          setSelectedSalary('All');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        onOpenPostBySlug={handleSelectSlug}
-        allPosts={allPosts}
-      />
+        {/* 1. Header (Classic Sarkari Result Masthead & Nav Bar) */}
+        <Header
+          activeCategory={activeCategory}
+          onCategoryChange={(cat) => {
+            setSelectedPost(null);
+            setActiveCategory(cat);
+            setSearchQuery('');
+            setSelectedDept('All');
+            setSelectedQual('All');
+            setSelectedSalary('All');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          onOpenPostBySlug={handleSelectSlug}
+          allPosts={allPosts}
+        />
 
       {/* 2. Conditional Full Page View or Main Home Portal */}
       {selectedPost ? (
@@ -933,6 +926,7 @@ const sortSectionPostsByLatest = (posts: SarkariPost[]): SarkariPost[] => {
           setSelectedSalary('All');
         }}
       />
+      </div>
 
       {/* Candidate Tools Modals */}
       {isAgeCalcOpen && (

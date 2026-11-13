@@ -11,7 +11,9 @@ import {
   VacancyBreakdown,
   SalaryBreakdownItem,
   PaperPattern,
-  ExamSubjectItem
+  ExamSubjectItem,
+  StateVacancyItem,
+  ZoneVacancyItem
 } from '../../types/job';
 import { 
   X, 
@@ -56,6 +58,7 @@ import { AdsManagerModal } from './AdsManagerModal';
 import { readPdfFileAsDataUrl } from '../../utils/pdfGenerator';
 import { validateIso8601 } from '../../utils/dateUtils';
 import { getPostViralTags, formatViralTagsString } from '../../utils/viralTagsHelper';
+import { ALL_RRB_BOARDS } from '../../data/rrbBoards';
 
 interface AdminEditingPanelModalProps {
   isOpen: boolean;
@@ -1507,6 +1510,279 @@ export const AdminEditingPanelModal: React.FC<AdminEditingPanelModalProps> = ({
                       </div>
                     ))}
                   </div>
+                </div>
+
+                {/* State-Wise Vacancy Breakdown (Central Vacancies) */}
+                <div className="pt-4 border-t border-slate-200 space-y-2.5">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block">
+                        State-Wise Vacancy Details (Central / All India Vacancies)
+                      </span>
+                      <span className="text-[11px] text-slate-500">
+                        Add custom state-wise seat counts for SSC, Defence, UPSC &amp; Central posts.
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const states: StateVacancyItem[] = [
+                            'Uttar Pradesh',
+                            'Bihar',
+                            'Rajasthan',
+                            'Madhya Pradesh',
+                            'Delhi / NCR',
+                            'Haryana',
+                            'Maharashtra',
+                            'West Bengal',
+                            'Other States / UT',
+                          ].map((stateName) => ({
+                            stateName,
+                            totalPosts: '-',
+                            genPosts: '-',
+                            obcPosts: '-',
+                            ewsPosts: '-',
+                            scPosts: '-',
+                            stPosts: '-',
+                            eligibilityNote: 'All India',
+                          }));
+                          setEditingPost({ ...editingPost, stateBreakdown: states });
+                          showToast('Loaded major states for Central State-Wise Vacancy table.');
+                        }}
+                        className="text-xs bg-emerald-700 hover:bg-emerald-800 text-white px-2.5 py-1 rounded font-bold cursor-pointer"
+                      >
+                        ⚡ Load Central States
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = editingPost.stateBreakdown || [];
+                          setEditingPost({
+                            ...editingPost,
+                            stateBreakdown: [
+                              ...current,
+                              {
+                                stateName: 'New State / UT',
+                                totalPosts: '-',
+                                genPosts: '-',
+                                obcPosts: '-',
+                                ewsPosts: '-',
+                                scPosts: '-',
+                                stPosts: '-',
+                                eligibilityNote: 'All India',
+                              },
+                            ],
+                          });
+                        }}
+                        className="text-xs bg-slate-800 hover:bg-black text-white px-2.5 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Add State Row
+                      </button>
+                    </div>
+                  </div>
+
+                  {editingPost.stateBreakdown && editingPost.stateBreakdown.length > 0 && (
+                    <div className="space-y-2">
+                      {editingPost.stateBreakdown.map((s, idx) => (
+                        <div key={idx} className="bg-white border border-slate-300 rounded p-2.5 space-y-2">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <input
+                              type="text"
+                              value={s.stateName}
+                              onChange={(e) => {
+                                const next = [...(editingPost.stateBreakdown || [])];
+                                next[idx] = { ...next[idx], stateName: e.target.value };
+                                setEditingPost({ ...editingPost, stateBreakdown: next });
+                              }}
+                              placeholder="State / UT Name"
+                              className="px-2 py-1 border border-slate-300 rounded text-xs font-bold"
+                            />
+                            <input
+                              type="text"
+                              value={s.totalPosts}
+                              onChange={(e) => {
+                                const next = [...(editingPost.stateBreakdown || [])];
+                                next[idx] = { ...next[idx], totalPosts: e.target.value };
+                                setEditingPost({ ...editingPost, stateBreakdown: next });
+                              }}
+                              placeholder="Total Posts"
+                              className="px-2 py-1 border border-slate-300 rounded text-xs font-bold text-center"
+                            />
+                            <input
+                              type="text"
+                              value={s.eligibilityNote || ''}
+                              onChange={(e) => {
+                                const next = [...(editingPost.stateBreakdown || [])];
+                                next[idx] = { ...next[idx], eligibilityNote: e.target.value };
+                                setEditingPost({ ...editingPost, stateBreakdown: next });
+                              }}
+                              placeholder="Remarks (All India)"
+                              className="px-2 py-1 border border-slate-300 rounded text-xs"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = (editingPost.stateBreakdown || []).filter((_, i) => i !== idx);
+                                setEditingPost({ ...editingPost, stateBreakdown: next });
+                              }}
+                              className="text-xs bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded px-2 py-1 font-bold cursor-pointer"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-5 gap-1.5">
+                            {(['genPosts', 'obcPosts', 'ewsPosts', 'scPosts', 'stPosts'] as const).map((field) => (
+                              <input
+                                key={field}
+                                type="text"
+                                value={s[field] ?? ''}
+                                onChange={(e) => {
+                                  const next = [...(editingPost.stateBreakdown || [])];
+                                  next[idx] = { ...next[idx], [field]: e.target.value };
+                                  setEditingPost({ ...editingPost, stateBreakdown: next });
+                                }}
+                                placeholder={field.replace('Posts', '').toUpperCase()}
+                                className="px-1.5 py-1 border border-slate-300 rounded text-xs text-center"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* RRB Zone-Wise Vacancy Breakdown */}
+                <div className="pt-4 border-t border-slate-200 space-y-2.5">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block">
+                        RRB Zone-Wise Vacancy Details (Railway / RRB Vacancies)
+                      </span>
+                      <span className="text-[11px] text-slate-500">
+                        Manage RRB Board &amp; Zone seat distribution (auto-loaded for Railway/RRB posts).
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const zones: ZoneVacancyItem[] = ALL_RRB_BOARDS.map((b) => ({
+                            zoneName: `${b.name} — ${b.zone}`,
+                            hindiZoneName: b.hindiName,
+                            totalPosts: '-',
+                            genPosts: '-',
+                            obcPosts: '-',
+                            ewsPosts: '-',
+                            scPosts: '-',
+                            stPosts: '-',
+                            applyLink: b.applyUrl || b.website,
+                          }));
+                          setEditingPost({ ...editingPost, zoneBreakdown: zones });
+                          showToast('Loaded all 21 RRB Boards & Zones.');
+                        }}
+                        className="text-xs bg-blue-700 hover:bg-blue-800 text-white px-2.5 py-1 rounded font-bold cursor-pointer"
+                      >
+                        🚂 Load All 21 RRB Zones
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = editingPost.zoneBreakdown || [];
+                          setEditingPost({
+                            ...editingPost,
+                            zoneBreakdown: [
+                              ...current,
+                              {
+                                zoneName: 'RRB New Board — Zone',
+                                totalPosts: '-',
+                                genPosts: '-',
+                                obcPosts: '-',
+                                ewsPosts: '-',
+                                scPosts: '-',
+                                stPosts: '-',
+                                applyLink: 'https://www.rrbapply.gov.in/',
+                              },
+                            ],
+                          });
+                        }}
+                        className="text-xs bg-slate-800 hover:bg-black text-white px-2.5 py-1 rounded font-bold cursor-pointer"
+                      >
+                        + Add RRB Zone Row
+                      </button>
+                    </div>
+                  </div>
+
+                  {editingPost.zoneBreakdown && editingPost.zoneBreakdown.length > 0 && (
+                    <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+                      {editingPost.zoneBreakdown.map((z, idx) => (
+                        <div key={idx} className="bg-white border border-slate-300 rounded p-2.5 space-y-2">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <input
+                              type="text"
+                              value={z.zoneName}
+                              onChange={(e) => {
+                                const next = [...(editingPost.zoneBreakdown || [])];
+                                next[idx] = { ...next[idx], zoneName: e.target.value };
+                                setEditingPost({ ...editingPost, zoneBreakdown: next });
+                              }}
+                              placeholder="RRB Board / Zone"
+                              className="px-2 py-1 border border-slate-300 rounded text-xs font-bold"
+                            />
+                            <input
+                              type="text"
+                              value={z.totalPosts}
+                              onChange={(e) => {
+                                const next = [...(editingPost.zoneBreakdown || [])];
+                                next[idx] = { ...next[idx], totalPosts: e.target.value };
+                                setEditingPost({ ...editingPost, zoneBreakdown: next });
+                              }}
+                              placeholder="Total Posts"
+                              className="px-2 py-1 border border-slate-300 rounded text-xs font-bold text-center"
+                            />
+                            <input
+                              type="text"
+                              value={z.applyLink || ''}
+                              onChange={(e) => {
+                                const next = [...(editingPost.zoneBreakdown || [])];
+                                next[idx] = { ...next[idx], applyLink: e.target.value };
+                                setEditingPost({ ...editingPost, zoneBreakdown: next });
+                              }}
+                              placeholder="Apply / Portal URL"
+                              className="px-2 py-1 border border-slate-300 rounded text-xs"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = (editingPost.zoneBreakdown || []).filter((_, i) => i !== idx);
+                                setEditingPost({ ...editingPost, zoneBreakdown: next });
+                              }}
+                              className="text-xs bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded px-2 py-1 font-bold cursor-pointer"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-5 gap-1.5">
+                            {(['genPosts', 'obcPosts', 'ewsPosts', 'scPosts', 'stPosts'] as const).map((field) => (
+                              <input
+                                key={field}
+                                type="text"
+                                value={z[field] ?? ''}
+                                onChange={(e) => {
+                                  const next = [...(editingPost.zoneBreakdown || [])];
+                                  next[idx] = { ...next[idx], [field]: e.target.value };
+                                  setEditingPost({ ...editingPost, zoneBreakdown: next });
+                                }}
+                                placeholder={field.replace('Posts', '').toUpperCase()}
+                                className="px-1.5 py-1 border border-slate-300 rounded text-xs text-center"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

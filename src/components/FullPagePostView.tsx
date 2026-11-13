@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { SarkariPost, DirectLinkItem } from '../types/job';
+import { SarkariPost, DirectLinkItem, StateVacancyItem, ZoneVacancyItem, SalaryBreakdownItem, ExamSubjectItem } from '../types/job';
 import { getProcessedImportantDates, toIso8601Date, formatDisplayDate } from '../utils/dateUtils';
 import { sanitizeUrl, deduplicateLinks, getCleanShareUrl } from '../utils/urlUtils';
 
@@ -211,15 +211,17 @@ export const getCategoryShareText = (post: SarkariPost, postUrl: string): string
 
 // Helper to bold application date ranges and keywords in shortInfo
 const renderFormattedShortInfo = (text: string) => {
-  // Regex to bold dates like "25 October 2026 to 15 November 2026" or similar patterns
-  const dateRegex = /(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\s+to\s+\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})/gi;
-  const parts = text.split(dateRegex);
+  const datePattern =
+    '(\\d{1,2}[/-]\\d{1,2}[/-]\\d{4}\\s+to\\s+\\d{1,2}[/-]\\d{1,2}[/-]\\d{4}|\\d{1,2}\\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{4}\\s+to\\s+\\d{1,2}\\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{4})';
+  const splitRegex = new RegExp(datePattern, 'gi');
+  const matchRegex = new RegExp(`^${datePattern}$`, 'i');
+  const parts = text.split(splitRegex);
 
   return (
     <>
       {parts.map((part, i) => {
-        if (dateRegex.test(part)) {
-          return <strong key={i} className="font-bold text-slate-900">{part}</strong>;
+        if (matchRegex.test(part)) {
+          return <strong key={i} className="font-bold text-black">{part}</strong>;
         }
         return part;
       })}
@@ -557,6 +559,106 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     }));
   };
 
+  const defaultRrbZones: ZoneVacancyItem[] = useMemo(
+    () =>
+      ALL_RRB_BOARDS.map((b) => ({
+        zoneName: `${b.name} — ${b.zone}`,
+        hindiZoneName: b.hindiName,
+        totalPosts: 'As per Notice',
+        genPosts: '-',
+        obcPosts: '-',
+        ewsPosts: '-',
+        scPosts: '-',
+        stPosts: '-',
+        applyLink: b.applyUrl || b.website,
+      })),
+    []
+  );
+
+  const updateStateRow = (index: number, patch: Partial<StateVacancyItem>) => {
+    setEditablePost(prev => {
+      const base = [...(prev.stateBreakdown || [])];
+      if (!base[index]) return prev;
+      base[index] = { ...base[index], ...patch };
+      return { ...prev, stateBreakdown: base };
+    });
+  };
+
+  const handleAddStateRow = () => {
+    setEditablePost(prev => ({
+      ...prev,
+      stateBreakdown: [
+        ...(prev.stateBreakdown || []),
+        {
+          stateName: 'Uttar Pradesh',
+          totalPosts: '-',
+          genPosts: '-',
+          obcPosts: '-',
+          ewsPosts: '-',
+          scPosts: '-',
+          stPosts: '-',
+          eligibilityNote: 'All India',
+        },
+      ],
+    }));
+  };
+
+  const handleDeleteStateRow = (index: number) => {
+    setEditablePost(prev => ({
+      ...prev,
+      stateBreakdown: (prev.stateBreakdown || []).filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateZoneRow = (index: number, patch: Partial<ZoneVacancyItem>) => {
+    setEditablePost(prev => {
+      const base =
+        prev.zoneBreakdown && prev.zoneBreakdown.length > 0
+          ? [...prev.zoneBreakdown]
+          : defaultRrbZones.map(item => ({ ...item }));
+      base[index] = { ...base[index], ...patch };
+      return { ...prev, zoneBreakdown: base };
+    });
+  };
+
+  const handleAddZoneRow = () => {
+    setEditablePost(prev => {
+      const base =
+        prev.zoneBreakdown && prev.zoneBreakdown.length > 0
+          ? [...prev.zoneBreakdown]
+          : defaultRrbZones.map(item => ({ ...item }));
+      return {
+        ...prev,
+        zoneBreakdown: [
+          ...base,
+          {
+            zoneName: 'RRB New Board / Zone',
+            totalPosts: '-',
+            genPosts: '-',
+            obcPosts: '-',
+            ewsPosts: '-',
+            scPosts: '-',
+            stPosts: '-',
+            applyLink: 'https://www.rrbapply.gov.in/',
+          },
+        ],
+      };
+    });
+  };
+
+  const handleDeleteZoneRow = (index: number) => {
+    setEditablePost(prev => {
+      const base =
+        prev.zoneBreakdown && prev.zoneBreakdown.length > 0
+          ? [...prev.zoneBreakdown]
+          : defaultRrbZones.map(item => ({ ...item }));
+      return {
+        ...prev,
+        zoneBreakdown: base.filter((_, i) => i !== index),
+      };
+    });
+  };
+
   const handleAddSelectionStage = () => {
     setEditablePost(prev => ({
       ...prev,
@@ -583,6 +685,158 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
       ...prev,
       howToApplySteps: prev.howToApplySteps.filter((_, i) => i !== index)
     }));
+  };
+
+  const defaultSalaryRows: SalaryBreakdownItem[] = useMemo(() => {
+    const vacs = editablePost.vacancyBreakdown || [];
+    if (vacs.length > 0) {
+      return vacs.map((v) => ({
+        postName: v.postName,
+        payLevel: 'As per 7th CPC',
+        basicPay: editablePost.salary || 'As per Official Notification',
+        inHandSalary: 'As per Govt Rules',
+        allowances: 'DA, HRA, TA & Medical as per Govt Norms',
+      }));
+    }
+    return [
+      {
+        postName: editablePost.shortTitle || editablePost.title,
+        payLevel: 'As per 7th CPC',
+        basicPay: editablePost.salary || 'As per Official Notification',
+        inHandSalary: 'As per Govt Rules',
+        allowances: 'DA, HRA, TA & Medical as per Govt Norms',
+      },
+    ];
+  }, [editablePost.vacancyBreakdown, editablePost.shortTitle, editablePost.title, editablePost.salary]);
+
+  const displayedSalaryRows = useMemo(() => {
+    return editablePost.salaryBreakdown && editablePost.salaryBreakdown.length > 0
+      ? editablePost.salaryBreakdown
+      : defaultSalaryRows;
+  }, [editablePost.salaryBreakdown, defaultSalaryRows]);
+
+  const updateSalaryRow = (index: number, patch: Partial<SalaryBreakdownItem>) => {
+    setEditablePost(prev => {
+      const base =
+        prev.salaryBreakdown && prev.salaryBreakdown.length > 0
+          ? [...prev.salaryBreakdown]
+          : defaultSalaryRows.map(item => ({ ...item }));
+      if (!base[index]) return prev;
+      base[index] = { ...base[index], ...patch };
+      return { ...prev, salaryBreakdown: base };
+    });
+  };
+
+  const handleAddSalaryRow = () => {
+    setEditablePost(prev => {
+      const base =
+        prev.salaryBreakdown && prev.salaryBreakdown.length > 0
+          ? [...prev.salaryBreakdown]
+          : defaultSalaryRows.map(item => ({ ...item }));
+      return {
+        ...prev,
+        salaryBreakdown: [
+          ...base,
+          {
+            postName: 'New Post Name',
+            payLevel: 'Pay Level 6',
+            basicPay: 'As per Notification',
+            inHandSalary: '-',
+            allowances: 'DA, HRA, TA as per Govt Norms',
+          },
+        ],
+      };
+    });
+  };
+
+  const handleDeleteSalaryRow = (index: number) => {
+    setEditablePost(prev => {
+      const base =
+        prev.salaryBreakdown && prev.salaryBreakdown.length > 0
+          ? [...prev.salaryBreakdown]
+          : defaultSalaryRows.map(item => ({ ...item }));
+      return {
+        ...prev,
+        salaryBreakdown: base.filter((_, i) => i !== index),
+      };
+    });
+  };
+
+  const defaultPaperSubjects: ExamSubjectItem[] = useMemo(
+    () => [
+      { subjectName: 'General Intelligence & Reasoning', totalQuestions: 'As per Syllabus', totalMarks: 'As per Syllabus', duration: 'Composite Duration' },
+      { subjectName: 'General Awareness / General Knowledge', totalQuestions: 'As per Syllabus', totalMarks: 'As per Syllabus', duration: 'Composite Duration' },
+      { subjectName: 'Quantitative Aptitude / Mathematics', totalQuestions: 'As per Syllabus', totalMarks: 'As per Syllabus', duration: 'Composite Duration' },
+      { subjectName: 'General English / Hindi / Concerned Subject', totalQuestions: 'As per Syllabus', totalMarks: 'As per Syllabus', duration: 'Composite Duration' },
+    ],
+    []
+  );
+
+  const displayedPaperSubjects = useMemo(() => {
+    return editablePost.paperPattern?.subjects && editablePost.paperPattern.subjects.length > 0
+      ? editablePost.paperPattern.subjects
+      : defaultPaperSubjects;
+  }, [editablePost.paperPattern?.subjects, defaultPaperSubjects]);
+
+  const updatePaperSubjectRow = (index: number, patch: Partial<ExamSubjectItem>) => {
+    setEditablePost(prev => {
+      const existingPattern = prev.paperPattern || {};
+      const baseSubjects =
+        existingPattern.subjects && existingPattern.subjects.length > 0
+          ? [...existingPattern.subjects]
+          : defaultPaperSubjects.map(item => ({ ...item }));
+      if (!baseSubjects[index]) return prev;
+      baseSubjects[index] = { ...baseSubjects[index], ...patch };
+      return {
+        ...prev,
+        paperPattern: {
+          ...existingPattern,
+          subjects: baseSubjects,
+        },
+      };
+    });
+  };
+
+  const handleAddPaperSubjectRow = () => {
+    setEditablePost(prev => {
+      const existingPattern = prev.paperPattern || {};
+      const baseSubjects =
+        existingPattern.subjects && existingPattern.subjects.length > 0
+          ? [...existingPattern.subjects]
+          : defaultPaperSubjects.map(item => ({ ...item }));
+      return {
+        ...prev,
+        paperPattern: {
+          ...existingPattern,
+          subjects: [
+            ...baseSubjects,
+            {
+              subjectName: 'New Subject / Paper',
+              totalQuestions: '-',
+              totalMarks: '-',
+              duration: '-',
+            },
+          ],
+        },
+      };
+    });
+  };
+
+  const handleDeletePaperSubjectRow = (index: number) => {
+    setEditablePost(prev => {
+      const existingPattern = prev.paperPattern || {};
+      const baseSubjects =
+        existingPattern.subjects && existingPattern.subjects.length > 0
+          ? [...existingPattern.subjects]
+          : defaultPaperSubjects.map(item => ({ ...item }));
+      return {
+        ...prev,
+        paperPattern: {
+          ...existingPattern,
+          subjects: baseSubjects.filter((_, i) => i !== index),
+        },
+      };
+    });
   };
 
   const handleAddDirectLink = () => {
@@ -1166,16 +1420,41 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
   }, [post.department, post.title, post.shortTitle]);
 
   const [rrbSearch, setRrbSearch] = useState('');
-  const filteredRrbBoards = useMemo(() => {
-    if (!rrbSearch.trim()) return ALL_RRB_BOARDS;
-    const q = rrbSearch.toLowerCase().trim();
-    return ALL_RRB_BOARDS.filter(
-      (b) =>
-        b.name.toLowerCase().includes(q) ||
-        b.hindiName.toLowerCase().includes(q) ||
-        b.zone.toLowerCase().includes(q)
+
+  // Identify Central Government / All India vacancies for State-Wise Post Details
+  const isCentralVacancy = useMemo(() => {
+    if (isServiceOrScheme || isInformationalPost) return false;
+    const stateLower = (editablePost.state || '').toLowerCase().trim();
+    return (
+      stateLower === 'all india' ||
+      stateLower === 'central' ||
+      ['UPSC', 'SSC', 'Railway', 'Defence'].includes(editablePost.department)
     );
-  }, [rrbSearch]);
+  }, [isServiceOrScheme, isInformationalPost, editablePost.state, editablePost.department]);
+
+  const displayedStateRows = useMemo(() => {
+    return editablePost.stateBreakdown && editablePost.stateBreakdown.length > 0
+      ? editablePost.stateBreakdown
+      : [];
+  }, [editablePost.stateBreakdown]);
+
+  const displayedZoneRows = useMemo(() => {
+    const base =
+      editablePost.zoneBreakdown && editablePost.zoneBreakdown.length > 0
+        ? editablePost.zoneBreakdown
+        : isRailwayPost && !isServiceOrScheme && !isInformationalPost
+          ? defaultRrbZones
+          : [];
+    if (!rrbSearch.trim()) return base.map((z, idx) => ({ z, idx }));
+    const q = rrbSearch.toLowerCase().trim();
+    return base
+      .map((z, idx) => ({ z, idx }))
+      .filter(
+        ({ z }) =>
+          z.zoneName.toLowerCase().includes(q) ||
+          (z.hindiZoneName || '').toLowerCase().includes(q)
+      );
+  }, [editablePost.zoneBreakdown, isRailwayPost, isServiceOrScheme, isInformationalPost, defaultRrbZones, rrbSearch]);
 
   // Useful Links for all posts (excluding social channels)
   const allDirectLinks = useMemo(() => {
@@ -1208,20 +1487,9 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
     }
   };
 
-  const categoryBreakdowns = useMemo(() => {
-    if (!post.vacancyBreakdown || post.vacancyBreakdown.length === 0) return [];
-    return post.vacancyBreakdown.filter(
-      (v) =>
-        v.categoryBreakdown &&
-        Object.values(v.categoryBreakdown).some(
-          (val) => val !== undefined && val !== '' && val !== null && val !== '-'
-        )
-    );
-  }, [post.vacancyBreakdown]);
-
   return (
     <div 
-      className="w-full min-h-screen bg-[#f3f4f6] pb-20 font-post font-mangal text-[14px] sm:text-[16px] md:text-[18px]"
+      className="single-post w-full min-h-screen bg-[#f3f4f6] pb-20 font-post font-mangal"
       style={{
         fontFamily: "'Georgia', 'Times New Roman', serif"
       }}
@@ -1230,7 +1498,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         
         {/* Navigation Breadcrumbs (Home > Category > Post Title) & Actions */}
         <nav aria-label="Breadcrumb navigation" className="mb-2 bg-white border border-slate-200 rounded-t-xs px-3 sm:px-4 py-2 flex items-center justify-between gap-2 flex-wrap shadow-2xs">
-          <ol className="flex items-center gap-1.5 sm:gap-2 text-slate-700 text-[13px] sm:text-[14px] flex-wrap font-sans">
+          <ol className="flex items-center gap-1.5 sm:gap-2 text-slate-700 text-[12px] leading-[18px] flex-wrap font-sans">
             <li className="flex items-center gap-1">
               <button 
                 onClick={onBack} 
@@ -1359,160 +1627,109 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
         )}
 
         {/* Main Document Paper Container */}
-        <article className="bg-white rounded-b-xs shadow-xs border border-slate-300 overflow-hidden">
-          
-          {/* Post Header Table - EXACT layout, colors and typography from Screenshot_20261020-155228.Chrome_5245ca1c.png */}
-          <div className="p-3 sm:p-5 border-b border-slate-200 bg-white">
-            <div className="border border-slate-200 rounded-xs overflow-hidden">
-              <table className="w-full text-left border-collapse">
-                <tbody>
-                  {/* Row 1: Name Of Post */}
-                  <tr className="border-b border-slate-200">
-                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[14pt] sm:text-[16pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
-                      Name Of Post :
-                    </td>
-                    <td className="p-3 sm:p-4 align-top">
+        <article className="inside-article entry-content bg-white p-2 sm:p-4">
+          {/* Classic SarkariResult Two-Column Post Header (Name Of Post / Post Date / Short Information) */}
+          <div
+            className="mb-3"
+            style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
+          >
+            <table className="w-full border-collapse">
+              <tbody>
+                <tr>
+                  <td className="w-[108px] sm:w-[175px] align-top text-center font-bold text-[#ff0000] text-[14px] sm:text-[16px] leading-snug pr-2 sm:pr-4 pb-4 pt-1">
+                    Name Of Post :
+                  </td>
+                  <td className="align-top pb-4 pt-0.5 pl-1 sm:pl-2">
+                    <EditableText
+                      as="h1"
+                      value={editablePost.title}
+                      onChange={(val) => setEditablePost(prev => ({ ...prev, title: val }))}
+                      className="m-0 block w-full text-left text-[20px] sm:text-[24px] font-bold text-[#ff0000] leading-[1.28]"
+                      titlePrefix="पोस्ट का शीर्षक (Title)"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="w-[108px] sm:w-[175px] align-top text-center font-bold text-[#ff0000] text-[14px] sm:text-[16px] leading-snug pr-2 sm:pr-4 pb-4 pt-0.5">
+                    Post Date / Update :
+                  </td>
+                  <td className="align-top text-left text-[15px] sm:text-[16px] font-normal text-black pb-4 pt-0.5 pl-1 sm:pl-2">
+                    {isDirectEditMode ? (
                       <EditableText
-                        as="h1"
-                        value={editablePost.title}
-                        onChange={(val) => setEditablePost(prev => ({ ...prev, title: val }))}
-                        className="text-[#ff0000] font-black text-[14pt] sm:text-[16pt] leading-snug tracking-tight font-serif"
-                        titlePrefix="पोस्ट का शीर्षक (Title)"
+                        value={editablePost.postDate}
+                        onChange={(val) => setEditablePost(prev => ({ ...prev, postDate: val }))}
+                        className="text-black"
+                        titlePrefix="पोस्ट की तिथि (Post Date)"
                       />
-                    </td>
-                  </tr>
+                    ) : (
+                      <span>{formatDisplayDate(editablePost.postDate)}</span>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="w-[108px] sm:w-[175px] align-top text-center font-bold text-[#ff0000] text-[14px] sm:text-[16px] leading-snug pr-2 sm:pr-4 pb-2 pt-0.5">
+                    Short Information
+                  </td>
+                  <td className="align-top text-left text-[14.5px] sm:text-[15.5px] font-normal text-black leading-[1.52] pb-2 pt-0.5 pl-1 sm:pl-2">
+                    {isDirectEditMode ? (
+                      <EditableText
+                        as="span"
+                        value={editablePost.shortInfo}
+                        onChange={(val) => setEditablePost(prev => ({ ...prev, shortInfo: val }))}
+                        titlePrefix="संक्षिप्त जानकारी (Short Info)"
+                      />
+                    ) : (
+                      <span>{renderFormattedShortInfo(editablePost.shortInfo)}</span>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-                  {/* Row 2: Post Date / Update */}
-                  <tr className="border-b border-slate-200">
-                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[13pt] sm:text-[14pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
-                      Post Date / Update :
-                    </td>
-                    <td className="p-3 sm:p-4 text-slate-900 font-semibold text-[11pt] sm:text-[12pt] align-top">
-                      {isDirectEditMode ? (
-                        <EditableText
-                          value={editablePost.postDate}
-                          onChange={(val) => setEditablePost(prev => ({ ...prev, postDate: val }))}
-                          className="text-slate-900 font-semibold text-[11pt] sm:text-[12pt]"
-                          titlePrefix="पोस्ट की तिथि (Post Date)"
-                        />
-                      ) : (
-                        <span>{formatDisplayDate(editablePost.postDate)}</span>
-                      )}
-                    </td>
-                  </tr>
+          {/* Social Bar */}
+          <div className="social-bar">
+            <a
+              href="https://t.me/newsarkariresultt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-pill pill-tg"
+            >
+              Join Telegram
+            </a>
+            <a
+              href="https://whatsapp.com/channel/0029VbEOVh74dTnTUUmjcS0j"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-pill pill-wa"
+            >
+              Join WhatsApp
+            </a>
+          </div>
 
-                  {/* Row 3: Short Information */}
-                  <tr>
-                    <td className="p-3 sm:p-4 text-[#ff0000] font-bold text-[13pt] sm:text-[14pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
-                      Short Information :
-                    </td>
-                    <td className="p-3 sm:p-4 text-slate-800 text-[12pt] leading-relaxed align-top">
-                      {isDirectEditMode ? (
-                        <EditableText
-                          as="div"
-                          value={editablePost.shortInfo}
-                          onChange={(val) => setEditablePost(prev => ({ ...prev, shortInfo: val }))}
-                          className="text-slate-900 text-[12pt] leading-relaxed font-sans"
-                          titlePrefix="संक्षिप्त जानकारी (Short Info)"
-                        />
-                      ) : (
-                        <div className="text-slate-900 text-[12pt] leading-relaxed font-sans">
-                          {renderFormattedShortInfo(editablePost.shortInfo)}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                  {/* Row 4: Trending Viral Tags Strip - Hidden for regular users, visible only in Admin Direct Edit Mode */}
-                  {isDirectEditMode && (
-                    <tr className="border-t border-slate-200 bg-amber-50/70">
-                      <td className="p-3 sm:p-4 text-red-700 font-bold text-[12pt] sm:text-[13pt] align-top border-r border-slate-200 w-36 sm:w-56 shrink-0 leading-tight">
-                        Trending Tags (Admin Only) :
-                      </td>
-                      <td className="p-3 sm:p-4 align-top">
-                        <div className="flex flex-wrap items-center gap-1.5">
-                          <span className="text-[10px] bg-red-700 text-white font-bold px-1.5 py-0.5 rounded mr-1">
-                            Hidden from Users
-                          </span>
-                          {viralTags.slice(0, 8).map((tag) => (
-                            <button
-                              key={tag}
-                              type="button"
-                              onClick={() => handleCopyTag(tag)}
-                              title={`Click to copy ${tag}`}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-red-50 text-slate-800 hover:text-red-700 font-bold text-[11px] rounded border border-slate-300 hover:border-red-400 shadow-2xs transition-all cursor-pointer"
-                            >
-                              <span className="text-red-600 font-black">#</span>
-                              <span>{tag.replace(/^#/, '')}</span>
-                              {copiedTag === tag && (
-                                <Check className="w-3 h-3 text-emerald-600 inline ml-0.5" />
-                              )}
-                            </button>
-                          ))}
-                          <button
-                            type="button"
-                            onClick={handleCopyAllTags}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-extrabold text-[11px] rounded border border-red-300 cursor-pointer transition-colors shadow-2xs"
-                            title="Copy all viral tags"
-                          >
-                            <Copy className="w-3 h-3" />
-                            <span>{isCopiedAll ? 'Copied!' : 'Copy All'}</span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Post Top Ad Unit (Under Main Post Details Table) */}
+          {/* In-Article Outstream Video / Display Ad Slot (placed below social bar, outside tables) */}
+          <div className="my-3">
             <AdBanner placement="postTop" onOpenTool={onOpenPhotoResizer} />
-
           </div>
 
           {/* Section Body Details */}
-          <div className="p-4 sm:p-7 md:p-9 space-y-6 sm:space-y-8 md:space-y-9 text-slate-900 text-[10pt] font-post">
-            
-            {/* Center Header Details */}
-            <div className="text-center py-4 border-b border-slate-200 space-y-1.5">
-              <h1 className="text-[#ff00ff] font-black text-[11pt] font-sans tracking-tight" style={{ color: '#ff00ff' }}>
-                {getDepartmentHeader(post.department, post.title, isInformationalPost)}
-              </h1>
-              <h2 className="text-[#008000] font-black text-[11pt] font-sans leading-snug" style={{ color: '#008000' }}>
-                {post.shortTitle || post.title}
-              </h2>
-              <div className="text-center pt-0.5">
-                <a 
-                  href="https://sarkariresult12.vercel.app/#" 
-                  className="text-blue-700 hover:text-red-700 font-bold text-xs sm:text-sm font-sans underline"
-                  title="Official Website"
-                >
-                  https://sarkariresult12.vercel.app/#
-                </a>
-              </div>
-            </div>
-
+          <div className="space-y-4 text-slate-900">
             {/* IF INFORMATIONAL POST (About Us, Privacy Policy, Disclaimer, Terms & Rules, Contact Us): Render Article with Ad Sections */}
             {isInformationalPost && (
-              <div className="space-y-6 sm:space-y-7">
-                {/* Informational Policy & Content Cards */}
+              <div className="space-y-4">
                 {post.vacancyBreakdown && post.vacancyBreakdown.length > 0 && (
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     {post.vacancyBreakdown.map((item, idx) => (
                       <React.Fragment key={idx}>
-                        <div className="border border-slate-300 bg-white p-4 sm:p-6 text-[10pt] space-y-2.5 shadow-2xs">
-                          <h4 
-                            className="text-[#16a34a] font-black text-[11pt] border-b border-slate-200 pb-2 font-sans"
-                            style={{ color: '#16a34a' }}
-                          >
+                        <div className="border border-black bg-white p-4 space-y-2">
+                          <h4 className="text-[#008000] font-bold text-base border-b border-slate-200 pb-2">
                             {item.postName}
                           </h4>
-                          <div className="text-slate-800 leading-relaxed whitespace-pre-line font-sans pt-1 text-[10pt]">
+                          <div className="text-slate-900 leading-relaxed whitespace-pre-line pt-1 text-sm">
                             {item.eligibility}
                           </div>
                         </div>
 
-                        {/* Mid-Article Ad Section between policy blocks */}
                         {idx === 0 && (
                           <div className="my-3">
                             <AdBanner placement="homeMid" onOpenTool={onOpenPhotoResizer} />
@@ -1523,256 +1740,301 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   </div>
                 )}
 
-                {/* Informational Guidelines / Instructions */}
                 {post.howToApplySteps && post.howToApplySteps.length > 0 && (
-                  <div className="border border-slate-300 bg-white p-4 sm:p-6 text-[10pt] space-y-2.5 shadow-2xs">
-                    <h4 
-                      className="text-[#16a34a] font-black text-[11pt] border-b border-slate-200 pb-2 font-sans"
-                      style={{ color: '#16a34a' }}
-                    >
-                      {post.shortTitle} Guidelines & Important Information
+                  <div className="border border-black bg-white p-4 space-y-2">
+                    <h4 className="text-[#008000] font-bold text-base border-b border-slate-200 pb-2">
+                      {post.shortTitle} Guidelines &amp; Important Information
                     </h4>
-                    <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[10pt]">
+                    <ul className="space-y-1.5 text-slate-900 pt-1 leading-relaxed text-sm list-disc pl-5">
                       {post.howToApplySteps.map((step, idx) => (
-                        <li key={idx}>• {step}</li>
+                        <li key={idx}>{step}</li>
                       ))}
                     </ul>
                   </div>
                 )}
 
-                {/* In-Article Ad Section for Informational Posts */}
                 <div className="my-3">
                   <AdBanner placement="postBottom" onOpenTool={onOpenPhotoResizer} />
                 </div>
               </div>
             )}
 
-            {/* IF RECRUITMENT JOB POST: Render Authentic Sarkari Result Tables & Boxes */}
+            {/* IF RECRUITMENT JOB POST: Render SarkariResult .sr-table Tables */}
             {!isInformationalPost && (
               <>
-                {/* Horizontal Side-by-Side 2-Column Table for Important Dates & Application Fee */}
-                {!hiddenSections['sec_dates_fee'] ? (
-                  <div className="border border-slate-300 bg-white text-[10pt] shadow-2xs overflow-hidden rounded-xs my-4 relative">
-                    <div className="grid grid-cols-2 divide-x divide-slate-400">
-                      {/* Left Column: Important Dates */}
-                      <div className="p-2.5 sm:p-5 space-y-2.5">
-                        <h3 
-                          className="font-black text-[11pt] border-b border-slate-200 pb-1.5 text-center font-sans tracking-tight"
-                          style={{ color: '#ff0000' }}
-                        >
-                          Important Dates
-                        </h3>
-                        <ul className="space-y-2 text-[10pt] text-slate-800 pt-1 leading-relaxed">
-                          {(editablePost.importantDates || []).map((d, idx) => (
-                            <li key={idx} className="leading-snug flex items-center justify-between gap-2">
-                              <div>
-                                <span className="text-slate-800 font-medium">• </span>
-                                <EditableText
-                                  value={d.label}
-                                  onChange={(val) => {
-                                    setEditablePost(prev => {
-                                      const nextDates = [...prev.importantDates];
-                                      nextDates[idx] = { ...nextDates[idx], label: val };
-                                      return { ...prev, importantDates: nextDates };
-                                    });
-                                  }}
-                                  className="text-slate-800 font-medium"
-                                  titlePrefix="तारीख का नाम (Date Label)"
-                                />
-                                <span className="text-slate-800 font-medium"> : </span>
-                                <EditableText
-                                  value={d.value}
-                                  onChange={(val) => {
-                                    setEditablePost(prev => {
-                                      const nextDates = [...prev.importantDates];
-                                      nextDates[idx] = { ...nextDates[idx], value: val };
-                                      return { ...prev, importantDates: nextDates };
-                                    });
-                                  }}
-                                  className={d.isHighlight ? 'text-[#ff0000] font-bold' : 'text-slate-900 font-bold'}
-                                  titlePrefix="तारीख (Date Value)"
-                                />
-                              </div>
-                              {isDirectEditMode && (
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteDateItem(idx)}
-                                  className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
-                                  title="यह तारीख हटाएं"
-                                >
-                                  ✕ हटाएं
-                                </button>
+                {/* Important Dates & Application Fee Table */}
+                {!hiddenSections['sec_dates_fee'] && (
+                  <div className="overflow-x-auto">
+                    <table className="sr-table">
+                      <thead>
+                        <tr>
+                          <th colSpan={2} className="sr-table-head-maroon">
+                            <EditableText
+                              value={editablePost.shortTitle || editablePost.title}
+                              onChange={(val) => setEditablePost(prev => ({ ...prev, shortTitle: val }))}
+                              className="text-white font-bold"
+                              titlePrefix="भर्ती / योजना का नाम (Short Title)"
+                            />{' '}
+                            — Short Details of Notification
+                          </th>
+                        </tr>
+                        <tr>
+                          <th className="sr-table-head-green" style={{ width: '50%' }}>
+                            Important Dates
+                          </th>
+                          <th className="sr-table-head-green" style={{ width: '50%' }}>
+                            Application Fee
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <ul>
+                              {(editablePost.importantDates || []).map((d, idx) => (
+                                <li key={idx}>
+                                  <EditableText
+                                    value={d.label}
+                                    onChange={(val) => {
+                                      setEditablePost(prev => {
+                                        const nextDates = [...prev.importantDates];
+                                        nextDates[idx] = { ...nextDates[idx], label: val };
+                                        return { ...prev, importantDates: nextDates };
+                                      });
+                                    }}
+                                    titlePrefix="तारीख का नाम (Date Label)"
+                                  />
+                                  {' : '}
+                                  <strong className={d.isHighlight ? 'badge-red' : ''}>
+                                    <EditableText
+                                      value={d.value}
+                                      onChange={(val) => {
+                                        setEditablePost(prev => {
+                                          const nextDates = [...prev.importantDates];
+                                          nextDates[idx] = { ...nextDates[idx], value: val };
+                                          return { ...prev, importantDates: nextDates };
+                                        });
+                                      }}
+                                      className={d.isHighlight ? 'badge-red' : 'font-bold'}
+                                      titlePrefix="तारीख (Date Value)"
+                                    />
+                                  </strong>
+                                  {isDirectEditMode && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDeleteDateItem(idx)}
+                                      className="ml-2 text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                                      title="यह तारीख हटाएं"
+                                    >
+                                      ✕
+                                    </button>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                            {isDirectEditMode && (
+                              <button
+                                type="button"
+                                onClick={handleAddDateItem}
+                                className="mt-2 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                              >
+                                <span>+ नई तारीख जोड़ें (Add Date)</span>
+                              </button>
+                            )}
+                          </td>
+                          <td>
+                            <ul>
+                              {editablePost.applicationFee && editablePost.applicationFee.length > 0 ? (
+                                editablePost.applicationFee.map((fee, idx) => (
+                                  <li key={idx}>
+                                    <EditableText
+                                      value={fee.category}
+                                      onChange={(val) => {
+                                        setEditablePost(prev => {
+                                          const nextFees = [...prev.applicationFee];
+                                          nextFees[idx] = { ...nextFees[idx], category: val };
+                                          return { ...prev, applicationFee: nextFees };
+                                        });
+                                      }}
+                                      titlePrefix="शुल्क श्रेणी (Category)"
+                                    />
+                                    {' : '}
+                                    <strong>
+                                      <EditableText
+                                        value={fee.amount}
+                                        onChange={(val) => {
+                                          setEditablePost(prev => {
+                                            const nextFees = [...prev.applicationFee];
+                                            nextFees[idx] = { ...nextFees[idx], amount: val };
+                                            return { ...prev, applicationFee: nextFees };
+                                          });
+                                        }}
+                                        titlePrefix="शुल्क राशि (Amount)"
+                                      />
+                                    </strong>
+                                    {isDirectEditMode && (
+                                      <button
+                                        type="button"
+                                        onClick={() => handleDeleteFeeItem(idx)}
+                                        className="ml-2 text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                                        title="यह फीस हटाएं"
+                                      >
+                                        ✕
+                                      </button>
+                                    )}
+                                  </li>
+                                ))
+                              ) : (
+                                <li>No Application Fee</li>
                               )}
-                            </li>
-                          ))}
-                        </ul>
-                        {isDirectEditMode && (
-                          <button
-                            type="button"
-                            onClick={handleAddDateItem}
-                            className="mt-2.5 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
-                          >
-                            <span>+ नई तारीख जोड़ें (Add Date)</span>
-                          </button>
-                        )}
-                      </div>
-
-                      {/* Right Column: Application Fee */}
-                      <div className="p-2.5 sm:p-5 space-y-2.5">
-                        <h3 
-                          className="font-black text-[11pt] border-b border-slate-200 pb-1.5 text-center font-sans tracking-tight"
-                          style={{ color: '#ff0000' }}
-                        >
-                          Application Fee
-                        </h3>
-                        <ul className="space-y-2 text-[10pt] text-slate-800 pt-1 leading-relaxed">
-                          {editablePost.applicationFee && editablePost.applicationFee.length > 0 ? (
-                            editablePost.applicationFee.map((fee, idx) => (
-                              <li key={idx} className="leading-snug flex items-center justify-between gap-2">
-                                <div>
-                                  <span className="text-slate-800 font-medium">• </span>
-                                  <EditableText
-                                    value={fee.category}
-                                    onChange={(val) => {
-                                      setEditablePost(prev => {
-                                        const nextFees = [...prev.applicationFee];
-                                        nextFees[idx] = { ...nextFees[idx], category: val };
-                                        return { ...prev, applicationFee: nextFees };
-                                      });
-                                    }}
-                                    className="text-slate-800 font-medium"
-                                    titlePrefix="शुल्क श्रेणी (Category)"
-                                  />
-                                  <span className="text-slate-800 font-medium"> : </span>
-                                  <EditableText
-                                    value={fee.amount}
-                                    onChange={(val) => {
-                                      setEditablePost(prev => {
-                                        const nextFees = [...prev.applicationFee];
-                                        nextFees[idx] = { ...nextFees[idx], amount: val };
-                                        return { ...prev, applicationFee: nextFees };
-                                      });
-                                    }}
-                                    className="text-slate-900 font-bold"
-                                    titlePrefix="शुल्क राशि (Amount)"
-                                  />
-                                </div>
-                                {isDirectEditMode && (
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDeleteFeeItem(idx)}
-                                    className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
-                                    title="यह फीस हटाएं"
-                                  >
-                                    ✕ हटाएं
-                                  </button>
-                                )}
-                              </li>
-                            ))
-                          ) : (
-                            <li className="text-slate-600 italic leading-snug">• No Application Fee</li>
-                          )}
-                          <li className="leading-snug text-slate-700 pt-1.5 border-t border-slate-100 mt-2">
-                            • Pay the Examination Fee Through Debit Card, Credit Card, Net Banking or UPI Mode Only.
-                          </li>
-                        </ul>
-                        {isDirectEditMode && (
-                          <button
-                            type="button"
-                            onClick={handleAddFeeItem}
-                            className="mt-2.5 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
-                          >
-                            <span>+ नई फीस श्रेणी जोड़ें (Add Fee)</span>
-                          </button>
-                        )}
-                      </div>
-                    </div>
+                              <li>Pay the Examination Fee through Debit Card, Credit Card, Net Banking, or UPI Mode Only.</li>
+                            </ul>
+                            {isDirectEditMode && (
+                              <button
+                                type="button"
+                                onClick={handleAddFeeItem}
+                                className="mt-2 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
+                              >
+                                <span>+ नई फीस श्रेणी जोड़ें (Add Fee)</span>
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                ) : renderHiddenBanner('sec_dates_fee', 'Important Dates & Fee')}
-
-                {/* Age Limit Box */}
-                {!isServiceOrScheme && editablePost.ageLimit.asOnDate && (
-                  !hiddenSections['sec_age_limit'] ? (
-                    <div className="border border-slate-300 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs text-center rounded-xs my-4">
-                      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-200 pb-2">
-                        <h3 className="font-black text-[11pt] font-sans">
-                          <span style={{ color: '#008000' }}>{editablePost.shortTitle} Notification 2026 : </span>
-                          <span style={{ color: '#ff00ff' }}>
-                            Age Limit as on{' '}
-                            <EditableText
-                              value={editablePost.ageLimit.asOnDate}
-                              onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, asOnDate: val } }))}
-                              titlePrefix="आयु गणना तिथि (As On Date)"
-                            />
-                          </span>
-                        </h3>
-                        {renderSectionControls('sec_age_limit', 'Age Limit Box')}
-                      </div>
-                      <ul className="space-y-1.5 text-slate-800 pt-1 leading-relaxed text-[10pt] text-left max-w-2xl mx-auto">
-                        <li>
-                          • Minimum Age :{' '}
-                          <strong className="font-bold text-slate-900">
-                            <EditableText
-                              value={editablePost.ageLimit.minAge}
-                              onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, minAge: Number(val) || undefined } }))}
-                              titlePrefix="न्यूनतम आयु (Min Age)"
-                            />
-                            {' '}Years.
-                          </strong>
-                        </li>
-                        <li>
-                          • Maximum Age :{' '}
-                          <strong className="font-bold text-slate-900">
-                            <EditableText
-                              value={editablePost.ageLimit.maxAge}
-                              onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, maxAge: Number(val) || undefined } }))}
-                              titlePrefix="अधिकतम आयु (Max Age)"
-                            />
-                            {' '}Years.
-                          </strong>
-                        </li>
-                        <li className="text-slate-700">
-                          •{' '}
-                          <EditableText
-                            value={editablePost.ageLimit.notes || `Age Relaxation Extra as per ${editablePost.department} ${editablePost.shortTitle} Recruitment Rules.`}
-                            onChange={(val) => setEditablePost(prev => ({ ...prev, ageLimit: { ...prev.ageLimit, notes: val } }))}
-                            titlePrefix="आयु छूट नियम (Age Relaxation Notes)"
-                          />
-                        </li>
-                      </ul>
-                    </div>
-                  ) : renderHiddenBanner('sec_age_limit', 'Age Limit Box')
                 )}
 
-
-                {/* Vacancy Details Table */}
-                {editablePost.vacancyBreakdown && editablePost.vacancyBreakdown.length > 0 && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                      <span className="text-white">{editablePost.shortTitle} Recruitment 2026 : Vacancy Details Total </span>
-                      <span className="text-yellow-200">
-                        <EditableText
-                          value={editablePost.totalVacancies}
-                          onChange={(val) => setEditablePost(prev => ({ ...prev, totalVacancies: val }))}
-                          titlePrefix="कुल पद (Total Vacancies)"
-                        />
-                        {' '}Post
-                      </span>
-                    </div>
+                {/* Separate Age Limit Details Table */}
+                {!isServiceOrScheme &&
+                  editablePost.ageLimit &&
+                  (editablePost.ageLimit.asOnDate ||
+                    editablePost.ageLimit.minAge ||
+                    editablePost.ageLimit.maxAge) &&
+                  !hiddenSections['sec_age_limit'] && (
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse">
+                      <table className="sr-table">
                         <thead>
-                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400 w-1/4" style={{ color: '#ff00ff' }}>Post Name</th>
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400 w-1/6 text-center" style={{ color: '#008000' }}>Total Post</th>
-                            <th className="p-2.5 sm:p-3" style={{ color: '#008000' }}>{editablePost.shortTitle} Eligibility Criteria</th>
-                            {isDirectEditMode && <th className="p-2.5 text-center text-red-600">Action</th>}
+                          <tr>
+                            <th className="sr-table-head-green">
+                              <EditableText
+                                value={editablePost.shortTitle || editablePost.title}
+                                onChange={(val) => setEditablePost(prev => ({ ...prev, shortTitle: val }))}
+                                className="text-white font-bold"
+                                titlePrefix="भर्ती का नाम (Short Title)"
+                              />{' '}
+                              : Age Limit Details
+                              {editablePost.ageLimit.asOnDate ? (
+                                <>
+                                  {' '}(as on{' '}
+                                  <EditableText
+                                    value={editablePost.ageLimit.asOnDate}
+                                    onChange={(val) =>
+                                      setEditablePost(prev => ({
+                                        ...prev,
+                                        ageLimit: { ...prev.ageLimit, asOnDate: val }
+                                      }))
+                                    }
+                                    className="text-yellow-200 font-bold"
+                                    titlePrefix="आयु गणना तिथि (As On Date)"
+                                  />
+                                  )
+                                </>
+                              ) : null}
+                            </th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-300 text-[10pt]">
-                          {editablePost.vacancyBreakdown.map((v, idx) => (
-                            <tr key={idx} className={idx % 2 === 0 ? 'bg-white hover:bg-blue-50/50 transition-colors' : 'bg-slate-50/90 hover:bg-blue-50/50 transition-colors'}>
-                              <td className="p-2.5 sm:p-3 align-top font-bold text-blue-900 border-r border-slate-400">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <ul>
+                                {(editablePost.ageLimit.minAge !== undefined || isDirectEditMode) && (
+                                  <li>
+                                    Minimum Age :{' '}
+                                    <strong>
+                                      <EditableText
+                                        value={editablePost.ageLimit.minAge ?? ''}
+                                        onChange={(val) =>
+                                          setEditablePost(prev => ({
+                                            ...prev,
+                                            ageLimit: { ...prev.ageLimit, minAge: Number(val) || undefined }
+                                          }))
+                                        }
+                                        titlePrefix="न्यूनतम आयु (Min Age)"
+                                      />{' '}
+                                      Years
+                                    </strong>
+                                  </li>
+                                )}
+                                {(editablePost.ageLimit.maxAge !== undefined || isDirectEditMode) && (
+                                  <li>
+                                    Maximum Age :{' '}
+                                    <strong>
+                                      <EditableText
+                                        value={editablePost.ageLimit.maxAge ?? ''}
+                                        onChange={(val) =>
+                                          setEditablePost(prev => ({
+                                            ...prev,
+                                            ageLimit: { ...prev.ageLimit, maxAge: Number(val) || undefined }
+                                          }))
+                                        }
+                                        titlePrefix="अधिकतम आयु (Max Age)"
+                                      />{' '}
+                                      Years
+                                    </strong>
+                                  </li>
+                                )}
+                                <li>
+                                  <EditableText
+                                    value={
+                                      editablePost.ageLimit.notes ||
+                                      'Age Relaxation Extra as per Official Recruitment Rules.'
+                                    }
+                                    onChange={(val) =>
+                                      setEditablePost(prev => ({
+                                        ...prev,
+                                        ageLimit: { ...prev.ageLimit, notes: val }
+                                      }))
+                                    }
+                                    titlePrefix="आयु छूट नियम (Age Relaxation Notes)"
+                                  />
+                                </li>
+                              </ul>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                {/* Separate Vacancy Details Table */}
+                {editablePost.vacancyBreakdown && editablePost.vacancyBreakdown.length > 0 && (
+                  <div className="overflow-x-auto">
+                    <table className="sr-table">
+                      <thead>
+                        <tr>
+                          <th colSpan={3} className="sr-table-head-green">
+                            Vacancy Details Total :{' '}
+                            <EditableText
+                              value={editablePost.totalVacancies}
+                              onChange={(val) => setEditablePost(prev => ({ ...prev, totalVacancies: val }))}
+                              className="text-yellow-200 font-bold"
+                              titlePrefix="कुल पद (Total Vacancies)"
+                            />{' '}
+                            Posts
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>Post Name</th>
+                          <th style={{ width: '18%', textAlign: 'center' }}>Total Post</th>
+                          <th>Eligibility Criteria</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {editablePost.vacancyBreakdown.map((v, idx) => (
+                          <tr key={idx}>
+                            <td>
+                              <strong>
                                 <EditableText
                                   value={v.postName}
                                   onChange={(val) => {
@@ -1784,307 +2046,777 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                                   }}
                                   titlePrefix="पद का नाम (Post Name)"
                                 />
-                              </td>
-                              <td className="p-2.5 sm:p-3 align-top text-center font-bold text-slate-900 border-r border-slate-400">
+                              </strong>
+                              {isDirectEditMode && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteVacancyRow(idx)}
+                                  className="ml-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-0.5 rounded cursor-pointer"
+                                  title="यह पद हटाएं"
+                                >
+                                  ✕ हटाएं
+                                </button>
+                              )}
+                            </td>
+                            <td className="center-cell">
+                              <EditableText
+                                value={v.totalPosts}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = { ...nextV[idx], totalPosts: val };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="पद संख्या (Posts Count)"
+                              />
+                            </td>
+                            <td className="whitespace-pre-line">
+                              <EditableText
+                                as="div"
+                                value={v.eligibility}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = { ...nextV[idx], eligibility: val };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="योग्यता पात्रता (Eligibility)"
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                        {isDirectEditMode && (
+                          <tr>
+                            <td colSpan={3} className="bg-slate-50 text-right">
+                              <button
+                                type="button"
+                                onClick={handleAddVacancyRow}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded inline-flex items-center gap-1 shadow-2xs cursor-pointer"
+                              >
+                                <span>+ नया पद पंक्ति जोड़ें (Add Vacancy Row)</span>
+                              </button>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+
+                {/* Category Wise Vacancy Details Table (Directly Below Vacancy Details) */}
+                {!isServiceOrScheme && editablePost.vacancyBreakdown && editablePost.vacancyBreakdown.length > 0 && (
+                  <div className="overflow-x-auto">
+                    <table className="sr-table">
+                      <thead>
+                        <tr>
+                          <th colSpan={7} className="sr-table-head-green">
+                            <EditableText
+                              value={editablePost.shortTitle || editablePost.title}
+                              onChange={(val) => setEditablePost(prev => ({ ...prev, shortTitle: val }))}
+                              className="text-white font-bold"
+                              titlePrefix="भर्ती का नाम (Short Title)"
+                            />{' '}
+                            : Category Wise Vacancy Details
+                          </th>
+                        </tr>
+                        <tr className="bg-slate-100">
+                          <th className="text-left">Post Name</th>
+                          <th className="text-center" style={{ color: '#ff00ff' }}>UR / GEN</th>
+                          <th className="text-center" style={{ color: '#008000' }}>EWS</th>
+                          <th className="text-center" style={{ color: '#0000ff' }}>OBC</th>
+                          <th className="text-center" style={{ color: '#ab1616' }}>SC</th>
+                          <th className="text-center" style={{ color: '#7e22ce' }}>ST</th>
+                          <th className="text-center">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {editablePost.vacancyBreakdown.map((v, idx) => (
+                          <tr key={idx}>
+                            <td className="font-bold">
+                              <EditableText
+                                value={v.postName}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = { ...nextV[idx], postName: val };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="पद का नाम (Post Name)"
+                              />
+                            </td>
+                            <td className="center-cell">
+                              <EditableText
+                                value={v.categoryBreakdown?.gen ?? '-'}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = {
+                                      ...nextV[idx],
+                                      categoryBreakdown: { ...(nextV[idx].categoryBreakdown || {}), gen: val }
+                                    };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="UR / GEN पद"
+                              />
+                            </td>
+                            <td className="center-cell">
+                              <EditableText
+                                value={v.categoryBreakdown?.ews ?? '-'}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = {
+                                      ...nextV[idx],
+                                      categoryBreakdown: { ...(nextV[idx].categoryBreakdown || {}), ews: val }
+                                    };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="EWS पद"
+                              />
+                            </td>
+                            <td className="center-cell">
+                              <EditableText
+                                value={v.categoryBreakdown?.obc ?? '-'}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = {
+                                      ...nextV[idx],
+                                      categoryBreakdown: { ...(nextV[idx].categoryBreakdown || {}), obc: val }
+                                    };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="OBC पद"
+                              />
+                            </td>
+                            <td className="center-cell">
+                              <EditableText
+                                value={v.categoryBreakdown?.sc ?? '-'}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = {
+                                      ...nextV[idx],
+                                      categoryBreakdown: { ...(nextV[idx].categoryBreakdown || {}), sc: val }
+                                    };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="SC पद"
+                              />
+                            </td>
+                            <td className="center-cell">
+                              <EditableText
+                                value={v.categoryBreakdown?.st ?? '-'}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = {
+                                      ...nextV[idx],
+                                      categoryBreakdown: { ...(nextV[idx].categoryBreakdown || {}), st: val }
+                                    };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="ST पद"
+                              />
+                            </td>
+                            <td className="center-cell">
+                              <EditableText
+                                value={v.totalPosts}
+                                onChange={(val) => {
+                                  setEditablePost(prev => {
+                                    const nextV = [...prev.vacancyBreakdown];
+                                    nextV[idx] = { ...nextV[idx], totalPosts: val };
+                                    return { ...prev, vacancyBreakdown: nextV };
+                                  });
+                                }}
+                                titlePrefix="कुल पद (Total Posts)"
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Ad Section between Category Wise Vacancy Details and Subsequent Sections */}
+                <AdBanner placement="postMid" onOpenTool={onOpenPhotoResizer} />
+
+                {/* State-Wise Vacancy Details Table (Renders ONLY when stateBreakdown data exists) */}
+                {displayedStateRows.length > 0 ? (
+                  !hiddenSections['sec_state_vacancy'] ? (
+                    <div className="overflow-x-auto">
+                      <table className="sr-table">
+                        <thead>
+                          <tr>
+                            <th colSpan={isDirectEditMode ? 9 : 8} className="sr-table-head-green">
+                              <div className="flex items-center justify-between flex-wrap gap-2">
+                                <span className="flex-1 text-center">
+                                  {editablePost.shortTitle || editablePost.title} : State-Wise Vacancy Details
+                                </span>
+                                {renderSectionControls('sec_state_vacancy', 'State-Wise Vacancy')}
+                              </div>
+                            </th>
+                          </tr>
+                          <tr className="bg-slate-100">
+                            <th className="text-left" style={{ color: '#ff00ff' }}>State / UT Name</th>
+                            <th className="text-center" style={{ color: '#008000' }}>Total Posts</th>
+                            <th className="text-center text-blue-900">GEN</th>
+                            <th className="text-center text-emerald-800">OBC</th>
+                            <th className="text-center text-purple-800">EWS</th>
+                            <th className="text-center text-red-800">SC</th>
+                            <th className="text-center text-amber-800">ST</th>
+                            <th className="text-left">Remarks</th>
+                            {isDirectEditMode && <th className="text-center">Action</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {displayedStateRows.map((s, idx) => (
+                            <tr key={idx}>
+                              <td className="font-bold text-blue-900">
                                 <EditableText
-                                  value={v.totalPosts}
-                                  onChange={(val) => {
-                                    setEditablePost(prev => {
-                                      const nextV = [...prev.vacancyBreakdown];
-                                      nextV[idx] = { ...nextV[idx], totalPosts: val };
-                                      return { ...prev, vacancyBreakdown: nextV };
-                                    });
-                                  }}
-                                  titlePrefix="पद संख्या (Posts Count)"
+                                  value={s.stateName}
+                                  onChange={(val) => updateStateRow(idx, { stateName: val })}
+                                  titlePrefix="राज्य का नाम (State)"
                                 />
                               </td>
-                              <td className="p-2.5 sm:p-3 align-top text-slate-800 leading-relaxed whitespace-pre-line font-sans">
+                              <td className="center-cell">
                                 <EditableText
-                                  as="div"
-                                  value={v.eligibility}
-                                  onChange={(val) => {
-                                    setEditablePost(prev => {
-                                      const nextV = [...prev.vacancyBreakdown];
-                                      nextV[idx] = { ...nextV[idx], eligibility: val };
-                                      return { ...prev, vacancyBreakdown: nextV };
-                                    });
-                                  }}
-                                  titlePrefix="योग्यता पात्रता (Eligibility)"
+                                  value={s.totalPosts}
+                                  onChange={(val) => updateStateRow(idx, { totalPosts: val })}
+                                  titlePrefix="कुल पद (Total Posts)"
+                                />
+                              </td>
+                              <td className="center-cell">
+                                <EditableText
+                                  value={s.genPosts ?? '-'}
+                                  onChange={(val) => updateStateRow(idx, { genPosts: val })}
+                                  titlePrefix="GEN पद"
+                                />
+                              </td>
+                              <td className="center-cell">
+                                <EditableText
+                                  value={s.obcPosts ?? '-'}
+                                  onChange={(val) => updateStateRow(idx, { obcPosts: val })}
+                                  titlePrefix="OBC पद"
+                                />
+                              </td>
+                              <td className="center-cell">
+                                <EditableText
+                                  value={s.ewsPosts ?? '-'}
+                                  onChange={(val) => updateStateRow(idx, { ewsPosts: val })}
+                                  titlePrefix="EWS पद"
+                                />
+                              </td>
+                              <td className="center-cell">
+                                <EditableText
+                                  value={s.scPosts ?? '-'}
+                                  onChange={(val) => updateStateRow(idx, { scPosts: val })}
+                                  titlePrefix="SC पद"
+                                />
+                              </td>
+                              <td className="center-cell">
+                                <EditableText
+                                  value={s.stPosts ?? '-'}
+                                  onChange={(val) => updateStateRow(idx, { stPosts: val })}
+                                  titlePrefix="ST पद"
+                                />
+                              </td>
+                              <td>
+                                <EditableText
+                                  value={s.eligibilityNote || 'All India'}
+                                  onChange={(val) => updateStateRow(idx, { eligibilityNote: val })}
+                                  titlePrefix="टिप्पणी (Remarks)"
                                 />
                               </td>
                               {isDirectEditMode && (
-                                <td className="p-2.5 text-center align-top border-l border-slate-300">
+                                <td className="center-cell">
                                   <button
                                     type="button"
-                                    onClick={() => handleDeleteVacancyRow(idx)}
-                                    className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-1 rounded cursor-pointer"
-                                    title="यह पद हटाएं"
+                                    onClick={() => handleDeleteStateRow(idx)}
+                                    className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-0.5 rounded cursor-pointer"
                                   >
-                                    ✕ हटाएं
+                                    ✕
                                   </button>
                                 </td>
                               )}
                             </tr>
                           ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    {isDirectEditMode && (
-                      <div className="p-3 bg-slate-50 border-t border-slate-300 flex justify-end">
-                        <button
-                          type="button"
-                          onClick={handleAddVacancyRow}
-                          className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded flex items-center gap-1 shadow-2xs cursor-pointer"
-                        >
-                          <span>+ नया पद पंक्ति जोड़ें (Add Vacancy Row)</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Ad Section between Vacancy Details and Subsequent Sections */}
-                <AdBanner placement="postMid" onOpenTool={onOpenPhotoResizer} />
-
-                {/* Category Wise Vacancy Details Table (Renders ONLY if categoryBreakdown data exists) */}
-                {categoryBreakdowns.length > 0 && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                    <div className="text-white px-4 py-2.5 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                      <span className="text-white">{post.shortTitle} Category Wise Vacancy Details</span>
-                    </div>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-center border-collapse">
-                        <thead>
-                          <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400 text-left">Post Name</th>
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>UR / GEN</th>
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#008000' }}>EWS</th>
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#0000ff' }}>OBC</th>
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ab1616' }}>SC</th>
-                            <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#7e22ce' }}>ST</th>
-                            <th className="p-2.5 sm:p-3 font-bold">Total</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-300 text-[10pt]">
-                          {categoryBreakdowns.map((v, idx) => (
-                            <tr key={idx} className="hover:bg-slate-50/50">
-                              <td className="p-2.5 sm:p-3 text-left font-bold text-blue-900 border-r border-slate-400">
-                                {v.postName}
+                          {isDirectEditMode && (
+                            <tr>
+                              <td colSpan={9} className="bg-slate-50 text-right">
+                                <button
+                                  type="button"
+                                  onClick={handleAddStateRow}
+                                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded inline-flex items-center gap-1 cursor-pointer"
+                                >
+                                  + नया राज्य जोड़ें (Add State Row)
+                                </button>
                               </td>
-                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.gen ?? '-'}</td>
-                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.ews ?? '-'}</td>
-                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.obc ?? '-'}</td>
-                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.sc ?? '-'}</td>
-                              <td className="p-2.5 sm:p-3 font-bold border-r border-slate-400">{v.categoryBreakdown?.st ?? '-'}</td>
-                              <td className="p-2.5 sm:p-3 font-black text-slate-900">{v.totalPosts}</td>
                             </tr>
-                          ))}
+                          )}
                         </tbody>
                       </table>
-                    </div>
-                  </div>
-                )}
-
-                {/* State-Wise Vacancy Details Table (Renders ONLY IF stateBreakdown data exists) */}
-                {post.stateBreakdown && post.stateBreakdown.length > 0 && (
-                  !hiddenSections['sec_state_vacancy'] ? (
-                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
-                        <span>{post.shortTitle} State-Wise Vacancy Details</span>
-                        {renderSectionControls('sec_state_vacancy', 'State-Wise Vacancy')}
-                      </div>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                          <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>State / UT Name</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-red-800">SC</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
-                              <th className="p-2.5 sm:p-3">Eligibility / Remarks</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-300 text-[10pt]">
-                            {post.stateBreakdown.map((s, idx) => (
-                              <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-2.5 sm:p-3 font-bold text-blue-900 border-r border-slate-400">• {s.stateName}</td>
-                                <td className="p-2.5 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-400">{s.totalPosts}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.genPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.obcPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.ewsPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.scPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{s.stPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-slate-700 font-sans">{s.eligibilityNote || '-'}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
                     </div>
                   ) : renderHiddenBanner('sec_state_vacancy', 'State-Wise Vacancy')
+                ) : (
+                  isDirectEditMode && isCentralVacancy && (
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={handleAddStateRow}
+                        className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-3 py-1.5 rounded inline-flex items-center gap-1 cursor-pointer"
+                      >
+                        + Add State-Wise Vacancy Row
+                      </button>
+                    </div>
+                  )
                 )}
 
-                {/* Zone-Wise / Regional Vacancy Details Table (Renders ONLY IF zoneBreakdown data exists) */}
-                {post.zoneBreakdown && post.zoneBreakdown.length > 0 && (
+                {/* Zone-Wise / RRB Board Vacancy Details Table (All Railway / RRB Posts & Custom Zones) */}
+                {(displayedZoneRows.length > 0 || (isRailwayPost && !isServiceOrScheme && !isInformationalPost)) && (
                   !hiddenSections['sec_zone_vacancy'] ? (
-                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
-                        <span>{post.shortTitle} Zone-Wise / Regional Vacancy Details</span>
-                        {renderSectionControls('sec_zone_vacancy', 'Zone-Wise Vacancy')}
-                      </div>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                          <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400" style={{ color: '#ff00ff' }}>Zone / Board Name</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center" style={{ color: '#008000' }}>Total Posts</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-blue-900">GEN</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-emerald-800">OBC</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-purple-800">EWS</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-red-800">SC</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center text-amber-800">ST</th>
-                              <th className="p-2.5 sm:p-3 text-center">Action / Portal</th>
+                    <div className="overflow-x-auto">
+                      <table className="sr-table">
+                        <thead>
+                          <tr>
+                            <th colSpan={isDirectEditMode ? 9 : 8} className="sr-table-head-green">
+                              <div className="flex items-center justify-between flex-wrap gap-2">
+                                <span className="flex-1 text-center">
+                                  {editablePost.shortTitle || editablePost.title} : RRB Zone-Wise Vacancy Details
+                                </span>
+                                {renderSectionControls('sec_zone_vacancy', 'Zone-Wise Vacancy')}
+                              </div>
+                            </th>
+                          </tr>
+                          {isRailwayPost && (
+                            <tr>
+                              <th colSpan={isDirectEditMode ? 9 : 8} className="bg-slate-50 p-2 font-normal text-left">
+                                <div className="flex items-center gap-2 max-w-sm">
+                                  <input
+                                    type="text"
+                                    value={rrbSearch}
+                                    onChange={(e) => setRrbSearch(e.target.value)}
+                                    placeholder="Filter RRB Board / Zone (e.g. Ajmer, Patna, WR)..."
+                                    className="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded text-slate-900 focus:outline-none focus:border-[#008000]"
+                                  />
+                                  {rrbSearch && (
+                                    <button
+                                      type="button"
+                                      onClick={() => setRrbSearch('')}
+                                      className="text-xs font-bold text-red-700 hover:underline cursor-pointer shrink-0"
+                                    >
+                                      Clear
+                                    </button>
+                                  )}
+                                </div>
+                              </th>
                             </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-300 text-[10pt]">
-                            {post.zoneBreakdown.map((z, idx) => (
-                              <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-2.5 sm:p-3 font-bold text-blue-900 border-r border-slate-400">
-                                  <div>• {z.zoneName}</div>
-                                  {z.hindiZoneName && <div className="text-[10pt] text-slate-500 font-normal">{z.hindiZoneName}</div>}
+                          )}
+                          <tr className="bg-slate-100">
+                            <th className="text-left" style={{ color: '#ff00ff' }}>RRB Board / Zone Name</th>
+                            <th className="text-center" style={{ color: '#008000' }}>Total Posts</th>
+                            <th className="text-center text-blue-900">GEN</th>
+                            <th className="text-center text-emerald-800">OBC</th>
+                            <th className="text-center text-purple-800">EWS</th>
+                            <th className="text-center text-red-800">SC</th>
+                            <th className="text-center text-amber-800">ST</th>
+                            <th className="text-center">Official Portal</th>
+                            {isDirectEditMode && <th className="text-center">Action</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {displayedZoneRows.length > 0 ? (
+                            displayedZoneRows.map(({ z, idx }) => (
+                              <tr key={idx}>
+                                <td className="font-bold text-blue-900">
+                                  <EditableText
+                                    value={z.zoneName}
+                                    onChange={(val) => updateZoneRow(idx, { zoneName: val })}
+                                    titlePrefix="ज़ोन / आरआरबी नाम (Zone)"
+                                  />
+                                  {z.hindiZoneName && (
+                                    <div className="text-xs text-slate-600 font-normal">{z.hindiZoneName}</div>
+                                  )}
                                 </td>
-                                <td className="p-2.5 sm:p-3 text-center font-bold text-slate-900 border-r border-slate-400">{z.totalPosts}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.genPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.obcPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.ewsPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.scPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center text-slate-800 border-r border-slate-400">{z.stPosts ?? '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-center">
+                                <td className="center-cell">
+                                  <EditableText
+                                    value={z.totalPosts}
+                                    onChange={(val) => updateZoneRow(idx, { totalPosts: val })}
+                                    titlePrefix="कुल पद (Total Posts)"
+                                  />
+                                </td>
+                                <td className="center-cell">
+                                  <EditableText
+                                    value={z.genPosts ?? '-'}
+                                    onChange={(val) => updateZoneRow(idx, { genPosts: val })}
+                                    titlePrefix="GEN पद"
+                                  />
+                                </td>
+                                <td className="center-cell">
+                                  <EditableText
+                                    value={z.obcPosts ?? '-'}
+                                    onChange={(val) => updateZoneRow(idx, { obcPosts: val })}
+                                    titlePrefix="OBC पद"
+                                  />
+                                </td>
+                                <td className="center-cell">
+                                  <EditableText
+                                    value={z.ewsPosts ?? '-'}
+                                    onChange={(val) => updateZoneRow(idx, { ewsPosts: val })}
+                                    titlePrefix="EWS पद"
+                                  />
+                                </td>
+                                <td className="center-cell">
+                                  <EditableText
+                                    value={z.scPosts ?? '-'}
+                                    onChange={(val) => updateZoneRow(idx, { scPosts: val })}
+                                    titlePrefix="SC पद"
+                                  />
+                                </td>
+                                <td className="center-cell">
+                                  <EditableText
+                                    value={z.stPosts ?? '-'}
+                                    onChange={(val) => updateZoneRow(idx, { stPosts: val })}
+                                    titlePrefix="ST पद"
+                                  />
+                                </td>
+                                <td className="center-cell">
                                   <a
-                                    href={z.applyLink || '#'}
+                                    href={sanitizeUrl(z.applyLink || 'https://www.rrbapply.gov.in/')}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-[#1432c7] hover:bg-blue-800 text-white font-bold px-2.5 py-1 rounded text-xs inline-flex items-center gap-1 shadow-2xs transition-colors"
+                                    className="sr-link-blue font-bold"
                                   >
-                                    <span>Apply</span>
-                                    <ExternalLink className="w-3 h-3" />
+                                    Click Here
                                   </a>
                                 </td>
+                                {isDirectEditMode && (
+                                  <td className="center-cell">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDeleteZoneRow(idx)}
+                                      className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-0.5 rounded cursor-pointer"
+                                    >
+                                      ✕
+                                    </button>
+                                  </td>
+                                )}
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={isDirectEditMode ? 9 : 8} className="center-cell text-slate-600">
+                                No matching RRB Board / Zone found for &ldquo;{rrbSearch}&rdquo;.
+                              </td>
+                            </tr>
+                          )}
+                          {isDirectEditMode && (
+                            <tr>
+                              <td colSpan={9} className="bg-slate-50 text-right">
+                                <button
+                                  type="button"
+                                  onClick={handleAddZoneRow}
+                                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded inline-flex items-center gap-1 cursor-pointer"
+                                >
+                                  + नया ज़ोन जोड़ें (Add RRB Zone Row)
+                                </button>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
                     </div>
                   ) : renderHiddenBanner('sec_zone_vacancy', 'Zone-Wise Vacancy')
                 )}
 
                 {/* Salary & Pay Scale Table (वेतन सारणी) */}
-                {(post.salary || (post.salaryBreakdown && post.salaryBreakdown.length > 0)) && (
-                  <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                    <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide text-center" style={{ backgroundColor: '#008000' }}>
-                      {post.shortTitle} Pay Scale & Salary Details (वेतन सारणी)
-                    </div>
-                    <div className="p-2.5 sm:p-3.5 bg-slate-50 border-b border-slate-300">
-                      <div className="flex flex-wrap items-center justify-between gap-2 text-slate-800 text-[10pt]">
-                        <span><strong>Pay Scale (वेतनमान): </strong>{post.salary || 'As per 7th Pay Commission (7th CPC)'}</span>
-                        {post.salaryBand && (
-                          <span className="bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded text-[10pt] border border-emerald-300">
-                            Band: {post.salaryBand}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    {post.salaryBreakdown && post.salaryBreakdown.length > 0 && (
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                          <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400">Post Name</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center">Pay Level</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400">Basic Pay</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400">In-Hand Salary</th>
-                              <th className="p-2.5 sm:p-3">Allowances / Grade Pay</th>
+                {!isServiceOrScheme && !isInformationalPost && (
+                  !hiddenSections['sec_salary'] ? (
+                    <div className="overflow-x-auto">
+                      <table className="sr-table">
+                        <thead>
+                          <tr>
+                            <th colSpan={isDirectEditMode ? 6 : 5} className="sr-table-head-green">
+                              <div className="flex items-center justify-between flex-wrap gap-2">
+                                <span className="flex-1 text-center">
+                                  {editablePost.shortTitle || editablePost.title} — Pay Scale &amp; Salary Details (वेतन सारणी)
+                                </span>
+                                {renderSectionControls('sec_salary', 'Salary (वेतन सारणी)')}
+                              </div>
+                            </th>
+                          </tr>
+                          <tr>
+                            <th colSpan={isDirectEditMode ? 6 : 5} className="bg-slate-50 text-left font-normal">
+                              <div className="flex flex-wrap items-center justify-between gap-2 text-slate-900">
+                                <span>
+                                  <strong>Pay Scale (वेतनमान): </strong>
+                                  <EditableText
+                                    value={editablePost.salary || 'As per 7th Pay Commission (7th CPC)'}
+                                    onChange={(val) => setEditablePost(prev => ({ ...prev, salary: val }))}
+                                    titlePrefix="वेतनमान (Pay Scale)"
+                                  />
+                                </span>
+                                {editablePost.salaryBand && editablePost.salaryBand !== 'All' && (
+                                  <span className="bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded text-xs border border-emerald-300">
+                                    Band: {editablePost.salaryBand}
+                                  </span>
+                                )}
+                              </div>
+                            </th>
+                          </tr>
+                          <tr className="bg-slate-100">
+                            <th className="text-left" style={{ color: '#ff00ff' }}>Post Name</th>
+                            <th className="text-center" style={{ color: '#008000' }}>Pay Level</th>
+                            <th className="text-left text-blue-900">Basic Pay</th>
+                            <th className="text-left text-purple-900">In-Hand Salary</th>
+                            <th className="text-left">Allowances / Grade Pay</th>
+                            {isDirectEditMode && <th className="text-center">Action</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {displayedSalaryRows.map((sal, idx) => (
+                            <tr key={idx}>
+                              <td className="font-bold text-blue-900">
+                                <EditableText
+                                  value={sal.postName}
+                                  onChange={(val) => updateSalaryRow(idx, { postName: val })}
+                                  titlePrefix="पद का नाम (Post Name)"
+                                />
+                              </td>
+                              <td className="center-cell text-emerald-800">
+                                <EditableText
+                                  value={sal.payLevel}
+                                  onChange={(val) => updateSalaryRow(idx, { payLevel: val })}
+                                  titlePrefix="पे लेवल (Pay Level)"
+                                />
+                              </td>
+                              <td className="font-bold text-slate-900">
+                                <EditableText
+                                  value={sal.basicPay}
+                                  onChange={(val) => updateSalaryRow(idx, { basicPay: val })}
+                                  titlePrefix="बेसिक पे (Basic Pay)"
+                                />
+                              </td>
+                              <td className="font-bold text-purple-900">
+                                <EditableText
+                                  value={sal.inHandSalary || '-'}
+                                  onChange={(val) => updateSalaryRow(idx, { inHandSalary: val })}
+                                  titlePrefix="इन-हैंड वेतन (In-Hand Salary)"
+                                />
+                              </td>
+                              <td>
+                                <EditableText
+                                  value={sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}
+                                  onChange={(val) => updateSalaryRow(idx, { allowances: val })}
+                                  titlePrefix="भत्ते (Allowances)"
+                                />
+                              </td>
+                              {isDirectEditMode && (
+                                <td className="center-cell">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteSalaryRow(idx)}
+                                    className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-0.5 rounded cursor-pointer"
+                                  >
+                                    ✕
+                                  </button>
+                                </td>
+                              )}
                             </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-300 text-[10pt]">
-                            {post.salaryBreakdown.map((sal, idx) => (
-                              <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-2.5 sm:p-3 font-bold text-blue-900 border-r border-slate-400">{sal.postName}</td>
-                                <td className="p-2.5 sm:p-3 text-center font-bold text-emerald-700 border-r border-slate-400">{sal.payLevel}</td>
-                                <td className="p-2.5 sm:p-3 font-bold text-slate-900 border-r border-slate-400">{sal.basicPay}</td>
-                                <td className="p-2.5 sm:p-3 font-bold text-purple-900 border-r border-slate-400">{sal.inHandSalary || '-'}</td>
-                                <td className="p-2.5 sm:p-3 text-slate-700">{sal.allowances || sal.gradePay || 'DA, HRA, TA as per Govt Norms'}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
+                          ))}
+                          {isDirectEditMode && (
+                            <tr>
+                              <td colSpan={6} className="bg-slate-50 text-right">
+                                <button
+                                  type="button"
+                                  onClick={handleAddSalaryRow}
+                                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded inline-flex items-center gap-1 cursor-pointer"
+                                >
+                                  + वेतन पंक्ति जोड़ें (Add Salary Row)
+                                </button>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : renderHiddenBanner('sec_salary', 'Salary (वेतन सारणी)')
                 )}
 
-                {/* Exam Scheme & Paper Pattern Table (Renders ONLY IF post.paperPattern.subjects exists) */}
-                {post.paperPattern && post.paperPattern.subjects && post.paperPattern.subjects.length > 0 && (
+                {/* Exam Scheme & Paper Pattern Table (परीक्षा पैटर्न) */}
+                {!isServiceOrScheme && !isInformationalPost && (
                   !hiddenSections['sec_paper_pattern'] ? (
-                    <div className="border border-slate-400 bg-white overflow-hidden text-[10pt] shadow-2xs">
-                      <div className="text-white px-4 py-2 text-[11pt] font-black uppercase tracking-wide flex items-center justify-between flex-wrap gap-2" style={{ backgroundColor: '#008000' }}>
-                        <span>{post.paperPattern.examName || `${post.shortTitle} Examination Scheme & Paper Pattern`}</span>
-                        {renderSectionControls('sec_paper_pattern', 'Paper Pattern')}
-                      </div>
-                      <div className="p-2.5 sm:p-3.5 bg-slate-50 border-b border-slate-300 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10pt]">
-                        {post.paperPattern.examMode && (
-                          <div className="bg-white p-2 rounded border border-slate-200">
-                            <span className="text-slate-500 block text-[10pt]">Exam Mode</span>
-                            <strong className="text-slate-900">{post.paperPattern.examMode}</strong>
-                          </div>
-                        )}
-                        {post.paperPattern.totalDuration && (
-                          <div className="bg-white p-2 rounded border border-slate-200">
-                            <span className="text-slate-500 block text-[10pt]">Total Duration</span>
-                            <strong className="text-blue-900">{post.paperPattern.totalDuration}</strong>
-                          </div>
-                        )}
-                        {post.paperPattern.totalQuestions && (
-                          <div className="bg-white p-2 rounded border border-slate-200">
-                            <span className="text-slate-500 block text-[10pt]">Total Questions</span>
-                            <strong className="text-slate-900">{post.paperPattern.totalQuestions} Ques</strong>
-                          </div>
-                        )}
-                        {post.paperPattern.negativeMarking && (
-                          <div className="bg-white p-2 rounded border border-slate-200">
-                            <span className="text-slate-500 block text-[10pt]">Negative Marking</span>
-                            <strong className="text-red-600">{post.paperPattern.negativeMarking}</strong>
-                          </div>
-                        )}
-                      </div>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                          <thead>
-                            <tr className="bg-slate-100 border-b border-slate-400 text-slate-900 font-black text-[10.5pt]">
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400">Subject / Test Paper</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center">Questions</th>
-                              <th className="p-2.5 sm:p-3 border-r border-slate-400 text-center">Maximum Marks</th>
-                              <th className="p-2.5 sm:p-3">Duration / Remarks</th>
+                    <div className="overflow-x-auto">
+                      <table className="sr-table">
+                        <thead>
+                          <tr>
+                            <th colSpan={isDirectEditMode ? 5 : 4} className="sr-table-head-green">
+                              <div className="flex items-center justify-between flex-wrap gap-2">
+                                <span className="flex-1 text-center">
+                                  <EditableText
+                                    value={
+                                      editablePost.paperPattern?.examName ||
+                                      `${editablePost.shortTitle || editablePost.title} — Exam Pattern (परीक्षा पैटर्न)`
+                                    }
+                                    onChange={(val) =>
+                                      setEditablePost(prev => ({
+                                        ...prev,
+                                        paperPattern: { ...(prev.paperPattern || {}), examName: val },
+                                      }))
+                                    }
+                                    className="text-white font-bold"
+                                    titlePrefix="परीक्षा पैटर्न शीर्षक (Exam Name)"
+                                  />
+                                </span>
+                                {renderSectionControls('sec_paper_pattern', 'Exam Pattern')}
+                              </div>
+                            </th>
+                          </tr>
+                          <tr>
+                            <th colSpan={isDirectEditMode ? 5 : 4} className="bg-slate-50 font-normal text-left p-2.5">
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                                <div className="bg-white p-2 rounded border border-slate-300">
+                                  <span className="text-slate-600 block">Exam Mode</span>
+                                  <strong className="text-slate-900">
+                                    <EditableText
+                                      value={editablePost.paperPattern?.examMode || 'CBT / Written Exam'}
+                                      onChange={(val) =>
+                                        setEditablePost(prev => ({
+                                          ...prev,
+                                          paperPattern: { ...(prev.paperPattern || {}), examMode: val },
+                                        }))
+                                      }
+                                      titlePrefix="परीक्षा मोड (Exam Mode)"
+                                    />
+                                  </strong>
+                                </div>
+                                <div className="bg-white p-2 rounded border border-slate-300">
+                                  <span className="text-slate-600 block">Total Duration</span>
+                                  <strong className="text-blue-900">
+                                    <EditableText
+                                      value={editablePost.paperPattern?.totalDuration || 'As per Notice'}
+                                      onChange={(val) =>
+                                        setEditablePost(prev => ({
+                                          ...prev,
+                                          paperPattern: { ...(prev.paperPattern || {}), totalDuration: val },
+                                        }))
+                                      }
+                                      titlePrefix="कुल समय (Total Duration)"
+                                    />
+                                  </strong>
+                                </div>
+                                <div className="bg-white p-2 rounded border border-slate-300">
+                                  <span className="text-slate-600 block">Total Questions</span>
+                                  <strong className="text-slate-900">
+                                    <EditableText
+                                      value={editablePost.paperPattern?.totalQuestions ?? 'Objective / MCQ'}
+                                      onChange={(val) =>
+                                        setEditablePost(prev => ({
+                                          ...prev,
+                                          paperPattern: { ...(prev.paperPattern || {}), totalQuestions: val },
+                                        }))
+                                      }
+                                      titlePrefix="कुल प्रश्न (Total Questions)"
+                                    />
+                                  </strong>
+                                </div>
+                                <div className="bg-white p-2 rounded border border-slate-300">
+                                  <span className="text-slate-600 block">Negative Marking</span>
+                                  <strong className="text-red-700">
+                                    <EditableText
+                                      value={editablePost.paperPattern?.negativeMarking || 'As per Official Rules'}
+                                      onChange={(val) =>
+                                        setEditablePost(prev => ({
+                                          ...prev,
+                                          paperPattern: { ...(prev.paperPattern || {}), negativeMarking: val },
+                                        }))
+                                      }
+                                      titlePrefix="नेगेटिव मार्किंग (Negative Marking)"
+                                    />
+                                  </strong>
+                                </div>
+                              </div>
+                            </th>
+                          </tr>
+                          <tr className="bg-slate-100">
+                            <th className="text-left" style={{ color: '#ff00ff' }}>Subject / Test Paper</th>
+                            <th className="text-center text-blue-900">Questions</th>
+                            <th className="text-center" style={{ color: '#008000' }}>Maximum Marks</th>
+                            <th className="text-left">Duration / Remarks</th>
+                            {isDirectEditMode && <th className="text-center">Action</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {displayedPaperSubjects.map((sub, idx) => (
+                            <tr key={idx}>
+                              <td className="font-bold text-slate-900">
+                                <EditableText
+                                  value={sub.subjectName}
+                                  onChange={(val) => updatePaperSubjectRow(idx, { subjectName: val })}
+                                  titlePrefix="विषय (Subject)"
+                                />
+                              </td>
+                              <td className="center-cell text-blue-900">
+                                <EditableText
+                                  value={sub.totalQuestions || '-'}
+                                  onChange={(val) => updatePaperSubjectRow(idx, { totalQuestions: val })}
+                                  titlePrefix="प्रश्न संख्या (Questions)"
+                                />
+                              </td>
+                              <td className="center-cell text-emerald-800">
+                                <EditableText
+                                  value={sub.totalMarks || '-'}
+                                  onChange={(val) => updatePaperSubjectRow(idx, { totalMarks: val })}
+                                  titlePrefix="अधिकतम अंक (Max Marks)"
+                                />
+                              </td>
+                              <td>
+                                <EditableText
+                                  value={sub.duration || sub.remarks || '-'}
+                                  onChange={(val) => updatePaperSubjectRow(idx, { duration: val })}
+                                  titlePrefix="समय / टिप्पणी (Duration / Remarks)"
+                                />
+                              </td>
+                              {isDirectEditMode && (
+                                <td className="center-cell">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeletePaperSubjectRow(idx)}
+                                    className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 font-bold text-xs px-2 py-0.5 rounded cursor-pointer"
+                                  >
+                                    ✕
+                                  </button>
+                                </td>
+                              )}
                             </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-300 text-[10pt]">
-                            {post.paperPattern.subjects.map((sub, idx) => (
-                              <tr key={idx} className="hover:bg-slate-50">
-                                <td className="p-2.5 sm:p-3 font-bold text-slate-900 border-r border-slate-400">{sub.subjectName}</td>
-                                <td className="p-2.5 sm:p-3 text-center font-bold text-blue-900 border-r border-slate-400">{sub.totalQuestions || '-'}</td>
-                                 <td className="p-2.5 sm:p-3 text-center font-bold text-blue-800 border-r border-slate-400">{sub.totalMarks || '-'}</td>
-                                 <td className="p-2.5 sm:p-3 text-slate-700">{sub.duration || sub.remarks || '-'}</td>
-                               </tr>
-                             ))}
-                          </tbody>
-                        </table>
-                      </div>
+                          ))}
+                          {isDirectEditMode && (
+                            <tr>
+                              <td colSpan={5} className="bg-slate-50 text-right">
+                                <button
+                                  type="button"
+                                  onClick={handleAddPaperSubjectRow}
+                                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3 py-1.5 rounded inline-flex items-center gap-1 cursor-pointer"
+                                >
+                                  + विषय जोड़ें (Add Subject Row)
+                                </button>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
                     </div>
-                  ) : renderHiddenBanner('sec_paper_pattern', 'Paper Pattern')
+                  ) : renderHiddenBanner('sec_paper_pattern', 'Exam Pattern')
                 )}
 
                 {/* Mode of Selection (Renders ONLY IF post.selectionProcess data exists) */}
@@ -2149,7 +2881,7 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                   ) : renderHiddenBanner('sec_selection_process', 'Selection Process')
                 )}
 
-                {/* How to Fill Form Section */}
+                {/* How to Fill Form Table */}
                 {(() => {
                   const steps = (editablePost.howToApplySteps && editablePost.howToApplySteps.length >= 5) 
                     ? editablePost.howToApplySteps 
@@ -2164,76 +2896,72 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                       ];
 
                   return (
-                    <div className="border border-slate-400 bg-white p-3.5 sm:p-5 text-[10pt] space-y-2.5 shadow-2xs my-4">
-                      <h4 className="font-black text-[11pt] border-b border-slate-200 pb-2 font-sans">
-                        <span style={{ color: '#008000' }}>How to Fill </span>
-                        <span style={{ color: '#ff00ff' }}>{editablePost.shortTitle} Recruitment Online Form 2026</span>
-                      </h4>
-                      <ul className="space-y-2 text-slate-800 pt-1 leading-relaxed text-[10pt]">
-                        {steps.map((step, idx) => (
-                          <li key={idx} className="flex items-start justify-between gap-2">
-                            <div className="flex-1">
-                              <span>• </span>
-                              <EditableText
-                                value={step}
-                                onChange={(val) => {
-                                  setEditablePost(prev => {
-                                    const nextSteps = [...(prev.howToApplySteps && prev.howToApplySteps.length >= 5 ? prev.howToApplySteps : steps)];
-                                    nextSteps[idx] = val;
-                                    return { ...prev, howToApplySteps: nextSteps };
-                                  });
-                                }}
-                                titlePrefix="आवेदन निर्देश (Instruction Step)"
-                              />
-                            </div>
+                    <table className="sr-table">
+                      <thead>
+                        <tr>
+                          <th className="sr-table-head-maroon">How to Fill Online Application Form</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <ul>
+                              {steps.map((step, idx) => (
+                                <li key={idx}>
+                                  <EditableText
+                                    value={step}
+                                    onChange={(val) => {
+                                      setEditablePost(prev => {
+                                        const nextSteps = [...(prev.howToApplySteps && prev.howToApplySteps.length >= 5 ? prev.howToApplySteps : steps)];
+                                        nextSteps[idx] = val;
+                                        return { ...prev, howToApplySteps: nextSteps };
+                                      });
+                                    }}
+                                    titlePrefix="आवेदन निर्देश (Instruction Step)"
+                                  />
+                                  {isDirectEditMode && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDeleteApplyStep(idx)}
+                                      className="ml-2 text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
+                                      title="यह निर्देश हटाएं"
+                                    >
+                                      ✕
+                                    </button>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
                             {isDirectEditMode && (
                               <button
                                 type="button"
-                                onClick={() => handleDeleteApplyStep(idx)}
-                                className="text-red-500 hover:text-red-700 text-xs px-1 cursor-pointer font-bold"
-                                title="यह निर्देश हटाएं"
+                                onClick={handleAddApplyStep}
+                                className="mt-2 text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
                               >
-                                ✕
+                                <span>+ नया निर्देश पंक्ति जोड़ें (Add Step)</span>
                               </button>
                             )}
-                          </li>
-                        ))}
-                      {isDirectEditMode && (
-                        <li>
-                          <button
-                            type="button"
-                            onClick={handleAddApplyStep}
-                            className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-300 font-bold px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer"
-                          >
-                            <span>+ नया निर्देश पंक्ति जोड़ें (Add Step)</span>
-                          </button>
-                        </li>
-                      )}
-                      <li className="font-bold pt-2 border-t border-slate-200 mt-2 text-center text-[10.5pt]" style={{ color: '#ff00ff' }}>
-                        Interested Candidates Can Read the Full Notification Before Apply Online
-                      </li>
-                    </ul>
-                  </div>
-                );
-              })()}
+                            <div className="font-bold pt-2 border-t border-slate-200 mt-2 text-center label-magenta">
+                              Interested Candidates Can Read the Full Notification Before Apply Online
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  );
+                })()}
               </>
             )}
-
-
 
             {/* Post Mid Ad Unit (Directly Above Useful Important Links Table) */}
             <AdBanner placement="postMid" onOpenTool={onOpenPhotoResizer} />
 
-            {/* Useful Important Links Table (Matches Screenshot Layout) */}
-            <div className="border border-slate-300 bg-white rounded-xl overflow-hidden text-[10pt] shadow-2xs my-4 font-sans">
-              <div className="bg-white text-slate-900 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
-                <h3 className="font-extrabold text-[12pt] sm:text-[13pt] text-red-600 font-sans" style={{ color: '#dc2626' }}>
-                  {editablePost.shortTitle || editablePost.title} Important Links
-                </h3>
-                
-                {isAdmin && (
+            {/* Some Useful Important Links Table */}
+            <div className="overflow-x-auto">
+              {isAdmin && (
+                <div className="bg-slate-100 border border-b-0 border-black px-3.5 py-2 flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-xs font-bold text-slate-700">एडमिन टूल्स (Important Links Controls):</span>
                   <div className="flex items-center gap-2 flex-wrap">
-                    {/* + PDF Upload Button */}
                     <button
                       type="button"
                       onClick={() => {
@@ -2243,167 +2971,151 @@ export const FullPagePostView: React.FC<FullPagePostViewProps> = ({
                           pdfFileInputRef.current.click();
                         }
                       }}
-                      className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
+                      className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
                       title="डिवाइस से नई PDF फ़ाइल अपलोड करें"
                     >
                       <span className="text-xs">+ 📄</span>
                       <span>PDF</span>
                     </button>
 
-                    {/* + लिंक Button */}
                     <button
                       type="button"
                       onClick={handleAddDirectLink}
-                      className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
+                      className="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-2.5 py-1 rounded flex items-center gap-1 cursor-pointer shadow-2xs transition-colors"
                       title="नया लिंक जोड़ें"
                     >
                       <span className="text-xs">+ 🔗</span>
                       <span>लिंक</span>
                     </button>
 
-                    {/* Section Edit Controls */}
                     {renderSectionControls('sec_important_links', 'Important Links')}
                   </div>
-                )}
-              </div>
-
-              {/* User Guide Banner for Word In-Place Editing */}
-              {isDirectEditMode && (
-                <div className="bg-amber-50 border-b border-amber-200 px-3.5 py-2 flex flex-row items-center justify-between text-xs font-bold text-amber-950 gap-1.5 flex-wrap">
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-base">💡</span>
-                    <span><strong>इन-प्लेस एडिट चालू:</strong> किसी भी नाम या URL पर क्लिक करके सीधे टाइप करें या 📄 PDF बटन दबाकर फाइल अपलोड करें।</span>
-                  </span>
                 </div>
               )}
 
-              {/* 2-Column Table Matching Screenshot */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse font-sans text-[10pt]">
-                  <tbody>
-                    {(editablePost.directLinks || [])
-                      .filter(l => 
-                        !l.label?.toLowerCase().includes('whatsapp') && 
-                        !l.label?.toLowerCase().includes('telegram') && 
-                        !l.url?.toLowerCase().includes('whatsapp') && 
-                        !l.url?.toLowerCase().includes('t.me')
-                      )
-                      .map((link, idx) => {
-                        const isPdf = Boolean(
-                          link.isPdf ||
-                          link.type === 'notification' ||
-                          link.type === 'syllabus' ||
-                          link.label.toLowerCase().includes('pdf') ||
-                          link.actionText?.toLowerCase().includes('pdf') ||
-                          (link.url && (
-                            link.url.toLowerCase().endsWith('.pdf') ||
-                            link.url.toLowerCase().includes('.pdf?') ||
-                            link.url.startsWith('data:application/pdf')
-                          ))
-                        );
+              <table className="sr-table">
+                <thead>
+                  <tr>
+                    <th colSpan={2} className="sr-table-head-green">
+                      Some Useful Important Links
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(editablePost.directLinks || [])
+                    .filter(l => 
+                      !l.label?.toLowerCase().includes('whatsapp') && 
+                      !l.label?.toLowerCase().includes('telegram') && 
+                      !l.url?.toLowerCase().includes('whatsapp') && 
+                      !l.url?.toLowerCase().includes('t.me')
+                    )
+                    .map((link, idx) => {
+                      const isPdf = Boolean(
+                        link.isPdf ||
+                        link.type === 'notification' ||
+                        link.type === 'syllabus' ||
+                        link.label.toLowerCase().includes('pdf') ||
+                        link.actionText?.toLowerCase().includes('pdf') ||
+                        (link.url && (
+                          link.url.toLowerCase().endsWith('.pdf') ||
+                          link.url.toLowerCase().includes('.pdf?') ||
+                          link.url.startsWith('data:application/pdf')
+                        ))
+                      );
 
-                        return (
-                          <tr key={idx} className="border-b border-slate-200 hover:bg-slate-50/70 transition-colors">
-                            {/* Column 1: Link Title / Name */}
-                            <td className="p-3 sm:p-3.5 font-bold text-slate-900 border-r border-slate-200 w-1/2 align-middle">
-                              <EditableText
-                                value={link.label}
-                                onChange={(newVal) => {
-                                  setEditablePost(prev => {
-                                    const list = [...(prev.directLinks || [])];
-                                    list[idx] = { ...list[idx], label: newVal };
-                                    return { ...prev, directLinks: list };
-                                  });
-                                }}
-                                className="font-bold text-[10.5pt] text-slate-900 break-words block"
-                                titlePrefix="लिंक का नाम"
-                              />
-                            </td>
+                      return (
+                        <tr key={idx}>
+                          <td className="center-cell label-magenta" style={{ width: '50%' }}>
+                            <EditableText
+                              value={link.label}
+                              onChange={(newVal) => {
+                                setEditablePost(prev => {
+                                  const list = [...(prev.directLinks || [])];
+                                  list[idx] = { ...list[idx], label: newVal };
+                                  return { ...prev, directLinks: list };
+                                });
+                              }}
+                              titlePrefix="लिंक का नाम"
+                            />
+                          </td>
+                          <td className="center-cell" style={{ width: '50%' }}>
+                            <div className="flex items-center justify-center gap-2 flex-wrap">
+                              <a
+                                href={link.url || '#'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download={isPdf ? (link.fileName || `${(link.label || 'file').replace(/\s+/g, '_')}.pdf`) : undefined}
+                                className="sr-link-blue"
+                              >
+                                {link.actionText || 'Click Here'}
+                              </a>
 
-                            {/* Column 2: Link Action / Click Here & PDF Button */}
-                            <td className="p-3 sm:p-3.5 w-1/2 align-middle">
-                              <div className="flex items-center justify-between gap-2 flex-wrap">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <a
-                                    href={link.url || '#'}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    download={isPdf ? (link.fileName || `${(link.label || 'file').replace(/\s+/g, '_')}.pdf`) : undefined}
-                                    className="text-blue-600 hover:text-blue-800 underline font-bold text-[11pt]"
+                              {isAdmin && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleAttachPdfToLink(idx)}
+                                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-[11px] px-2 py-0.5 rounded cursor-pointer inline-flex items-center gap-1 shadow-2xs transition-colors"
+                                  title="इस पंक्ति के लिए PDF फ़ाइल चुनें/अपलोड करें"
+                                >
+                                  <FileText className="w-3 h-3 text-slate-500" />
+                                  <span>PDF</span>
+                                </button>
+                              )}
+
+                              {isDirectEditMode && (
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveUpDirectLink(idx)}
+                                    disabled={idx === 0}
+                                    className="text-xs text-slate-600 hover:bg-slate-200 p-1 rounded cursor-pointer disabled:opacity-30"
+                                    title="ऊपर करें"
                                   >
-                                    <span>{link.actionText || 'Click Here'}</span>
-                                  </a>
-
-                                  {/* Compact 📄 PDF Button beside Click Here (Only for Admin) */}
-                                  {isAdmin && (
-                                    <button
-                                      type="button"
-                                      onClick={() => handleAttachPdfToLink(idx)}
-                                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-bold text-[11px] px-2 py-0.5 rounded cursor-pointer inline-flex items-center gap-1 shadow-2xs transition-colors"
-                                      title="इस पंक्ति के लिए PDF फ़ाइल चुनें/अपलोड करें"
-                                    >
-                                      <FileText className="w-3 h-3 text-slate-500" />
-                                      <span>PDF</span>
-                                    </button>
-                                  )}
+                                    ⬆️
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleMoveDownDirectLink(idx)}
+                                    disabled={idx === (editablePost.directLinks || []).length - 1}
+                                    className="text-xs text-slate-600 hover:bg-slate-200 p-1 rounded cursor-pointer disabled:opacity-30"
+                                    title="नीचे करें"
+                                  >
+                                    ⬇️
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newUrl = prompt('लिंक का URL दर्ज करें (Enter URL):', link.url || 'https://');
+                                      if (newUrl !== null) {
+                                        setEditablePost(prev => {
+                                          const list = [...(prev.directLinks || [])];
+                                          list[idx] = { ...list[idx], url: newUrl.trim() };
+                                          return { ...prev, directLinks: list };
+                                        });
+                                      }
+                                    }}
+                                    className="text-[10px] bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-1.5 py-0.5 rounded cursor-pointer"
+                                    title="URL बदलें"
+                                  >
+                                    🔗
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteDirectLink(idx)}
+                                    className="text-red-500 hover:text-red-700 text-xs px-1 hover:bg-red-50 rounded cursor-pointer font-bold"
+                                    title="हटाएं"
+                                  >
+                                    ✕
+                                  </button>
                                 </div>
-
-                                {/* Reorder & Quick Action Controls in Edit Mode */}
-                                {isDirectEditMode && (
-                                  <div className="flex items-center gap-1">
-                                    <button
-                                      type="button"
-                                      onClick={() => handleMoveUpDirectLink(idx)}
-                                      disabled={idx === 0}
-                                      className="text-xs text-slate-600 hover:bg-slate-200 p-1 rounded cursor-pointer disabled:opacity-30"
-                                      title="ऊपर करें"
-                                    >
-                                      ⬆️
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => handleMoveDownDirectLink(idx)}
-                                      disabled={idx === (editablePost.directLinks || []).length - 1}
-                                      className="text-xs text-slate-600 hover:bg-slate-200 p-1 rounded cursor-pointer disabled:opacity-30"
-                                      title="नीचे करें"
-                                    >
-                                      ⬇️
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        const newUrl = prompt('लिंक का URL दर्ज करें (Enter URL):', link.url || 'https://');
-                                        if (newUrl !== null) {
-                                          setEditablePost(prev => {
-                                            const list = [...(prev.directLinks || [])];
-                                            list[idx] = { ...list[idx], url: newUrl.trim() };
-                                            return { ...prev, directLinks: list };
-                                          });
-                                        }
-                                      }}
-                                      className="text-[10px] bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-1.5 py-0.5 rounded cursor-pointer"
-                                      title="URL बदलें"
-                                    >
-                                      🔗
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => handleDeleteDirectLink(idx)}
-                                      className="text-red-500 hover:text-red-700 text-xs px-1 hover:bg-red-50 rounded cursor-pointer font-bold"
-                                      title="हटाएं"
-                                    >
-                                      ✕
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
             </div>
 
             {/* Join WhatsApp & Telegram Channel Section */}

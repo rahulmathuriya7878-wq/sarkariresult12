@@ -32,21 +32,64 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
 
-  // Close More dropdown when clicking outside
+  // Close More dropdown when clicking outside and support Escape key / body scroll lock
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
         setIsMoreOpen(false);
       }
     };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMoreOpen(false);
+        setIsMobileMenuOpen(false);
+        setIsSearchVisible(false);
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const activeCategoryLabel = useMemo(() => {
+    switch (activeCategory) {
+      case 'latest_jobs':
+        return 'Latest Job';
+      case 'admit_card':
+        return 'Admit Card';
+      case 'result':
+        return 'Result';
+      case 'answer_key':
+        return 'Answer Key';
+      case 'syllabus':
+        return 'Syllabus';
+      case 'admission':
+        return 'Admission';
+      case 'certificate_verification':
+        return 'Certificate Verification';
+      case 'important':
+        return 'Important';
+      default:
+        return '';
+    }
+  }, [activeCategory]);
 
   const handleNavClick = (cat: PostCategory | 'all') => {
     onCategoryChange(cat);
     setIsMoreOpen(false);
     setIsMobileMenuOpen(false);
+    setIsMobileMoreOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -54,6 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
     onOpenPostBySlug(slug);
     setIsMoreOpen(false);
     setIsMobileMenuOpen(false);
+    setIsMobileMoreOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -75,359 +119,312 @@ export const Header: React.FC<HeaderProps> = ({
     }));
   }, [allPosts]);
 
-  // Dynamically derive top 8 latest added posts for the running marquee ticker
-  const latestTickerPosts = useMemo(() => {
-    if (!allPosts || allPosts.length === 0) return [];
-    return allPosts.slice(0, 8);
-  }, [allPosts]);
-
   return (
-    <header className="w-full bg-white shadow-sm">
-      {/* 1. Standard Sarkari Result Crimson Masthead */}
-      <div className="bg-[#ab1616] text-white py-2 px-2 sm:px-3 border-b border-red-950">
-        <div className="max-w-full mx-auto flex items-center justify-between gap-3">
-          {/* Brand Logo & Title with Seal */}
-          <div 
-            onClick={() => handleNavClick('all')}
-            className="cursor-pointer group flex items-center gap-2.5 select-none"
-          >
-            {/* Standard Logo Image */}
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden border-2 border-amber-400 shadow-sm shrink-0 bg-white flex items-center justify-center p-0.5">
-              <img 
-                src="/sarkari-result-logo.jpg" 
-                alt="Sarkari Result Emblem Logo" 
-                className="w-full h-full object-contain rounded-full"
-                loading="lazy"
-              />
-            </div>
+    <div className="w-full">
+      {/* Site Header */}
+      <header className="sr-header cursor-pointer" onClick={() => handleNavClick('all')}>
+        <div className="sr-header-title">SARKARI RESULT</div>
+        <div className="sr-header-sub">WWW.SARKARIRESULT12.VERCEL.APP</div>
+      </header>
 
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="text-[#facc15] font-serif text-base sm:text-lg leading-none">★</span>
-              <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-wide uppercase text-white font-serif leading-tight">
-                SARKARI RESULT
-              </h1>
-              <span className="text-[#facc15] font-serif text-base sm:text-lg leading-none">★</span>
-            </div>
-          </div>
-
-          <a 
-            href="https://sarkariresult12.vercel.app/#" 
-            className="text-amber-300 hover:text-yellow-200 font-bold text-xs sm:text-sm tracking-wider font-sans underline truncate max-w-[160px] sm:max-w-none"
-            title="Sarkari Result Official Portal"
-          >
-            sarkariresult12.vercel.app
-          </a>
-        </div>
-      </div>
-
-      {/* Running Live Alert Ribbon (Header Ribbon) */}
-      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-bold py-1.5 px-2 overflow-hidden whitespace-nowrap shadow-inner border-y border-amber-600 text-xs sm:text-sm font-sans flex items-center gap-2">
-        <span className="bg-slate-950 text-amber-400 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full shrink-0 uppercase tracking-wider flex items-center gap-1 shadow-2xs">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-          LIVE UPDATES
-        </span>
-        <div className="overflow-hidden whitespace-nowrap w-full">
-          <div className="inline-block animate-marquee cursor-pointer select-none">
-            {latestTickerPosts.map((p, idx) => (
-              <React.Fragment key={`ticker-${p.id}-${idx}`}>
-                <span 
-                  className="mx-4 text-slate-950 font-black hover:underline" 
-                  onClick={() => onOpenPostBySlug(p.slug)}
-                >
-                  {p.category === 'result' ? '🏆 ' : p.category === 'admit_card' ? '🎫 ' : '🔥 '}
-                  {p.shortTitle || p.title}
-                </span>
-                <span className="text-red-900 font-extrabold mx-2">★</span>
-              </React.Fragment>
-            ))}
-            {/* Seamless duplicate loop for continuous scrolling */}
-            {latestTickerPosts.map((p, idx) => (
-              <React.Fragment key={`ticker-dup-${p.id}-${idx}`}>
-                <span 
-                  className="mx-4 text-slate-950 font-black hover:underline" 
-                  onClick={() => onOpenPostBySlug(p.slug)}
-                >
-                  {p.category === 'result' ? '🏆 ' : p.category === 'admit_card' ? '🎫 ' : '🔥 '}
-                  {p.shortTitle || p.title}
-                </span>
-                <span className="text-red-900 font-extrabold mx-2">★</span>
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Responsive Navigation Bar */}
-      <div className="bg-black text-white border-b-2 border-red-900 sticky top-0 z-50 shadow-md">
-        {/* Mobile Header Bar (md:hidden) */}
-        <div className="md:hidden flex items-center justify-between px-2 py-2">
+      {/* Navigation Sub-Bar with Collapsible Hamburger Menu */}
+      <nav className="sr-nav relative" aria-label="Main Navigation">
+        <div className="flex items-center min-w-0 flex-1">
+          {/* Left-side Collapsible Menu Toggle Button */}
           <button
+            type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-expanded={isMobileMenuOpen}
+            aria-controls="sr-mobile-nav-drawer"
             aria-label="Toggle Navigation Menu"
-            className="flex items-center gap-2 text-white font-extrabold text-sm sm:text-base cursor-pointer py-1 px-2 hover:bg-neutral-800 rounded-xs select-none transition-colors"
+            className="sr-nav-btn flex items-center gap-1.5 font-bold shrink-0"
           >
             {isMobileMenuOpen ? (
-              <>
-                <X className="w-5 h-5 text-white" aria-hidden="true" />
-                <span>Menu</span>
-              </>
+              <X className="w-4 h-4 text-white" />
             ) : (
-              <>
-                <Menu className="w-5 h-5 text-white" aria-hidden="true" />
-                <span>Menu</span>
-              </>
+              <Menu className="w-4 h-4 text-white" />
             )}
+            <span>Menu</span>
           </button>
 
-          <button
-            onClick={() => setIsSearchVisible(!isSearchVisible)}
-            aria-label="Search Sarkari Result"
-            className="p-1.5 text-white hover:bg-neutral-800 rounded-xs cursor-pointer select-none transition-colors"
-            title="Search Sarkari Result"
-          >
-            <Search className="w-5 h-5 text-white" aria-hidden="true" />
-          </button>
+          {/* Compact Active Category Indicator on Small Mobile Screens */}
+          {activeCategoryLabel && (
+            <span className="md:hidden text-xs font-bold text-yellow-200 truncate px-2.5">
+              {activeCategoryLabel}
+            </span>
+          )}
+
+          {/* Desktop Horizontal Navigation Links (Left-Aligned) */}
+          <div className="hidden md:flex items-center min-w-0">
+            <button
+              type="button"
+              onClick={() => handleNavClick('all')}
+              className={`sr-nav-btn ${activeCategory === 'all' ? 'active-nav' : ''}`}
+            >
+              Home
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('latest_jobs')}
+              className={`sr-nav-btn ${activeCategory === 'latest_jobs' ? 'active-nav' : ''}`}
+            >
+              Latest Job
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('admit_card')}
+              className={`sr-nav-btn ${activeCategory === 'admit_card' ? 'active-nav' : ''}`}
+            >
+              Admit Card
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('result')}
+              className={`sr-nav-btn ${activeCategory === 'result' ? 'active-nav' : ''}`}
+            >
+              Result
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('answer_key')}
+              className={`sr-nav-btn ${activeCategory === 'answer_key' ? 'active-nav' : ''}`}
+            >
+              Answer Key
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('syllabus')}
+              className={`sr-nav-btn ${activeCategory === 'syllabus' ? 'active-nav' : ''}`}
+            >
+              Syllabus
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick('admission')}
+              className={`sr-nav-btn ${activeCategory === 'admission' ? 'active-nav' : ''}`}
+            >
+              Admission
+            </button>
+            <div className="relative inline-block" ref={moreRef}>
+              <button
+                type="button"
+                onClick={() => setIsMoreOpen(!isMoreOpen)}
+                aria-expanded={isMoreOpen}
+                className="sr-nav-btn flex items-center gap-1"
+              >
+                <span>More</span>
+                {isMoreOpen ? <ChevronUp className="w-3.5 h-3.5 inline" /> : <ChevronDown className="w-3.5 h-3.5 inline" />}
+              </button>
+              {isMoreOpen && (
+                <div className="absolute left-0 top-full mt-0 w-56 bg-white text-slate-900 shadow-xl border-2 border-[#ab0000] z-50 py-1 divide-y divide-slate-200 font-bold text-xs text-left">
+                  <button
+                    type="button"
+                    onClick={() => handleNavClick('certificate_verification')}
+                    className="w-full text-left px-3 py-2.5 text-slate-900 hover:bg-red-50 hover:text-[#ab0000] cursor-pointer"
+                  >
+                    📜 Certificate Verification
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNavClick('important')}
+                    className="w-full text-left px-3 py-2.5 text-slate-900 hover:bg-red-50 hover:text-[#ab0000] cursor-pointer"
+                  >
+                    📌 Important Links
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleStaticDocClick('privacy-policy')}
+                    className="w-full text-left px-3 py-2.5 text-slate-900 hover:bg-red-50 hover:text-[#ab0000] cursor-pointer"
+                  >
+                    🔒 Privacy Policy
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleStaticDocClick('disclaimer')}
+                    className="w-full text-left px-3 py-2.5 text-slate-900 hover:bg-red-50 hover:text-[#ab0000] cursor-pointer"
+                  >
+                    ⚠️ Disclaimer
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleStaticDocClick('rules-and-regulations')}
+                    className="w-full text-left px-3 py-2.5 text-slate-900 hover:bg-red-50 hover:text-[#ab0000] cursor-pointer"
+                  >
+                    📋 Rules &amp; Regulations
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Mobile Vertical Drawer (Exact Match to Screenshot) */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden sticky top-full bg-black text-white border-t border-neutral-800 pb-2 z-50 shadow-2xl animate-in fade-in slide-in-from-top-1 duration-150">
-            <div className="flex flex-col py-1">
+        {/* Right-side Search Button */}
+        <button
+          type="button"
+          onClick={() => setIsSearchVisible(!isSearchVisible)}
+          title="Search Sarkari Result"
+          aria-label="Search Sarkari Result"
+          aria-expanded={isSearchVisible}
+          className="sr-nav-btn sr-nav-search flex items-center gap-1.5 ml-auto shrink-0"
+        >
+          <Search className="w-3.5 h-3.5 inline" />
+          <span>Search</span>
+        </button>
+      </nav>
+
+      {/* Left Slide-Out Collapsible Navigation Drawer */}
+      {isMobileMenuOpen && (
+        <div
+          id="sr-mobile-nav-drawer"
+          className="fixed inset-0 z-50 flex"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation Menu"
+        >
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          {/* Left Drawer Panel */}
+          <aside className="relative z-10 w-72 max-w-[82vw] h-full bg-[#800000] text-white shadow-2xl border-r-2 border-[#ab0000] flex flex-col overflow-y-auto">
+            <div className="bg-[#ab0000] px-4 py-3 flex items-center justify-between border-b border-white/30">
+              <span className="font-bold text-base tracking-wide">MENU</span>
               <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="Close Menu"
+                className="p-1 hover:bg-[#5c0000] rounded cursor-pointer text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex flex-col divide-y divide-white/20">
+              <button
+                type="button"
                 onClick={() => handleNavClick('all')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'all' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
+                className={`w-full min-h-[44px] text-left px-4 py-3 text-sm font-bold cursor-pointer ${
+                  activeCategory === 'all' ? 'bg-[#5c0000] text-yellow-300 border-l-4 border-yellow-300' : 'text-white hover:bg-[#5c0000]'
                 }`}
               >
                 Home
               </button>
-
               <button
+                type="button"
                 onClick={() => handleNavClick('latest_jobs')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'latest_jobs' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
+                className={`w-full min-h-[44px] text-left px-4 py-3 text-sm font-bold cursor-pointer ${
+                  activeCategory === 'latest_jobs' ? 'bg-[#5c0000] text-yellow-300 border-l-4 border-yellow-300' : 'text-white hover:bg-[#5c0000]'
                 }`}
               >
                 Latest Job
               </button>
-
               <button
+                type="button"
                 onClick={() => handleNavClick('admit_card')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'admit_card' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
+                className={`w-full min-h-[44px] text-left px-4 py-3 text-sm font-bold cursor-pointer ${
+                  activeCategory === 'admit_card' ? 'bg-[#5c0000] text-yellow-300 border-l-4 border-yellow-300' : 'text-white hover:bg-[#5c0000]'
                 }`}
               >
                 Admit Card
               </button>
-
               <button
+                type="button"
+                onClick={() => handleNavClick('result')}
+                className={`w-full min-h-[44px] text-left px-4 py-3 text-sm font-bold cursor-pointer ${
+                  activeCategory === 'result' ? 'bg-[#5c0000] text-yellow-300 border-l-4 border-yellow-300' : 'text-white hover:bg-[#5c0000]'
+                }`}
+              >
+                Result
+              </button>
+              <button
+                type="button"
+                onClick={() => handleNavClick('answer_key')}
+                className={`w-full min-h-[44px] text-left px-4 py-3 text-sm font-bold cursor-pointer ${
+                  activeCategory === 'answer_key' ? 'bg-[#5c0000] text-yellow-300 border-l-4 border-yellow-300' : 'text-white hover:bg-[#5c0000]'
+                }`}
+              >
+                Answer Key
+              </button>
+              <button
+                type="button"
+                onClick={() => handleNavClick('syllabus')}
+                className={`w-full min-h-[44px] text-left px-4 py-3 text-sm font-bold cursor-pointer ${
+                  activeCategory === 'syllabus' ? 'bg-[#5c0000] text-yellow-300 border-l-4 border-yellow-300' : 'text-white hover:bg-[#5c0000]'
+                }`}
+              >
+                Syllabus
+              </button>
+              <button
+                type="button"
                 onClick={() => handleNavClick('admission')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'admission' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
+                className={`w-full min-h-[44px] text-left px-4 py-3 text-sm font-bold cursor-pointer ${
+                  activeCategory === 'admission' ? 'bg-[#5c0000] text-yellow-300 border-l-4 border-yellow-300' : 'text-white hover:bg-[#5c0000]'
                 }`}
               >
                 Admission
               </button>
 
-              <button
-                onClick={() => handleNavClick('result')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'result' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
-                }`}
-              >
-                Results
-              </button>
-
-              <button
-                onClick={() => handleNavClick('syllabus')}
-                className={`w-full text-left px-5 py-3 text-[16px] font-bold tracking-wide transition-colors cursor-pointer ${
-                  activeCategory === 'syllabus' ? 'text-purple-400 font-black' : 'text-white hover:bg-neutral-900'
-                }`}
-              >
-                Syllabus
-              </button>
-
-              {/* Mobile More Accordion */}
+              {/* Drawer More Accordion */}
               <div>
                 <button
+                  type="button"
                   onClick={() => setIsMobileMoreOpen(!isMobileMoreOpen)}
-                  className="w-full flex items-center justify-between px-5 py-3 text-[16px] font-bold text-white hover:bg-neutral-900 tracking-wide transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-white hover:bg-[#5c0000] cursor-pointer"
                 >
                   <span>More</span>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileMoreOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {isMobileMoreOpen && (
-                  <div className="bg-neutral-950 pl-4 border-l-2 border-red-700 my-1 divide-y divide-neutral-900 text-[15px]">
+                  <div className="bg-[#5c0000] pl-3 divide-y divide-white/15 text-xs font-bold">
                     <button
-                      onClick={() => handleNavClick('answer_key')}
-                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
-                    >
-                      🔑 Answer Key
-                    </button>
-                    <button
+                      type="button"
                       onClick={() => handleNavClick('certificate_verification')}
-                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-white hover:text-yellow-300 cursor-pointer"
                     >
                       📜 Certificate Verification
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleNavClick('important')}
-                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-white hover:text-yellow-300 cursor-pointer"
                     >
                       📌 Important Links
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleStaticDocClick('privacy-policy')}
-                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-white hover:text-yellow-300 cursor-pointer"
                     >
                       🔒 Privacy Policy
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleStaticDocClick('disclaimer')}
-                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-white hover:text-yellow-300 cursor-pointer"
                     >
                       ⚠️ Disclaimer
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleStaticDocClick('rules-and-regulations')}
-                      className="w-full text-left px-4 py-2.5 text-neutral-300 hover:text-white cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 text-white hover:text-yellow-300 cursor-pointer"
                     >
-                      📋 Rules & Regulations
+                      📋 Rules &amp; Regulations
                     </button>
                   </div>
                 )}
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Desktop Navigation Bar (hidden md:flex) with Segoe UI 12pt */}
-        <div className="hidden md:flex max-w-full mx-auto items-center justify-between font-headlight">
-          <nav className="flex items-stretch flex-1 overflow-x-auto no-scrollbar divide-x divide-neutral-700 font-headlight font-black tracking-wide uppercase">
-            <button
-              onClick={() => handleNavClick('all')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
-                activeCategory === 'all' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Home
-            </button>
-
-            <button
-              onClick={() => handleNavClick('latest_jobs')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
-                activeCategory === 'latest_jobs' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Latest Job
-            </button>
-
-            <button
-              onClick={() => handleNavClick('admit_card')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
-                activeCategory === 'admit_card' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Admit Card
-            </button>
-
-            <button
-              onClick={() => handleNavClick('admission')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
-                activeCategory === 'admission' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Admission
-            </button>
-
-            <button
-              onClick={() => handleNavClick('result')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
-                activeCategory === 'result' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Results
-            </button>
-
-            <button
-              onClick={() => handleNavClick('syllabus')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 whitespace-nowrap hover:bg-[#ab1616] hover:text-white transition-colors cursor-pointer text-center shrink-0 font-headlight ${
-                activeCategory === 'syllabus' ? 'bg-[#ab1616] text-white' : 'text-neutral-100'
-              }`}
-            >
-              Syllabus
-            </button>
-
-            {/* Desktop More Button */}
-            <div className="relative shrink-0 font-headlight" ref={moreRef}>
-              <button
-                onClick={() => setIsMoreOpen(!isMoreOpen)}
-                className="bg-white text-black font-extrabold px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-1 hover:bg-neutral-200 transition-colors cursor-pointer h-full font-headlight"
-              >
-                <span>More</span>
-                {isMoreOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </button>
-
-              {isMoreOpen && (
-                <div className="absolute left-0 sm:right-0 sm:left-auto top-full mt-0 w-52 bg-white text-slate-900 shadow-xl border-2 border-red-800 z-50 py-1 divide-y divide-slate-100 animate-fade-in font-bold text-xs normal-case">
-                  <button
-                    onClick={() => handleNavClick('answer_key')}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between"
-                  >
-                    <span>🔑 Answer Key</span>
-                  </button>
-                  <button
-                    onClick={() => handleNavClick('certificate_verification')}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between"
-                  >
-                    <span>📜 Certificate Verification</span>
-                  </button>
-                  <button
-                    onClick={() => handleNavClick('important')}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between"
-                  >
-                    <span>📌 Important Links</span>
-                  </button>
-                  <button
-                    onClick={() => handleStaticDocClick('privacy-policy')}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-purple-800"
-                  >
-                    <span>🔒 Privacy Policy</span>
-                  </button>
-                  <button
-                    onClick={() => handleStaticDocClick('disclaimer')}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-amber-800"
-                  >
-                    <span>⚠️ Disclaimer</span>
-                  </button>
-                  <button
-                    onClick={() => handleStaticDocClick('rules-and-regulations')}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 hover:text-[#ab1616] transition-colors cursor-pointer flex items-center justify-between text-blue-800"
-                  >
-                    <span>📋 Rules & Regulations</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          </nav>
-
-          {/* Desktop Search Icon */}
-          <button
-            onClick={() => setIsSearchVisible(!isSearchVisible)}
-            className="px-3 sm:px-4 py-2 sm:py-2.5 bg-black hover:bg-neutral-800 text-white transition-colors cursor-pointer flex items-center justify-center shrink-0 border-l border-neutral-700"
-            title="Search Sarkari Result"
-          >
-            <Search className="w-4 h-4 text-white" />
-          </button>
+          </aside>
         </div>
-      </div>
+      )}
 
       {/* 3. Google Search Style Dropdown when search icon is clicked */}
       {isSearchVisible && (
         <div className="bg-white border-b-2 border-slate-300 py-3 px-3 sm:px-6 shadow-md">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto relative">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <div className="relative flex-1">
                 {/* Google-style search icon */}
@@ -503,6 +500,6 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       )}
-    </header>
+    </div>
   );
 };
